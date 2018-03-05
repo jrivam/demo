@@ -16,9 +16,7 @@ namespace Web.Api.Controllers
                 if (search != "")
                     query.Data["Nombre"].Where(search, WhereOperator.Like);
 
-                var list = new business.Model.Sucursales().Load(query.List().businesses).Datas.Domains;
-
-                return Ok(list);
+                return Ok(new business.Model.Sucursales().Load(query.List().businesses).Datas.Domains);
             }
             catch (Exception ex)
             {

@@ -143,13 +143,13 @@ namespace business.Model
         {
         }
 
-        public virtual Empresas Load(business.Query.Empresa query)
+        public virtual Empresas Load(business.Query.Empresa query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(1, 0).businesses);
+            return Load(query.List(maxdepth, top).businesses);
         }
         public virtual Empresas Load(IEnumerable<business.Model.Empresa> list)
         {
-            list?.ToList().ForEach(i => Add(i));
+            this.AddRange(list);
 
             return this;
         }

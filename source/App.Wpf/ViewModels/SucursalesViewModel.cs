@@ -5,11 +5,7 @@
         public SucursalesViewModel()
             : base()
         {
-            //Load(new presentation.Query.Sucursal());
-
-            var query = new presentation.Query.Sucursal();
-            var list = query.List(2);
-            Load(new presentation.Model.Sucursales().Load(list.presentations));
+            Load(new presentation.Query.Sucursal(), 2);
             
             //Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalAdd, "SucursalAdd");
             //Messenger.Default.Register<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>(this, SucursalEdit, "SucursalEdit");

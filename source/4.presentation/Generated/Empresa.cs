@@ -4,6 +4,7 @@ using library.Impl.Presentation;
 using library.Interface.Presentation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -168,13 +169,14 @@ namespace presentation.Model
             }, delegate (object parameter) { return this != null; });
         }
 
-        public virtual Empresas Load(presentation.Query.Empresa query)
+        public virtual Empresas Load(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(1, 0).presentations);
+            return Load(query.List(maxdepth, top).presentations);
         }
         public virtual Empresas Load(IEnumerable<presentation.Model.Empresa> list)
         {
             list?.ToList().ForEach(i => Add(i));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
             return this;
         }

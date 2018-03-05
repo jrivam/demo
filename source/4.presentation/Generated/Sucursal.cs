@@ -5,6 +5,7 @@ using library.Interface.Presentation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -212,13 +213,14 @@ namespace presentation.Model
             }, delegate (object parameter) { return this != null; });
         }
  
-        public virtual Sucursales Load(presentation.Query.Sucursal query)
+        public virtual Sucursales Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(1, 0).presentations);
+            return Load(query.List(maxdepth, top).presentations);
         }
         public virtual Sucursales Load(IEnumerable<presentation.Model.Sucursal> list)
         {
             list?.ToList().ForEach(i => Add(i));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
             return this;
         }
