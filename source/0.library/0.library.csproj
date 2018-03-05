@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FCAD1ABF-269F-4027-8567-A0F7F12B9BBC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>library</RootNamespace>
+    <AssemblyName>library</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.10.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.10.6\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extension\ListExtensions.cs" />
+    <Compile Include="Extension\ObjectExtensions.cs" />
+    <Compile Include="Extension\StringExtensions.cs" />
+    <Compile Include="Impl\3.Business\MapperState.cs" />
+    <Compile Include="Impl\2.Data\Repository\QueryColumn.cs" />
+    <Compile Include="Impl\2.Data\Sql\Builder\AbstractSqlBuilder.cs" />
+    <Compile Include="Impl\2.Data\Sql\DbParameter.cs" />
+    <Compile Include="Impl\2.Data\Sql\SyntaxSign\AbstractSqlSyntaxSign.cs" />
+    <Compile Include="Impl\2.Data\Sql\Builder\MySqlBuilder.cs" />
+    <Compile Include="Impl\2.Data\Sql\SyntaxSign\SqlServerSyntaxSign.cs" />
+    <Compile Include="Impl\2.Data\Sql\SyntaxSign\MySqlSyntaxSign.cs" />
+    <Compile Include="Impl\2.Data\Sql\Builder\SqlBuilderFactory.cs" />
+    <Compile Include="Impl\2.Data\Sql\Builder\SqlServerBuilder.cs" />
+    <Compile Include="Impl\2.Data\DbObjectCreator.cs" />
+    <Compile Include="Impl\2.Data\Repository\Repository.cs" />
+    <Compile Include="Impl\2.Data\Repository\EntityColumn.cs" />
+    <Compile Include="Impl\2.Data\OrderDirection.cs" />
+    <Compile Include="Impl\2.Data\WhereOperator.cs" />
+    <Compile Include="Impl\2.Data\ListItems.cs" />
+    <Compile Include="Impl\3.Business\Logic.cs" />
+    <Compile Include="Impl\2.Data\MapperTable.cs" />
+    <Compile Include="Impl\4.Presentation\CommandAction.cs" />
+    <Compile Include="Impl\4.Presentation\Interactive.cs" />
+    <Compile Include="Impl\4.Presentation\MapperView.cs" />
+    <Compile Include="Impl\4.Presentation\Messenger.cs" />
+    <Compile Include="Impl\4.Presentation\RelayCommand.cs" />
+    <Compile Include="Impl\Result.cs" />
+    <Compile Include="Impl\ResultCategory.cs" />
+    <Compile Include="Interface\1.Domain\IEntity.cs" />
+    <Compile Include="Interface\2.Data\IEntityRepository.cs" />
+    <Compile Include="Interface\2.Data\IQueryRepository.cs" />
+    <Compile Include="Interface\2.Data\Sql\IDbObjectCreator.cs" />
+    <Compile Include="Interface\3.Business\IEntityLogic.cs" />
+    <Compile Include="Interface\3.Business\IQueryLogic.cs" />
+    <Compile Include="Interface\4.Presentation\IEntityInteractive.cs" />
+    <Compile Include="Interface\4.Presentation\IMapperView.cs" />
+    <Compile Include="Interface\2.Data\IMapperTable.cs" />
+    <Compile Include="Interface\2.Data\IQueryTable.cs" />
+    <Compile Include="Interface\2.Data\IEntityTable.cs" />
+    <Compile Include="Interface\2.Data\Repository\IQueryColumn.cs" />
+    <Compile Include="Interface\3.Business\IMapperState.cs" />
+    <Compile Include="Interface\4.Presentation\IQueryInteractive.cs" />
+    <Compile Include="Interface\4.Presentation\IQueryView.cs" />
+    <Compile Include="Interface\3.Business\IQueryState.cs" />
+    <Compile Include="Interface\2.Data\IRepository.cs" />
+    <Compile Include="Interface\2.Data\Repository\IEntityColumn.cs" />
+    <Compile Include="Interface\2.Data\Sql\ISqlSyntaxSign.cs" />
+    <Compile Include="Interface\2.Data\Sql\ISqlBuilder.cs" />
+    <Compile Include="Interface\3.Business\ILogic.cs" />
+    <Compile Include="Interface\3.Business\IEntityState.cs" />
+    <Compile Include="Interface\4.Presentation\IEntityView.cs" />
+    <Compile Include="Interface\4.Presentation\IInteractive.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Impl\1.Domain\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="docs\MySqlCommand.xml" />
+    <Content Include="docs\MySqlCommandBuilder.xml" />
+    <Content Include="docs\MySqlConnection.xml" />
+    <Content Include="docs\MySqlConnectionStringBuilder.xml" />
+    <Content Include="docs\MySqlDataAdapter.xml" />
+    <Content Include="docs\MySqlDataReader.xml" />
+    <Content Include="docs\MySqlException.xml" />
+    <Content Include="docs\MySqlHelper.xml" />
+    <Content Include="docs\MySqlParameter.xml" />
+    <Content Include="docs\MySqlParameterCollection.xml" />
+    <Content Include="docs\MySqlTransaction.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,13 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace library.Extension
+{
+    public static class ListExtensions
+    {
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> l)
+        {
+            return new ObservableCollection<T>(l);
+        }
+    }
+}
