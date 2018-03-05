@@ -161,13 +161,13 @@ namespace data.Model
         {
         }
 
-        public virtual Empresas Load(data.Query.Empresa query)
+        public virtual Empresas Load(data.Query.Empresa query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.SelectMultiple(1, 0).datas);
+            return Load(query.SelectMultiple(maxdepth, top).datas);
         }
         public virtual Empresas Load(IEnumerable<data.Model.Empresa> list)
         {
-            list?.ToList().ForEach(i => Add(i));
+            this.AddRange(list);
 
             return this;
         }

@@ -141,13 +141,13 @@ namespace business.Model
         {
         }
 
-        public virtual Sucursales Load(business.Query.Sucursal query)
+        public virtual Sucursales Load(business.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(1, 0).businesses);
+            return Load(query.List(maxdepth, top).businesses);
         }
         public virtual Sucursales Load(IEnumerable<business.Model.Sucursal> list)
         {
-            list?.ToList().ForEach(i => Add(i));
+            this.AddRange(list);
 
             return this;
         }
