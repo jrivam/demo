@@ -85,16 +85,16 @@ namespace data.Model
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { this["RazonSocial"].Value = Domain.RazonSocial = value; } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { this["Activo"].Value = Domain.Activo = value; } } }
 
-        public virtual void Sucursales_Load()
+        public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new data.Query.Sucursal();
             query["IdEmpresa"].Where(this.Id);
 
-            Sucursales_Load(query);
+            Sucursales_Load(query, maxdepth, top);
         }
-        public virtual void Sucursales_Load(data.Query.Sucursal query)
+        public virtual void Sucursales_Load(data.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            Sucursales_Load(query.SelectMultiple(1, 0).datas.ToList());
+            Sucursales_Load(query.SelectMultiple(maxdepth, top).datas.ToList());
         }
         public virtual void Sucursales_Load(IList<data.Model.Sucursal> list)
         {
@@ -125,9 +125,9 @@ namespace data.Model
         {
             return _repository.Clear(this);
         }
-        public virtual (Result result, data.Model.Empresa data) Select()
+        public virtual (Result result, data.Model.Empresa data) Select(int maxdepth = 1)
         {
-            var select = _repository.Select(this);
+            var select = _repository.Select(this, maxdepth);
 
             return select;
         }

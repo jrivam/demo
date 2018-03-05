@@ -29,16 +29,16 @@ namespace library.Impl.Business
             return presentation;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic)
+        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic, int maxdepth = 1)
         {
-            _mapper.Clear(presentation, 1, 0);
+            _mapper.Clear(presentation, maxdepth, 0);
 
-            var load = logic.Load();
+            var load = logic.Load(maxdepth);
             presentation.Business = load.business;
 
             if (load.result.Success && load.result.Passed)
             {
-                _mapper.Map(presentation, 1, 0);
+                _mapper.Map(presentation, maxdepth, 0);
             }
 
             return (load.result, presentation);

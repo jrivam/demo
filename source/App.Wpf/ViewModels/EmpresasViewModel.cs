@@ -9,7 +9,6 @@ namespace WpfApp.ViewModels
             : base()
         {
             Load(new presentation.Query.Empresa());
-
             //Messenger.Default.Register<presentation.Model.Empresa>(this, EmpresaAdd, "EmpresaAdd");
             //Messenger.Default.Register<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>(this, EmpresaEdit, "EmpresaEdit");
         }

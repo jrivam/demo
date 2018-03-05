@@ -56,16 +56,16 @@ namespace business.Model
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
-        public virtual void Sucursales_Load()
+        public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new business.Query.Sucursal();
             query.Data["IdEmpresa"].Where(this.Id);
 
-            Sucursales_Load(query);
+            Sucursales_Load(query, maxdepth, top);
         }
-        public virtual void Sucursales_Load(business.Query.Sucursal query)
+        public virtual void Sucursales_Load(business.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            Sucursales_Load(query.List(1, 0).businesses.ToList());
+            Sucursales_Load(query.List(maxdepth, top).businesses.ToList());
         }
         public virtual void Sucursales_Load(IList<business.Model.Sucursal> list)
         {
@@ -96,9 +96,9 @@ namespace business.Model
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, business.Model.Empresa business) Load()
+        public virtual (Result result, business.Model.Empresa business) Load(int maxdepth = 1)
         {
-            var load = _logic.Load(this, Data);
+            var load = _logic.Load(this, Data, maxdepth);
 
             return load;
         }

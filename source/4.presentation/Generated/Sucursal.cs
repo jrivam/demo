@@ -162,9 +162,9 @@ namespace presentation.Model
         {
             return _interactive.Clear(this, Business);
         }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Load()
+        public virtual (Result result, presentation.Model.Sucursal presentation) Load(int maxdepth = 1)
         {
-            var load = _interactive.Load(this, Business);
+            var load = _interactive.Load(this, Business, maxdepth);
 
             return load;
         }

@@ -96,9 +96,9 @@ namespace business.Model
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, business.Model.Sucursal business) Load()
+        public virtual (Result result, business.Model.Sucursal business) Load(int maxdepth = 1)
         {
-            var load = _logic.Load(this, Data);
+            var load = _logic.Load(this, Data, maxdepth);
 
             return load;
         }
