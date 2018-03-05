@@ -85,27 +85,27 @@ namespace library.Impl.Data.Repository
             return ExecuteNonQuery(command);
         }
 
-        public virtual (Result result, U data) Select(U data)
+        public virtual (Result result, U data) Select(U data, int maxdepth = 1)
         {
-            return (data.SelectDbCommand != null) ? Select(data, data.SelectDbCommand.Value) : Select(data, _builder.Select(data));
+            return (data.SelectDbCommand != null) ? Select(data, data.SelectDbCommand.Value, maxdepth) : Select(data, _builder.Select(data), maxdepth);
         }
-        public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
+        public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand, int maxdepth = 1)
         {
             var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
 
             foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), command));
 
-            return Select(data, command);
+            return Select(data, command, maxdepth);
         }
-        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null)
+        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null, int maxdepth = 1)
         {
-            return Select(data, _builder.GetCommand(commandtext, commandtype, parameters));
+            return Select(data, _builder.GetCommand(commandtext, commandtype, parameters), maxdepth);
         }
-        public virtual (Result result, U data) Select(U data, IDbCommand command)
+        public virtual (Result result, U data) Select(U data, IDbCommand command, int maxdepth = 1)
         {
             if (data.Domain.Id != null)
             {
-                var executequery = ExecuteQuery(command, 1, new List<U>() { data });
+                var executequery = ExecuteQuery(command, maxdepth, new List<U>() { data });
 
                 return (executequery.result, executequery.datas.FirstOrDefault());
             }
@@ -296,20 +296,6 @@ namespace library.Impl.Data.Repository
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, null);
             }
         }
-
-        //public virtual void GetFromReader(U data, IDataReader reader, IList<string> prefixname, string aliasseparator, int maxdepth = 1, int depth = 0)
-        //{
-        //    prefixname.Add(data.Reference);
-
-        //    var columprefix = string.Join(aliasseparator, prefixname);
-        //    columprefix = $"{columprefix}{(columprefix == "" ? "" : aliasseparator)}";
-
-        //    for (int index = 0; index < reader.FieldCount; index++)
-        //    {
-        //        var columnname = reader.GetName(index).Replace(columprefix, string.Empty);
-
-        //        data[columnname].DbValue = reader[$"{columprefix}{columnname}"];
-        //    }
-        //}
+   
     }
 }

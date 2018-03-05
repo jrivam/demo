@@ -32,16 +32,16 @@ namespace library.Impl.Business
             return business;
         }
 
-        public virtual (Result result, V business) Load(V business, IEntityRepository<T, U> repository)
+        public virtual (Result result, V business) Load(V business, IEntityRepository<T, U> repository, int maxdepth = 1)
         {
-            _mapper.Clear(business, 1, 0);
+            _mapper.Clear(business, maxdepth, 0);
 
-            var select = repository.Select();
+            var select = repository.Select(maxdepth);
             business.Data = select.data;
 
             if (select.result.Success && select.result.Passed)
             {
-                _mapper.Map(business, 1, 0);
+                _mapper.Map(business, maxdepth, 0);
 
                 business.Loaded = true;
                 business.Changed = false;

@@ -14,7 +14,7 @@ namespace test
             var mockMapper = new Moq.Mock<IMapperTable<domain.Model.Empresa, data.Model.Empresa>>();
             var mockRepository = new Moq.Mock<IRepository<domain.Model.Empresa, data.Model.Empresa>>(mockMapper.Object);
 
-            mockRepository.Setup(x => x.Select(It.IsAny<data.Model.Empresa>()))
+            mockRepository.Setup(x => x.Select(It.IsAny<data.Model.Empresa>(), It.IsAny<int>()))
             .Returns((IMapperTable<domain.Model.Empresa, data.Model.Empresa> mapper, data.Model.Empresa param) => 
             {
                 return (new Result() { Success = true }, param);

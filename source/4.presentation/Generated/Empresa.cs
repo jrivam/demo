@@ -74,16 +74,16 @@ namespace presentation.Model
         public virtual string RazonSocial { get { return Business?.RazonSocial; } set { if (Business?.RazonSocial != value) { Business.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
         public virtual bool? Activo { get { return Business?.Activo; } set { if (Business?.Activo != value) { Business.Activo = value; OnPropertyChanged("Activo"); } } }
 
-        public virtual void Sucursales_Load()
+        public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new presentation.Query.Sucursal();
             query.Business.Data["IdEmpresa"].Where(this.Id);
 
-            Sucursales_Load(query);
+            Sucursales_Load(query, maxdepth, top);
         }
-        public virtual void Sucursales_Load(presentation.Query.Sucursal query)
+        public virtual void Sucursales_Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            Sucursales_Load(query.List(1, 0).presentations.ToList());
+            Sucursales_Load(query.List(maxdepth, top).presentations.ToList());
         }
         public virtual void Sucursales_Load(IList<presentation.Model.Sucursal> list)
         {
@@ -116,9 +116,9 @@ namespace presentation.Model
         {
             return _interactive.Clear(this, Business);
         }
-        public virtual (Result result, presentation.Model.Empresa presentation) Load()
+        public virtual (Result result, presentation.Model.Empresa presentation) Load(int maxdepth = 1)
         {
-            var load = _interactive.Load(this, Business);
+            var load = _interactive.Load(this, Business, maxdepth);
 
             return load;
         }

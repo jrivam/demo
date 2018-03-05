@@ -162,9 +162,9 @@ namespace data.Model
         {
             return _repository.Clear(this);
         }
-        public virtual (Result result, data.Model.Sucursal data) Select()
+        public virtual (Result result, data.Model.Sucursal data) Select(int maxdepth = 1)
         {
-            var select = _repository.Select(this);
+            var select = _repository.Select(this, maxdepth);
 
             return select;
         }

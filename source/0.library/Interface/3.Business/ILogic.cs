@@ -11,7 +11,7 @@ namespace library.Interface.Business
     {
         V Clear(V business, IEntityRepository<T, U> repository, int maxdepth = 1);
 
-        (Result result, V business) Load(V business, IEntityRepository<T, U> repository);
+        (Result result, V business) Load(V business, IEntityRepository<T, U> repository, int maxdepth = 1);
         (Result result, V business) Save(V business, IEntityRepository<T, U> repository);
         (Result result, V business) Erase(V business, IEntityRepository<T, U> repository);
 

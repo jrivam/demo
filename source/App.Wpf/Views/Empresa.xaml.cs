@@ -76,7 +76,7 @@ namespace WpfApp.Views
 
                 view.ShowDialog();
 
-                if (view.ViewModel.Business.Deleted || message.oldvalue.IdEmpresa != view.ViewModel.IdEmpresa)
+                if (view.ViewModel.Business.Deleted || message.oldvalue.IdEmpresa != message.newvalue.IdEmpresa)
                 {
                     ViewModel.Sucursales.Remove(message.oldvalue);
                 }
