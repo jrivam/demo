@@ -259,9 +259,9 @@ namespace presentation.Query
         {
             return _interactive.Retrieve(Business, maxdepth, presentation);
         }
-        public virtual (Result result, IEnumerable<presentation.Model.Sucursal> presentations) List(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<presentation.Model.Sucursal> presentations) List(int maxdepth = 1, int top = 0, IList<presentation.Model.Sucursal> presentations = null)
         {
-            return _interactive.List(Business, maxdepth, top);
+            return _interactive.List(Business, maxdepth, top, presentations);
         }
     }
 }

@@ -184,9 +184,9 @@ namespace data.Query
         {
             return _repository.SelectSingle(this, maxdepth, data);
         }
-        public virtual (Result result, IEnumerable<data.Model.Empresa> datas) SelectMultiple(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<data.Model.Empresa> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<data.Model.Empresa> datas = null)
         {
-            return _repository.SelectMultiple(this, maxdepth, top);
+            return _repository.SelectMultiple(this, maxdepth, top, datas);
         }
 
         public virtual (Result result, int rows) Update(data.Model.Empresa entity, int maxdepth = 1)
