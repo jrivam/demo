@@ -9,7 +9,7 @@ namespace library.Interface.Business
                                             where U : IEntityTable<T>
                                             where V : IEntityState<T, U>
     {
-        (Result result, V business) Retrieve(int maxdepth);
+        (Result result, V business) Retrieve(int maxdepth, V business = default(V));
         (Result result, IEnumerable<V> businesses) List(int maxdepth, int top);
     }
 }

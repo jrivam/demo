@@ -14,27 +14,22 @@ namespace presentation.Model
 {
     public partial class Empresa : INotifyPropertyChanged, IEntityView<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>, IEntityInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
     {
-        public partial class Mapper : MapperView<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
-        {
-            public override presentation.Model.Empresa Map(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
-            {
-                return base.Map(presentation, maxdepth, depth);
-            }
-        }
+        private int _maxdepth;
 
         public virtual business.Model.Empresa Business { get; set; } = new business.Model.Empresa();
 
         protected readonly IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public Empresa(IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> interactive)
+        public Empresa(IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> interactive, int maxdepth)
         {
             _interactive = interactive;
+            _maxdepth = maxdepth;
 
             ClearCommand = new RelayCommand(delegate (object parameter) { Messenger.Default.Send<presentation.Model.Empresa>(Clear(), "EmpresaClear"); }, null);
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>((CommandAction.Load, Load()), "EmpresaLoad");
+                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>((CommandAction.Load, Load(_maxdepth)), "EmpresaLoad");
             }, delegate (object parameter) { return Business.Data.Domain.Id != null && Business.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
@@ -50,8 +45,8 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>((this, this), "EmpresaEdit");
             }, delegate (object parameter) { return Business.Data.Domain.Id != null && !Business.Deleted; });
         }
-        public Empresa()
-            : this(new Interactive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>(new presentation.Model.Empresa.Mapper()))
+        public Empresa(int maxdepth = 1)
+            : this(new Interactive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()), maxdepth)
         {
         }
 
@@ -116,9 +111,20 @@ namespace presentation.Model
         {
             return _interactive.Clear(this, Business);
         }
+        public virtual (Result result, presentation.Model.Empresa presentation) Load()
+        {
+            var load = _interactive.Load(this, Business);
+
+            return load;
+        }
         public virtual (Result result, presentation.Model.Empresa presentation) Load(int maxdepth = 1)
         {
-            var load = _interactive.Load(this, Business, maxdepth);
+            _maxdepth = maxdepth;
+
+            var query = new presentation.Query.Empresa();
+            query.Business.Data["Id"].Where(this.Id);
+
+            var load = query.Retrieve(maxdepth, this);
 
             return load;
         }
@@ -223,17 +229,28 @@ namespace presentation.Query
             _interactive = interactive;
         }
         public Empresa()
-            : this(new Interactive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>(new presentation.Model.Empresa.Mapper()))
+            : this(new Interactive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()))
         {
         }
 
-        public virtual (Result result, presentation.Model.Empresa presentation) Retrieve(int maxdepth = 1)
+        public virtual (Result result, presentation.Model.Empresa presentation) Retrieve(int maxdepth = 1, presentation.Model.Empresa presentation = default(presentation.Model.Empresa))
         {
-            return _interactive.Retrieve(Business, maxdepth);
+            return _interactive.Retrieve(Business, maxdepth, presentation);
         }
         public virtual (Result result, IEnumerable<presentation.Model.Empresa> presentations) List(int maxdepth = 1, int top = 0)
         {
             return _interactive.List(Business, maxdepth, top);
+        }
+    }
+}
+
+namespace presentation.Mapper
+{
+    public partial class Empresa : MapperView<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
+    {
+        public override presentation.Model.Empresa Map(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
+        {
+            return base.Map(presentation, maxdepth, depth);
         }
     }
 }

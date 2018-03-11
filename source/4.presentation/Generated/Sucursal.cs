@@ -14,53 +14,25 @@ namespace presentation.Model
 {
     public partial class Sucursal : INotifyPropertyChanged, IEntityView<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>, IEntityInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public partial class Mapper : MapperView<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
-        {
-            public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
-            {
-                presentation = base.Clear(presentation, maxdepth, depth);
+        private int _maxdepth;
 
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    presentation.Empresa = new presentation.Model.Empresa.Mapper().Clear(presentation.Empresa, maxdepth, depth);
-                }
-                else
-                {
-                    presentation.Empresa = null;
-                }
-
-                return presentation;
-            }
-            public override presentation.Model.Sucursal Map(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
-            {
-                presentation = base.Map(presentation, maxdepth, depth);
-
-                presentation.OnPropertyChanged("Empresa");
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    presentation.Empresa = new presentation.Model.Empresa.Mapper().Map(presentation.Empresa, maxdepth, depth);
-                }
-
-                return presentation;
-            }
-        }
         public virtual business.Model.Sucursal Business { get; set; } = new business.Model.Sucursal();
 
         protected readonly IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public Sucursal(IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> interactive)
+        public Sucursal(IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> interactive, int maxdepth)
         {
             _interactive = interactive;
+            _maxdepth = maxdepth;
 
             ClearCommand = new RelayCommand(delegate (object entity) { Messenger.Default.Send<presentation.Model.Sucursal>(Clear(), "SucursalClear"); }, null);
 
             LoadCommand = new RelayCommand(delegate (object parameter) 
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, Load()), "SucursalLoad");
+                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, Load(_maxdepth)), "SucursalLoad");
             }, delegate (object parameter) { return Business.Data.Domain.Id != null && Business.Changed; });
+
+
             SaveCommand = new RelayCommand(delegate (object parameter) 
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Save, Save()), "SucursalSave");
@@ -75,8 +47,8 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>((this, this), "SucursalEdit");
             }, delegate (object parameter) { return Business.Data.Domain.Id != null && !Business.Deleted; });
         }
-        public Sucursal()
-            : this(new Interactive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Model.Sucursal.Mapper()))
+        public Sucursal(int maxdepth = 1)
+            : this(new Interactive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()), maxdepth)
         {
         }
 
@@ -162,9 +134,20 @@ namespace presentation.Model
         {
             return _interactive.Clear(this, Business);
         }
+        public virtual (Result result, presentation.Model.Sucursal presentation) Load()
+        {
+            var load = _interactive.Load(this, Business);
+
+            return load;
+        }
         public virtual (Result result, presentation.Model.Sucursal presentation) Load(int maxdepth = 1)
         {
-            var load = _interactive.Load(this, Business, maxdepth);
+            _maxdepth = maxdepth;
+
+            var query = new presentation.Query.Sucursal();
+            query.Business.Data["Id"].Where(this.Id);         
+
+            var load = query.Retrieve(maxdepth, this);
 
             return load;
         }
@@ -268,17 +251,54 @@ namespace presentation.Query
             _interactive = interactive;
         }
         public Sucursal()
-            : this(new Interactive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Model.Sucursal.Mapper()))
+            : this(new Interactive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
         {
         }
 
-        public virtual (Result result, presentation.Model.Sucursal presentation) Retrieve(int maxdepth = 1)
+        public virtual (Result result, presentation.Model.Sucursal presentation) Retrieve(int maxdepth = 1, presentation.Model.Sucursal presentation = default(presentation.Model.Sucursal))
         {
-            return _interactive.Retrieve(Business, maxdepth);
+            return _interactive.Retrieve(Business, maxdepth, presentation);
         }
         public virtual (Result result, IEnumerable<presentation.Model.Sucursal> presentations) List(int maxdepth = 1, int top = 0)
         {
             return _interactive.List(Business, maxdepth, top);
+        }
+    }
+}
+
+namespace presentation.Mapper
+{
+    public partial class Sucursal : MapperView<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
+    {
+        public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        {
+            presentation = base.Clear(presentation, maxdepth, depth);
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                presentation.Empresa = new presentation.Mapper.Empresa().Clear(presentation.Empresa, maxdepth, depth);
+            }
+            else
+            {
+                presentation.Empresa = null;
+            }
+
+            return presentation;
+        }
+        public override presentation.Model.Sucursal Map(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        {
+            presentation = base.Map(presentation, maxdepth, depth);
+
+            presentation.OnPropertyChanged("Empresa");
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                presentation.Empresa = new presentation.Mapper.Empresa().Map(presentation.Empresa, maxdepth, depth);
+            }
+
+            return presentation;
         }
     }
 }

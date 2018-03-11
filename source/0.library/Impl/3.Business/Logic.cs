@@ -32,16 +32,16 @@ namespace library.Impl.Business
             return business;
         }
 
-        public virtual (Result result, V business) Load(V business, IEntityRepository<T, U> repository, int maxdepth = 1)
+        public virtual (Result result, V business) Load(V business, IEntityRepository<T, U> repository)
         {
-            _mapper.Clear(business, maxdepth, 0);
+            _mapper.Clear(business, 1, 0);
 
-            var select = repository.Select(maxdepth);
+            var select = repository.Select();
             business.Data = select.data;
 
             if (select.result.Success && select.result.Passed)
             {
-                _mapper.Map(business, maxdepth, 0);
+                _mapper.Map(business, 1, 0);
 
                 business.Loaded = true;
                 business.Changed = false;
@@ -92,15 +92,16 @@ namespace library.Impl.Business
             return (new Result() { Success = true, Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, business);
         }
 
-        public virtual (Result result, V business) Retrieve(IQueryRepository<T, U> repository, int maxdepth = 1)
+        public virtual (Result result, V business) Retrieve(IQueryRepository<T, U> repository, int maxdepth = 1, V business = default(V))
         {
-            var business = (V)Activator.CreateInstance(typeof(V),
+            if (business == null)
+                business = (V)Activator.CreateInstance(typeof(V),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
                     BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
 
-            var selectsingle = repository.SelectSingle(maxdepth);
+            var selectsingle = repository.SelectSingle(maxdepth, business.Data);
             business.Data = selectsingle.data;
 
             if (selectsingle.result.Success && selectsingle.result.Passed)

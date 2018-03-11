@@ -29,16 +29,16 @@ namespace library.Impl.Business
             return presentation;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic, int maxdepth = 1)
+        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic)
         {
-            _mapper.Clear(presentation, maxdepth, 0);
+            _mapper.Clear(presentation, 1, 0);
 
-            var load = logic.Load(maxdepth);
+            var load = logic.Load();
             presentation.Business = load.business;
 
             if (load.result.Success && load.result.Passed)
             {
-                _mapper.Map(presentation, maxdepth, 0);
+                _mapper.Map(presentation, 1, 0);
             }
 
             return (load.result, presentation);
@@ -62,15 +62,16 @@ namespace library.Impl.Business
             return (erase.result, presentation);
         }
 
-        public virtual (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1)
+        public virtual (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1, W presentation = default(W))
         {
-            var presentation = (W)Activator.CreateInstance(typeof(W),
-                    BindingFlags.CreateInstance |
-                    BindingFlags.Public |
-                    BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
+            if (presentation == null)
+                presentation = (W)Activator.CreateInstance(typeof(W),
+                        BindingFlags.CreateInstance |
+                        BindingFlags.Public |
+                        BindingFlags.Instance |
+                        BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
 
-            var retrieve = logic.Retrieve(maxdepth);
+            var retrieve = logic.Retrieve(maxdepth, presentation.Business);
             presentation.Business = retrieve.business;
 
             _mapper.Map(presentation, maxdepth, 0);
@@ -82,13 +83,13 @@ namespace library.Impl.Business
             var presentations = new List<W>();
 
             var list = logic.List(maxdepth, top);
-            foreach(var iterator in list.businesses)
+            foreach (var iterator in list.businesses)
             {
                 var presentation = (W)Activator.CreateInstance(typeof(W),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
+                    BindingFlags.OptionalParamBinding, null, new object[] { maxdepth }, CultureInfo.CurrentCulture);
                 presentation.Business = iterator;
 
                 _mapper.Map(presentation, maxdepth, 0);

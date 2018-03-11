@@ -10,7 +10,7 @@ namespace library.Interface.Business
     {
         V Clear();
 
-        (Result result, V business) Load(int maxdepth = 1);
+        (Result result, V business) Load();
         (Result result, V business) Save();
         (Result result, V business) Erase();
     }

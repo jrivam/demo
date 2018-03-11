@@ -31,17 +31,17 @@ namespace library.Impl.Data.Repository
             return _mapper.Clear(data, maxdepth, 0);
         }
 
-        public virtual (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1)
+        public virtual (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1, U data = default(U))
         {
-            return SelectSingle(_builder.Select(query, maxdepth, 1));
+            return SelectSingle(_builder.Select(query, maxdepth, 1), maxdepth, data);
         }
-        public virtual (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1)
+        public virtual (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, U data = default(U))
         {
-            return SelectSingle(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth);
+            return SelectSingle(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth, data);
         }
-        public virtual (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1)
+        public virtual (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1, U data = default(U))
         {
-            var executequery = ExecuteQuery(command, maxdepth);
+            var executequery = ExecuteQuery(command, maxdepth, new List<U> { data });
 
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
