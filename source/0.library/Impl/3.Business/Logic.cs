@@ -95,11 +95,13 @@ namespace library.Impl.Business
         public virtual (Result result, V business) Retrieve(IQueryRepository<T, U> repository, int maxdepth = 1, V business = default(V))
         {
             if (business == null)
+            {
                 business = (V)Activator.CreateInstance(typeof(V),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
                     BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
+            }
 
             var selectsingle = repository.SelectSingle(maxdepth, business.Data);
             business.Data = selectsingle.data;
@@ -115,21 +117,23 @@ namespace library.Impl.Business
 
             return (selectsingle.result, business);
         }
-        public virtual (Result result, IEnumerable<V> businesses) List(IQueryRepository<T, U> repository, int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<V> businesses) List(IQueryRepository<T, U> repository, int maxdepth = 1, int top = 0, IList<V> businesses = null)
         {
-            var list = new List<V>();
+            var enumeration = new List<V>();
+            var iterator = (businesses ?? new List<V>()).GetEnumerator();
 
             var selectmultiple = repository.SelectMultiple(maxdepth, top);
             if (selectmultiple.result.Success && selectmultiple.result.Passed)
             {
-                foreach (var iterator in selectmultiple.datas)
+                foreach (var data in selectmultiple.datas)
                 {
-                    var business = (V)Activator.CreateInstance(typeof(V),
+                    var business = iterator.MoveNext() ? iterator.Current : (V)Activator.CreateInstance(typeof(V),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
                     BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
-                    business.Data = iterator;
+
+                    business.Data = data;
 
                     _mapper.Map(business, maxdepth, 0);
 
@@ -137,11 +141,11 @@ namespace library.Impl.Business
                     business.Changed = false;
                     business.Deleted = false;
 
-                    list.Add(business);
+                    enumeration.Add(business);
                 }
             }
 
-            return (selectmultiple.result, list);
+            return (selectmultiple.result, enumeration);
         }
     }
 }

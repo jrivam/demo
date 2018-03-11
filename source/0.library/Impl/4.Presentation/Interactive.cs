@@ -65,39 +65,46 @@ namespace library.Impl.Business
         public virtual (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1, W presentation = default(W))
         {
             if (presentation == null)
+            {
                 presentation = (W)Activator.CreateInstance(typeof(W),
                         BindingFlags.CreateInstance |
                         BindingFlags.Public |
                         BindingFlags.Instance |
                         BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
+            }
 
             var retrieve = logic.Retrieve(maxdepth, presentation.Business);
             presentation.Business = retrieve.business;
 
-            _mapper.Map(presentation, maxdepth, 0);
+            if (retrieve.result.Success && retrieve.result.Passed)
+            {
+                _mapper.Map(presentation, maxdepth, 0);
+            }
 
             return (retrieve.result, presentation);
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth, int top)
+        public virtual (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth = 1, int top = 0, IList<W> presentations = null)
         {
-            var presentations = new List<W>();
+            var enumeration = new List<W>();
+            var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
             var list = logic.List(maxdepth, top);
-            foreach (var iterator in list.businesses)
+            foreach (var business in list.businesses)
             {
-                var presentation = (W)Activator.CreateInstance(typeof(W),
+                var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
                     BindingFlags.OptionalParamBinding, null, new object[] { maxdepth }, CultureInfo.CurrentCulture);
-                presentation.Business = iterator;
+
+                presentation.Business = business;
 
                 _mapper.Map(presentation, maxdepth, 0);
 
-                presentations.Add(presentation);
+                enumeration.Add(presentation);
             }
 
-            return (list.result, presentations);
+            return (list.result, enumeration);
         }
     }
 }
