@@ -13,6 +13,7 @@ namespace library.Interface.Presentation
         W Clear();
 
         (Result result, W presentation) Load();
+        (Result result, W presentation) Load(int maxdepth = 1);
         (Result result, W presentation) Save();
         (Result result, W presentation) Erase();
     }
