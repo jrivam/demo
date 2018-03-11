@@ -8,7 +8,7 @@ namespace library.Interface.Data
     {
         U Clear();
 
-        (Result result, U data) Select(int maxdepth = 1);
+        (Result result, U data) Select();
         (Result result, U data) Insert();
         (Result result, U data) Update();
         (Result result, U data) Delete();

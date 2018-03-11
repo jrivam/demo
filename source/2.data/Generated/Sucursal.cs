@@ -16,72 +16,6 @@ namespace data.Model
 {
     public partial class Sucursal : IEntityTable<domain.Model.Sucursal>, IEntityRepository<domain.Model.Sucursal, data.Model.Sucursal>
     {
-        public partial class Mapper : MapperTable<domain.Model.Sucursal, data.Model.Sucursal>
-        {
-            public override data.Model.Sucursal CreateInstance(int maxdepth = 1, int depth = 0)
-            {
-                var instance = base.CreateInstance(maxdepth, depth);
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    instance.Empresa = new data.Model.Empresa.Mapper().CreateInstance(maxdepth, depth);
-                }
-
-                return instance;
-            }
-            public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
-            {
-                data.Domain.Id = null;
-                data.Domain.Nombre = null;
-                data.Domain.Fecha = null;
-                data.Domain.Activo = null;
-                data.Domain.IdEmpresa = null;
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    data.Empresa = new data.Model.Empresa.Mapper().Clear(data.Empresa, maxdepth, depth);
-                }
-                else
-                {
-                    data.Empresa = null;
-                }
-
-                return data;
-            }
-
-            public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
-            {
-                data.Domain.Id = data["Id"].Value as int?;
-                data.Domain.Nombre = data["Nombre"].Value as string;
-                data.Domain.Activo = data["Activo"].Value as bool?;
-                data.Domain.Fecha = data["Fecha"].Value as DateTime?;
-                data.Domain.IdEmpresa = data["IdEmpresa"].Value as int?;
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    data.Empresa = new data.Model.Empresa.Mapper().Map(data.Empresa, maxdepth, depth);
-                }
-
-                return data;
-            }
-
-            public override data.Model.Sucursal Read(data.Model.Sucursal data, IDataReader reader, IList<string> prefixname, string aliasseparator = ".", int maxdepth = 1, int depth = 0)
-            {
-                data = base.Read(data, reader, prefixname, aliasseparator, maxdepth, depth);
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    data.Empresa = new data.Model.Empresa.Mapper().Read(data.Empresa, reader, prefixname, aliasseparator, maxdepth, depth);
-                }
-
-                return data;
-            }
-        }
-
         public virtual domain.Model.Sucursal Domain { get; set; } = new domain.Model.Sucursal();
 
         protected readonly IRepository<domain.Model.Sucursal, data.Model.Sucursal> _repository;
@@ -103,7 +37,7 @@ namespace data.Model
             Columns.Add(new EntityColumn<bool?, domain.Model.Sucursal>(this, "activo", "Activo"));
         }
         public Sucursal(string connectionstringname, string name, string reference)
-            : this(new Repository<domain.Model.Sucursal, data.Model.Sucursal>(new data.Model.Sucursal.Mapper(), connectionstringname), name, reference)
+            : this(new Repository<domain.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
         {
         }
 
@@ -162,9 +96,9 @@ namespace data.Model
         {
             return _repository.Clear(this);
         }
-        public virtual (Result result, data.Model.Sucursal data) Select(int maxdepth = 1)
+        public virtual (Result result, data.Model.Sucursal data) Select()
         {
-            var select = _repository.Select(this, maxdepth);
+            var select = _repository.Select(this);
 
             return select;
         }
@@ -234,7 +168,7 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
         public Sucursal(string connectionstringname, string name, string reference)
-            : this(new Repository<domain.Model.Sucursal, data.Model.Sucursal>(new data.Model.Sucursal.Mapper(), connectionstringname), name, reference)
+            : this(new Repository<domain.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
         {
         }
 
@@ -264,9 +198,9 @@ namespace data.Query
             set { if (_empresa != value) { _empresa = value; } }
         }
 
-        public virtual (Result result, data.Model.Sucursal data) SelectSingle(int maxdepth = 1)
+        public virtual (Result result, data.Model.Sucursal data) SelectSingle(int maxdepth = 1, data.Model.Sucursal data = default(data.Model.Sucursal))
         {
-            return _repository.SelectSingle(this, maxdepth);
+            return _repository.SelectSingle(this, maxdepth, data);
         }
         public virtual (Result result, IEnumerable<data.Model.Sucursal> datas) SelectMultiple(int maxdepth = 1, int top = 0)
         {
@@ -280,6 +214,75 @@ namespace data.Query
         public virtual (Result result, int rows) Delete(int maxdepth = 1)
         {
             return _repository.Delete(this, maxdepth);
+        }
+    }
+}
+
+namespace data.Mapper
+{
+    public partial class Sucursal : MapperTable<domain.Model.Sucursal, data.Model.Sucursal>
+    {
+        public override data.Model.Sucursal CreateInstance(int maxdepth = 1, int depth = 0)
+        {
+            var instance = base.CreateInstance(maxdepth, depth);
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                instance.Empresa = new data.Mapper.Empresa().CreateInstance(maxdepth, depth);
+            }
+
+            return instance;
+        }
+        public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
+        {
+            data.Domain.Id = null;
+            data.Domain.Nombre = null;
+            data.Domain.Fecha = null;
+            data.Domain.Activo = null;
+            data.Domain.IdEmpresa = null;
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                data.Empresa = new data.Mapper.Empresa().Clear(data.Empresa, maxdepth, depth);
+            }
+            else
+            {
+                data.Empresa = null;
+            }
+
+            return data;
+        }
+
+        public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
+        {
+            data.Domain.Id = data["Id"].Value as int?;
+            data.Domain.Nombre = data["Nombre"].Value as string;
+            data.Domain.Activo = data["Activo"].Value as bool?;
+            data.Domain.Fecha = data["Fecha"].Value as DateTime?;
+            data.Domain.IdEmpresa = data["IdEmpresa"].Value as int?;
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                data.Empresa = new data.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
+            }
+
+            return data;
+        }
+
+        public override data.Model.Sucursal Read(data.Model.Sucursal data, IDataReader reader, IList<string> prefixname, string aliasseparator = ".", int maxdepth = 1, int depth = 0)
+        {
+            data = base.Read(data, reader, prefixname, aliasseparator, maxdepth, depth);
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                data.Empresa = new data.Mapper.Empresa().Read(data.Empresa, reader, prefixname, aliasseparator, maxdepth, depth);
+            }
+
+            return data;
         }
     }
 }

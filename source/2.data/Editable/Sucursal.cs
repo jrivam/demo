@@ -10,10 +10,10 @@ namespace data.Model
         public Sucursal()
             : this("test.connectionstring.name", "sucursal", "Sucursal")
         {
-            SelectDbCommand = ("gsp_sucursal_select", CommandType.StoredProcedure, new List<DbParameter>());
-            InsertDbCommand = ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<DbParameter>());
-            UpdateDbCommand = ("gsp_sucursal_update", CommandType.StoredProcedure, new List<DbParameter>());
-            DeleteDbCommand = ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<DbParameter>());
+            //SelectDbCommand = ("gsp_sucursal_select", CommandType.StoredProcedure, new List<DbParameter>());
+            //InsertDbCommand = ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<DbParameter>());
+            //UpdateDbCommand = ("gsp_sucursal_update", CommandType.StoredProcedure, new List<DbParameter>());
+            //DeleteDbCommand = ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<DbParameter>());
         }
     }
 }

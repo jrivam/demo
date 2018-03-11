@@ -8,14 +8,6 @@ namespace business.Model
 {
     public partial class Empresa : IEntityState<domain.Model.Empresa, data.Model.Empresa>, IEntityLogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
     {
-        public partial class Mapper : MapperState<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
-        {
-            public override business.Model.Empresa Map(business.Model.Empresa business, int maxdepth = 1, int depth = 0)
-            {
-                return base.Map(business, maxdepth, depth);
-            }
-        }
-
         public virtual data.Model.Empresa Data { get; set; } = new data.Model.Empresa();
 
         protected readonly ILogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa> _logic;
@@ -25,7 +17,7 @@ namespace business.Model
             _logic = logic;
         }
         public Empresa()
-            : this(new Logic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>(new business.Model.Empresa.Mapper()))
+            : this(new Logic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>(new business.Mapper.Empresa()))
         {
         }
 
@@ -96,9 +88,9 @@ namespace business.Model
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, business.Model.Empresa business) Load(int maxdepth = 1)
+        public virtual (Result result, business.Model.Empresa business) Load()
         {
-            var load = _logic.Load(this, Data, maxdepth);
+            var load = _logic.Load(this, Data);
 
             return load;
         }
@@ -169,17 +161,28 @@ namespace business.Query
             _logic = logic;
         }
         public Empresa()
-            : this(new Logic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>(new business.Model.Empresa.Mapper()))
+            : this(new Logic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>(new business.Mapper.Empresa()))
         {
         }
 
-        public virtual (Result result, business.Model.Empresa business) Retrieve(int maxdepth = 1)
+        public virtual (Result result, business.Model.Empresa business) Retrieve(int maxdepth = 1, business.Model.Empresa business = default(business.Model.Empresa))
         {
-            return _logic.Retrieve(Data, maxdepth);
+            return _logic.Retrieve(Data, maxdepth, business);
         }
         public virtual (Result result, IEnumerable<business.Model.Empresa> businesses) List(int maxdepth = 1, int top = 0)
         {
             return _logic.List(Data, maxdepth, top);
+        }
+    }
+}
+
+namespace business.Mapper
+{
+    public partial class Empresa : MapperState<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
+    {
+        public override business.Model.Empresa Map(business.Model.Empresa business, int maxdepth = 1, int depth = 0)
+        {
+            return base.Map(business, maxdepth, depth);
         }
     }
 }

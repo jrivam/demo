@@ -11,9 +11,9 @@ namespace library.Interface.Data
     {
         U Clear(U data, int maxdepth = 1);
 
-        (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1);
-        (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1);
-        (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1);
+        (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1, U data = default(U));
+        (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, U data = default(U));
+        (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1, U data = default(U));
 
         (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable query, int maxdepth = 1, int top = 0);
         (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1);

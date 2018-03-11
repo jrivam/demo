@@ -7,10 +7,10 @@ namespace library.Interface.Data
     public interface IQueryRepository<T, U> where T : IEntity
                                             where U : IEntityTable<T>
     {
-        (Result result, U data) SelectSingle(int maxdepth);
-        (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth, int top);
+        (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U));
+        (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0);
 
-        (Result result, int rows) Update(U data, int maxdepth);
-        (Result result, int rows) Delete(int maxdepth);
+        (Result result, int rows) Update(U data, int maxdepth = 1);
+        (Result result, int rows) Delete(int maxdepth = 1);
     }
 }

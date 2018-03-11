@@ -9,37 +9,6 @@ namespace business.Model
 {
     public partial class Sucursal : IEntityState<domain.Model.Sucursal, data.Model.Sucursal>, IEntityLogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
     {
-        public partial class Mapper : MapperState<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
-        {
-            public override business.Model.Sucursal Clear(business.Model.Sucursal business, int maxdepth = 1, int depth = 0)
-            {
-                business = base.Clear(business, maxdepth, depth);
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    business.Empresa = new business.Model.Empresa.Mapper().Clear(business.Empresa, maxdepth, depth);
-                }
-                else
-                {
-                    business.Empresa = null;
-                }
-
-                return business;
-            }
-            public override business.Model.Sucursal Map(business.Model.Sucursal business, int maxdepth = 1, int depth = 0)
-            {
-                business = base.Map(business, maxdepth, depth);
-
-                depth++;
-                if (depth < maxdepth || maxdepth == 0)
-                {
-                    business.Empresa = new business.Model.Empresa.Mapper().Map(business.Empresa, maxdepth, depth);
-                }
-
-                return business;
-            }
-        }
         public virtual data.Model.Sucursal Data { get; set; } = new data.Model.Sucursal();
 
         protected readonly ILogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal> _logic;
@@ -49,7 +18,7 @@ namespace business.Model
             _logic = logic;
         }
         public Sucursal()
-            : this(new Logic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>(new business.Model.Sucursal.Mapper()))
+            : this(new Logic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>(new business.Mapper.Sucursal()))
         {
         }
 
@@ -96,9 +65,9 @@ namespace business.Model
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, business.Model.Sucursal business) Load(int maxdepth = 1)
+        public virtual (Result result, business.Model.Sucursal business) Load()
         {
-            var load = _logic.Load(this, Data, maxdepth);
+            var load = _logic.Load(this, Data);
 
             return load;
         }
@@ -167,7 +136,7 @@ namespace business.Query
             _logic = logic;
         }
         public Sucursal()
-            : this(new Logic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>(new business.Model.Sucursal.Mapper()))
+            : this(new Logic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>(new business.Mapper.Sucursal()))
         {
         }
 
@@ -186,13 +155,48 @@ namespace business.Query
             set { if (_empresa != value) { _empresa = value; } }
         }
 
-        public virtual (Result result, business.Model.Sucursal business) Retrieve(int maxdepth = 1)
+        public virtual (Result result, business.Model.Sucursal business) Retrieve(int maxdepth = 1, business.Model.Sucursal business = default(business.Model.Sucursal))
         {
-            return _logic.Retrieve(Data, maxdepth);
+            return _logic.Retrieve(Data, maxdepth, business);
         }
         public virtual (Result result, IEnumerable<business.Model.Sucursal> businesses) List(int maxdepth = 1, int top = 0)
         {
             return _logic.List(Data, maxdepth, top);
+        }
+    }
+}
+
+namespace business.Mapper
+{
+    public partial class Sucursal : MapperState<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
+    {
+        public override business.Model.Sucursal Clear(business.Model.Sucursal business, int maxdepth = 1, int depth = 0)
+        {
+            business = base.Clear(business, maxdepth, depth);
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                business.Empresa = new business.Mapper.Empresa().Clear(business.Empresa, maxdepth, depth);
+            }
+            else
+            {
+                business.Empresa = null;
+            }
+
+            return business;
+        }
+        public override business.Model.Sucursal Map(business.Model.Sucursal business, int maxdepth = 1, int depth = 0)
+        {
+            business = base.Map(business, maxdepth, depth);
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                business.Empresa = new business.Mapper.Empresa().Map(business.Empresa, maxdepth, depth);
+            }
+
+            return business;
         }
     }
 }

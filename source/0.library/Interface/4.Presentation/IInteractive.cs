@@ -13,11 +13,11 @@ namespace library.Interface.Presentation
     {
         W Clear(W presentation, IEntityLogic<T, U, V> logic, int maxdepth = 1);
 
-        (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic, int maxdepth = 1);
+        (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic);
         (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> logic);
         (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> logic);
 
-        (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1);
+        (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1, W presentation = default(W));
         (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth = 1, int top = 0);
     }
 }

@@ -11,7 +11,7 @@ namespace library.Interface.Presentation
                                                     where V : IEntityState<T, U>
                                                     where W : IEntityView<T, U, V>
     {
-        (Result result, W presentation) Retrieve(int maxdepth);
+        (Result result, W presentation) Retrieve(int maxdepth, W presentation = default(W));
         (Result result, IEnumerable<W> presentations) List(int maxdepth, int top);
     }
 }
