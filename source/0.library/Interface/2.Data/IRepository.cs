@@ -27,10 +27,10 @@ namespace library.Interface.Data
         (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null);
         (Result result, int rows) Delete(IDbCommand command);
 
-        (Result result, U data) Select(U data, int maxdepth = 1);
-        (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand, int maxdepth = 1);
-        (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null, int maxdepth = 1);
-        (Result result, U data) Select(U data, IDbCommand command, int maxdepth = 1);
+        (Result result, U data) Select(U data);
+        (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand);
+        (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null);
+        (Result result, U data) Select(U data, IDbCommand command);
 
         (Result result, U data) Insert(U data);
         (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand);

@@ -169,9 +169,9 @@ namespace business.Query
         {
             return _logic.Retrieve(Data, maxdepth, business);
         }
-        public virtual (Result result, IEnumerable<business.Model.Empresa> businesses) List(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<business.Model.Empresa> businesses) List(int maxdepth = 1, int top = 0, IList<business.Model.Empresa> businesses = null)
         {
-            return _logic.List(Data, maxdepth, top);
+            return _logic.List(Data, maxdepth, top, businesses);
         }
     }
 }

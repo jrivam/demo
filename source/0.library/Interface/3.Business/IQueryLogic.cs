@@ -10,6 +10,6 @@ namespace library.Interface.Business
                                             where V : IEntityState<T, U>
     {
         (Result result, V business) Retrieve(int maxdepth, V business = default(V));
-        (Result result, IEnumerable<V> businesses) List(int maxdepth, int top);
+        (Result result, IEnumerable<V> businesses) List(int maxdepth = 1, int top = 0, IList<V> businesses = null);
     }
 }

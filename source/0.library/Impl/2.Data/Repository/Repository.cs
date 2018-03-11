@@ -85,27 +85,27 @@ namespace library.Impl.Data.Repository
             return ExecuteNonQuery(command);
         }
 
-        public virtual (Result result, U data) Select(U data, int maxdepth = 1)
+        public virtual (Result result, U data) Select(U data)
         {
-            return (data.SelectDbCommand != null) ? Select(data, data.SelectDbCommand.Value, maxdepth) : Select(data, _builder.Select(data), maxdepth);
+            return (data.SelectDbCommand != null) ? Select(data, data.SelectDbCommand.Value) : Select(data, _builder.Select(data));
         }
-        public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand, int maxdepth = 1)
+        public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
         {
             var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
 
             foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), command));
 
-            return Select(data, command, maxdepth);
+            return Select(data, command);
         }
-        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null, int maxdepth = 1)
+        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null)
         {
-            return Select(data, _builder.GetCommand(commandtext, commandtype, parameters), maxdepth);
+            return Select(data, _builder.GetCommand(commandtext, commandtype, parameters));
         }
-        public virtual (Result result, U data) Select(U data, IDbCommand command, int maxdepth = 1)
+        public virtual (Result result, U data) Select(U data, IDbCommand command)
         {
             if (data.Domain.Id != null)
             {
-                var executequery = ExecuteQuery(command, maxdepth, new List<U>() { data });
+                var executequery = ExecuteQuery(command, 1, new List<U>() { data });
 
                 return (executequery.result, executequery.datas.FirstOrDefault());
             }

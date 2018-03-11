@@ -202,9 +202,9 @@ namespace data.Query
         {
             return _repository.SelectSingle(this, maxdepth, data);
         }
-        public virtual (Result result, IEnumerable<data.Model.Sucursal> datas) SelectMultiple(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<data.Model.Sucursal> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<data.Model.Sucursal> datas = null)
         {
-            return _repository.SelectMultiple(this, maxdepth, top);
+            return _repository.SelectMultiple(this, maxdepth, top, datas);
         }
 
         public virtual (Result result, int rows) Update(data.Model.Sucursal entity, int maxdepth = 1)
