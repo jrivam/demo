@@ -18,6 +18,6 @@ namespace library.Interface.Presentation
         (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> logic);
 
         (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1, W presentation = default(W));
-        (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth = 1, int top = 0);
+        (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth = 1, int top = 0, IList<W> presentations = null);
     }
 }

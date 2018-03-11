@@ -46,17 +46,17 @@ namespace library.Impl.Data.Repository
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
 
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable query, int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable query, int maxdepth = 1, int top = 0, IList<U> datas = null)
         {
-            return SelectMultiple(_builder.Select(query, maxdepth, top), maxdepth);
+            return SelectMultiple(_builder.Select(query, maxdepth, top), maxdepth, datas);
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1)
+        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
         {
-            return SelectMultiple(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth);
+            return SelectMultiple(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1)
+        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
         {
-            return ExecuteQuery(command, maxdepth);
+            return ExecuteQuery(command, maxdepth, datas);
         }
 
         public virtual (Result result, int rows) Update(U table, IQueryTable query, int maxdepth = 1)
@@ -263,25 +263,22 @@ namespace library.Impl.Data.Repository
         {
             try
             {
-                var list = new List<U>();
+                var enumeration = new List<U>();
+                var iterator = (datas ?? new List<U>()).GetEnumerator();
 
                 command.Connection.Open();
                 var reader = command.ExecuteReader();
 
                 bool passed = false;
-
-                var iterator = datas?.GetEnumerator() ?? new List<U>().GetEnumerator();
                 while (reader.Read())
                 {
-                    var data = (iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth, 0));
+                    var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth, 0);
 
                     _mapper.Clear(data, maxdepth, 0);
-
                     _mapper.Read(data, reader, new List<string>(), _builder.SyntaxSign.AliasSeparatorColumn, maxdepth, 0);
-
                     _mapper.Map(data, maxdepth, 0);
 
-                    list.Add(data);
+                    enumeration.Add(data);
 
                     passed = true;
                 }
@@ -289,7 +286,7 @@ namespace library.Impl.Data.Repository
                 reader.Close();
                 command.Connection.Close();
 
-                return (new Result() { Success = true, Passed = passed }, list);
+                return (new Result() { Success = true, Passed = passed }, enumeration);
             }
             catch (Exception ex)
             {

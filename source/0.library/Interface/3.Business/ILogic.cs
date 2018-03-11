@@ -16,6 +16,6 @@ namespace library.Interface.Business
         (Result result, V business) Erase(V business, IEntityRepository<T, U> repository);
 
         (Result result, V business) Retrieve(IQueryRepository<T, U> repository, int maxdepth = 1, V business = default(V));
-        (Result result, IEnumerable<V> businesses) List(IQueryRepository<T, U> repository, int maxdepth =1, int top = 0);
+        (Result result, IEnumerable<V> businesses) List(IQueryRepository<T, U> repository, int maxdepth =1, int top = 0, IList<V> businesses = null);
     }
 }
