@@ -69,21 +69,16 @@ namespace WpfApp.Views
         }
         public void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
-            //var load = new presentation.Model.Sucursal() { Id = message.oldvalue.Id }.Load();
+            var view = new Views.Sucursal();
 
-            //if (load.result.Success && load.result.Passed)
-            //{
-                var view = new Views.Sucursal();
+            view.ViewModel = message.oldvalue;
 
-                view.ViewModel = message.oldvalue;//load.presentation;
+            view.ShowDialog();
 
-                view.ShowDialog();
-
-                if (view.ViewModel.Business.Deleted)
-                    ViewModel.Remove(message.oldvalue);
-                else
-                    ViewModel.SucursalEdit((message.oldvalue, view.ViewModel));
-            //}
+            if (view.ViewModel.Business.Deleted)
+                ViewModel.Remove(message.oldvalue);
+            else
+                ViewModel.SucursalEdit((message.oldvalue, view.ViewModel));
         }
     }
 }
