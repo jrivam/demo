@@ -27,21 +27,20 @@ namespace library.Impl.Business
             business.Changed = false;
             business.Deleted = false;
 
-            _mapper.Map(business, maxdepth, 0);
+            _mapper.Map(business, maxdepth);
 
             return business;
         }
 
         public virtual (Result result, V business) Load(V business, IEntityRepository<T, U> repository)
         {
-            _mapper.Clear(business, 1, 0);
-
             var select = repository.Select();
             business.Data = select.data;
 
             if (select.result.Success && select.result.Passed)
             {
-                _mapper.Map(business, 1, 0);
+                _mapper.Clear(business, 1);
+                _mapper.Map(business, 1);
 
                 business.Loaded = true;
                 business.Changed = false;
@@ -59,7 +58,7 @@ namespace library.Impl.Business
 
                 if (updateinsert.result.Success && updateinsert.result.Passed)
                 {
-                    _mapper.Map(business, 1, 0);
+                    _mapper.Map(business, 1);
 
                     business.Loaded = true;
                     business.Changed = false;
@@ -80,7 +79,7 @@ namespace library.Impl.Business
 
                 if (delete.result.Success && delete.result.Passed)
                 {
-                    _mapper.Map(business, 1, 0);
+                    _mapper.Map(business, 1);
 
                     business.Loaded = false;
                     business.Deleted = true;
@@ -108,7 +107,8 @@ namespace library.Impl.Business
 
             if (selectsingle.result.Success && selectsingle.result.Passed)
             {
-                _mapper.Map(business, maxdepth, 0);
+                _mapper.Clear(business, maxdepth);
+                _mapper.Map(business, maxdepth);
 
                 business.Loaded = true;
                 business.Changed = false;
@@ -135,7 +135,8 @@ namespace library.Impl.Business
 
                     business.Data = data;
 
-                    _mapper.Map(business, maxdepth, 0);
+                    _mapper.Clear(business, maxdepth);
+                    _mapper.Map(business, maxdepth);
 
                     business.Loaded = true;
                     business.Changed = false;

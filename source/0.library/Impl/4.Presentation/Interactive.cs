@@ -24,21 +24,20 @@ namespace library.Impl.Business
         {
             presentation.Business = logic.Clear();
 
-            _mapper.Map(presentation, maxdepth, 0);
+            _mapper.Map(presentation, maxdepth);
 
             return presentation;
         }
 
         public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic)
         {
-            _mapper.Clear(presentation, 1, 0);
-
             var load = logic.Load();
             presentation.Business = load.business;
 
             if (load.result.Success && load.result.Passed)
             {
-                _mapper.Map(presentation, 1, 0);
+                _mapper.Clear(presentation, 1);
+                _mapper.Map(presentation, 1);
             }
 
             return (load.result, presentation);
@@ -48,7 +47,7 @@ namespace library.Impl.Business
             var save = logic.Save();
             presentation.Business = save.business;
 
-            _mapper.Map(presentation, 1, 0);
+            _mapper.Map(presentation, 1);
 
             return (save.result, presentation);
         }
@@ -57,7 +56,7 @@ namespace library.Impl.Business
             var erase = logic.Erase();
             presentation.Business = erase.business;
 
-            _mapper.Map(presentation, 1, 0);
+            _mapper.Map(presentation, 1);
 
             return (erase.result, presentation);
         }
@@ -78,7 +77,8 @@ namespace library.Impl.Business
 
             if (retrieve.result.Success && retrieve.result.Passed)
             {
-                _mapper.Map(presentation, maxdepth, 0);
+                _mapper.Clear(presentation, maxdepth);
+                _mapper.Map(presentation, maxdepth);
             }
 
             return (retrieve.result, presentation);
@@ -99,7 +99,8 @@ namespace library.Impl.Business
 
                 presentation.Business = business;
 
-                _mapper.Map(presentation, maxdepth, 0);
+                _mapper.Clear(presentation, maxdepth);
+                _mapper.Map(presentation, maxdepth);
 
                 enumeration.Add(presentation);
             }

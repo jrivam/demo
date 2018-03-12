@@ -174,15 +174,15 @@ namespace business.Mapper
         {
             business = base.Clear(business, maxdepth, depth);
 
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                business.Empresa = new business.Mapper.Empresa().Clear(business.Empresa, maxdepth, depth);
-            }
-            else
-            {
+            //depth++;
+            //if (depth < maxdepth || maxdepth == 0)
+            //{
+            //    business.Empresa = new business.Mapper.Empresa().Clear(business.Empresa, maxdepth, depth);
+            //}
+            //else
+            //{
                 business.Empresa = null;
-            }
+            //}
 
             return business;
         }

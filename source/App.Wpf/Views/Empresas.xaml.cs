@@ -67,13 +67,13 @@ namespace WpfApp.Views
         }
         public void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
         {
-            var load = new presentation.Model.Empresa() { Id = message.oldvalue.Id }.Load();
+            //var load = new presentation.Model.Empresa() { Id = message.oldvalue.Id }.Load();
 
-            if (load.result.Success && load.result.Passed)
-            {
+            //if (load.result.Success && load.result.Passed)
+            //{
                 var view = new Views.Empresa();
 
-                view.ViewModel = load.presentation;
+                view.ViewModel = message.oldvalue;//load.presentation;
                 //load.entity.Sucursales.Load();
 
                 view.ShowDialog();
@@ -82,7 +82,7 @@ namespace WpfApp.Views
                     ViewModel.Remove(message.oldvalue);
                 else
                     ViewModel.EmpresaEdit((message.oldvalue, view.ViewModel));
-            }
+            //}
         }
     }
 }

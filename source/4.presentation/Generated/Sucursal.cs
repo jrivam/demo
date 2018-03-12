@@ -125,7 +125,7 @@ namespace presentation.Model
                 {
                     _empresa = value;
 
-                    //OnPropertyChanged("Empresa");
+                    OnPropertyChanged("Empresa");
                 }
             }
         }
@@ -274,15 +274,15 @@ namespace presentation.Mapper
         {
             presentation = base.Clear(presentation, maxdepth, depth);
 
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                presentation.Empresa = new presentation.Mapper.Empresa().Clear(presentation.Empresa, maxdepth, depth);
-            }
-            else
-            {
+            //depth++;
+            //if (depth < maxdepth || maxdepth == 0)
+            //{
+            //    presentation.Empresa = new presentation.Mapper.Empresa().Clear(presentation.Empresa, maxdepth, depth);
+            //}
+            //else
+            //{
                 presentation.Empresa = null;
-            }
+            //}
 
             return presentation;
         }
