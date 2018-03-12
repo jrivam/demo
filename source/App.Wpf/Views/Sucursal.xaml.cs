@@ -4,9 +4,6 @@ using System.Windows;
 
 namespace WpfApp.Views
 {
-    /// <summary>
-    /// Interaction logic for SucursalView.xaml
-    /// </summary>
     public partial class Sucursal : Window
     {
         public presentation.Model.Sucursal ViewModel

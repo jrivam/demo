@@ -28,7 +28,7 @@ namespace library.Impl.Data.Repository
 
         public virtual U Clear(U data, int maxdepth = 1)
         {
-            return _mapper.Clear(data, maxdepth, 0);
+            return _mapper.Clear(data, maxdepth);
         }
 
         public virtual (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1, U data = default(U))
@@ -272,7 +272,7 @@ namespace library.Impl.Data.Repository
                 bool passed = false;
                 while (reader.Read())
                 {
-                    var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth, 0);
+                    var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
 
                     _mapper.Clear(data, maxdepth);
                     _mapper.Read(data, reader, new List<string>(), _builder.SyntaxSign.AliasSeparatorColumn, maxdepth);

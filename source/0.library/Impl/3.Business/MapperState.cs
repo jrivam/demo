@@ -1,9 +1,6 @@
 ﻿using library.Interface.Business;
 using library.Interface.Data;
 using library.Interface.Domain;
-using System;
-using System.Globalization;
-using System.Reflection;
 
 namespace library.Impl.Business
 {
