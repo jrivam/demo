@@ -55,7 +55,7 @@ namespace WpfApp.Views
             ViewModel.EmpresaErase(message);
         }
 
-        public void EmpresaAdd(presentation.Model.Empresa entity)
+        public virtual void EmpresaAdd(presentation.Model.Empresa entity)
         {
             var view = new Views.Empresa();
 
@@ -65,7 +65,7 @@ namespace WpfApp.Views
 
             ViewModel.EmpresaAdd((presentation.Model.Empresa)view.ViewModel);
         }
-        public void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
+        public virtual void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
         {
             var view = new Views.Empresa();
 

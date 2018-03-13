@@ -35,13 +35,13 @@ namespace business.Model
                     Data.Id = value;
                     Changed = true;
 
-                    if (Loaded)
-                    {
-                        if (value == null)
-                            Clear();
+                    //if (Loaded)
+                    //{
+                    //    if (value == null)
+                    //        Clear();
 
-                        //Sucursales.IdEmpresa = value;
-                    }
+                    //    Sucursales?.ForEach(x => x.IdEmpresa = value);
+                    //}
                 }
             }
         }
@@ -180,9 +180,5 @@ namespace business.Mapper
 {
     public partial class Empresa : MapperState<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
     {
-        public override business.Model.Empresa Map(business.Model.Empresa business, int maxdepth = 1, int depth = 0)
-        {
-            return base.Map(business, maxdepth, depth);
-        }
     }
 }

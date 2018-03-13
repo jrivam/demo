@@ -13,12 +13,12 @@ namespace library.Impl.Presentation
                                             where V : IEntityState<T, U>
                                             where W : IEntityView<T, U, V>
     {
-        public virtual W Clear(W presentation, int maxdepth = 1, int depth = 0)
+        public virtual W Clear(W presentation)
         {
             return presentation;
         }
 
-        public virtual W Map(W presentation, int maxdepth = 1, int depth = 0)
+        public virtual W Map(W presentation)
         {
             foreach (var column in presentation.Business.Data.Columns)
             {

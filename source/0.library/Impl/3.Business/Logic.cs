@@ -19,7 +19,7 @@ namespace library.Impl.Business
             _mapper = mapper;
         }
 
-        public virtual V Clear(V business, IEntityRepository<T, U> repository, int maxdepth = 1)
+        public virtual V Clear(V business, IEntityRepository<T, U> repository)
         {
             business.Data = repository.Clear();
 
@@ -27,7 +27,7 @@ namespace library.Impl.Business
             business.Changed = false;
             business.Deleted = false;
 
-            _mapper.Map(business, maxdepth);
+            _mapper.Map(business);
 
             return business;
         }
@@ -39,8 +39,8 @@ namespace library.Impl.Business
 
             if (select.result.Success && select.result.Passed)
             {
-                _mapper.Clear(business, 1);
-                _mapper.Map(business, 1);
+                _mapper.Clear(business);
+                _mapper.Map(business);
 
                 business.Loaded = true;
                 business.Changed = false;
@@ -58,7 +58,7 @@ namespace library.Impl.Business
 
                 if (updateinsert.result.Success && updateinsert.result.Passed)
                 {
-                    _mapper.Map(business, 1);
+                    _mapper.Map(business);
 
                     business.Loaded = true;
                     business.Changed = false;
@@ -79,7 +79,7 @@ namespace library.Impl.Business
 
                 if (delete.result.Success && delete.result.Passed)
                 {
-                    _mapper.Map(business, 1);
+                    _mapper.Map(business);
 
                     business.Loaded = false;
                     business.Deleted = true;
@@ -107,8 +107,8 @@ namespace library.Impl.Business
 
             if (selectsingle.result.Success && selectsingle.result.Passed)
             {
-                _mapper.Clear(business, maxdepth);
-                _mapper.Map(business, maxdepth);
+                _mapper.Clear(business);
+                _mapper.Map(business);
 
                 business.Loaded = true;
                 business.Changed = false;
@@ -135,8 +135,8 @@ namespace library.Impl.Business
 
                     business.Data = data;
 
-                    _mapper.Clear(business, maxdepth);
-                    _mapper.Map(business, maxdepth);
+                    _mapper.Clear(business);
+                    _mapper.Map(business);
 
                     business.Loaded = true;
                     business.Changed = false;

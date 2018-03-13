@@ -9,7 +9,7 @@ namespace library.Interface.Presentation
                                             where V : IEntityState<T, U>
                                             where W : IEntityView<T, U, V>
     {
-        W Clear(W presentation, int maxdepth = 1, int depth = 0);
-        W Map(W presentation, int maxdepth = 1, int depth = 0);
+        W Clear(W presentation);
+        W Map(W presentation);
     }
 }

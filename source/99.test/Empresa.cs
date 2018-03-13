@@ -12,10 +12,10 @@ namespace test
         public void Load_Success()
         {
             var mockMapper = new Moq.Mock<IMapperTable<domain.Model.Empresa, data.Model.Empresa>>();
-            var mockRepository = new Moq.Mock<IRepository<domain.Model.Empresa, data.Model.Empresa>>(mockMapper.Object);
+            var mockRepository = new Moq.Mock<IRepository<domain.Model.Empresa, data.Model.Empresa>>();
 
             mockRepository.Setup(x => x.Select(It.IsAny<data.Model.Empresa>()))
-            .Returns((IMapperTable<domain.Model.Empresa, data.Model.Empresa> mapper, data.Model.Empresa param) => 
+            .Returns((data.Model.Empresa param) => 
             {
                 return (new Result() { Success = true }, param);
             });

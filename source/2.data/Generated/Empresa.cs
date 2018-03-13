@@ -49,7 +49,22 @@ namespace data.Model
         }
         public virtual IList<IEntityColumn<domain.Model.Empresa>> Columns { get; set; } = new List<IEntityColumn<domain.Model.Empresa>>();
 
-        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { this["Id"].Value = Domain.Id = value; } } }
+        public virtual int? Id
+        {
+            get { return Domain?.Id; }
+            set
+            {
+                if (Domain?.Id != value)
+                {
+                    this["Id"].Value = Domain.Id = value;
+
+                    //if (value == null)
+                    //    Clear();
+
+                    //Sucursales?.ForEach(x => x.IdEmpresa = value);
+                }
+            }
+        }
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { this["RazonSocial"].Value = Domain.RazonSocial = value; } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { this["Activo"].Value = Domain.Activo = value; } } }
 

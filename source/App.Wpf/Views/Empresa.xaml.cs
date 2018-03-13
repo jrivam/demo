@@ -33,6 +33,7 @@ namespace WpfApp.Views
         {
             Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalAdd, "SucursalAdd");
             Messenger.Default.Register<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>(this, SucursalEdit, "SucursalEdit");
+            Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
         }
@@ -40,18 +41,19 @@ namespace WpfApp.Views
         {
             Messenger.Default.Unregister(this, "SucursalAdd");
             Messenger.Default.Unregister(this, "SucursalEdit");
+            Messenger.Default.Unregister(this, "SucursalErase");
 
             Messenger.Default.Unregister(this, "EmpresaErase");
 
             //ViewModel.Dispose();
         }
 
-        public void EmpresaErase((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
+        public virtual void EmpresaErase((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
         {
             this.Close();
         }
 
-        public void SucursalAdd(presentation.Model.Sucursal entity)
+        public virtual void SucursalAdd(presentation.Model.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -64,7 +66,7 @@ namespace WpfApp.Views
             if (view.ViewModel.IdEmpresa == ViewModel.Id)
                 ViewModel.Sucursales.SucursalAdd((presentation.Model.Sucursal)view.ViewModel);
         }
-        public void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
+        public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
             var view = new Views.Sucursal();
 
@@ -80,6 +82,10 @@ namespace WpfApp.Views
             {
                 ViewModel.Sucursales.SucursalEdit((message.oldvalue, view.ViewModel));
             }
+        }
+        public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
+        {
+            ViewModel.Sucursales.SucursalErase(message);
         }
     }
 }

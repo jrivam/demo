@@ -90,23 +90,6 @@ namespace presentation.Model
             }
         }
 
-        protected presentation.Model.Empresas _empresas;
-        public virtual presentation.Model.Empresas Empresas
-        {
-            get
-            {
-                if (_empresas == null)
-                {
-                    var query = new presentation.Query.Empresa();
-                    query.Business.Data["Activo"].Where(true);
-
-                    _empresas = new presentation.Model.Empresas().Load(query);
-                }
-
-                return _empresas;
-            }
-        }
-
         protected presentation.Model.Empresa _empresa;
         public virtual presentation.Model.Empresa Empresa
         {
@@ -127,6 +110,23 @@ namespace presentation.Model
 
                     OnPropertyChanged("Empresa");
                 }
+            }
+        }
+
+        protected presentation.Model.Empresas _empresas;
+        public virtual presentation.Model.Empresas Empresas
+        {
+            get
+            {
+                if (_empresas == null)
+                {
+                    var query = new presentation.Query.Empresa();
+                    query.Business.Data["Activo"].Where(true);
+
+                    _empresas = new presentation.Model.Empresas().Load(query);
+                }
+
+                return _empresas;
             }
         }
 
@@ -234,7 +234,6 @@ namespace presentation.Model
                     this[i] = message.newvalue;
             }
         }
-
     }
 }
 
@@ -270,33 +269,19 @@ namespace presentation.Mapper
 {
     public partial class Sucursal : MapperView<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation)
         {
-            presentation = base.Clear(presentation, maxdepth, depth);
+            presentation = base.Clear(presentation);
 
-            //depth++;
-            //if (depth < maxdepth || maxdepth == 0)
-            //{
-            //    presentation.Empresa = new presentation.Mapper.Empresa().Clear(presentation.Empresa, maxdepth, depth);
-            //}
-            //else
-            //{
-                presentation.Empresa = null;
-            //}
+            presentation.Empresa = null;
 
             return presentation;
         }
-        public override presentation.Model.Sucursal Map(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        public override presentation.Model.Sucursal Map(presentation.Model.Sucursal presentation)
         {
-            presentation = base.Map(presentation, maxdepth, depth);
+            presentation = base.Map(presentation);
 
             presentation.OnPropertyChanged("Empresa");
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                presentation.Empresa = new presentation.Mapper.Empresa().Map(presentation.Empresa, maxdepth, depth);
-            }
 
             return presentation;
         }

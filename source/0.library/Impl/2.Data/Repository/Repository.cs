@@ -292,7 +292,6 @@ namespace library.Impl.Data.Repository
             {
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, null);
             }
-        }
-   
+        } 
     }
 }

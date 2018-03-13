@@ -9,7 +9,7 @@ namespace library.Interface.Business
                                       where U : IEntityTable<T>
                                       where V : IEntityState<T, U>
     {
-        V Clear(V business, IEntityRepository<T, U> repository, int maxdepth = 1);
+        V Clear(V business, IEntityRepository<T, U> repository);
 
         (Result result, V business) Load(V business, IEntityRepository<T, U> repository);
         (Result result, V business) Save(V business, IEntityRepository<T, U> repository);

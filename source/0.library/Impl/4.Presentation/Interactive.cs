@@ -20,11 +20,11 @@ namespace library.Impl.Business
         {
             _mapper = mapper;
         }
-        public virtual W Clear(W presentation, IEntityLogic<T, U, V> logic, int maxdepth = 1)
+        public virtual W Clear(W presentation, IEntityLogic<T, U, V> logic)
         {
             presentation.Business = logic.Clear();
 
-            _mapper.Map(presentation, maxdepth);
+            _mapper.Map(presentation);
 
             return presentation;
         }
@@ -36,8 +36,8 @@ namespace library.Impl.Business
 
             if (load.result.Success && load.result.Passed)
             {
-                _mapper.Clear(presentation, 1);
-                _mapper.Map(presentation, 1);
+                _mapper.Clear(presentation);
+                _mapper.Map(presentation);
             }
 
             return (load.result, presentation);
@@ -47,7 +47,10 @@ namespace library.Impl.Business
             var save = logic.Save();
             presentation.Business = save.business;
 
-            _mapper.Map(presentation, 1);
+            if (save.result.Success && save.result.Passed)
+            {
+                _mapper.Map(presentation);
+            }
 
             return (save.result, presentation);
         }
@@ -56,7 +59,10 @@ namespace library.Impl.Business
             var erase = logic.Erase();
             presentation.Business = erase.business;
 
-            _mapper.Map(presentation, 1);
+            if (erase.result.Success && erase.result.Passed)
+            {
+                _mapper.Map(presentation);
+            }
 
             return (erase.result, presentation);
         }
@@ -77,8 +83,8 @@ namespace library.Impl.Business
 
             if (retrieve.result.Success && retrieve.result.Passed)
             {
-                _mapper.Clear(presentation, maxdepth);
-                _mapper.Map(presentation, maxdepth);
+                _mapper.Clear(presentation);
+                _mapper.Map(presentation);
             }
 
             return (retrieve.result, presentation);
@@ -99,8 +105,8 @@ namespace library.Impl.Business
 
                 presentation.Business = business;
 
-                _mapper.Clear(presentation, maxdepth);
-                _mapper.Map(presentation, maxdepth);
+                _mapper.Clear(presentation);
+                _mapper.Map(presentation);
 
                 enumeration.Add(presentation);
             }

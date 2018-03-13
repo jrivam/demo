@@ -56,7 +56,7 @@ namespace WpfApp.Views
             ViewModel.SucursalErase(message);
         }
 
-        public void SucursalAdd(presentation.Model.Sucursal entity)
+        public virtual void SucursalAdd(presentation.Model.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -67,7 +67,7 @@ namespace WpfApp.Views
 
             ViewModel.SucursalAdd((presentation.Model.Sucursal)view.ViewModel);
         }
-        public void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
+        public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
             var view = new Views.Sucursal();
 
