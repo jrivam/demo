@@ -257,7 +257,6 @@ namespace library.Impl.Data.Repository
                 command.Connection.Open();
                 var reader = command.ExecuteReader();
 
-                bool passed = false;
                 while (reader.Read())
                 {
                     var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
@@ -267,8 +266,6 @@ namespace library.Impl.Data.Repository
                     _mapper.Map(data, maxdepth);
 
                     enumeration.Add(data);
-
-                    passed = true;
                 }
 
                 reader.Close();
