@@ -50,16 +50,14 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]business.Model.Sucursal entity)
+        public IHttpActionResult Post([FromBody]business.Model.Sucursal business)
         {
             try
             {
-                if (entity == null)
-                {
+                if (business == null)
                     return BadRequest();
-                }
 
-                var save = entity.Save();
+                var save = business.Save();
                 if (save.result.Success)
                 {
                     return Created<domain.Model.Sucursal>(Request.RequestUri + "/" + save.business.Id.ToString(), save.business.Data.Domain);
@@ -73,14 +71,14 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]business.Model.Sucursal entity)
+        public IHttpActionResult Put(int id, [FromBody]business.Model.Sucursal business)
         {
             try
             {
-                if (entity == null)
+                if (business == null)
                     return BadRequest();
 
-                var save = entity.Save();
+                var save = business.Save();
                 if (save.result.Success)
                 {
                     return Ok(save.business.Data.Domain);
