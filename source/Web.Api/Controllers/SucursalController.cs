@@ -7,14 +7,18 @@ namespace Web.Api.Controllers
 {
     public class SucursalController : ApiController
     {
-        public IHttpActionResult Get(string search = "")
+        public IHttpActionResult Get(string nombre = null, bool? activo = null, string fecha = null)
         {
             try
             {
                 var query = new business.Query.Sucursal();
 
-                if (search != "")
-                    query.Data["Nombre"].Where(search, WhereOperator.Like);
+                if (nombre != null)
+                    query.Data["Nombre"].Where(nombre, WhereOperator.Like);
+                if (activo != null)
+                    query.Data["Activo"].Where(activo);
+                if (fecha != null)
+                    query.Data["Fecha"].Where(Convert.ToDateTime(fecha).ToString("dd/MM/yyyy"));
 
                 return Ok(new business.Model.Sucursales().Load(query.List().businesses).Datas.Domains);
             }

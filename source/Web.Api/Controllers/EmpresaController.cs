@@ -7,14 +7,16 @@ namespace Web.Api.Controllers
 {
     public class EmpresaController : ApiController
     {
-        public IHttpActionResult Get(string search = "")
+        public IHttpActionResult Get(string razonsocial = null, bool? activo = null)
         {
             try
             {
                 var query = new business.Query.Empresa();
 
-                if (search != "")
-                    query.Data["RazonSocial"].Where(search, WhereOperator.Like);
+                if (razonsocial != null)
+                    query.Data["RazonSocial"].Where(razonsocial, WhereOperator.Like);
+                if (activo != null)
+                    query.Data["Activo"].Where(activo);
 
                 return Ok(new business.Model.Empresas().Load(query.List().businesses).Datas.Domains);
             }
