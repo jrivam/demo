@@ -7,7 +7,7 @@ namespace library.Interface.Business
                                         where U : IEntityTable<T>
                                         where V : IEntityState<T, U>
     {
-        V Clear(V business, int maxdepth = 1, int depth = 0);
-        V Map(V business, int maxdepth = 1, int depth = 0);
+        V Clear(V business);
+        V Map(V business);
     }
 }

@@ -61,6 +61,23 @@ namespace business.Model
             set { if (_empresa != value) { _empresa = value; } }
         }
 
+        protected business.Model.Empresas _empresas;
+        public virtual business.Model.Empresas Empresas
+        {
+            get
+            {
+                if (_empresas == null)
+                {
+                    var query = new business.Query.Empresa();
+                    query.Data["Activo"].Where(true);
+
+                    _empresas = new business.Model.Empresas().Load(query);
+                }
+
+                return _empresas;
+            }
+        }
+
         public virtual business.Model.Sucursal Clear()
         {
             return _logic.Clear(this, Data);
@@ -170,31 +187,17 @@ namespace business.Mapper
 {
     public partial class Sucursal : MapperState<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
     {
-        public override business.Model.Sucursal Clear(business.Model.Sucursal business, int maxdepth = 1, int depth = 0)
+        public override business.Model.Sucursal Clear(business.Model.Sucursal business)
         {
-            business = base.Clear(business, maxdepth, depth);
+            business = base.Clear(business);
 
-            //depth++;
-            //if (depth < maxdepth || maxdepth == 0)
-            //{
-            //    business.Empresa = new business.Mapper.Empresa().Clear(business.Empresa, maxdepth, depth);
-            //}
-            //else
-            //{
-                business.Empresa = null;
-            //}
+            business.Empresa = null;
 
             return business;
         }
-        public override business.Model.Sucursal Map(business.Model.Sucursal business, int maxdepth = 1, int depth = 0)
+        public override business.Model.Sucursal Map(business.Model.Sucursal business)
         {
-            business = base.Map(business, maxdepth, depth);
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                business.Empresa = new business.Mapper.Empresa().Map(business.Empresa, maxdepth, depth);
-            }
+            business = base.Map(business);
 
             return business;
         }

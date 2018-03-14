@@ -65,7 +65,23 @@ namespace presentation.Model
 
         public virtual ICommand EditCommand { get; set; }
 
-        public virtual int? Id { get { return Business?.Id; } set { if (Business?.Id != value) { Business.Id = value; OnPropertyChanged("Id"); } } }
+        public virtual int? Id
+        {
+            get { return Business?.Id; }
+            set
+            {
+                if (Business?.Id != value)
+                {
+                    Business.Id = value;
+                    OnPropertyChanged("Id");
+
+                    //if (value == null)
+                    //    Clear();
+
+                    //Sucursales?.ForEach(x => x.IdEmpresa = value);
+                }
+            }
+        }
         public virtual string RazonSocial { get { return Business?.RazonSocial; } set { if (Business?.RazonSocial != value) { Business.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
         public virtual bool? Activo { get { return Business?.Activo; } set { if (Business?.Activo != value) { Business.Activo = value; OnPropertyChanged("Activo"); } } }
 
@@ -103,7 +119,7 @@ namespace presentation.Model
 
                  Business.Sucursales = Sucursales?.Businesses;
 
-                 //OnPropertyChanged("Sucursales");
+                 OnPropertyChanged("Sucursales");
             }
         }
 
@@ -248,9 +264,5 @@ namespace presentation.Mapper
 {
     public partial class Empresa : MapperView<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
     {
-        public override presentation.Model.Empresa Map(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
-        {
-            return base.Map(presentation, maxdepth, depth);
-        }
     }
 }

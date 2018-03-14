@@ -11,7 +11,7 @@ namespace library.Interface.Presentation
                                                 where V : IEntityState<T, U>
                                                 where W : IEntityView<T, U, V>
     {
-        W Clear(W presentation, IEntityLogic<T, U, V> logic, int maxdepth = 1);
+        W Clear(W presentation, IEntityLogic<T, U, V> logic);
 
         (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic);
         (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> logic);

@@ -19,7 +19,7 @@ namespace library.Impl.Business
             _mapper = mapper;
         }
 
-        public virtual V Clear(V business, IEntityRepository<T, U> repository, int maxdepth = 1)
+        public virtual V Clear(V business, IEntityRepository<T, U> repository)
         {
             business.Data = repository.Clear();
 
@@ -27,27 +27,32 @@ namespace library.Impl.Business
             business.Changed = false;
             business.Deleted = false;
 
-            _mapper.Map(business, maxdepth);
+            _mapper.Map(business);
 
             return business;
         }
 
         public virtual (Result result, V business) Load(V business, IEntityRepository<T, U> repository)
         {
-            var select = repository.Select();
-            business.Data = select.data;
-
-            if (select.result.Success && select.result.Passed)
+            if (business.Data.Domain.Id != null)
             {
-                _mapper.Clear(business, 1);
-                _mapper.Map(business, 1);
+                var select = repository.Select();
+                business.Data = select.data;
 
-                business.Loaded = true;
-                business.Changed = false;
-                business.Deleted = false;
+                if (select.result.Success)
+                {
+                    _mapper.Clear(business);
+                    _mapper.Map(business);
+
+                    business.Loaded = true;
+                    business.Changed = false;
+                    business.Deleted = false;
+                }
+
+                return (select.result, business);
             }
 
-            return (select.result, business);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Load: empty primary key") } }, business);
         }
         public virtual (Result result, V business) Save(V business, IEntityRepository<T, U> repository)
         {
@@ -56,9 +61,9 @@ namespace library.Impl.Business
                 var updateinsert = (business.Loaded ? repository.Update() : repository.Insert());
                 business.Data = updateinsert.data;
 
-                if (updateinsert.result.Success && updateinsert.result.Passed)
+                if (updateinsert.result.Success)
                 {
-                    _mapper.Map(business, 1);
+                    _mapper.Map(business);
 
                     business.Loaded = true;
                     business.Changed = false;
@@ -68,7 +73,7 @@ namespace library.Impl.Business
                 return (updateinsert.result, business);
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Save: without changes") } }, business);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Save: no changes to persist") } }, business);
         }
         public virtual (Result result, V business) Erase(V business, IEntityRepository<T, U> repository)
         {
@@ -77,9 +82,9 @@ namespace library.Impl.Business
                 var delete = repository.Delete();
                 business.Data = delete.data;
 
-                if (delete.result.Success && delete.result.Passed)
+                if (delete.result.Success)
                 {
-                    _mapper.Map(business, 1);
+                    _mapper.Map(business);
 
                     business.Loaded = false;
                     business.Deleted = true;
@@ -88,7 +93,7 @@ namespace library.Impl.Business
                 return (delete.result, business);
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, business);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, business);
         }
 
         public virtual (Result result, V business) Retrieve(IQueryRepository<T, U> repository, int maxdepth = 1, V business = default(V))
@@ -105,10 +110,10 @@ namespace library.Impl.Business
             var selectsingle = repository.SelectSingle(maxdepth, business.Data);
             business.Data = selectsingle.data;
 
-            if (selectsingle.result.Success && selectsingle.result.Passed)
+            if (selectsingle.result.Success)
             {
-                _mapper.Clear(business, maxdepth);
-                _mapper.Map(business, maxdepth);
+                _mapper.Clear(business);
+                _mapper.Map(business);
 
                 business.Loaded = true;
                 business.Changed = false;
@@ -123,20 +128,20 @@ namespace library.Impl.Business
             var iterator = (businesses ?? new List<V>()).GetEnumerator();
 
             var selectmultiple = repository.SelectMultiple(maxdepth, top);
-            if (selectmultiple.result.Success && selectmultiple.result.Passed)
+            if (selectmultiple.result.Success)
             {
                 foreach (var data in selectmultiple.datas)
                 {
                     var business = iterator.MoveNext() ? iterator.Current : (V)Activator.CreateInstance(typeof(V),
-                    BindingFlags.CreateInstance |
-                    BindingFlags.Public |
-                    BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
+                        BindingFlags.CreateInstance |
+                        BindingFlags.Public |
+                        BindingFlags.Instance |
+                        BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
 
                     business.Data = data;
 
-                    _mapper.Clear(business, maxdepth);
-                    _mapper.Map(business, maxdepth);
+                    _mapper.Clear(business);
+                    _mapper.Map(business);
 
                     business.Loaded = true;
                     business.Changed = false;

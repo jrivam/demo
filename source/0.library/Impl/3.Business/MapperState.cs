@@ -8,12 +8,12 @@ namespace library.Impl.Business
                                                             where U : IEntityTable<T>
                                                             where V : IEntityState<T, U>
     {
-        public virtual V Clear(V business, int maxdepth = 1, int depth = 0)
+        public virtual V Clear(V business)
         {
             return business;
         }
 
-        public virtual V Map(V business, int maxdepth = 1, int depth = 0)
+        public virtual V Map(V business)
         {
             return business;
         }
