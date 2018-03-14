@@ -34,7 +34,7 @@ namespace library.Impl.Business
             var load = logic.Load();
             presentation.Business = load.business;
 
-            if (load.result.Success && load.result.Passed)
+            if (load.result.Success)
             {
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);
@@ -47,7 +47,7 @@ namespace library.Impl.Business
             var save = logic.Save();
             presentation.Business = save.business;
 
-            if (save.result.Success && save.result.Passed)
+            if (save.result.Success)
             {
                 _mapper.Map(presentation);
             }
@@ -59,7 +59,7 @@ namespace library.Impl.Business
             var erase = logic.Erase();
             presentation.Business = erase.business;
 
-            if (erase.result.Success && erase.result.Passed)
+            if (erase.result.Success)
             {
                 _mapper.Map(presentation);
             }
@@ -81,7 +81,7 @@ namespace library.Impl.Business
             var retrieve = logic.Retrieve(maxdepth, presentation.Business);
             presentation.Business = retrieve.business;
 
-            if (retrieve.result.Success && retrieve.result.Passed)
+            if (retrieve.result.Success)
             {
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);

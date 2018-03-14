@@ -93,7 +93,7 @@ namespace library.Impl.Data.Repository
         {
             var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
 
-            foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), command));
+            foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), command)) ;
 
             return Select(data, command);
         }
@@ -103,14 +103,9 @@ namespace library.Impl.Data.Repository
         }
         public virtual (Result result, U data) Select(U data, IDbCommand command)
         {
-            if (data.Domain.Id != null)
-            {
-                var executequery = ExecuteQuery(command, 1, new List<U>() { data });
+            var executequery = ExecuteQuery(command, 1, new List<U>() { data });
 
-                return (executequery.result, executequery.datas.FirstOrDefault());
-            }
-
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Select: empty primary key") } }, data);
+            return (executequery.result, executequery.datas.FirstOrDefault());
         }
 
         public virtual (Result result, U data) Insert(U data)
@@ -133,14 +128,14 @@ namespace library.Impl.Data.Repository
         {
             var executescalar = ExecuteScalar(command);
 
-            if (executescalar.result != null)
+            if (executescalar.result == null)
             {
-                data.Domain.Id = Convert.ToInt32(executescalar.scalar);
+                executescalar.result.Success = false;
+                executescalar.result.Messages.Add((ResultCategory.Information, "Insert: no rows affected"));
             }
             else
             {
-                executescalar.result.Passed = false;
-                executescalar.result.Messages.Add((ResultCategory.Information, "Insert: no rows affected"));
+                data.Domain.Id = Convert.ToInt32(executescalar.scalar);
             }
 
             return (executescalar.result, data);
@@ -166,13 +161,9 @@ namespace library.Impl.Data.Repository
         {
             var executenonquery = ExecuteNonQuery(command);
 
-            if (executenonquery.rows > 0)
+            if (executenonquery.rows <= 0)
             {
-
-            }
-            else
-            {
-                executenonquery.result.Passed = false;
+                executenonquery.result.Success = false;
                 executenonquery.result.Messages.Add((ResultCategory.Information, "Update: no rows affected"));
             }
 
@@ -199,12 +190,9 @@ namespace library.Impl.Data.Repository
         {
             var executenonquery = ExecuteNonQuery(command);
 
-            if (executenonquery.rows > 0)
+            if (executenonquery.rows <= 0)
             {
-            }
-            else
-            {
-                executenonquery.result.Passed = false;
+                executenonquery.result.Success = false;
                 executenonquery.result.Messages.Add((ResultCategory.Information, "Delete: no rows affected"));
             }
 
@@ -225,7 +213,7 @@ namespace library.Impl.Data.Repository
 
                 command.Connection.Close();
 
-                return (new Result() { Success = true, Passed = true }, rows);
+                return (new Result() { Success = true }, rows);
             }
             catch (Exception ex)
             {
@@ -247,7 +235,7 @@ namespace library.Impl.Data.Repository
 
                 command.Connection.Close();
 
-                return (new Result() { Success = true, Passed = true }, scalar);
+                return (new Result() { Success = true }, scalar);
             }
             catch (Exception ex)
             {
@@ -286,7 +274,7 @@ namespace library.Impl.Data.Repository
                 reader.Close();
                 command.Connection.Close();
 
-                return (new Result() { Success = true, Passed = passed }, enumeration);
+                return (new Result() { Success = true }, enumeration);
             }
             catch (Exception ex)
             {
