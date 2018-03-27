@@ -1,5 +1,5 @@
 ﻿using library.Impl;
-using library.Interface.Domain;
+using library.Interface.Entities;
 
 namespace library.Interface.Data
 {

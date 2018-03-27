@@ -73,7 +73,7 @@ namespace WpfApp.Views
 
             view.ShowDialog();
 
-            if (view.ViewModel.Business.Deleted)
+            if (view.ViewModel.Domain.Deleted)
                 ViewModel.Remove(message.oldvalue);
             else
                 ViewModel.EmpresaEdit((message.oldvalue, view.ViewModel));

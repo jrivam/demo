@@ -14,30 +14,30 @@ using System.Linq;
 
 namespace data.Model
 {
-    public partial class Sucursal : IEntityTable<domain.Model.Sucursal>, IEntityRepository<domain.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : IEntityTable<entities.Model.Sucursal>, IEntityRepository<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public virtual domain.Model.Sucursal Domain { get; set; } = new domain.Model.Sucursal();
+        public virtual entities.Model.Sucursal Entity { get; set; } = new entities.Model.Sucursal();
 
-        protected readonly IRepository<domain.Model.Sucursal, data.Model.Sucursal> _repository;
+        protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
 
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Sucursal(IRepository<domain.Model.Sucursal, data.Model.Sucursal> repository, string name, string reference)
+        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository, string name, string reference)
         {
             _repository = repository;
 
             Name = name;
             Reference = reference;
 
-            Columns.Add(new EntityColumn<int?, domain.Model.Sucursal>(this, "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string, domain.Model.Sucursal>(this, "nombre", "Nombre"));
-            Columns.Add(new EntityColumn<int?, domain.Model.Sucursal>(this, "id_empresa", "IdEmpresa"));
-            Columns.Add(new EntityColumn<DateTime?, domain.Model.Sucursal>(this, "fecha", "Fecha"));
-            Columns.Add(new EntityColumn<bool?, domain.Model.Sucursal>(this, "activo", "Activo"));
+            Columns.Add(new EntityColumn<int?, entities.Model.Sucursal>(this, "id", "Id", true, true));
+            Columns.Add(new EntityColumn<string, entities.Model.Sucursal>(this, "nombre", "Nombre"));
+            Columns.Add(new EntityColumn<int?, entities.Model.Sucursal>(this, "id_empresa", "IdEmpresa"));
+            Columns.Add(new EntityColumn<DateTime?, entities.Model.Sucursal>(this, "fecha", "Fecha"));
+            Columns.Add(new EntityColumn<bool?, entities.Model.Sucursal>(this, "activo", "Activo"));
         }
         public Sucursal(string connectionstringname, string name, string reference)
-            : this(new Repository<domain.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
+            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
         {
         }
 
@@ -46,31 +46,31 @@ namespace data.Model
         public virtual (string text, CommandType type, IList<DbParameter> parameters)? UpdateDbCommand { get; set; }
         public virtual (string text, CommandType type, IList<DbParameter> parameters)? DeleteDbCommand { get; set; }
 
-        public virtual IEntityColumn<domain.Model.Sucursal> this[string reference]
+        public virtual IEntityColumn<entities.Model.Sucursal> this[string reference]
         {
             get
             {
                 return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IEntityColumn<domain.Model.Sucursal>> Columns { get; set; } = new List<IEntityColumn<domain.Model.Sucursal>>();
+        public virtual IList<IEntityColumn<entities.Model.Sucursal>> Columns { get; set; } = new List<IEntityColumn<entities.Model.Sucursal>>();
 
-        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { this["Id"].Value = Domain.Id = value; } } }
-        public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { this["Nombre"].Value = Domain.Nombre = value; } } }
-        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { this["Activo"].Value = Domain.Activo = value; } } }
-        public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { this["Fecha"].Value = Domain.Fecha = value; } } }
+        public virtual int? Id { get { return Entity?.Id; } set { if (Entity?.Id != value) { this["Id"].Value = Entity.Id = value; } } }
+        public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { this["Nombre"].Value = Entity.Nombre = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
+        public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { this["Fecha"].Value = Entity.Fecha = value; } } }
 
         public virtual int? IdEmpresa
         {
             get
             {
-                return Domain?.IdEmpresa;
+                return Entity?.IdEmpresa;
             }
             set
             {
-                if (Domain?.IdEmpresa != value)
+                if (Entity?.IdEmpresa != value)
                 {
-                    this["IdEmpresa"].Value = Domain.IdEmpresa = value;
+                    this["IdEmpresa"].Value = Entity.IdEmpresa = value;
 
                     Empresa = null;
                 }
@@ -118,12 +118,12 @@ namespace data.Model
 
     public partial class Sucursales : List<data.Model.Sucursal>
     {
-        public virtual IList<domain.Model.Sucursal> Domains
+        public virtual IList<entities.Model.Sucursal> Domains
         {
             get
             {
-                var list = new List<domain.Model.Sucursal>();
-                this.ForEach(x => list.Add(x.Domain));
+                var list = new List<entities.Model.Sucursal>();
+                this.ForEach(x => list.Add(x.Entity));
                 return list;
             }
         }
@@ -147,14 +147,14 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Sucursal : IQueryTable, IQueryRepository<domain.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : IQueryTable, IQueryRepository<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        protected readonly IRepository<domain.Model.Sucursal, data.Model.Sucursal> _repository;
+        protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
 
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Sucursal(IRepository<domain.Model.Sucursal, data.Model.Sucursal> repository, string name, string reference)
+        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository, string name, string reference)
         {
             _repository = repository;
 
@@ -168,7 +168,7 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
         public Sucursal(string connectionstringname, string name, string reference)
-            : this(new Repository<domain.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
+            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
         {
         }
 
@@ -220,7 +220,7 @@ namespace data.Query
 
 namespace data.Mapper
 {
-    public partial class Sucursal : MapperTable<domain.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : MapperTable<entities.Model.Sucursal, data.Model.Sucursal>
     {
         public override data.Model.Sucursal CreateInstance(int maxdepth = 1, int depth = 0)
         {
@@ -236,11 +236,11 @@ namespace data.Mapper
         }
         public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data.Domain.Id = null;
-            data.Domain.Nombre = null;
-            data.Domain.Fecha = null;
-            data.Domain.Activo = null;
-            data.Domain.IdEmpresa = null;
+            data.Entity.Id = null;
+            data.Entity.Nombre = null;
+            data.Entity.Fecha = null;
+            data.Entity.Activo = null;
+            data.Entity.IdEmpresa = null;
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)
@@ -257,11 +257,11 @@ namespace data.Mapper
 
         public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data.Domain.Id = data["Id"].Value as int?;
-            data.Domain.Nombre = data["Nombre"].Value as string;
-            data.Domain.Activo = data["Activo"].Value as bool?;
-            data.Domain.Fecha = data["Fecha"].Value as DateTime?;
-            data.Domain.IdEmpresa = data["IdEmpresa"].Value as int?;
+            data.Entity.Id = data["Id"].Value as int?;
+            data.Entity.Nombre = data["Nombre"].Value as string;
+            data.Entity.Activo = data["Activo"].Value as bool?;
+            data.Entity.Fecha = data["Fecha"].Value as DateTime?;
+            data.Entity.IdEmpresa = data["IdEmpresa"].Value as int?;
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)

@@ -1,6 +1,6 @@
 ﻿using library.Interface.Data;
 
-namespace business.Model
+namespace domain.Model
 {
     public partial class Empresa
     {
@@ -8,18 +8,18 @@ namespace business.Model
     }
 }
 
-namespace business.Query
+namespace domain.Query
 {
     public partial class Empresa
     {
     }
 }
 
-namespace business.Mapper
+namespace domain.Mapper
 {
     public partial class Empresa
     {
-        public virtual business.Model.Empresa Load(business.Model.Empresa entity)
+        public virtual domain.Model.Empresa Load(domain.Model.Empresa entity)
         {
             entity.Direccion = "mi direccion empresa";
 

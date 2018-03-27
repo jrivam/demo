@@ -1,6 +1,6 @@
 ﻿using library.Interface.Data;
 
-namespace business.Model
+namespace domain.Model
 {
     public partial class Sucursal
     {
@@ -8,18 +8,18 @@ namespace business.Model
     }
 }
 
-namespace business.Query
+namespace domain.Query
 {
     public partial class Sucursal
     {
     }
 }
 
-namespace business.Mapper
+namespace domain.Mapper
 {
     public partial class Sucursal
     {
-        public virtual business.Model.Sucursal Load(business.Model.Sucursal entity)
+        public virtual domain.Model.Sucursal Load(domain.Model.Sucursal entity)
         {
             entity.Direccion = "mi direccion sucursal";
 

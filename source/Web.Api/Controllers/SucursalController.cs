@@ -11,7 +11,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var query = new business.Query.Sucursal();
+                var query = new domain.Query.Sucursal();
 
                 if (nombre != null)
                     query.Data["Nombre"].Where(nombre, WhereOperator.Like);
@@ -20,7 +20,7 @@ namespace Web.Api.Controllers
                 if (fecha != null)
                     query.Data["Fecha"].Where(Convert.ToDateTime(fecha).ToString("dd/MM/yyyy"));
 
-                return Ok(new business.Model.Sucursales().Load(query.List().businesses).Datas.Domains);
+                return Ok(new domain.Model.Sucursales().Load(query.List().domains).Datas.Domains);
             }
             catch (Exception ex)
             {
@@ -32,11 +32,11 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new business.Model.Sucursal() { Id = id }.Load();
+                var load = new domain.Model.Sucursal() { Id = id }.Load();
 
                 if (load.result.Success)
                 {
-                    return Ok(load.business.Data.Domain);
+                    return Ok(load.domain.Data.Entity);
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]business.Model.Sucursal business)
+        public IHttpActionResult Post([FromBody]domain.Model.Sucursal business)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Web.Api.Controllers
                 var save = business.Save();
                 if (save.result.Success)
                 {
-                    return Created<domain.Model.Sucursal>(Request.RequestUri + "/" + save.business.Id.ToString(), save.business.Data.Domain);
+                    return Created<entities.Model.Sucursal>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
                 }
 
                 return BadRequest();
@@ -71,7 +71,7 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]business.Model.Sucursal business)
+        public IHttpActionResult Put(int id, [FromBody]domain.Model.Sucursal business)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Web.Api.Controllers
                 var save = business.Save();
                 if (save.result.Success)
                 {
-                    return Ok(save.business.Data.Domain);
+                    return Ok(save.domain.Data.Entity);
                 }
 
                 return BadRequest();
@@ -96,7 +96,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var delete = new business.Model.Sucursal() { Id = id }.Erase();
+                var delete = new domain.Model.Sucursal() { Id = id }.Erase();
 
                 if (delete.result.Success)
                 {

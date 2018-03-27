@@ -1,8 +1,7 @@
-﻿using library.Interface.Domain;
+﻿using library.Interface.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace domain.Model
+namespace entities.Model
 {
     public partial class Empresa : IEntity
     {
@@ -10,6 +9,6 @@ namespace domain.Model
         public virtual string RazonSocial { get; set; }
         public virtual bool? Activo { get; set; }
 
-        public virtual IList<domain.Model.Sucursal> Sucursales { get; set; }
+        public virtual IList<entities.Model.Sucursal> Sucursales { get; set; }
     }
 }

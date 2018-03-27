@@ -10,28 +10,28 @@ using System.Linq;
 
 namespace data.Model
 {
-    public partial class Empresa : IEntityTable<domain.Model.Empresa>, IEntityRepository<domain.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : IEntityTable<entities.Model.Empresa>, IEntityRepository<entities.Model.Empresa, data.Model.Empresa>
     {
-        public virtual domain.Model.Empresa Domain { get; set; } = new domain.Model.Empresa();
+        public virtual entities.Model.Empresa Entity { get; set; } = new entities.Model.Empresa();
 
-        protected readonly IRepository<domain.Model.Empresa, data.Model.Empresa> _repository;
+        protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Empresa(IRepository<domain.Model.Empresa, data.Model.Empresa> repository, string name, string reference)
+        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository, string name, string reference)
         {
             _repository = repository;
 
             Name = name;
             Reference = reference;
 
-            Columns.Add(new EntityColumn<int?, domain.Model.Empresa>(this, "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string, domain.Model.Empresa>(this, "razon_social", "RazonSocial"));
-            Columns.Add(new EntityColumn<bool?, domain.Model.Empresa>(this, "activo", "Activo"));
+            Columns.Add(new EntityColumn<int?, entities.Model.Empresa>(this, "id", "Id", true, true));
+            Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
+            Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
         }
         public Empresa(string connectionstringname, string name, string reference)
-            : this(new Repository<domain.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), name, reference)
+            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), name, reference)
         {
         }
 
@@ -40,23 +40,23 @@ namespace data.Model
         public virtual (string text, CommandType type, IList<DbParameter> parameters)? UpdateDbCommand { get; set; }
         public virtual (string text, CommandType type, IList<DbParameter> parameters)? DeleteDbCommand { get; set; }
 
-        public virtual IEntityColumn<domain.Model.Empresa> this[string reference]
+        public virtual IEntityColumn<entities.Model.Empresa> this[string reference]
         {
             get
             {
                 return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IEntityColumn<domain.Model.Empresa>> Columns { get; set; } = new List<IEntityColumn<domain.Model.Empresa>>();
+        public virtual IList<IEntityColumn<entities.Model.Empresa>> Columns { get; set; } = new List<IEntityColumn<entities.Model.Empresa>>();
 
         public virtual int? Id
         {
-            get { return Domain?.Id; }
+            get { return Entity?.Id; }
             set
             {
-                if (Domain?.Id != value)
+                if (Entity?.Id != value)
                 {
-                    this["Id"].Value = Domain.Id = value;
+                    this["Id"].Value = Entity.Id = value;
 
                     //if (value == null)
                     //    Clear();
@@ -65,8 +65,8 @@ namespace data.Model
                 }
             }
         }
-        public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { this["RazonSocial"].Value = Domain.RazonSocial = value; } } }
-        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { this["Activo"].Value = Domain.Activo = value; } } }
+        public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { this["RazonSocial"].Value = Entity.RazonSocial = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
@@ -100,7 +100,7 @@ namespace data.Model
             {
                 _sucursales = value;
 
-                Domain.Sucursales = Sucursales?.Domains;
+                Entity.Sucursales = Sucursales?.Domains;
             }
         } 
 
@@ -130,12 +130,12 @@ namespace data.Model
 
     public partial class Empresas : List<data.Model.Empresa>
     {
-        public virtual IList<domain.Model.Empresa> Domains
+        public virtual IList<entities.Model.Empresa> Domains
         {
             get
             {
-                var list = new List<domain.Model.Empresa>();
-                this.ForEach(x => list.Add(x.Domain));
+                var list = new List<entities.Model.Empresa>();
+                this.ForEach(x => list.Add(x.Entity));
                 return list;
             }
         }
@@ -159,14 +159,14 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Empresa : IQueryTable, IQueryRepository<domain.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : IQueryTable, IQueryRepository<entities.Model.Empresa, data.Model.Empresa>
     {
-        protected readonly IRepository<domain.Model.Empresa, data.Model.Empresa> _repository;
+        protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Empresa(IRepository<domain.Model.Empresa, data.Model.Empresa> repository, string name, string reference)
+        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository, string name, string reference)
         {
             _repository = repository;
 
@@ -178,7 +178,7 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
         public Empresa(string connectionstringname, string name, string reference)
-            : this(new Repository<domain.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), name, reference)
+            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), name, reference)
         {
         }
 
@@ -217,7 +217,7 @@ namespace data.Query
 
 namespace data.Mapper
 {
-    public partial class Empresa : MapperTable<domain.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : MapperTable<entities.Model.Empresa, data.Model.Empresa>
     {
         public override data.Model.Empresa CreateInstance(int maxdepth = 1, int depth = 0)
         {
@@ -236,9 +236,9 @@ namespace data.Mapper
         }
         public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data.Domain.Id = data["Id"].Value as int?;
-            data.Domain.RazonSocial = data["RazonSocial"].Value as string;
-            data.Domain.Activo = data["Activo"].Value as bool?;
+            data.Entity.Id = data["Id"].Value as int?;
+            data.Entity.RazonSocial = data["RazonSocial"].Value as string;
+            data.Entity.Activo = data["Activo"].Value as bool?;
 
             return data;
         }

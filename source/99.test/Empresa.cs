@@ -12,14 +12,20 @@ namespace test
     [TestClass]
     public class Empresa
     {
-        private domain.Model.Empresa empresa = new domain.Model.Empresa()
+        private entities.Model.Empresa empresa = new entities.Model.Empresa()
         {
             Id = 1,
             RazonSocial = "razon_social",
             Activo = true
         };
 
-        public Mock<IDbCommand> GetCommand(Mock<ISqlBuilder<domain.Model.Empresa>> mockBuilder)
+        [TestInitialize]
+        public void BeforeEachTest()
+        {
+
+        }
+
+        public Mock<IDbCommand> GetCommand(Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder)
         {
             //var mockMapper = new Moq.Mock<IMapperTable<domain.Model.Empresa, data.Model.Empresa>>();
 
@@ -45,7 +51,7 @@ namespace test
             return mockCommand;
         }
 
-        private data.Model.Empresa Data_Select(Mock<ISqlBuilder<domain.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
+        private data.Model.Empresa Data_Select(Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
         {
             bool read = true;
             var mockDataReader = new Moq.Mock<IDataReader>();
@@ -57,7 +63,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteReader())
                 .Returns(mockDataReader.Object);
 
-            return new data.Model.Empresa(new Repository<domain.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
+            return new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
             {
                 Id = empresa.Id
             };
@@ -65,12 +71,12 @@ namespace test
         [TestMethod]
         public void Data_Select_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Select(mockBuilder, mockCommand);
 
-            mockBuilder.Setup(x => x.Select(It.IsAny<IEntityTable<domain.Model.Empresa>>()))
+            mockBuilder.Setup(x => x.Select(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(mockCommand.Object);
 
             var select = data.Select();
@@ -83,7 +89,7 @@ namespace test
         [TestMethod]
         public void Data_Select_DbCommand_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Select(mockBuilder, mockCommand);
@@ -100,12 +106,12 @@ namespace test
             Assert.AreEqual(empresa.Activo, select.data.Activo);
         }
 
-        private data.Model.Empresa Data_Insert(Mock<ISqlBuilder<domain.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
+        private data.Model.Empresa Data_Insert(Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
         {
             mockCommand.Setup(x => x.ExecuteScalar())
                 .Returns(empresa.Id);
 
-            return new data.Model.Empresa(new Repository<domain.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
+            return new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
             {
                 RazonSocial = empresa.RazonSocial,
                 Activo = empresa.Activo
@@ -114,12 +120,12 @@ namespace test
         [TestMethod]
         public void Data_Insert_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Insert(mockBuilder, mockCommand);
 
-            mockBuilder.Setup(x => x.Insert(It.IsAny<IEntityTable<domain.Model.Empresa>>()))
+            mockBuilder.Setup(x => x.Insert(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(mockCommand.Object);
 
             var insert = data.Insert();
@@ -132,7 +138,7 @@ namespace test
         [TestMethod]
         public void Data_Insert_DbCommand_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Insert(mockBuilder, mockCommand);
@@ -149,12 +155,12 @@ namespace test
             Assert.AreEqual(empresa.Activo, insert.data.Activo);
         }
 
-        private data.Model.Empresa Data_Update(Mock<ISqlBuilder<domain.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
+        private data.Model.Empresa Data_Update(Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
         {
             mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            return new data.Model.Empresa(new Repository<domain.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
+            return new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
             {
                 Id = empresa.Id,
                 RazonSocial = empresa.RazonSocial,
@@ -164,12 +170,12 @@ namespace test
         [TestMethod]
         public void Data_Update_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Update(mockBuilder, mockCommand);
 
-            mockBuilder.Setup(x => x.Update(It.IsAny<IEntityTable<domain.Model.Empresa>>()))
+            mockBuilder.Setup(x => x.Update(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(mockCommand.Object);
 
             var update = data.Update();
@@ -182,7 +188,7 @@ namespace test
         [TestMethod]
         public void Data_Update_DbCommand_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Update(mockBuilder, mockCommand);
@@ -199,12 +205,12 @@ namespace test
             Assert.AreEqual(empresa.Activo, update.data.Activo);
         }
 
-        private data.Model.Empresa Data_Delete(Mock<ISqlBuilder<domain.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
+        private data.Model.Empresa Data_Delete(Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)
         {
             mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            return new data.Model.Empresa(new Repository<domain.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
+            return new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), "", "")
             {
                 Id = empresa.Id,
                 RazonSocial = empresa.RazonSocial,
@@ -214,12 +220,12 @@ namespace test
         [TestMethod]
         public void Data_Delete_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Delete(mockBuilder, mockCommand);
 
-            mockBuilder.Setup(x => x.Delete(It.IsAny<IEntityTable<domain.Model.Empresa>>()))
+            mockBuilder.Setup(x => x.Delete(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(mockCommand.Object);
 
             var delete = data.Delete();
@@ -229,7 +235,7 @@ namespace test
         [TestMethod]
         public void Data_Delete_DbCommand_Success()
         {
-            var mockBuilder = new Moq.Mock<ISqlBuilder<domain.Model.Empresa>>();
+            var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
 
             var data = Data_Delete(mockBuilder, mockCommand);

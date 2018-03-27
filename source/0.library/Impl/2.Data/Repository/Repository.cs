@@ -2,7 +2,7 @@
 using library.Impl.Data.Sql.Builder;
 using library.Interface.Data;
 using library.Interface.Data.Sql;
-using library.Interface.Domain;
+using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -135,7 +135,7 @@ namespace library.Impl.Data.Repository
             }
             else
             {
-                data.Domain.Id = Convert.ToInt32(executescalar.scalar);
+                data.Entity.Id = Convert.ToInt32(executescalar.scalar);
             }
 
             return (executescalar.result, data);

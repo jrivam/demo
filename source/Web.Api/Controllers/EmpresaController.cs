@@ -11,14 +11,14 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var query = new business.Query.Empresa();
+                var query = new domain.Query.Empresa();
 
                 if (razonsocial != null)
                     query.Data["RazonSocial"].Where(razonsocial, WhereOperator.Like);
                 if (activo != null)
                     query.Data["Activo"].Where(activo);
 
-                return Ok(new business.Model.Empresas().Load(query.List().businesses).Datas.Domains);
+                return Ok(new domain.Model.Empresas().Load(query.List().domains).Datas.Domains);
             }
             catch (Exception ex)
             {
@@ -30,13 +30,13 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new business.Model.Empresa() { Id = id }.Load();
+                var load = new domain.Model.Empresa() { Id = id }.Load();
 
                 if (load.result.Success)
                 {
-                    load.business.Sucursales_Load();
+                    load.domain.Sucursales_Load();
 
-                    return Ok(load.business.Data.Domain);
+                    return Ok(load.domain.Data.Entity);
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]business.Model.Empresa business)
+        public IHttpActionResult Post([FromBody]domain.Model.Empresa business)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Web.Api.Controllers
                 var save = business.Save();
                 if (save.result.Success)
                 {
-                    return Created<domain.Model.Empresa>(Request.RequestUri + "/" + save.business.Id.ToString(), save.business.Data.Domain);
+                    return Created<entities.Model.Empresa>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
                 }
 
                 return BadRequest();
@@ -71,7 +71,7 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]business.Model.Empresa business)
+        public IHttpActionResult Put(int id, [FromBody]domain.Model.Empresa business)
         {
             try
             {
@@ -81,9 +81,9 @@ namespace Web.Api.Controllers
                 var save = business.Save();
                 if (save.result.Success)
                 {
-                    save.business.Sucursales_Load();
+                    save.domain.Sucursales_Load();
 
-                    return Ok(save.business.Data.Domain);
+                    return Ok(save.domain.Data.Entity);
                 }
 
                 return BadRequest();
@@ -98,7 +98,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var delete = new business.Model.Empresa() { Id = id }.Erase();
+                var delete = new domain.Model.Empresa() { Id = id }.Erase();
 
                 if (delete.result.Success)
                 {

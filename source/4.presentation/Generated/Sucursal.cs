@@ -12,15 +12,15 @@ using System.Windows.Input;
 
 namespace presentation.Model
 {
-    public partial class Sucursal : INotifyPropertyChanged, IEntityView<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>, IEntityInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : INotifyPropertyChanged, IEntityView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>, IEntityInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         private int _maxdepth;
 
-        public virtual business.Model.Sucursal Business { get; set; } = new business.Model.Sucursal();
+        public virtual domain.Model.Sucursal Domain { get; set; } = new domain.Model.Sucursal();
 
-        protected readonly IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> _interactive;
+        protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public Sucursal(IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> interactive, int maxdepth)
+        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive, int maxdepth)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
@@ -30,25 +30,25 @@ namespace presentation.Model
             LoadCommand = new RelayCommand(delegate (object parameter) 
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, Load(_maxdepth)), "SucursalLoad");
-            }, delegate (object parameter) { return Business.Data.Domain.Id != null && Business.Changed; });
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && Domain.Changed; });
 
 
             SaveCommand = new RelayCommand(delegate (object parameter) 
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Save, Save()), "SucursalSave");
-            }, delegate (object parameter) { return Business.Changed; });
+            }, delegate (object parameter) { return Domain.Changed; });
             EraseCommand = new RelayCommand(delegate (object parameter) 
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Erase, Erase()), "SucursalErase");
-            }, delegate (object parameter) { return Business.Data.Domain.Id != null && !Business.Deleted; });
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>((this, this), "SucursalEdit");
-            }, delegate (object parameter) { return Business.Data.Domain.Id != null && !Business.Deleted; });
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
         public Sucursal(int maxdepth = 1)
-            : this(new Interactive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()), maxdepth)
+            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()), maxdepth)
         {
         }
 
@@ -67,22 +67,22 @@ namespace presentation.Model
 
         public virtual ICommand EditCommand { get; set; }
 
-        public virtual int? Id { get { return Business?.Id; } set { if (Business?.Id != value) { Business.Id = value; OnPropertyChanged("Id"); } } }
-        public virtual string Nombre { get { return Business?.Nombre; } set { if (Business?.Nombre != value) { Business.Nombre = value; OnPropertyChanged("Nombre"); } } }
-        public virtual bool? Activo { get { return Business?.Activo; } set { if (Business?.Activo != value) { Business.Activo = value; OnPropertyChanged("Activo"); } } }
-        public virtual DateTime? Fecha { get { return Business?.Fecha; } set { if (Business?.Fecha != value) { Business.Fecha = value; OnPropertyChanged("Fecha"); } } }
+        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
+        public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
+        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
+        public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { Domain.Fecha = value; OnPropertyChanged("Fecha"); } } }
 
         public virtual int? IdEmpresa
         {
             get
             {
-                return Business?.IdEmpresa;
+                return Domain?.IdEmpresa;
             }
             set
             {
-                if (Business?.IdEmpresa != value)
+                if (Domain?.IdEmpresa != value)
                 {
-                    Business.IdEmpresa = value;
+                    Domain.IdEmpresa = value;
                     OnPropertyChanged("IdEmpresa");
 
                     Empresa = null;
@@ -97,7 +97,7 @@ namespace presentation.Model
             {
                 if (_empresa == null)
                 {
-                    Empresa = new presentation.Model.Empresa() { Business = Business.Empresa };
+                    Empresa = new presentation.Model.Empresa() { Domain = Domain.Empresa };
                 }
 
                 return _empresa;
@@ -132,11 +132,11 @@ namespace presentation.Model
 
         public virtual presentation.Model.Sucursal Clear()
         {
-            return _interactive.Clear(this, Business);
+            return _interactive.Clear(this, Domain);
         }
         public virtual (Result result, presentation.Model.Sucursal presentation) Load()
         {
-            var load = _interactive.Load(this, Business);
+            var load = _interactive.Load(this, Domain);
 
             return load;
         }
@@ -153,7 +153,7 @@ namespace presentation.Model
         }
         public virtual (Result result, presentation.Model.Sucursal presentation) Save()
         {
-            var save = _interactive.Save(this, Business);
+            var save = _interactive.Save(this, Domain);
 
             SaveDependencies();
 
@@ -163,7 +163,7 @@ namespace presentation.Model
         {
             EraseDependencies();
 
-            var erase = _interactive.Erase(this, Business);
+            var erase = _interactive.Erase(this, Domain);
 
             return erase;
         }
@@ -180,11 +180,11 @@ namespace presentation.Model
     {
         public virtual ICommand AddCommand { get; set; }
 
-        public virtual business.Model.Sucursales Businesses
+        public virtual domain.Model.Sucursales Businesses
         {
             get
             {
-                return new business.Model.Sucursales().Load(this.Select(x => x.Business).Cast<business.Model.Sucursal>());
+                return new domain.Model.Sucursales().Load(this.Select(x => x.Domain).Cast<domain.Model.Sucursal>());
             }
         }
 
@@ -216,13 +216,13 @@ namespace presentation.Model
         }
         public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
         {
-            if (message.operation.presentation?.Business.Data.Domain.Id != null)
+            if (message.operation.presentation?.Domain.Data.Entity.Id != null)
                 this.Remove(message.operation.presentation);
         }
 
         public virtual void SucursalAdd(presentation.Model.Sucursal presentation)
         {
-            if (presentation.Business.Data.Domain?.Id != null)
+            if (presentation.Domain.Data.Entity?.Id != null)
                 this.Add(presentation);
         }
         public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
@@ -239,18 +239,18 @@ namespace presentation.Model
 
 namespace presentation.Query
 {
-    public partial class Sucursal : IQueryView<data.Query.Sucursal, business.Query.Sucursal>, IQueryInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : IQueryView<data.Query.Sucursal, domain.Query.Sucursal>, IQueryInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public virtual business.Query.Sucursal Business { get; set; } = new business.Query.Sucursal();
+        public virtual domain.Query.Sucursal Business { get; set; } = new domain.Query.Sucursal();
 
-        protected readonly IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> _interactive;
+        protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public Sucursal(IInteractive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal> interactive)
+        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
         {
             _interactive = interactive;
         }
         public Sucursal()
-            : this(new Interactive<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
+            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
         {
         }
 
@@ -267,7 +267,7 @@ namespace presentation.Query
 
 namespace presentation.Mapper
 {
-    public partial class Sucursal : MapperView<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : MapperView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation)
         {
