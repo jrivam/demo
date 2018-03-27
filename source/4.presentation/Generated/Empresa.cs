@@ -1,5 +1,4 @@
 ﻿using library.Impl;
-using library.Impl.Business;
 using library.Impl.Presentation;
 using library.Interface.Presentation;
 using System.Collections.Generic;
@@ -88,7 +87,7 @@ namespace presentation.Model
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new presentation.Query.Sucursal();
-            query.Business.Data["IdEmpresa"].Where(this.Id);
+            query.Domains.Data["IdEmpresa"].Where(this.Id);
 
             Sucursales_Load(query, maxdepth, top);
         }
@@ -117,7 +116,7 @@ namespace presentation.Model
             {
                 _sucursales = value;
 
-                 Domain.Sucursales = Sucursales?.Businesses;
+                 Domain.Sucursales = Sucursales?.Domains;
 
                  OnPropertyChanged("Sucursales");
             }
@@ -138,7 +137,7 @@ namespace presentation.Model
             _maxdepth = maxdepth;
 
             var query = new presentation.Query.Empresa();
-            query.Business.Data["Id"].Where(this.Id);
+            query.Domains.Data["Id"].Where(this.Id);
 
             var load = query.Retrieve(maxdepth, this);
 
@@ -175,7 +174,7 @@ namespace presentation.Model
     {
         public virtual ICommand AddCommand { get; set; }
 
-        public virtual domain.Model.Empresas Businesses
+        public virtual domain.Model.Empresas Domains
         {
             get
             {
@@ -236,7 +235,7 @@ namespace presentation.Query
 {
     public partial class Empresa : IQueryView<data.Query.Empresa, domain.Query.Empresa>, IQueryInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public virtual domain.Query.Empresa Business { get; set; } = new domain.Query.Empresa();
+        public virtual domain.Query.Empresa Domains { get; set; } = new domain.Query.Empresa();
 
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
@@ -251,11 +250,11 @@ namespace presentation.Query
 
         public virtual (Result result, presentation.Model.Empresa presentation) Retrieve(int maxdepth = 1, presentation.Model.Empresa presentation = default(presentation.Model.Empresa))
         {
-            return _interactive.Retrieve(Business, maxdepth, presentation);
+            return _interactive.Retrieve(Domains, maxdepth, presentation);
         }
         public virtual (Result result, IEnumerable<presentation.Model.Empresa> presentations) List(int maxdepth = 1, int top = 0, IList<presentation.Model.Empresa> presentations = null)
         {
-            return _interactive.List(Business, maxdepth, top, presentations);
+            return _interactive.List(Domains, maxdepth, top, presentations);
         }
     }
 }

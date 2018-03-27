@@ -1,5 +1,4 @@
 ﻿using library.Impl;
-using library.Impl.Business;
 using library.Impl.Domain;
 using library.Interface.Domain;
 using System;
@@ -188,19 +187,19 @@ namespace domain.Mapper
 {
     public partial class Sucursal : MapperState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public override domain.Model.Sucursal Clear(domain.Model.Sucursal business)
+        public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain)
         {
-            business = base.Clear(business);
+            domain = base.Clear(domain);
 
-            business.Empresa = null;
+            domain.Empresa = null;
 
-            return business;
+            return domain;
         }
-        public override domain.Model.Sucursal Map(domain.Model.Sucursal business)
+        public override domain.Model.Sucursal Map(domain.Model.Sucursal domain)
         {
-            business = base.Map(business);
+            domain = base.Map(domain);
 
-            return business;
+            return domain;
         }
     }
 }
