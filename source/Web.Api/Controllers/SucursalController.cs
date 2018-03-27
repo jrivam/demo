@@ -14,11 +14,11 @@ namespace Web.Api.Controllers
                 var query = new domain.Query.Sucursal();
 
                 if (nombre != null)
-                    query.Data["Nombre"].Where(nombre, WhereOperator.Like);
+                    query.Data["Nombre"]?.Where(nombre, WhereOperator.Like);
                 if (activo != null)
-                    query.Data["Activo"].Where(activo);
+                    query.Data["Activo"]?.Where(activo);
                 if (fecha != null)
-                    query.Data["Fecha"].Where(Convert.ToDateTime(fecha).ToString("dd/MM/yyyy"));
+                    query.Data["Fecha"]?.Where(Convert.ToDateTime(fecha).ToString("dd/MM/yyyy"));
 
                 return Ok(new domain.Model.Sucursales().Load(query.List().domains).Datas.Domains);
             }

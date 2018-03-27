@@ -87,7 +87,7 @@ namespace presentation.Model
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new presentation.Query.Sucursal();
-            query.Domains.Data["IdEmpresa"].Where(this.Id);
+            query.Domains.Data["IdEmpresa"]?.Where(this.Id);
 
             Sucursales_Load(query, maxdepth, top);
         }
@@ -137,7 +137,7 @@ namespace presentation.Model
             _maxdepth = maxdepth;
 
             var query = new presentation.Query.Empresa();
-            query.Domains.Data["Id"].Where(this.Id);
+            query.Domains.Data["Id"]?.Where(this.Id);
 
             var load = query.Retrieve(maxdepth, this);
 
@@ -162,11 +162,11 @@ namespace presentation.Model
 
         protected virtual void SaveDependencies()
         {
-            Sucursales?.ToList()?.ForEach(i => { ((presentation.Model.Sucursal)i).Save(); });
+            Sucursales?.ToList()?.ForEach(i => { i.Save(); });
         }
         protected virtual void EraseDependencies()
         {
-            Sucursales?.ToList()?.ForEach(i => { ((presentation.Model.Sucursal)i).Erase(); });
+            Sucursales?.ToList()?.ForEach(i => { i.Erase(); });
         }
     }
 

@@ -120,7 +120,7 @@ namespace presentation.Model
                 if (_empresas == null)
                 {
                     var query = new presentation.Query.Empresa();
-                    query.Domains.Data["Activo"].Where(true);
+                    query.Domains.Data["Activo"]?.Where(true);
 
                     _empresas = new presentation.Model.Empresas().Load(query);
                 }
@@ -144,7 +144,7 @@ namespace presentation.Model
             _maxdepth = maxdepth;
 
             var query = new presentation.Query.Sucursal();
-            query.Domains.Data["Id"].Where(this.Id);         
+            query.Domains.Data["Id"]?.Where(this.Id);         
 
             var load = query.Retrieve(maxdepth, this);
 

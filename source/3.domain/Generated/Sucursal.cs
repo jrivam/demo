@@ -69,7 +69,7 @@ namespace domain.Model
                 if (_empresas == null)
                 {
                     var query = new domain.Query.Empresa();
-                    query.Data["Activo"].Where(true);
+                    query.Data["Activo"]?.Where(true);
 
                     _empresas = new domain.Model.Empresas().Load(query);
                 }
