@@ -1,5 +1,4 @@
 ﻿using library.Impl;
-using library.Impl.Business;
 using library.Impl.Presentation;
 using library.Interface.Presentation;
 using System;
@@ -121,7 +120,7 @@ namespace presentation.Model
                 if (_empresas == null)
                 {
                     var query = new presentation.Query.Empresa();
-                    query.Business.Data["Activo"].Where(true);
+                    query.Domains.Data["Activo"].Where(true);
 
                     _empresas = new presentation.Model.Empresas().Load(query);
                 }
@@ -145,7 +144,7 @@ namespace presentation.Model
             _maxdepth = maxdepth;
 
             var query = new presentation.Query.Sucursal();
-            query.Business.Data["Id"].Where(this.Id);         
+            query.Domains.Data["Id"].Where(this.Id);         
 
             var load = query.Retrieve(maxdepth, this);
 
@@ -180,7 +179,7 @@ namespace presentation.Model
     {
         public virtual ICommand AddCommand { get; set; }
 
-        public virtual domain.Model.Sucursales Businesses
+        public virtual domain.Model.Sucursales Domains
         {
             get
             {
@@ -241,7 +240,7 @@ namespace presentation.Query
 {
     public partial class Sucursal : IQueryView<data.Query.Sucursal, domain.Query.Sucursal>, IQueryInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public virtual domain.Query.Sucursal Business { get; set; } = new domain.Query.Sucursal();
+        public virtual domain.Query.Sucursal Domains { get; set; } = new domain.Query.Sucursal();
 
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
@@ -256,11 +255,11 @@ namespace presentation.Query
 
         public virtual (Result result, presentation.Model.Sucursal presentation) Retrieve(int maxdepth = 1, presentation.Model.Sucursal presentation = default(presentation.Model.Sucursal))
         {
-            return _interactive.Retrieve(Business, maxdepth, presentation);
+            return _interactive.Retrieve(Domains, maxdepth, presentation);
         }
         public virtual (Result result, IEnumerable<presentation.Model.Sucursal> presentations) List(int maxdepth = 1, int top = 0, IList<presentation.Model.Sucursal> presentations = null)
         {
-            return _interactive.List(Business, maxdepth, top, presentations);
+            return _interactive.List(Domains, maxdepth, top, presentations);
         }
     }
 }

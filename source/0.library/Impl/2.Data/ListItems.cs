@@ -1,4 +1,4 @@
-﻿namespace library.Impl.Business
+﻿namespace library.Impl.Domain
 {
     public enum ListItems
     {

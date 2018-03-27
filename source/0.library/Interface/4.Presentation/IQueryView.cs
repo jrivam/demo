@@ -7,6 +7,6 @@ namespace library.Interface.Presentation
                                         where U : IQueryState<T>
                             
     {
-        U Business { get; set; }
+        U Domains { get; set; }
     }
 }

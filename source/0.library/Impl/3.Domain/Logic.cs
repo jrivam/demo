@@ -132,22 +132,22 @@ namespace library.Impl.Domain
             {
                 foreach (var data in selectmultiple.datas)
                 {
-                    var business = iterator.MoveNext() ? iterator.Current : (V)Activator.CreateInstance(typeof(V),
+                    var domain = iterator.MoveNext() ? iterator.Current : (V)Activator.CreateInstance(typeof(V),
                         BindingFlags.CreateInstance |
                         BindingFlags.Public |
                         BindingFlags.Instance |
                         BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
 
-                    business.Data = data;
+                    domain.Data = data;
 
-                    _mapper.Clear(business);
-                    _mapper.Map(business);
+                    _mapper.Clear(domain);
+                    _mapper.Map(domain);
 
-                    business.Loaded = true;
-                    business.Changed = false;
-                    business.Deleted = false;
+                    domain.Loaded = true;
+                    domain.Changed = false;
+                    domain.Deleted = false;
 
-                    enumeration.Add(business);
+                    enumeration.Add(domain);
                 }
             }
 

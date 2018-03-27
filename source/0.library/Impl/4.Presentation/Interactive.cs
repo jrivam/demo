@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
-namespace library.Impl.Business
+namespace library.Impl.Presentation
 {
     public class Interactive<T, U, V, W> : IInteractive<T, U, V, W> where T : IEntity
                                                                     where U : IEntityTable<T>
@@ -95,7 +95,7 @@ namespace library.Impl.Business
             var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
             var list = logic.List(maxdepth, top);
-            foreach (var business in list.domains)
+            foreach (var domain in list.domains)
             {
                 var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
                     BindingFlags.CreateInstance |
@@ -103,7 +103,7 @@ namespace library.Impl.Business
                     BindingFlags.Instance |
                     BindingFlags.OptionalParamBinding, null, new object[] { maxdepth }, CultureInfo.CurrentCulture);
 
-                presentation.Domain = business;
+                presentation.Domain = domain;
 
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);

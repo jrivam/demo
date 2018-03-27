@@ -50,14 +50,14 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]domain.Model.Empresa business)
+        public IHttpActionResult Post([FromBody]domain.Model.Empresa domain)
         {
             try
             {
-                if (business == null)
+                if (domain == null)
                     return BadRequest();
 
-                var save = business.Save();
+                var save = domain.Save();
                 if (save.result.Success)
                 {
                     return Created<entities.Model.Empresa>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
@@ -71,14 +71,14 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]domain.Model.Empresa business)
+        public IHttpActionResult Put(int id, [FromBody]domain.Model.Empresa domain)
         {
             try
             {
-                if (business == null)
+                if (domain == null)
                     return BadRequest();
 
-                var save = business.Save();
+                var save = domain.Save();
                 if (save.result.Success)
                 {
                     save.domain.Sucursales_Load();
