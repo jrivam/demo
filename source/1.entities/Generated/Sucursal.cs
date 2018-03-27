@@ -1,7 +1,7 @@
-﻿using library.Interface.Domain;
+﻿using library.Interface.Entities;
 using System;
 
-namespace domain.Model
+namespace entities.Model
 {
     public partial class Sucursal : IEntity
     {

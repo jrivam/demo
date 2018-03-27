@@ -1,6 +1,6 @@
-﻿using library.Interface.Business;
-using library.Interface.Data;
+﻿using library.Interface.Data;
 using library.Interface.Domain;
+using library.Interface.Entities;
 
 namespace library.Impl.Business
 {

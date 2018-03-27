@@ -1,7 +1,6 @@
 ﻿using library.Impl.Data;
 using System;
 using System.Collections.Generic;
-using library.Interface.Domain;
 
 namespace library.Interface.Data.Repository
 {

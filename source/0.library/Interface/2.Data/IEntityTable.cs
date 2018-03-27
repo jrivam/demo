@@ -1,6 +1,6 @@
 ﻿using library.Impl.Data.Sql;
 using library.Interface.Data.Repository;
-using library.Interface.Domain;
+using library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
@@ -8,7 +8,7 @@ namespace library.Interface.Data
 {
     public interface IEntityTable<T> where T : IEntity
     {
-        T Domain { get; set; }
+        T Entity { get; set; }
 
         string Reference { get; }
         string Name { get; }

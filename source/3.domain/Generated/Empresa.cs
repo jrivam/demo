@@ -1,23 +1,24 @@
 ﻿using library.Impl;
 using library.Impl.Business;
-using library.Interface.Business;
+using library.Impl.Domain;
+using library.Interface.Domain;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace business.Model
+namespace domain.Model
 {
-    public partial class Empresa : IEntityState<domain.Model.Empresa, data.Model.Empresa>, IEntityLogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
+    public partial class Empresa : IEntityState<entities.Model.Empresa, data.Model.Empresa>, IEntityLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public virtual data.Model.Empresa Data { get; set; } = new data.Model.Empresa();
 
-        protected readonly ILogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa> _logic;
+        protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
 
-        public Empresa(ILogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa> logic)
+        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
         {
             _logic = logic;
         }
         public Empresa()
-            : this(new Logic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>(new business.Mapper.Empresa()))
+            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
         {
         }
 
@@ -50,22 +51,22 @@ namespace business.Model
 
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
-            var query = new business.Query.Sucursal();
+            var query = new domain.Query.Sucursal();
             query.Data["IdEmpresa"].Where(this.Id);
 
             Sucursales_Load(query, maxdepth, top);
         }
-        public virtual void Sucursales_Load(business.Query.Sucursal query, int maxdepth = 1, int top = 0)
+        public virtual void Sucursales_Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            Sucursales_Load(query.List(maxdepth, top).businesses.ToList());
+            Sucursales_Load(query.List(maxdepth, top).domains.ToList());
         }
-        public virtual void Sucursales_Load(IList<business.Model.Sucursal> list)
+        public virtual void Sucursales_Load(IList<domain.Model.Sucursal> list)
         {
-            Sucursales = new business.Model.Sucursales().Load(list);
+            Sucursales = new domain.Model.Sucursales().Load(list);
         }
 
-        protected business.Model.Sucursales _sucursales;
-        public virtual business.Model.Sucursales Sucursales
+        protected domain.Model.Sucursales _sucursales;
+        public virtual domain.Model.Sucursales Sucursales
         {
             get
             {
@@ -84,17 +85,17 @@ namespace business.Model
             }
         }
 
-        public virtual business.Model.Empresa Clear()
+        public virtual domain.Model.Empresa Clear()
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, business.Model.Empresa business) Load()
+        public virtual (Result result, domain.Model.Empresa domain) Load()
         {
             var load = _logic.Load(this, Data);
 
             return load;
         }
-        public virtual (Result result, business.Model.Empresa business) Save()
+        public virtual (Result result, domain.Model.Empresa domain) Save()
         {
             var save = _logic.Save(this, Data);
 
@@ -102,7 +103,7 @@ namespace business.Model
 
             return save;
         }
-        public virtual (Result result, business.Model.Empresa business) Erase()
+        public virtual (Result result, domain.Model.Empresa domain) Erase()
         {
             EraseDependencies();
 
@@ -121,7 +122,7 @@ namespace business.Model
         }
     }
 
-    public partial class Empresas : List<business.Model.Empresa>
+    public partial class Empresas : List<domain.Model.Empresa>
     {
         public virtual data.Model.Empresas Datas
         {
@@ -135,11 +136,11 @@ namespace business.Model
         {
         }
 
-        public virtual Empresas Load(business.Query.Empresa query, int maxdepth = 1, int top = 0)
+        public virtual Empresas Load(domain.Query.Empresa query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(maxdepth, top).businesses);
+            return Load(query.List(maxdepth, top).domains);
         }
-        public virtual Empresas Load(IEnumerable<business.Model.Empresa> list)
+        public virtual Empresas Load(IEnumerable<domain.Model.Empresa> list)
         {
             this.AddRange(list);
 
@@ -148,37 +149,37 @@ namespace business.Model
     }
 }
 
-namespace business.Query
+namespace domain.Query
 {
-    public partial class Empresa : IQueryState<data.Query.Empresa>, IQueryLogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
+    public partial class Empresa : IQueryState<data.Query.Empresa>, IQueryLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public virtual data.Query.Empresa Data { get; set; } = new data.Query.Empresa();
 
-        protected readonly ILogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa> _logic;
+        protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
 
-        public Empresa(ILogic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa> logic)
+        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
         {
             _logic = logic;
         }
         public Empresa()
-            : this(new Logic<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>(new business.Mapper.Empresa()))
+            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
         {
         }
 
-        public virtual (Result result, business.Model.Empresa business) Retrieve(int maxdepth = 1, business.Model.Empresa business = default(business.Model.Empresa))
+        public virtual (Result result, domain.Model.Empresa domain) Retrieve(int maxdepth = 1, domain.Model.Empresa domain = default(domain.Model.Empresa))
         {
-            return _logic.Retrieve(Data, maxdepth, business);
+            return _logic.Retrieve(Data, maxdepth, domain);
         }
-        public virtual (Result result, IEnumerable<business.Model.Empresa> businesses) List(int maxdepth = 1, int top = 0, IList<business.Model.Empresa> businesses = null)
+        public virtual (Result result, IEnumerable<domain.Model.Empresa> domains) List(int maxdepth = 1, int top = 0, IList<domain.Model.Empresa> domains = null)
         {
-            return _logic.List(Data, maxdepth, top, businesses);
+            return _logic.List(Data, maxdepth, top, domains);
         }
     }
 }
 
-namespace business.Mapper
+namespace domain.Mapper
 {
-    public partial class Empresa : MapperState<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>
+    public partial class Empresa : MapperState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
     }
 }

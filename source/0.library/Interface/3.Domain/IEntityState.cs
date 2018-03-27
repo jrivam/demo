@@ -1,7 +1,7 @@
 ﻿using library.Interface.Data;
-using library.Interface.Domain;
+using library.Interface.Entities;
 
-namespace library.Interface.Business
+namespace library.Interface.Domain
 {
     public interface IEntityState<T, U> where T: IEntity
                                         where U : IEntityTable<T>

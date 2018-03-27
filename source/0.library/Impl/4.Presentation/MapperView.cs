@@ -1,10 +1,7 @@
-﻿using library.Interface.Business;
-using library.Interface.Data;
+﻿using library.Interface.Data;
 using library.Interface.Domain;
+using library.Interface.Entities;
 using library.Interface.Presentation;
-using System;
-using System.Globalization;
-using System.Reflection;
 
 namespace library.Impl.Presentation
 {
@@ -20,7 +17,7 @@ namespace library.Impl.Presentation
 
         public virtual W Map(W presentation)
         {
-            foreach (var column in presentation.Business.Data.Columns)
+            foreach (var column in presentation.Domain.Data.Columns)
             {
                 presentation.OnPropertyChanged(column.Reference);
             }

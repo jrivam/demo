@@ -1,6 +1,6 @@
-﻿using library.Interface.Business;
-using library.Interface.Data;
+﻿using library.Interface.Data;
 using library.Interface.Domain;
+using library.Interface.Entities;
 using library.Interface.Presentation;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace library.Impl.Business
         }
         public virtual W Clear(W presentation, IEntityLogic<T, U, V> logic)
         {
-            presentation.Business = logic.Clear();
+            presentation.Domain = logic.Clear();
 
             _mapper.Map(presentation);
 
@@ -32,7 +32,7 @@ namespace library.Impl.Business
         public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic)
         {
             var load = logic.Load();
-            presentation.Business = load.business;
+            presentation.Domain = load.domain;
 
             if (load.result.Success)
             {
@@ -45,7 +45,7 @@ namespace library.Impl.Business
         public virtual (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> logic)
         {
             var save = logic.Save();
-            presentation.Business = save.business;
+            presentation.Domain = save.domain;
 
             if (save.result.Success)
             {
@@ -57,7 +57,7 @@ namespace library.Impl.Business
         public virtual (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> logic)
         {
             var erase = logic.Erase();
-            presentation.Business = erase.business;
+            presentation.Domain = erase.domain;
 
             if (erase.result.Success)
             {
@@ -78,8 +78,8 @@ namespace library.Impl.Business
                         BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
             }
 
-            var retrieve = logic.Retrieve(maxdepth, presentation.Business);
-            presentation.Business = retrieve.business;
+            var retrieve = logic.Retrieve(maxdepth, presentation.Domain);
+            presentation.Domain = retrieve.domain;
 
             if (retrieve.result.Success)
             {
@@ -95,7 +95,7 @@ namespace library.Impl.Business
             var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
             var list = logic.List(maxdepth, top);
-            foreach (var business in list.businesses)
+            foreach (var business in list.domains)
             {
                 var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
                     BindingFlags.CreateInstance |
@@ -103,7 +103,7 @@ namespace library.Impl.Business
                     BindingFlags.Instance |
                     BindingFlags.OptionalParamBinding, null, new object[] { maxdepth }, CultureInfo.CurrentCulture);
 
-                presentation.Business = business;
+                presentation.Domain = business;
 
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);

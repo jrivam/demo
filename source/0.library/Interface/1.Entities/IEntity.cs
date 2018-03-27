@@ -1,4 +1,4 @@
-﻿namespace library.Interface.Domain
+﻿namespace library.Interface.Entities
 {
     public interface IEntity
     {

@@ -1,6 +1,6 @@
 ﻿using library.Interface.Data;
 using library.Interface.Data.Sql;
-using library.Interface.Domain;
+using library.Interface.Entities;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;

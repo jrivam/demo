@@ -1,5 +1,5 @@
 ﻿using System;
-using library.Interface.Domain;
+using library.Interface.Entities;
 
 namespace library.Interface.Data.Repository
 {

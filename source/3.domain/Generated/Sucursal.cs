@@ -1,24 +1,25 @@
 ﻿using library.Impl;
 using library.Impl.Business;
-using library.Interface.Business;
+using library.Impl.Domain;
+using library.Interface.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace business.Model
+namespace domain.Model
 {
-    public partial class Sucursal : IEntityState<domain.Model.Sucursal, data.Model.Sucursal>, IEntityLogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
+    public partial class Sucursal : IEntityState<entities.Model.Sucursal, data.Model.Sucursal>, IEntityLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public virtual data.Model.Sucursal Data { get; set; } = new data.Model.Sucursal();
 
-        protected readonly ILogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal> _logic;
+        protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
 
-        public Sucursal(ILogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal> logic)
+        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
         {
             _logic = logic;
         }
         public Sucursal()
-            : this(new Logic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>(new business.Mapper.Sucursal()))
+            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
         {
         }
 
@@ -46,14 +47,14 @@ namespace business.Model
             }
         }
 
-        protected business.Model.Empresa _empresa;
-        public virtual business.Model.Empresa Empresa
+        protected domain.Model.Empresa _empresa;
+        public virtual domain.Model.Empresa Empresa
         {
             get
             {
                 if (_empresa == null)
                 {
-                    Empresa = new business.Model.Empresa() { Data = Data.Empresa };
+                    Empresa = new domain.Model.Empresa() { Data = Data.Empresa };
                 }
 
                 return _empresa;
@@ -61,34 +62,34 @@ namespace business.Model
             set { if (_empresa != value) { _empresa = value; } }
         }
 
-        protected business.Model.Empresas _empresas;
-        public virtual business.Model.Empresas Empresas
+        protected domain.Model.Empresas _empresas;
+        public virtual domain.Model.Empresas Empresas
         {
             get
             {
                 if (_empresas == null)
                 {
-                    var query = new business.Query.Empresa();
+                    var query = new domain.Query.Empresa();
                     query.Data["Activo"].Where(true);
 
-                    _empresas = new business.Model.Empresas().Load(query);
+                    _empresas = new domain.Model.Empresas().Load(query);
                 }
 
                 return _empresas;
             }
         }
 
-        public virtual business.Model.Sucursal Clear()
+        public virtual domain.Model.Sucursal Clear()
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, business.Model.Sucursal business) Load()
+        public virtual (Result result, domain.Model.Sucursal domain) Load()
         {
             var load = _logic.Load(this, Data);
 
             return load;
         }
-        public virtual (Result result, business.Model.Sucursal business) Save()
+        public virtual (Result result, domain.Model.Sucursal domain) Save()
         {
             var save = _logic.Save(this, Data);
 
@@ -96,7 +97,7 @@ namespace business.Model
 
             return save;
         }
-        public virtual (Result result, business.Model.Sucursal business) Erase()
+        public virtual (Result result, domain.Model.Sucursal domain) Erase()
         {
             EraseDependencies();
 
@@ -113,7 +114,7 @@ namespace business.Model
         }
     }
 
-    public partial class Sucursales : List<business.Model.Sucursal>
+    public partial class Sucursales : List<domain.Model.Sucursal>
     {
         public virtual data.Model.Sucursales Datas
         {
@@ -127,11 +128,11 @@ namespace business.Model
         {
         }
 
-        public virtual Sucursales Load(business.Query.Sucursal query, int maxdepth = 1, int top = 0)
+        public virtual Sucursales Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(maxdepth, top).businesses);
+            return Load(query.List(maxdepth, top).domains);
         }
-        public virtual Sucursales Load(IEnumerable<business.Model.Sucursal> list)
+        public virtual Sucursales Load(IEnumerable<domain.Model.Sucursal> list)
         {
             this.AddRange(list);
 
@@ -140,31 +141,31 @@ namespace business.Model
     }
 }
 
-namespace business.Query
+namespace domain.Query
 {
-    public partial class Sucursal : IQueryState<data.Query.Sucursal>, IQueryLogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
+    public partial class Sucursal : IQueryState<data.Query.Sucursal>, IQueryLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public virtual data.Query.Sucursal Data { get; set; } = new data.Query.Sucursal();
 
-        protected readonly ILogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal> _logic;
+        protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
 
-        public Sucursal(ILogic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal> logic)
+        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
         {
             _logic = logic;
         }
         public Sucursal()
-            : this(new Logic<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>(new business.Mapper.Sucursal()))
+            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
         {
         }
 
-        private business.Query.Empresa _empresa;
-        public virtual business.Query.Empresa Empresa
+        private domain.Query.Empresa _empresa;
+        public virtual domain.Query.Empresa Empresa
         {
             get
             {
                 if (_empresa == null)
                 {
-                    _empresa = new business.Query.Empresa();
+                    _empresa = new domain.Query.Empresa();
                 }
 
                 return _empresa;
@@ -172,22 +173,22 @@ namespace business.Query
             set { if (_empresa != value) { _empresa = value; } }
         }
 
-        public virtual (Result result, business.Model.Sucursal business) Retrieve(int maxdepth = 1, business.Model.Sucursal business = default(business.Model.Sucursal))
+        public virtual (Result result, domain.Model.Sucursal domain) Retrieve(int maxdepth = 1, domain.Model.Sucursal domain = default(domain.Model.Sucursal))
         {
-            return _logic.Retrieve(Data, maxdepth, business);
+            return _logic.Retrieve(Data, maxdepth, domain);
         }
-        public virtual (Result result, IEnumerable<business.Model.Sucursal> businesses) List(int maxdepth = 1, int top = 0, IList<business.Model.Sucursal> businesses = null)
+        public virtual (Result result, IEnumerable<domain.Model.Sucursal> domains) List(int maxdepth = 1, int top = 0, IList<domain.Model.Sucursal> domains = null)
         {
-            return _logic.List(Data, maxdepth, top, businesses);
+            return _logic.List(Data, maxdepth, top, domains);
         }
     }
 }
 
-namespace business.Mapper
+namespace domain.Mapper
 {
-    public partial class Sucursal : MapperState<domain.Model.Sucursal, data.Model.Sucursal, business.Model.Sucursal>
+    public partial class Sucursal : MapperState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public override business.Model.Sucursal Clear(business.Model.Sucursal business)
+        public override domain.Model.Sucursal Clear(domain.Model.Sucursal business)
         {
             business = base.Clear(business);
 
@@ -195,7 +196,7 @@ namespace business.Mapper
 
             return business;
         }
-        public override business.Model.Sucursal Map(business.Model.Sucursal business)
+        public override domain.Model.Sucursal Map(domain.Model.Sucursal business)
         {
             business = base.Map(business);
 

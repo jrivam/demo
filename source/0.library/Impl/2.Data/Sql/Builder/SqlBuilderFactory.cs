@@ -1,6 +1,6 @@
 ﻿using library.Impl.Data.Sql.SyntaxSign;
 using library.Interface.Data.Sql;
-using library.Interface.Domain;
+using library.Interface.Entities;
 using System;
 using System.Configuration;
 

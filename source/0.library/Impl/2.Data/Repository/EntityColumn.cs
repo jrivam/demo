@@ -1,6 +1,6 @@
 ﻿using library.Interface.Data;
-using library.Interface.Domain;
 using library.Interface.Data.Repository;
+using library.Interface.Entities;
 using System;
 
 namespace library.Impl.Data.Repository

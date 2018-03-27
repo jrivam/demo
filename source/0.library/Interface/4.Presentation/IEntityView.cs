@@ -1,6 +1,6 @@
-﻿using library.Interface.Business;
-using library.Interface.Data;
+﻿using library.Interface.Data;
 using library.Interface.Domain;
+using library.Interface.Entities;
 using System.Windows.Input;
 
 namespace library.Interface.Presentation
@@ -9,7 +9,7 @@ namespace library.Interface.Presentation
                                         where U : IEntityTable<T>
                                         where V : IEntityState<T, U>
     {
-        V Business { get; set; }
+        V Domain { get; set; }
 
         void OnPropertyChanged(string propertyName);
 

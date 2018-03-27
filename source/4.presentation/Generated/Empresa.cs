@@ -12,15 +12,15 @@ using System.Windows.Input;
 
 namespace presentation.Model
 {
-    public partial class Empresa : INotifyPropertyChanged, IEntityView<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa>, IEntityInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : INotifyPropertyChanged, IEntityView<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>, IEntityInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         private int _maxdepth;
 
-        public virtual business.Model.Empresa Business { get; set; } = new business.Model.Empresa();
+        public virtual domain.Model.Empresa Domain { get; set; } = new domain.Model.Empresa();
 
-        protected readonly IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> _interactive;
+        protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public Empresa(IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> interactive, int maxdepth)
+        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive, int maxdepth)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
@@ -30,23 +30,23 @@ namespace presentation.Model
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>((CommandAction.Load, Load(_maxdepth)), "EmpresaLoad");
-            }, delegate (object parameter) { return Business.Data.Domain.Id != null && Business.Changed; });
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>((CommandAction.Save, Save()), "EmpresaSave");
-            }, delegate (object parameter) { return Business.Changed; });
+            }, delegate (object parameter) { return Domain.Changed; });
             EraseCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>((CommandAction.Erase, Erase()), "EmpresaErase");
-            }, delegate (object parameter) { return Business.Data.Domain.Id != null && !Business.Deleted; });
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>((this, this), "EmpresaEdit");
-            }, delegate (object parameter) { return Business.Data.Domain.Id != null && !Business.Deleted; });
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
         public Empresa(int maxdepth = 1)
-            : this(new Interactive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()), maxdepth)
+            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()), maxdepth)
         {
         }
 
@@ -67,12 +67,12 @@ namespace presentation.Model
 
         public virtual int? Id
         {
-            get { return Business?.Id; }
+            get { return Domain?.Id; }
             set
             {
-                if (Business?.Id != value)
+                if (Domain?.Id != value)
                 {
-                    Business.Id = value;
+                    Domain.Id = value;
                     OnPropertyChanged("Id");
 
                     //if (value == null)
@@ -82,8 +82,8 @@ namespace presentation.Model
                 }
             }
         }
-        public virtual string RazonSocial { get { return Business?.RazonSocial; } set { if (Business?.RazonSocial != value) { Business.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
-        public virtual bool? Activo { get { return Business?.Activo; } set { if (Business?.Activo != value) { Business.Activo = value; OnPropertyChanged("Activo"); } } }
+        public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
+        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
@@ -117,7 +117,7 @@ namespace presentation.Model
             {
                 _sucursales = value;
 
-                 Business.Sucursales = Sucursales?.Businesses;
+                 Domain.Sucursales = Sucursales?.Businesses;
 
                  OnPropertyChanged("Sucursales");
             }
@@ -125,11 +125,11 @@ namespace presentation.Model
 
         public virtual presentation.Model.Empresa Clear()
         {
-            return _interactive.Clear(this, Business);
+            return _interactive.Clear(this, Domain);
         }
         public virtual (Result result, presentation.Model.Empresa presentation) Load()
         {
-            var load = _interactive.Load(this, Business);
+            var load = _interactive.Load(this, Domain);
 
             return load;
         }
@@ -146,7 +146,7 @@ namespace presentation.Model
         }
         public virtual (Result result, presentation.Model.Empresa presentation) Save()
         {
-            var save = _interactive.Save(this, Business);
+            var save = _interactive.Save(this, Domain);
 
             SaveDependencies();
 
@@ -156,7 +156,7 @@ namespace presentation.Model
         {
             EraseDependencies();
 
-            var erase = _interactive.Erase(this, Business);
+            var erase = _interactive.Erase(this, Domain);
 
             return erase;
         }
@@ -175,11 +175,11 @@ namespace presentation.Model
     {
         public virtual ICommand AddCommand { get; set; }
 
-        public virtual business.Model.Empresas Businesses
+        public virtual domain.Model.Empresas Businesses
         {
             get
             {
-                return new business.Model.Empresas().Load(this.Select(x => x.Business).Cast<business.Model.Empresa>());
+                return new domain.Model.Empresas().Load(this.Select(x => x.Domain).Cast<domain.Model.Empresa>());
             }
         }
 
@@ -211,13 +211,13 @@ namespace presentation.Model
         }
         public virtual void EmpresaErase((CommandAction action, (Result result, presentation.Model.Empresa presentation) operation) message)
         {
-            if (message.operation.presentation?.Business.Data.Domain.Id != null)
+            if (message.operation.presentation?.Domain.Data.Entity.Id != null)
                 this.Remove(message.operation.presentation);
         }
 
         public virtual void EmpresaAdd(presentation.Model.Empresa presentation)
         {
-            if (presentation?.Business.Data.Domain.Id != null)
+            if (presentation?.Domain.Data.Entity.Id != null)
                 this.Add(presentation);
         }
         public virtual void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
@@ -234,18 +234,18 @@ namespace presentation.Model
 
 namespace presentation.Query
 {
-    public partial class Empresa : IQueryView<data.Query.Empresa, business.Query.Empresa>, IQueryInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : IQueryView<data.Query.Empresa, domain.Query.Empresa>, IQueryInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public virtual business.Query.Empresa Business { get; set; } = new business.Query.Empresa();
+        public virtual domain.Query.Empresa Business { get; set; } = new domain.Query.Empresa();
 
-        protected readonly IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> _interactive;
+        protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public Empresa(IInteractive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa> interactive)
+        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
         {
             _interactive = interactive;
         }
         public Empresa()
-            : this(new Interactive<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()))
+            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()))
         {
         }
 
@@ -262,7 +262,7 @@ namespace presentation.Query
 
 namespace presentation.Mapper
 {
-    public partial class Empresa : MapperView<domain.Model.Empresa, data.Model.Empresa, business.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : MapperView<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
     }
 }

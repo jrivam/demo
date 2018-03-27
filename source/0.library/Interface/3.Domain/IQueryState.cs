@@ -1,6 +1,6 @@
 ﻿using library.Interface.Data;
 
-namespace library.Interface.Business
+namespace library.Interface.Domain
 {
     public interface IQueryState<T> where T : IQueryTable
     {
