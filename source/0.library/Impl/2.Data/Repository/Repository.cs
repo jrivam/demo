@@ -128,7 +128,7 @@ namespace library.Impl.Data.Repository
         {
             var executescalar = ExecuteScalar(command);
 
-            if (executescalar.result == null)
+            if (executescalar.scalar == null)
             {
                 executescalar.result.Success = false;
                 executescalar.result.Messages.Add((ResultCategory.Information, "Insert: no rows affected"));
