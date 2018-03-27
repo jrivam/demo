@@ -71,7 +71,7 @@ namespace data.Model
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new data.Query.Sucursal();
-            query["IdEmpresa"].Where(this.Id);
+            query["IdEmpresa"]?.Where(this.Id);
 
             Sucursales_Load(query, maxdepth, top);
         }
