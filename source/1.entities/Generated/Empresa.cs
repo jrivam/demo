@@ -9,6 +9,6 @@ namespace entities.Model
         public virtual string RazonSocial { get; set; }
         public virtual bool? Activo { get; set; }
 
-        public virtual IList<entities.Model.Sucursal> Sucursales { get; set; }
+        public virtual ICollection<entities.Model.Sucursal> Sucursales { get; set; }
     }
 }

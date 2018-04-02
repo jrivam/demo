@@ -4,6 +4,6 @@ namespace library.Interface.Domain
 {
     public interface IQueryState<T> where T : IQueryTable
     {
-        T Data { get; set; }
+        T Data { get; }
     }
 }

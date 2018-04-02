@@ -20,7 +20,7 @@ namespace Web.Api.Controllers
                 if (fecha != null)
                     query.Data["Fecha"]?.Where(Convert.ToDateTime(fecha).ToString("dd/MM/yyyy"));
 
-                return Ok(new domain.Model.Sucursales().Load(query.List().domains).Datas.Domains);
+                return Ok(new domain.Model.Sucursales().Load(query.List().domains).Datas.Entities);
             }
             catch (Exception ex)
             {

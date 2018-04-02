@@ -11,13 +11,13 @@ namespace library.Interface.Presentation
                                                 where V : IEntityState<T, U>
                                                 where W : IEntityView<T, U, V>
     {
-        W Clear(W presentation, IEntityLogic<T, U, V> logic);
+        W Clear(W presentation, IEntityLogic<T, U, V> entitylogic);
 
-        (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic);
-        (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> logic);
-        (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> logic);
+        (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> entitylogic);
+        (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> entitylogic);
+        (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> entitylogic);
 
-        (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1, W presentation = default(W));
-        (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth = 1, int top = 0, IList<W> presentations = null);
+        (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> querylogic, int maxdepth = 1, W presentation = default(W));
+        (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> querylogic, int maxdepth = 1, int top = 0, IList<W> presentations = null);
     }
 }

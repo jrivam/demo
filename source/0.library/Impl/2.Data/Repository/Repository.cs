@@ -31,9 +31,9 @@ namespace library.Impl.Data.Repository
             return _mapper.Clear(data, maxdepth);
         }
 
-        public virtual (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1, U data = default(U))
+        public virtual (Result result, U data) SelectSingle(IQueryTable querytable, int maxdepth = 1, U data = default(U))
         {
-            return SelectSingle(_builder.Select(query, maxdepth, 1), maxdepth, data);
+            return SelectSingle(_builder.Select(querytable, maxdepth, 1), maxdepth, data);
         }
         public virtual (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, U data = default(U))
         {
@@ -46,9 +46,9 @@ namespace library.Impl.Data.Repository
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
 
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable query, int maxdepth = 1, int top = 0, IList<U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable querytable, int maxdepth = 1, int top = 0, IList<U> datas = null)
         {
-            return SelectMultiple(_builder.Select(query, maxdepth, top), maxdepth, datas);
+            return SelectMultiple(_builder.Select(querytable, maxdepth, top), maxdepth, datas);
         }
         public virtual (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
         {
@@ -59,9 +59,9 @@ namespace library.Impl.Data.Repository
             return ExecuteQuery(command, maxdepth, datas);
         }
 
-        public virtual (Result result, int rows) Update(U table, IQueryTable query, int maxdepth = 1)
+        public virtual (Result result, int rows) Update(U table, IQueryTable querytable, int maxdepth = 1)
         {
-            return Update(_builder.Update(table, query, maxdepth));
+            return Update(_builder.Update(table, querytable, maxdepth));
         }
         public virtual (Result result, int rows) Update(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
         {
@@ -72,9 +72,9 @@ namespace library.Impl.Data.Repository
             return ExecuteNonQuery(command);
         }
 
-        public virtual (Result result, int rows) Delete(IQueryTable query, int maxdepth = 1)
+        public virtual (Result result, int rows) Delete(IQueryTable querytable, int maxdepth = 1)
         {
-            return Delete(_builder.Delete(query, maxdepth));
+            return Delete(_builder.Delete(querytable, maxdepth));
         }
         public virtual (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
         {

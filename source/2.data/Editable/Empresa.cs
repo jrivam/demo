@@ -7,8 +7,8 @@ namespace data.Model
 {
     public partial class Empresa
     {
-        public Empresa()
-           : this("test.connectionstring.name", "empresa", "Empresa")
+        public Empresa(entities.Model.Empresa entity)
+           : this("test.connectionstring.name", entity)
         {
             //SelectDbCommand = ("gsp_empresa_select", CommandType.StoredProcedure, new List<DbParameter>());
             //InsertDbCommand = ("gsp_empresa_insert", CommandType.StoredProcedure, new List<DbParameter>());
@@ -23,7 +23,7 @@ namespace data.Query
     public partial class Empresa
     {
         public Empresa()
-          : this("test.connectionstring.name", "empresa", "Empresa")
+          : this("test.connectionstring.name")
         {
         }
     }

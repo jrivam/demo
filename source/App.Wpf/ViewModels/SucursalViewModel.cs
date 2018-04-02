@@ -2,5 +2,9 @@
 {
     public class SucursalViewModel : presentation.Model.Sucursal
     {
+        public SucursalViewModel()
+            : base()
+        {
+        }
     }
 }

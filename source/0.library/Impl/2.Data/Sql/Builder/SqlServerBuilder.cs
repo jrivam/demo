@@ -42,16 +42,16 @@ namespace library.Impl.Data.Sql.Builder
 
         }
 
-        public override IDbCommand Select(IQueryTable query, int maxdepth = 1, int top = 0)
+        public override IDbCommand Select(IQueryTable querytable, int maxdepth = 1, int top = 0)
         {
             var command = GetCommand();
 
-            var querycolumns = GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(query, query.Name, maxdepth, 0);
+            var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
+            var queryjoins = GetQueryJoins(querytable, querytable.Name, maxdepth, 0);
 
             var columns = GetQuerySelectColumns(querycolumns, command);
 
-            var from = GetQueryFrom(queryjoins, query.Name);
+            var from = GetQueryFrom(queryjoins, querytable.Name);
 
             var where = GetQueryWhere(querycolumns, command);
 
@@ -61,18 +61,18 @@ namespace library.Impl.Data.Sql.Builder
             return command;
         }
 
-        public override IDbCommand Update(IEntityTable<T> entity, IQueryTable query, int maxdepth = 1)
+        public override IDbCommand Update(IEntityTable<T> entitytable, IQueryTable querytable, int maxdepth = 1)
         {
             var command = GetCommand();
 
-            var querycolumns = GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(query, query.Name, maxdepth, 0);
+            var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
+            var queryjoins = GetQueryJoins(querytable, querytable.Name, maxdepth, 0);
 
-            var set = GetEntityUpdateSet(entity.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), command);
+            var set = GetEntityUpdateSet(entitytable.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), command);
 
-            var table = $"{SyntaxSign.AliasEnclosureTableOpen}{query.Name}{SyntaxSign.AliasEnclosureTableClose}";
+            var table = $"{SyntaxSign.AliasEnclosureTableOpen}{querytable.Name}{SyntaxSign.AliasEnclosureTableClose}";
 
-            var from = GetQueryFrom(queryjoins, entity.Name);
+            var from = GetQueryFrom(queryjoins, entitytable.Name);
 
             var where = GetQueryWhere(querycolumns, command);
 
@@ -80,16 +80,16 @@ namespace library.Impl.Data.Sql.Builder
 
             return command;
         }
-        public override IDbCommand Delete(IQueryTable query, int maxdepth = 1)
+        public override IDbCommand Delete(IQueryTable querytable, int maxdepth = 1)
         {
             var command = GetCommand();
 
-            var querycolumns = GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(query, query.Name, maxdepth, 0);
+            var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
+            var queryjoins = GetQueryJoins(querytable, querytable.Name, maxdepth, 0);
 
-            var table = $"{SyntaxSign.AliasEnclosureTableOpen}{query.Name}{SyntaxSign.AliasEnclosureTableClose}{Environment.NewLine}";
+            var table = $"{SyntaxSign.AliasEnclosureTableOpen}{querytable.Name}{SyntaxSign.AliasEnclosureTableClose}{Environment.NewLine}";
 
-            var from = GetQueryFrom(queryjoins, query.Name);
+            var from = GetQueryFrom(queryjoins, querytable.Name);
 
             var where = GetQueryWhere(querycolumns, command);
 
@@ -98,36 +98,36 @@ namespace library.Impl.Data.Sql.Builder
             return command;
         }
 
-        public override IDbCommand Select(IEntityTable<T> entity)
+        public override IDbCommand Select(IEntityTable<T> entitytable)
         {
             var command = GetCommand();
 
-            var columns = GetEntitySelectColumns(entity.Columns, command);
+            var columns = GetEntitySelectColumns(entitytable.Columns, command);
 
-            var table = $"{entity.Name}{Environment.NewLine}";
+            var table = $"{entitytable.Name}{Environment.NewLine}";
 
-            var where = GetEntityWhere(entity.Columns.Where(c => c.IsPrimaryKey).ToList(), command);
+            var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey).ToList(), command);
 
             command.CommandText = $"select{Environment.NewLine}{columns}from {table}{where}";
 
             return command;
         }
 
-        public override IDbCommand Insert(IEntityTable<T> entity)
+        public override IDbCommand Insert(IEntityTable<T> entitytable)
         {
             var command = GetCommand();
 
-            var table = $"{entity.Name}{Environment.NewLine}";
+            var table = $"{entitytable.Name}{Environment.NewLine}";
 
-            var columns = GetEntityInsertColumns(entity.Columns.Where(c => !c.IsIdentity).ToList(), command);
+            var columns = GetEntityInsertColumns(entitytable.Columns.Where(c => !c.IsIdentity).ToList(), command);
 
-            var values = GetEntityInsertValues(entity.Columns.Where(c => !c.IsIdentity).ToList(), command);
+            var values = GetEntityInsertValues(entitytable.Columns.Where(c => !c.IsIdentity).ToList(), command);
 
             command.CommandText = $"insert{Environment.NewLine}into {table}{columns}values {values}";
 
             var output = string.Empty;
 
-            foreach (var c in entity.Columns.Where(c => c.IsIdentity).ToList())
+            foreach (var c in entitytable.Columns.Where(c => c.IsIdentity).ToList())
             {
                 output += $"{(string.IsNullOrWhiteSpace(output) ? "SELECT " : ", ")}SCOPE_IDENTITY()";
             }
@@ -136,27 +136,27 @@ namespace library.Impl.Data.Sql.Builder
 
             return command;
         }
-        public override IDbCommand Update(IEntityTable<T> entity)
+        public override IDbCommand Update(IEntityTable<T> entitytable)
         {
             var command = GetCommand();
 
-            var table = $"{entity.Name}{Environment.NewLine}";
+            var table = $"{entitytable.Name}{Environment.NewLine}";
 
-            var set = GetEntityUpdateSet(entity.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), command);
+            var set = GetEntityUpdateSet(entitytable.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), command);
 
-            var where = GetEntityWhere(entity.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), command);
+            var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), command);
 
             command.CommandText = $"update{Environment.NewLine}{table}set {set}{where}";
 
             return command;
         }
-        public override IDbCommand Delete(IEntityTable<T> entity)
+        public override IDbCommand Delete(IEntityTable<T> entitytable)
         {
             var command = GetCommand();
 
-            var table = $"{entity.Name}{Environment.NewLine}";
+            var table = $"{entitytable.Name}{Environment.NewLine}";
 
-            var where = GetEntityWhere(entity.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), command);
+            var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), command);
 
             command.CommandText = $"delete{Environment.NewLine}from {table}{where}";
 

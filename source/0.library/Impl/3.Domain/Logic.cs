@@ -19,11 +19,10 @@ namespace library.Impl.Domain
             _mapper = mapper;
         }
 
-        public virtual V Clear(V domain, IEntityRepository<T, U> repository)
+        public virtual V Clear(V domain, IEntityRepository<T, U> entityrepository)
         {
-            domain.Data = repository.Clear();
+            entityrepository.Clear();
 
-            domain.Loaded = false;
             domain.Changed = false;
             domain.Deleted = false;
 
@@ -32,19 +31,17 @@ namespace library.Impl.Domain
             return domain;
         }
 
-        public virtual (Result result, V domain) Load(V domain, IEntityRepository<T, U> repository)
+        public virtual (Result result, V domain) Load(V domain, IEntityRepository<T, U> entityrepository)
         {
             if (domain.Data.Entity.Id != null)
             {
-                var select = repository.Select();
-                domain.Data = select.data;
+                var select = entityrepository.Select();
 
                 if (select.result.Success)
                 {
                     _mapper.Clear(domain);
                     _mapper.Map(domain);
 
-                    domain.Loaded = true;
                     domain.Changed = false;
                     domain.Deleted = false;
                 }
@@ -54,20 +51,17 @@ namespace library.Impl.Domain
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Load: empty primary key") } }, domain);
         }
-        public virtual (Result result, V domain) Save(V domain, IEntityRepository<T, U> repository)
+        public virtual (Result result, V domain) Save(V domain, IEntityRepository<T, U> entityrepository)
         {
             if (domain.Changed)
             {
-                var updateinsert = (domain.Loaded ? repository.Update() : repository.Insert());
-                domain.Data = updateinsert.data;
+                var updateinsert = (domain.Data.Entity.Id != null ? entityrepository.Update() : entityrepository.Insert());
 
                 if (updateinsert.result.Success)
                 {
                     _mapper.Map(domain);
 
-                    domain.Loaded = true;
                     domain.Changed = false;
-                    domain.Deleted = false;
                 }
 
                 return (updateinsert.result, domain);
@@ -75,18 +69,16 @@ namespace library.Impl.Domain
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Save: no changes to persist") } }, domain);
         }
-        public virtual (Result result, V domain) Erase(V domain, IEntityRepository<T, U> repository)
+        public virtual (Result result, V domain) Erase(V domain, IEntityRepository<T, U> entityrepository)
         {
             if (!domain.Deleted)
             {
-                var delete = repository.Delete();
-                domain.Data = delete.data;
+                var delete = entityrepository.Delete();
 
                 if (delete.result.Success)
                 {
                     _mapper.Map(domain);
 
-                    domain.Loaded = false;
                     domain.Deleted = true;
                 }
 
@@ -96,7 +88,7 @@ namespace library.Impl.Domain
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, domain);
         }
 
-        public virtual (Result result, V domain) Retrieve(IQueryRepository<T, U> repository, int maxdepth = 1, V domain = default(V))
+        public virtual (Result result, V domain) Retrieve(IQueryRepository<T, U> queryrepository, int maxdepth = 1, V domain = default(V))
         {
             if (domain == null)
             {
@@ -107,27 +99,25 @@ namespace library.Impl.Domain
                     BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
             }
 
-            var selectsingle = repository.SelectSingle(maxdepth, domain.Data);
-            domain.Data = selectsingle.data;
+            var selectsingle = queryrepository.SelectSingle(maxdepth, domain.Data);
 
             if (selectsingle.result.Success)
             {
                 _mapper.Clear(domain);
                 _mapper.Map(domain);
 
-                domain.Loaded = true;
                 domain.Changed = false;
                 domain.Deleted = false;
             }
 
             return (selectsingle.result, domain);
         }
-        public virtual (Result result, IEnumerable<V> domains) List(IQueryRepository<T, U> repository, int maxdepth = 1, int top = 0, IList<V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryRepository<T, U> queryrepository, int maxdepth = 1, int top = 0, IList<V> domains = null)
         {
             var enumeration = new List<V>();
             var iterator = (domains ?? new List<V>()).GetEnumerator();
 
-            var selectmultiple = repository.SelectMultiple(maxdepth, top);
+            var selectmultiple = queryrepository.SelectMultiple(maxdepth, top);
             if (selectmultiple.result.Success)
             {
                 foreach (var data in selectmultiple.datas)
@@ -136,14 +126,11 @@ namespace library.Impl.Domain
                         BindingFlags.CreateInstance |
                         BindingFlags.Public |
                         BindingFlags.Instance |
-                        BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
-
-                    domain.Data = data;
+                        BindingFlags.OptionalParamBinding, null, new object[] { data }, CultureInfo.CurrentCulture);
 
                     _mapper.Clear(domain);
                     _mapper.Map(domain);
 
-                    domain.Loaded = true;
                     domain.Changed = false;
                     domain.Deleted = false;
 

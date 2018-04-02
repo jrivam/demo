@@ -12,16 +12,37 @@ namespace data.Model
 {
     public partial class Empresa : IEntityTable<entities.Model.Empresa>, IEntityRepository<entities.Model.Empresa, data.Model.Empresa>
     {
-        public virtual entities.Model.Empresa Entity { get; set; } = new entities.Model.Empresa();
+        protected entities.Model.Empresa _entity;
+        public virtual entities.Model.Empresa Entity
+        {
+            get
+            {
+                return _entity;
+            }
+            protected set
+            {
+                _entity = value;
+
+                //var props = _entity.GetType().GetProperties();
+                //foreach (var prop in props)
+                //{
+                //    this[prop.Name].Value = prop.GetValue(_entity, null);
+                //}
+            }
+        }
 
         protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository, string name, string reference)
+        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
+            entities.Model.Empresa entity,
+            string name, string reference)
         {
             _repository = repository;
+
+            Entity = entity;
 
             Name = name;
             Reference = reference;
@@ -30,8 +51,16 @@ namespace data.Model
             Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
         }
-        public Empresa(string connectionstringname, string name, string reference)
-            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), name, reference)
+        public Empresa(string connectionstringname,
+            entities.Model.Empresa entity,
+            string name = "empresa", string reference = "Empresa")
+            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname),
+                  entity,
+                  name, reference)
+        {
+        }
+        public Empresa()
+            : this(new entities.Model.Empresa())
         {
         }
 
@@ -100,7 +129,7 @@ namespace data.Model
             {
                 _sucursales = value;
 
-                Entity.Sucursales = Sucursales?.Domains;
+                Entity.Sucursales = _sucursales?.Entities;
             }
         } 
 
@@ -130,7 +159,7 @@ namespace data.Model
 
     public partial class Empresas : List<data.Model.Empresa>
     {
-        public virtual IList<entities.Model.Empresa> Domains
+        public virtual IList<entities.Model.Empresa> Entities
         {
             get
             {
@@ -166,7 +195,8 @@ namespace data.Query
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository, string name, string reference)
+        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
+            string name, string reference)
         {
             _repository = repository;
 
@@ -177,8 +207,10 @@ namespace data.Query
             Columns.Add(new QueryColumn<string>(this, "razon_social", "RazonSocial"));
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
-        public Empresa(string connectionstringname, string name, string reference)
-            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), name, reference)
+        public Empresa(string connectionstringname,
+            string name = "empresa", string reference = "Empresa")
+            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), 
+                  name, reference)
         {
         }
 

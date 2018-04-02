@@ -8,7 +8,7 @@ namespace library.Interface.Data
 {
     public interface IEntityTable<T> where T : IEntity
     {
-        T Entity { get; set; }
+        T Entity { get; }
 
         string Reference { get; }
         string Name { get; }
