@@ -20,19 +20,18 @@ namespace library.Impl.Presentation
         {
             _mapper = mapper;
         }
-        public virtual W Clear(W presentation, IEntityLogic<T, U, V> logic)
+        public virtual W Clear(W presentation, IEntityLogic<T, U, V> entitylogic)
         {
-            presentation.Domain = logic.Clear();
+            entitylogic.Clear();
 
             _mapper.Map(presentation);
 
             return presentation;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> logic)
+        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> entitylogic)
         {
-            var load = logic.Load();
-            presentation.Domain = load.domain;
+            var load = entitylogic.Load();
 
             if (load.result.Success)
             {
@@ -42,10 +41,9 @@ namespace library.Impl.Presentation
 
             return (load.result, presentation);
         }
-        public virtual (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> logic)
+        public virtual (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> entitylogic)
         {
-            var save = logic.Save();
-            presentation.Domain = save.domain;
+            var save = entitylogic.Save();
 
             if (save.result.Success)
             {
@@ -54,10 +52,9 @@ namespace library.Impl.Presentation
 
             return (save.result, presentation);
         }
-        public virtual (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> logic)
+        public virtual (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> entitylogic)
         {
-            var erase = logic.Erase();
-            presentation.Domain = erase.domain;
+            var erase = entitylogic.Erase();
 
             if (erase.result.Success)
             {
@@ -67,7 +64,7 @@ namespace library.Impl.Presentation
             return (erase.result, presentation);
         }
 
-        public virtual (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> logic, int maxdepth = 1, W presentation = default(W))
+        public virtual (Result result, W presentation) Retrieve(IQueryLogic<T, U, V> querylogic, int maxdepth = 1, W presentation = default(W))
         {
             if (presentation == null)
             {
@@ -78,8 +75,7 @@ namespace library.Impl.Presentation
                         BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
             }
 
-            var retrieve = logic.Retrieve(maxdepth, presentation.Domain);
-            presentation.Domain = retrieve.domain;
+            var retrieve = querylogic.Retrieve(maxdepth, presentation.Domain);
 
             if (retrieve.result.Success)
             {
@@ -89,21 +85,19 @@ namespace library.Impl.Presentation
 
             return (retrieve.result, presentation);
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> logic, int maxdepth = 1, int top = 0, IList<W> presentations = null)
+        public virtual (Result result, IEnumerable<W> presentations) List(IQueryLogic<T, U, V> querylogic, int maxdepth = 1, int top = 0, IList<W> presentations = null)
         {
             var enumeration = new List<W>();
             var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
-            var list = logic.List(maxdepth, top);
+            var list = querylogic.List(maxdepth, top);
             foreach (var domain in list.domains)
             {
                 var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, new object[] { maxdepth }, CultureInfo.CurrentCulture);
-
-                presentation.Domain = domain;
+                    BindingFlags.OptionalParamBinding, null, new object[] { domain, maxdepth }, CultureInfo.CurrentCulture);
 
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);

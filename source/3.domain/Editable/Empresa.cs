@@ -1,6 +1,4 @@
-﻿using library.Interface.Data;
-
-namespace domain.Model
+﻿namespace domain.Model
 {
     public partial class Empresa
     {

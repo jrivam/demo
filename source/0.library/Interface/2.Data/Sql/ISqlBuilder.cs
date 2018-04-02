@@ -15,15 +15,15 @@ namespace library.Interface.Data.Sql
         IDbDataParameter GetParameter(string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input);
         IDbCommand GetCommand(string commandtext = "", CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null);
 
-        IDbCommand Select(IQueryTable query, int maxdepth = 1, int top = 0);
-        IDbCommand Update(IEntityTable<T> entity, IQueryTable query, int maxdepth = 1);
-        IDbCommand Delete(IQueryTable query, int maxdepth = 1);
+        IDbCommand Select(IQueryTable querytable, int maxdepth = 1, int top = 0);
+        IDbCommand Update(IEntityTable<T> entitytable, IQueryTable querytable, int maxdepth = 1);
+        IDbCommand Delete(IQueryTable querytable, int maxdepth = 1);
 
-        IDbCommand Select(IEntityTable<T> entity);
+        IDbCommand Select(IEntityTable<T> entitytable);
 
-        IDbCommand Insert(IEntityTable<T> entity);
-        IDbCommand Update(IEntityTable<T> entity);
-        IDbCommand Delete(IEntityTable<T> entity);
+        IDbCommand Insert(IEntityTable<T> entitytable);
+        IDbCommand Update(IEntityTable<T> entitytable);
+        IDbCommand Delete(IEntityTable<T> entitytable);
 
         IEnumerable<(IEntityColumn<T> column, IDbDataParameter parameter)> GetEntityParameters(IList<IEntityColumn<T>> columns, IDbCommand command);
         IEnumerable<((object value, WhereOperator sign) where, IDbDataParameter parameter, int counter)> GetQueryParameters((IQueryColumn column, IList<string> aliases, IList<string> parameters) column, IDbCommand command);

@@ -9,6 +9,8 @@ namespace Web.Api.Controllers
     {
         public IHttpActionResult Get(string razonsocial = null, bool? activo = null)
         {
+            //var domain = new domain.Model.Empresa(new data.Model.Empresa(new entities.Model.Empresa() { Id = 1, RazonSocial = "test"}));
+
             try
             {
                 var query = new domain.Query.Empresa();
@@ -18,7 +20,7 @@ namespace Web.Api.Controllers
                 if (activo != null)
                     query.Data["Activo"]?.Where(activo);
 
-                return Ok(new domain.Model.Empresas().Load(query.List().domains).Datas.Domains);
+                return Ok(new domain.Model.Empresas().Load(query.List().domains).Datas.Entities);
             }
             catch (Exception ex)
             {
@@ -50,12 +52,14 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]domain.Model.Empresa domain)
+        public IHttpActionResult Post([FromBody]entities.Model.Empresa entity)
         {
             try
             {
-                if (domain == null)
+                if (entity == null)
                     return BadRequest();
+
+                var domain = new domain.Model.Empresa(new data.Model.Empresa(entity));
 
                 var save = domain.Save();
                 if (save.result.Success)

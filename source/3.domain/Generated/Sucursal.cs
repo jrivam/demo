@@ -9,20 +9,38 @@ namespace domain.Model
 {
     public partial class Sucursal : IEntityState<entities.Model.Sucursal, data.Model.Sucursal>, IEntityLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public virtual data.Model.Sucursal Data { get; set; } = new data.Model.Sucursal();
+        protected data.Model.Sucursal _data;
+        public virtual data.Model.Sucursal Data
+        {
+            get
+            {
+                return _data;
+            }
+            protected set
+            {
+                _data = value;
+            }
+        }
 
         protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
 
-        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
+            data.Model.Sucursal data)
         {
             _logic = logic;
+
+            Data = data;
+        }
+        public Sucursal(data.Model.Sucursal data)
+            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()),
+                  data)
+        {
         }
         public Sucursal()
-            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
+            : this(new data.Model.Sucursal())
         {
         }
 
-        public virtual bool Loaded { get; set; }
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
@@ -53,7 +71,7 @@ namespace domain.Model
             {
                 if (_empresa == null)
                 {
-                    Empresa = new domain.Model.Empresa() { Data = Data.Empresa };
+                    Empresa = new domain.Model.Empresa(Data.Empresa);
                 }
 
                 return _empresa;
@@ -144,20 +162,28 @@ namespace domain.Query
 {
     public partial class Sucursal : IQueryState<data.Query.Sucursal>, IQueryLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public virtual data.Query.Sucursal Data { get; set; } = new data.Query.Sucursal();
+        public virtual data.Query.Sucursal Data { get; protected set; }
 
         protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
 
-        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
+            data.Query.Sucursal data)
         {
             _logic = logic;
+
+            Data = data;
+        }
+        public Sucursal(data.Query.Sucursal data)
+            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()),
+                  data)
+        {
         }
         public Sucursal()
-            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
+            : this(new data.Query.Sucursal())
         {
         }
 
-        private domain.Query.Empresa _empresa;
+        protected domain.Query.Empresa _empresa;
         public virtual domain.Query.Empresa Empresa
         {
             get

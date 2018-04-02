@@ -16,16 +16,37 @@ namespace data.Model
 {
     public partial class Sucursal : IEntityTable<entities.Model.Sucursal>, IEntityRepository<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public virtual entities.Model.Sucursal Entity { get; set; } = new entities.Model.Sucursal();
+        protected entities.Model.Sucursal _entity;
+        public virtual entities.Model.Sucursal Entity
+        {
+            get
+            {
+                return _entity;
+            }
+            protected set
+            {
+                _entity = value;
+
+                //var props = _entity.GetType().GetProperties();
+                //foreach (var prop in props)
+                //{
+                //    this[prop.Name].Value = prop.GetValue(_entity, null);
+                //}
+            }
+        }
 
         protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
 
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository, string name, string reference)
+        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository,
+            entities.Model.Sucursal entity, 
+            string name, string reference)
         {
             _repository = repository;
+
+            Entity = entity;
 
             Name = name;
             Reference = reference;
@@ -36,8 +57,16 @@ namespace data.Model
             Columns.Add(new EntityColumn<DateTime?, entities.Model.Sucursal>(this, "fecha", "Fecha"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Sucursal>(this, "activo", "Activo"));
         }
-        public Sucursal(string connectionstringname, string name, string reference)
-            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
+        public Sucursal(string connectionstringname,
+            entities.Model.Sucursal entity, 
+            string name = "sucursal", string reference = "Sucursal")
+            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname),
+                    entity,
+                    name, reference)
+        {
+        }
+        public Sucursal()
+            : this(new entities.Model.Sucursal())
         {
         }
 
@@ -118,7 +147,7 @@ namespace data.Model
 
     public partial class Sucursales : List<data.Model.Sucursal>
     {
-        public virtual IList<entities.Model.Sucursal> Domains
+        public virtual IList<entities.Model.Sucursal> Entities
         {
             get
             {
@@ -154,7 +183,8 @@ namespace data.Query
         public virtual string Name { get; private set; }
         public virtual string Reference { get; private set; }
 
-        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository, string name, string reference)
+        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository,
+            string name, string reference)
         {
             _repository = repository;
 
@@ -167,8 +197,10 @@ namespace data.Query
             Columns.Add(new QueryColumn<DateTime?>(this, "fecha", "Fecha"));
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
-        public Sucursal(string connectionstringname, string name, string reference)
-            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), name, reference)
+        public Sucursal(string connectionstringname,
+            string name = "sucursal", string reference = "Sucursal")
+            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), 
+                  name, reference)
         {
         }
 

@@ -13,16 +13,31 @@ namespace presentation.Model
 {
     public partial class Empresa : INotifyPropertyChanged, IEntityView<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>, IEntityInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        private int _maxdepth;
+        protected int _maxdepth;
 
-        public virtual domain.Model.Empresa Domain { get; set; } = new domain.Model.Empresa();
+        protected domain.Model.Empresa _domain;
+        public virtual domain.Model.Empresa Domain
+        {
+            get
+            {
+                return _domain;
+            }
+            protected set
+            {
+                _domain = value;
+            }
+        }
 
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive, int maxdepth)
+        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
+            domain.Model.Empresa domain, 
+            int maxdepth = 1)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
+
+            Domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object parameter) { Messenger.Default.Send<presentation.Model.Empresa>(Clear(), "EmpresaClear"); }, null);
 
@@ -44,8 +59,16 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>((this, this), "EmpresaEdit");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
+        public Empresa(domain.Model.Empresa domain, 
+            int maxdepth = 1)
+            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()),
+                  domain,
+                  maxdepth)
+        {
+        }
         public Empresa(int maxdepth = 1)
-            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()), maxdepth)
+            : this(new domain.Model.Empresa(), 
+                  maxdepth)
         {
         }
 
@@ -87,7 +110,7 @@ namespace presentation.Model
         public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
         {
             var query = new presentation.Query.Sucursal();
-            query.Domains.Data["IdEmpresa"]?.Where(this.Id);
+            query.Domain.Data["IdEmpresa"]?.Where(this.Id);
 
             Sucursales_Load(query, maxdepth, top);
         }
@@ -116,7 +139,7 @@ namespace presentation.Model
             {
                 _sucursales = value;
 
-                 Domain.Sucursales = Sucursales?.Domains;
+                 Domain.Sucursales = _sucursales?.Domains;
 
                  OnPropertyChanged("Sucursales");
             }
@@ -137,7 +160,7 @@ namespace presentation.Model
             _maxdepth = maxdepth;
 
             var query = new presentation.Query.Empresa();
-            query.Domains.Data["Id"]?.Where(this.Id);
+            query.Domain.Data["Id"]?.Where(this.Id);
 
             var load = query.Retrieve(maxdepth, this);
 
@@ -162,11 +185,11 @@ namespace presentation.Model
 
         protected virtual void SaveDependencies()
         {
-            Sucursales?.ToList()?.ForEach(i => { i.Save(); });
+            _sucursales?.ToList()?.ForEach(i => { i.Save(); });
         }
         protected virtual void EraseDependencies()
         {
-            Sucursales?.ToList()?.ForEach(i => { i.Erase(); });
+            _sucursales?.ToList()?.ForEach(i => { i.Erase(); });
         }
     }
 
@@ -235,26 +258,34 @@ namespace presentation.Query
 {
     public partial class Empresa : IQueryView<data.Query.Empresa, domain.Query.Empresa>, IQueryInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public virtual domain.Query.Empresa Domains { get; set; } = new domain.Query.Empresa();
+        public virtual domain.Query.Empresa Domain { get; protected set; }
 
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
+        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
+            domain.Query.Empresa domain)
         {
             _interactive = interactive;
+
+            Domain = domain;
+        }
+        public Empresa(domain.Query.Empresa domain)
+            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()),
+                  domain)
+        {
         }
         public Empresa()
-            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()))
+            : this(new domain.Query.Empresa())
         {
         }
 
         public virtual (Result result, presentation.Model.Empresa presentation) Retrieve(int maxdepth = 1, presentation.Model.Empresa presentation = default(presentation.Model.Empresa))
         {
-            return _interactive.Retrieve(Domains, maxdepth, presentation);
+            return _interactive.Retrieve(Domain, maxdepth, presentation);
         }
         public virtual (Result result, IEnumerable<presentation.Model.Empresa> presentations) List(int maxdepth = 1, int top = 0, IList<presentation.Model.Empresa> presentations = null)
         {
-            return _interactive.List(Domains, maxdepth, top, presentations);
+            return _interactive.List(Domain, maxdepth, top, presentations);
         }
     }
 }

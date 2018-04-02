@@ -11,19 +11,19 @@ namespace library.Interface.Data
     {
         U Clear(U data, int maxdepth = 1);
 
-        (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1, U data = default(U));
+        (Result result, U data) SelectSingle(IQueryTable querytable, int maxdepth = 1, U data = default(U));
         (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, U data = default(U));
         (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1, U data = default(U));
 
-        (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable query, int maxdepth = 1, int top = 0, IList<U> datas = null);
+        (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable querytable, int maxdepth = 1, int top = 0, IList<U> datas = null);
         (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null);
         (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1, IList<U> datas = null);
 
-        (Result result, int rows) Update(U table, IQueryTable query, int maxdepth = 1);
+        (Result result, int rows) Update(U table, IQueryTable querytable, int maxdepth = 1);
         (Result result, int rows) Update(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null);
         (Result result, int rows) Update(IDbCommand command);
 
-        (Result result, int rows) Delete(IQueryTable query, int maxdepth = 1);
+        (Result result, int rows) Delete(IQueryTable querytable, int maxdepth = 1);
         (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null);
         (Result result, int rows) Delete(IDbCommand command);
 

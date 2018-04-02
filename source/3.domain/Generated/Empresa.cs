@@ -8,20 +8,38 @@ namespace domain.Model
 {
     public partial class Empresa : IEntityState<entities.Model.Empresa, data.Model.Empresa>, IEntityLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public virtual data.Model.Empresa Data { get; set; } = new data.Model.Empresa();
+        protected data.Model.Empresa _data;
+        public virtual data.Model.Empresa Data
+        {
+            get
+            {
+                return _data;
+            }
+            protected set
+            {
+                _data = value;
+            }
+        }
 
         protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
 
-        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
+            data.Model.Empresa data)
         {
             _logic = logic;
+
+            Data = data;
+        }
+        public Empresa(data.Model.Empresa data)
+            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()),
+                  data)
+        {
         }
         public Empresa()
-            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
+            : this(new data.Model.Empresa())
         {
         }
 
-        public virtual bool Loaded { get; set; }
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
@@ -80,7 +98,7 @@ namespace domain.Model
             {
                 _sucursales = value;
 
-                Data.Sucursales = Sucursales?.Datas;
+                Data.Sucursales = _sucursales?.Datas;
             }
         }
 
@@ -113,11 +131,11 @@ namespace domain.Model
 
         protected virtual void SaveDependencies()
         {
-            Sucursales?.ToList()?.ForEach(i => { i.Save(); });
+            _sucursales?.ToList()?.ForEach(i => { i.Save(); });
         }
         protected virtual void EraseDependencies()
         {
-            Sucursales?.ToList()?.ForEach(i => { i.Erase(); });
+            _sucursales?.ToList()?.ForEach(i => { i.Erase(); });
         }
     }
 
@@ -152,16 +170,24 @@ namespace domain.Query
 {
     public partial class Empresa : IQueryState<data.Query.Empresa>, IQueryLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public virtual data.Query.Empresa Data { get; set; } = new data.Query.Empresa();
+        public virtual data.Query.Empresa Data { get; protected set; }
 
         protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
 
-        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
+            data.Query.Empresa data)
         {
             _logic = logic;
+
+            Data = data;
+        }
+        public Empresa(data.Query.Empresa data)
+            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()),
+                  data)
+        {
         }
         public Empresa()
-            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
+            : this(new data.Query.Empresa())
         {
         }
 

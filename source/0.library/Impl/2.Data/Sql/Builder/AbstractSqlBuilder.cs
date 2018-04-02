@@ -18,16 +18,16 @@ namespace library.Impl.Data.Sql.Builder
 
         protected abstract IDictionary<DbType, object> DbTypeToSqlType { get; }
 
-        public abstract IDbCommand Select(IQueryTable query, int maxdepth = 1, int top = 0);
+        public abstract IDbCommand Select(IQueryTable querytable, int maxdepth = 1, int top = 0);
 
-        public abstract IDbCommand Update(IEntityTable<T> entity, IQueryTable query, int maxdepth = 1);
-        public abstract IDbCommand Delete(IQueryTable query, int maxdepth = 1);
+        public abstract IDbCommand Update(IEntityTable<T> entitytable, IQueryTable querytable, int maxdepth = 1);
+        public abstract IDbCommand Delete(IQueryTable querytable, int maxdepth = 1);
 
-        public abstract IDbCommand Select(IEntityTable<T> entity);
+        public abstract IDbCommand Select(IEntityTable<T> entitytable);
 
-        public abstract IDbCommand Insert(IEntityTable<T> entity);
-        public abstract IDbCommand Update(IEntityTable<T> entity);
-        public abstract IDbCommand Delete(IEntityTable<T> entity);
+        public abstract IDbCommand Insert(IEntityTable<T> entitytable);
+        public abstract IDbCommand Update(IEntityTable<T> entitytable);
+        public abstract IDbCommand Delete(IEntityTable<T> entitytable);
 
         public AbstractSqlBuilder(ConnectionStringSettings connectionstringsettings, ISqlSyntaxSign syntaxsign)
         {

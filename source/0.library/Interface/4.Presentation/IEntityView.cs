@@ -9,7 +9,7 @@ namespace library.Interface.Presentation
                                         where U : IEntityTable<T>
                                         where V : IEntityState<T, U>
     {
-        V Domain { get; set; }
+        V Domain { get; }
 
         void OnPropertyChanged(string propertyName);
 

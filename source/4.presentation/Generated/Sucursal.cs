@@ -13,16 +13,31 @@ namespace presentation.Model
 {
     public partial class Sucursal : INotifyPropertyChanged, IEntityView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>, IEntityInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        private int _maxdepth;
+        protected int _maxdepth;
 
-        public virtual domain.Model.Sucursal Domain { get; set; } = new domain.Model.Sucursal();
+        protected domain.Model.Sucursal _domain;
+        public virtual domain.Model.Sucursal Domain
+        {
+            get
+            {
+                return _domain;
+            }
+            protected set
+            {
+                _domain = value;
+            }
+        }
 
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive, int maxdepth)
+        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
+            domain.Model.Sucursal domain,
+            int maxdepth = 1)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
+
+            Domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object entity) { Messenger.Default.Send<presentation.Model.Sucursal>(Clear(), "SucursalClear"); }, null);
 
@@ -46,8 +61,16 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>((this, this), "SucursalEdit");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
+        public Sucursal(domain.Model.Sucursal domain, 
+            int maxdepth = 1)
+            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
+                  domain,
+                  maxdepth)
+        {
+        }
         public Sucursal(int maxdepth = 1)
-            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()), maxdepth)
+            : this(new domain.Model.Sucursal(), 
+                  maxdepth)
         {
         }
 
@@ -96,7 +119,7 @@ namespace presentation.Model
             {
                 if (_empresa == null)
                 {
-                    Empresa = new presentation.Model.Empresa() { Domain = Domain.Empresa };
+                    Empresa = new presentation.Model.Empresa(Domain.Empresa);
                 }
 
                 return _empresa;
@@ -120,7 +143,7 @@ namespace presentation.Model
                 if (_empresas == null)
                 {
                     var query = new presentation.Query.Empresa();
-                    query.Domains.Data["Activo"]?.Where(true);
+                    query.Domain.Data["Activo"]?.Where(true);
 
                     _empresas = new presentation.Model.Empresas().Load(query);
                 }
@@ -144,7 +167,7 @@ namespace presentation.Model
             _maxdepth = maxdepth;
 
             var query = new presentation.Query.Sucursal();
-            query.Domains.Data["Id"]?.Where(this.Id);         
+            query.Domain.Data["Id"]?.Where(this.Id);         
 
             var load = query.Retrieve(maxdepth, this);
 
@@ -240,26 +263,34 @@ namespace presentation.Query
 {
     public partial class Sucursal : IQueryView<data.Query.Sucursal, domain.Query.Sucursal>, IQueryInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public virtual domain.Query.Sucursal Domains { get; set; } = new domain.Query.Sucursal();
+        public virtual domain.Query.Sucursal Domain { get; protected set; }
 
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
+        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
+            domain.Query.Sucursal domain)
         {
             _interactive = interactive;
+
+            Domain = domain;
+        }
+        public Sucursal(domain.Query.Sucursal domain)
+            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
+                  domain)
+        {
         }
         public Sucursal()
-            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
+            : this(new domain.Query.Sucursal())
         {
         }
 
         public virtual (Result result, presentation.Model.Sucursal presentation) Retrieve(int maxdepth = 1, presentation.Model.Sucursal presentation = default(presentation.Model.Sucursal))
         {
-            return _interactive.Retrieve(Domains, maxdepth, presentation);
+            return _interactive.Retrieve(Domain, maxdepth, presentation);
         }
         public virtual (Result result, IEnumerable<presentation.Model.Sucursal> presentations) List(int maxdepth = 1, int top = 0, IList<presentation.Model.Sucursal> presentations = null)
         {
-            return _interactive.List(Domains, maxdepth, top, presentations);
+            return _interactive.List(Domain, maxdepth, top, presentations);
         }
     }
 }

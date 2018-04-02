@@ -70,7 +70,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Empresa.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="Domain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
