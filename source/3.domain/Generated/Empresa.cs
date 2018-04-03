@@ -147,11 +147,11 @@ namespace domain.Model
         {
         }
 
-        public virtual Empresas Load(domain.Query.Empresa query, int maxdepth = 1, int top = 0)
+        public virtual domain.Model.Empresas Load(domain.Query.Empresa query, int maxdepth = 1, int top = 0)
         {
             return Load(query.List(maxdepth, top).domains);
         }
-        public virtual Empresas Load(IEnumerable<domain.Model.Empresa> list)
+        public virtual domain.Model.Empresas Load(IEnumerable<domain.Model.Empresa> list)
         {
             this.AddRange(list);
 

@@ -235,11 +235,11 @@ namespace presentation.Model
             }, delegate (object parameter) { return this != null; });
         }
  
-        public virtual Sucursales Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
+        public virtual presentation.Model.Sucursales Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
             return Load(query.List(maxdepth, top).presentations);
         }
-        public virtual Sucursales Load(IEnumerable<presentation.Model.Sucursal> list)
+        public virtual presentation.Model.Sucursales Load(IEnumerable<presentation.Model.Sucursal> list)
         {
             list?.ToList().ForEach(i => Add(i));
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

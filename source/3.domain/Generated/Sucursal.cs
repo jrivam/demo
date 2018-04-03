@@ -169,11 +169,11 @@ namespace domain.Model
         {
         }
 
-        public virtual Sucursales Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
+        public virtual domain.Model.Sucursales Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
             return Load(query.List(maxdepth, top).domains);
         }
-        public virtual Sucursales Load(IEnumerable<domain.Model.Sucursal> list)
+        public virtual domain.Model.Sucursales Load(IEnumerable<domain.Model.Sucursal> list)
         {
             this.AddRange(list);
 
