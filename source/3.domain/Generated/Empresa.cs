@@ -66,33 +66,24 @@ namespace domain.Model
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
-        public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
+        public virtual domain.Model.Sucursales Sucursales_Load(int maxdepth = 1, int top = 0)
         {
-            var query = new domain.Query.Sucursal();
-            query.Data["IdEmpresa"]?.Where(this.Id);
+            if (this.Id != null)
+            {
+                var query = new domain.Query.Sucursal();
+                query.Data["IdEmpresa"]?.Where(this.Id);
 
-            Sucursales_Load(query, maxdepth, top);
-        }
-        public virtual void Sucursales_Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
-        {
-            Sucursales_Load(query.List(maxdepth, top).domains.ToList());
-        }
-        public virtual void Sucursales_Load(IList<domain.Model.Sucursal> list)
-        {
-            Sucursales = new domain.Model.Sucursales().Load(list);
-        }
+                Sucursales = new domain.Model.Sucursales().Load(query, maxdepth, top);
+            }
 
+            return _sucursales;
+        }
         protected domain.Model.Sucursales _sucursales;
         public virtual domain.Model.Sucursales Sucursales
         {
             get
             {
-                if (_sucursales == null && this.Id != null)
-                {
-                    Sucursales_Load();
-                }
-
-                return _sucursales;
+                return _sucursales ?? Sucursales_Load();
             }
             set
             {

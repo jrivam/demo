@@ -89,10 +89,14 @@ namespace domain.Model
                     var query = new domain.Query.Empresa();
                     query.Data["Activo"]?.Where(true);
 
-                    _empresas = new domain.Model.Empresas().Load(query);
+                    Empresas = new domain.Model.Empresas().Load(query);
                 }
 
                 return _empresas;
+            }
+            protected set
+            {
+                _empresas = value;
             }
         }
 

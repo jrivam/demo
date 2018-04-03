@@ -145,10 +145,14 @@ namespace presentation.Model
                     var query = new presentation.Query.Empresa();
                     query.Domain.Data["Activo"]?.Where(true);
 
-                    _empresas = new presentation.Model.Empresas().Load(query);
+                    Empresas = new presentation.Model.Empresas().Load(query);
                 }
 
                 return _empresas;
+            }
+            protected set
+            {
+                _empresas = value;
             }
         }
 
