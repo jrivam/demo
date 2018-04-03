@@ -197,11 +197,11 @@ namespace data.Model
         {
         }
 
-        public virtual Sucursales Load(data.Query.Sucursal query, int maxdepth = 1, int top = 0)
+        public virtual data.Model.Sucursales Load(data.Query.Sucursal query, int maxdepth = 1, int top = 0)
         {
             return Load(query.SelectMultiple(maxdepth, top).datas);
         }
-        public virtual Sucursales Load(IEnumerable<data.Model.Sucursal> list)
+        public virtual data.Model.Sucursales Load(IEnumerable<data.Model.Sucursal> list)
         {
             this.AddRange(list);
 
