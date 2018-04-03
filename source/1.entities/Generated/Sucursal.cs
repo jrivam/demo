@@ -11,6 +11,6 @@ namespace entities.Model
         public virtual bool? Activo { get; set; }
         public virtual DateTime? Fecha { get; set; }
 
-        public virtual Empresa Empresa { get; set; }
+        public virtual entities.Model.Empresa Empresa { get; set; }
     }
 }

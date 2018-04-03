@@ -87,9 +87,12 @@ namespace domain.Model
             }
             set
             {
-                _sucursales = value;
+                if (_sucursales != value)
+                {
+                    _sucursales = value;
 
-                Data.Sucursales = _sucursales?.Datas;
+                    Data.Sucursales = _sucursales?.Datas;
+                }
             }
         }
 

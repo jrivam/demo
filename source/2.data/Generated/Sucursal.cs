@@ -106,19 +106,55 @@ namespace data.Model
             }
         }
 
+        public data.Model.Empresa Empresa_Load()
+        {
+            if (this.IdEmpresa != null)
+            {
+                Empresa = new data.Model.Empresa() { Id = IdEmpresa }.Select().data;
+            }
+
+            return _empresa;
+        }
         protected data.Model.Empresa _empresa;
         public virtual data.Model.Empresa Empresa
         {
             get
             {
-                if (_empresa == null && this.IdEmpresa != null)
+                return _empresa ?? Empresa_Load();
+            }
+            set
+            {
+                if (_empresa != value)
                 {
-                    Empresa = new data.Model.Empresa() { Id = IdEmpresa }.Select().data;
+                    _empresa = value;
+
+                    Entity.Empresa = _empresa?.Entity;
+                }
+            }
+        }
+
+        protected data.Model.Empresas _empresas;
+        public virtual data.Model.Empresas Empresas
+        {
+            get
+            {
+                if (_empresas == null)
+                {
+                    var query = new data.Query.Empresa();
+                    query["Activo"]?.Where(true);
+
+                    Empresas = new data.Model.Empresas().Load(query);
                 }
 
-                return _empresa;
+                return _empresas;
             }
-            set { if (_empresa != value) { _empresa = value; } }
+            set
+            {
+                if (_empresas != value)
+                {
+                    _empresas = value;
+                }
+            }
         }
 
         public virtual data.Model.Sucursal Clear()

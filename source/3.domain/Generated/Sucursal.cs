@@ -51,7 +51,10 @@ namespace domain.Model
 
         public virtual int? IdEmpresa
         {
-            get { return Data?.IdEmpresa; }
+            get
+            {
+                return Data?.IdEmpresa;
+            }
             set
             {
                 if (Data?.IdEmpresa != value)
@@ -64,19 +67,31 @@ namespace domain.Model
             }
         }
 
+        public domain.Model.Empresa Empresa_Load()
+        {
+            if (this.IdEmpresa != null)
+            {
+                Empresa = new domain.Model.Empresa(Data.Empresa);
+            }
+
+            return _empresa;
+        }
         protected domain.Model.Empresa _empresa;
         public virtual domain.Model.Empresa Empresa
         {
             get
             {
-                if (_empresa == null)
-                {
-                    Empresa = new domain.Model.Empresa(Data.Empresa);
-                }
-
-                return _empresa;
+                return _empresa ?? Empresa_Load();
             }
-            set { if (_empresa != value) { _empresa = value; } }
+            set
+            {
+                if (_empresa != value)
+                {
+                    _empresa = value;
+
+                    Data.Empresa = _empresa?.Data;
+                }
+            }
         }
 
         protected domain.Model.Empresas _empresas;
@@ -94,9 +109,14 @@ namespace domain.Model
 
                 return _empresas;
             }
-            protected set
+            set
             {
-                _empresas = value;
+                if (_empresas != value)
+                {
+                    _empresas = value;
+
+                    Data.Empresas = _empresas?.Datas;
+                }
             }
         }
 

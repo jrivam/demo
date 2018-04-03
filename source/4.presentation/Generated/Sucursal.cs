@@ -112,23 +112,29 @@ namespace presentation.Model
             }
         }
 
+        public presentation.Model.Empresa Empresa_Load()
+        {
+            if (this.IdEmpresa != null)
+            {
+                Empresa = new presentation.Model.Empresa(Domain.Empresa);
+            }
+
+            return _empresa;
+        }
         protected presentation.Model.Empresa _empresa;
         public virtual presentation.Model.Empresa Empresa
         {
             get
             {
-                if (_empresa == null)
-                {
-                    Empresa = new presentation.Model.Empresa(Domain.Empresa);
-                }
-
-                return _empresa;
+                return _empresa ?? Empresa_Load();
             }
             set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
+
+                    Domain.Empresa = _empresa?.Domain;
 
                     OnPropertyChanged("Empresa");
                 }
@@ -150,9 +156,16 @@ namespace presentation.Model
 
                 return _empresas;
             }
-            protected set
+            set
             {
-                _empresas = value;
+                if (_empresas != value)
+                {
+                    _empresas = value;
+
+                    Domain.Empresas = _empresas?.Domains;
+
+                    OnPropertyChanged("Empresas");
+                }
             }
         }
 
