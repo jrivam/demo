@@ -97,33 +97,24 @@ namespace data.Model
         public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { this["RazonSocial"].Value = Entity.RazonSocial = value; } } }
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
-        public virtual void Sucursales_Load(int maxdepth = 1, int top = 0)
+        public virtual data.Model.Sucursales Sucursales_Load(int maxdepth = 1, int top = 0)
         {
-            var query = new data.Query.Sucursal();
-            query["IdEmpresa"]?.Where(this.Id);
+            if (this.Id != null)
+            {
+                var query = new data.Query.Sucursal();
+                query["IdEmpresa"]?.Where(this.Id);
 
-            Sucursales_Load(query, maxdepth, top);
-        }
-        public virtual void Sucursales_Load(data.Query.Sucursal query, int maxdepth = 1, int top = 0)
-        {
-            Sucursales_Load(query.SelectMultiple(maxdepth, top).datas.ToList());
-        }
-        public virtual void Sucursales_Load(IList<data.Model.Sucursal> list)
-        {
-            Sucursales = new data.Model.Sucursales().Load(list);
-        }
+                Sucursales = new data.Model.Sucursales().Load(query, maxdepth, top);
+            }
 
+            return _sucursales;
+        }
         protected data.Model.Sucursales _sucursales;
         public virtual data.Model.Sucursales Sucursales
         {
             get
             {
-                if (_sucursales == null && this.Id != null)
-                {
-                    Sucursales_Load();
-                }
-
-                return _sucursales;
+                return _sucursales ?? Sucursales_Load();
             }
             set
             {
