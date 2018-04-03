@@ -128,11 +128,14 @@ namespace presentation.Model
             }
             set
             {
-                _sucursales = value;
+                if (_sucursales != value)
+                {
+                    _sucursales = value;
 
-                 Domain.Sucursales = _sucursales?.Domains;
+                    Domain.Sucursales = _sucursales?.Domains;
 
-                 OnPropertyChanged("Sucursales");
+                    OnPropertyChanged("Sucursales");
+                }
             }
         }
 

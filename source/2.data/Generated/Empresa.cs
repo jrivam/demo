@@ -118,9 +118,12 @@ namespace data.Model
             }
             set
             {
-                _sucursales = value;
+                if (_sucursales != value)
+                {
+                    _sucursales = value;
 
-                Entity.Sucursales = _sucursales?.Entities;
+                    Entity.Sucursales = _sucursales?.Entities;
+                }
             }
         } 
 
