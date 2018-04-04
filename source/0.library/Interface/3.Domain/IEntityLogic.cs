@@ -10,8 +10,8 @@ namespace library.Interface.Domain
     {
         V Clear();
 
-        (Result result, V domain) Load();
-        (Result result, V domain) Save();
-        (Result result, V domain) Erase();
+        (Result result, V domain) Load(bool usedbcommand = false);
+        (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false);
+        (Result result, V domain) Erase(bool usedbcommand = false);
     }
 }

@@ -70,10 +70,11 @@ namespace data.Model
         {
         }
 
-        public virtual (string text, CommandType type, IList<DbParameter> parameters)? SelectDbCommand { get; set; }
-        public virtual (string text, CommandType type, IList<DbParameter> parameters)? InsertDbCommand { get; set; }
-        public virtual (string text, CommandType type, IList<DbParameter> parameters)? UpdateDbCommand { get; set; }
-        public virtual (string text, CommandType type, IList<DbParameter> parameters)? DeleteDbCommand { get; set; }
+        public virtual bool UseDbCommand { get; set; }
+        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? SelectDbCommand { get; set; }
+        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? InsertDbCommand { get; set; }
+        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
+        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
 
         public virtual IEntityColumn<entities.Model.Sucursal> this[string reference]
         {
@@ -161,23 +162,24 @@ namespace data.Model
         {
             return _repository.Clear(this);
         }
-        public virtual (Result result, data.Model.Sucursal data) Select()
+
+        public virtual (Result result, data.Model.Sucursal data) Select(bool usedbcommand = false)
         {
-            var select = _repository.Select(this);
+            var select = _repository.Select(this, usedbcommand);
 
             return select;
         }
-        public virtual (Result result, data.Model.Sucursal data) Insert()
+        public virtual (Result result, data.Model.Sucursal data) Insert(bool usedbcommand = false)
         {
-            return _repository.Insert(this);
+            return _repository.Insert(this, usedbcommand);
         }
-        public virtual (Result result, data.Model.Sucursal data) Update()
+        public virtual (Result result, data.Model.Sucursal data) Update(bool usedbcommand = false)
         {
-            return _repository.Update(this);
+            return _repository.Update(this, usedbcommand);
         }
-        public virtual (Result result, data.Model.Sucursal data) Delete()
+        public virtual (Result result, data.Model.Sucursal data) Delete(bool usedbcommand = false)
         {
-            return _repository.Delete(this);
+            return _repository.Delete(this, usedbcommand);
         }
     }
 

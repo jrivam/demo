@@ -5,6 +5,7 @@ using library.Interface.Data.Sql;
 using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 
@@ -85,13 +86,29 @@ namespace library.Impl.Data.Repository
             return ExecuteNonQuery(command);
         }
 
-        public virtual (Result result, U data) Select(U data)
+        protected bool UseDbCommand(bool classusedbcommand, bool commandusedbcommand, bool methodusedbcommand)
         {
-            return (data.SelectDbCommand != null) ? Select(data, data.SelectDbCommand.Value) : Select(data, _builder.Select(data));
+            bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["usedbcommand"]);
+
+            if (!methodusedbcommand)
+                if (!commandusedbcommand)
+                    if (!classusedbcommand)
+                        if (!configusedbcommand)
+                            return false;
+
+            return true;
         }
-        public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
+
+        public virtual (Result result, U data) Select(U data, bool usedbcommand = false)
         {
-            var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
+            if (data.SelectDbCommand != null && UseDbCommand(data.UseDbCommand, data.SelectDbCommand.Value.usedbcommand, usedbcommand))
+                return Select(data, data.SelectDbCommand.Value.dbcommand);
+
+            return Select(data, _builder.Select(data));
+        }
+        public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
+        {
+            var command = _builder.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
 
             foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), command)) ;
 
@@ -108,13 +125,16 @@ namespace library.Impl.Data.Repository
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
 
-        public virtual (Result result, U data) Insert(U data)
+        public virtual (Result result, U data) Insert(U data, bool usedbcommand = false)
         {
-            return (data.InsertDbCommand != null) ? Insert(data, data.InsertDbCommand.Value) : Insert(data, _builder.Insert(data));
+            if (data.InsertDbCommand != null && UseDbCommand(data.UseDbCommand, data.InsertDbCommand.Value.usedbcommand, usedbcommand))
+                return Insert(data, data.InsertDbCommand.Value.dbcommand);
+
+            return Insert(data, _builder.Insert(data));
         }
-        public virtual (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
+        public virtual (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
         {
-            var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
+            var command = _builder.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
 
             foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => !c.IsIdentity).ToList(), command)) ;
 
@@ -141,13 +161,16 @@ namespace library.Impl.Data.Repository
             return (executescalar.result, data);
         }
 
-        public virtual (Result result, U data) Update(U data)
+        public virtual (Result result, U data) Update(U data, bool usedbcommand = false)
         {
-            return (data.UpdateDbCommand != null) ? Update(data, data.UpdateDbCommand.Value) : Update(data, _builder.Update(data));
+            if (data.UpdateDbCommand != null && UseDbCommand(data.UseDbCommand, data.UpdateDbCommand.Value.usedbcommand, usedbcommand))
+                return Update(data, data.UpdateDbCommand.Value.dbcommand);
+
+            return Update(data, _builder.Update(data));
         }
-        public virtual (Result result, U data) Update(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
+        public virtual (Result result, U data) Update(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
         {
-            var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
+            var command = _builder.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
 
             foreach (var p in _builder.GetEntityParameters(data.Columns.ToList(), command)) ;
 
@@ -170,13 +193,16 @@ namespace library.Impl.Data.Repository
             return (executenonquery.result, data);
         }
 
-        public virtual (Result result, U data) Delete(U data)
+        public virtual (Result result, U data) Delete(U data, bool usedbcommand = false)
         {
-            return (data.DeleteDbCommand != null) ? Delete(data, data.DeleteDbCommand.Value) : Delete(data, _builder.Delete(data));
+            if (data.DeleteDbCommand != null && UseDbCommand(data.UseDbCommand, data.DeleteDbCommand.Value.usedbcommand, usedbcommand))
+                return Delete(data, data.DeleteDbCommand.Value.dbcommand);
+
+            return Delete(data, _builder.Delete(data));
         }
-        public virtual (Result result, U data) Delete(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
+        public virtual (Result result, U data) Delete(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
         {
-            var command = _builder.GetCommand(entitycommand.commandtext, entitycommand.commandtype, entitycommand.parameters);
+            var command = _builder.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
 
             foreach (var p in _builder.GetEntityParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), command)) ;
 

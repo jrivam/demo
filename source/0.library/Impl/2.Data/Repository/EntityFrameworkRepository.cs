@@ -15,154 +15,177 @@ namespace library.Impl.Data.Repository
 
         }
 
-        public U Clear(U data, int maxdepth = 1)
+        U IRepository<T, U>.Clear(U data, int maxdepth)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, int rows) Delete(IQueryTable query, int maxdepth = 1)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, int rows) Delete(IDbCommand command)
+        (Result result, int rows) IRepository<T, U>.Delete(IQueryTable querytable, int maxdepth)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, U data) Delete(U data)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Delete(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null)
+        (Result result, int rows) IRepository<T, U>.Delete(string commandtext, CommandType commandtype, IList<DbParameter> parameters)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, U data) Delete(U data, IDbCommand command)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, int rows) ExecuteNonQuery(IDbCommand command)
+        (Result result, int rows) IRepository<T, U>.Delete(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, IEnumerable<U> datas) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, IEnumerable<U> datas) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
+        (Result result, U data) IRepository<T, U>.Delete(U data, bool usedbcommand)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, object scalar) ExecuteScalar(IDbCommand command)
+        (Result result, U data) IRepository<T, U>.Delete(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, U data) Insert(U data)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Insert(U data, IDbCommand command)
+        (Result result, U data) IRepository<T, U>.Delete(U data, string commandtext, CommandType commandtype, IList<DbParameter> parameters)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, U data) Select(U data)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) Select(U data, IDbCommand command)
+        (Result result, U data) IRepository<T, U>.Delete(U data, IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable query, int maxdepth = 1, int top = 0, IList<U> datas = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
-        {
-            throw new NotImplementedException();
-        } 
-        public (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
+        (Result result, int rows) IRepository<T, U>.ExecuteNonQuery(string commandtext, CommandType commandtype, IList<DbParameter> parameters)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, U data) SelectSingle(IQueryTable query, int maxdepth = 1, U data = default(U))
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, U data = default(U))
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1, U data = default(U))
+        (Result result, int rows) IRepository<T, U>.ExecuteNonQuery(IDbCommand command)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, int rows) Update(U table, IQueryTable query, int maxdepth = 1)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, int rows) Update(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            throw new NotImplementedException();
-        }
-        public (Result result, int rows) Update(IDbCommand command)
+        (Result result, IEnumerable<U> datas) IRepository<T, U>.ExecuteQuery(string commandtext, CommandType commandtype, IList<DbParameter> parameters, int maxdepth, IList<U> datas)
         {
             throw new NotImplementedException();
         }
 
-        public (Result result, U data) Update(U data)
+        (Result result, IEnumerable<U> datas) IRepository<T, U>.ExecuteQuery(IDbCommand command, int maxdepth, IList<U> datas)
         {
             throw new NotImplementedException();
         }
-        public (Result result, U data) Update(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand)
+
+        (Result result, object scalar) IRepository<T, U>.ExecuteScalar(string commandtext, CommandType commandtype, IList<DbParameter> parameters)
         {
             throw new NotImplementedException();
         }
-        public (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null)
+
+        (Result result, object scalar) IRepository<T, U>.ExecuteScalar(IDbCommand command)
         {
             throw new NotImplementedException();
         }
-        public (Result result, U data) Update(U data, IDbCommand command)
+
+        (Result result, U data) IRepository<T, U>.Insert(U data, bool usedbcommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Insert(U data, string commandtext, CommandType commandtype, IList<DbParameter> parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Insert(U data, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Select(U data, bool usedbcommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Select(U data, string commandtext, CommandType commandtype, IList<DbParameter> parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Select(U data, IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, IEnumerable<U> datas) IRepository<T, U>.SelectMultiple(IQueryTable querytable, int maxdepth, int top, IList<U> datas)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, IEnumerable<U> datas) IRepository<T, U>.SelectMultiple(string commandtext, CommandType commandtype, IList<DbParameter> parameters, int maxdepth, IList<U> datas)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, IEnumerable<U> datas) IRepository<T, U>.SelectMultiple(IDbCommand command, int maxdepth, IList<U> datas)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.SelectSingle(IQueryTable querytable, int maxdepth, U data)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.SelectSingle(string commandtext, CommandType commandtype, IList<DbParameter> parameters, int maxdepth, U data)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.SelectSingle(IDbCommand command, int maxdepth, U data)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, int rows) IRepository<T, U>.Update(U table, IQueryTable querytable, int maxdepth)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, int rows) IRepository<T, U>.Update(string commandtext, CommandType commandtype, IList<DbParameter> parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, int rows) IRepository<T, U>.Update(IDbCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Update(U data, bool usedbcommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Update(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Update(U data, string commandtext, CommandType commandtype, IList<DbParameter> parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        (Result result, U data) IRepository<T, U>.Update(U data, IDbCommand command)
         {
             throw new NotImplementedException();
         }

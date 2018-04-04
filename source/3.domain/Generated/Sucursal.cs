@@ -124,25 +124,26 @@ namespace domain.Model
         {
             return _logic.Clear(this, Data);
         }
-        public virtual (Result result, domain.Model.Sucursal domain) Load()
+
+        public virtual (Result result, domain.Model.Sucursal domain) Load(bool usedbcommand = false)
         {
-            var load = _logic.Load(this, Data);
+            var load = _logic.Load(this, Data, usedbcommand);
 
             return load;
         }
-        public virtual (Result result, domain.Model.Sucursal domain) Save()
+        public virtual (Result result, domain.Model.Sucursal domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = _logic.Save(this, Data);
+            var save = _logic.Save(this, Data, useinsertdbcommand, useupdatedbcommand);
 
             SaveDependencies();
 
             return save;
         }
-        public virtual (Result result, domain.Model.Sucursal domain) Erase()
+        public virtual (Result result, domain.Model.Sucursal domain) Erase(bool usedbcommand = false)
         {
             EraseDependencies();
 
-            var erase = _logic.Erase(this, Data);
+            var erase = _logic.Erase(this, Data, usedbcommand);
 
             return erase;
         }
