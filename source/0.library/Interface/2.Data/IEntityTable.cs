@@ -13,10 +13,11 @@ namespace library.Interface.Data
         string Reference { get; }
         string Name { get; }
 
-        (string text, CommandType type, IList<DbParameter> parameters)? SelectDbCommand { get; set; }
-        (string text, CommandType type, IList<DbParameter> parameters)? InsertDbCommand { get; set; }
-        (string text, CommandType type, IList<DbParameter> parameters)? UpdateDbCommand { get; set; }
-        (string text, CommandType type, IList<DbParameter> parameters)? DeleteDbCommand { get; set; }
+        bool UseDbCommand { get; set; }
+        (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? SelectDbCommand { get; set; }
+        (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? InsertDbCommand { get; set; }
+        (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
+        (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
 
         IList<IEntityColumn<T>> Columns { get; }
         IEntityColumn<T> this[string reference] { get; }

@@ -43,7 +43,7 @@ namespace presentation.Model
 
             LoadCommand = new RelayCommand(delegate (object parameter) 
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, Load(_maxdepth)), "SucursalLoad");
+                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, LoadIn(_maxdepth)), "SucursalLoad");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && Domain.Changed; });
 
 
@@ -173,13 +173,8 @@ namespace presentation.Model
         {
             return _interactive.Clear(this, Domain);
         }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Load()
-        {
-            var load = _interactive.Load(this, Domain);
 
-            return load;
-        }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Load(int maxdepth = 1)
+        public virtual (Result result, presentation.Model.Sucursal presentation) LoadIn(int maxdepth = 1)
         {
             _maxdepth = maxdepth;
 
@@ -190,19 +185,25 @@ namespace presentation.Model
 
             return load;
         }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Save()
+        public virtual (Result result, presentation.Model.Sucursal presentation) Load(bool usedbcommand = false)
         {
-            var save = _interactive.Save(this, Domain);
+            var load = _interactive.Load(this, Domain, usedbcommand);
+
+            return load;
+        }
+        public virtual (Result result, presentation.Model.Sucursal presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        {
+            var save = _interactive.Save(this, Domain, useinsertdbcommand, useupdatedbcommand);
 
             SaveDependencies();
 
             return save;
         }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Erase()
+        public virtual (Result result, presentation.Model.Sucursal presentation) Erase(bool usedbcommand = false)
         {
             EraseDependencies();
 
-            var erase = _interactive.Erase(this, Domain);
+            var erase = _interactive.Erase(this, Domain, usedbcommand);
 
             return erase;
         }

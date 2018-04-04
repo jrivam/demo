@@ -93,7 +93,7 @@ namespace test
         {
             var dataselect = Data_Select();
 
-            dataselect.data.SelectDbCommand = ("", CommandType.StoredProcedure, new List<DbParameter>());
+            dataselect.data.SelectDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             dataselect.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
                 .Returns(dataselect.mockCommand.Object);
 
@@ -151,7 +151,7 @@ namespace test
         {
             var datainsert = Data_Insert();
 
-            datainsert.data.InsertDbCommand = ("", CommandType.StoredProcedure, new List<DbParameter>());
+            datainsert.data.InsertDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             datainsert.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
                 .Returns(datainsert.mockCommand.Object);
 
@@ -210,7 +210,7 @@ namespace test
         {
             var dataupdate = Data_Update();
 
-            dataupdate.data.UpdateDbCommand = ("", CommandType.StoredProcedure, new List<DbParameter>());
+            dataupdate.data.UpdateDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             dataupdate.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
                 .Returns(dataupdate.mockCommand.Object);
 
@@ -269,7 +269,7 @@ namespace test
         {
             var datadelete = Data_Delete();
 
-            datadelete.data.DeleteDbCommand = ("", CommandType.StoredProcedure, new List<DbParameter>());
+            datadelete.data.DeleteDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             datadelete.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
                 .Returns(datadelete.mockCommand.Object);
 

@@ -27,23 +27,23 @@ namespace library.Interface.Data
         (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null);
         (Result result, int rows) Delete(IDbCommand command);
 
-        (Result result, U data) Select(U data);
-        (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand);
+        (Result result, U data) Select(U data, bool usedbcommand = false);
+        (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand);
         (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null);
         (Result result, U data) Select(U data, IDbCommand command);
 
-        (Result result, U data) Insert(U data);
-        (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand);
+        (Result result, U data) Insert(U data, bool usedbcommand = false);
+        (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand);
         (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null);
         (Result result, U data) Insert(U data, IDbCommand command);
 
-        (Result result, U data) Update(U data);
-        (Result result, U data) Update(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand);
+        (Result result, U data) Update(U data, bool usedbcommand = false);
+        (Result result, U data) Update(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand);
         (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null);
         (Result result, U data) Update(U data, IDbCommand command);
 
-        (Result result, U data) Delete(U data);
-        (Result result, U data) Delete(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) entitycommand);
+        (Result result, U data) Delete(U data, bool usedbcommand = false);
+        (Result result, U data) Delete(U data, (string commandtext, CommandType commandtype, IList<DbParameter> parameters) dbcommand);
         (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<DbParameter> parameters = null);
         (Result result, U data) Delete(U data, IDbCommand command);
 

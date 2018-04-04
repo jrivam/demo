@@ -29,9 +29,9 @@ namespace library.Impl.Presentation
             return presentation;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> entitylogic)
+        public virtual (Result result, W presentation) Load(W presentation, IEntityLogic<T, U, V> entitylogic, bool usedbcommand = false)
         {
-            var load = entitylogic.Load();
+            var load = entitylogic.Load(usedbcommand);
 
             if (load.result.Success)
             {
@@ -41,9 +41,9 @@ namespace library.Impl.Presentation
 
             return (load.result, presentation);
         }
-        public virtual (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> entitylogic)
+        public virtual (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> entitylogic, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = entitylogic.Save();
+            var save = entitylogic.Save(useinsertdbcommand, useupdatedbcommand);
 
             if (save.result.Success)
             {
@@ -52,9 +52,9 @@ namespace library.Impl.Presentation
 
             return (save.result, presentation);
         }
-        public virtual (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> entitylogic)
+        public virtual (Result result, W presentation) Erase(W presentation, IEntityLogic<T, U, V> entitylogic, bool usedbcommand = false)
         {
-            var erase = entitylogic.Erase();
+            var erase = entitylogic.Erase(usedbcommand);
 
             if (erase.result.Success)
             {

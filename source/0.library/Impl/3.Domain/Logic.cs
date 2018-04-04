@@ -31,11 +31,11 @@ namespace library.Impl.Domain
             return domain;
         }
 
-        public virtual (Result result, V domain) Load(V domain, IEntityRepository<T, U> entityrepository)
+        public virtual (Result result, V domain) Load(V domain, IEntityRepository<T, U> entityrepository, bool usedbcommand = false)
         {
             if (domain.Data.Entity.Id != null)
             {
-                var select = entityrepository.Select();
+                var select = entityrepository.Select(usedbcommand);
 
                 if (select.result.Success)
                 {
@@ -51,11 +51,11 @@ namespace library.Impl.Domain
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Load: empty primary key") } }, domain);
         }
-        public virtual (Result result, V domain) Save(V domain, IEntityRepository<T, U> entityrepository)
+        public virtual (Result result, V domain) Save(V domain, IEntityRepository<T, U> entityrepository, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             if (domain.Changed)
             {
-                var updateinsert = (domain.Data.Entity.Id != null ? entityrepository.Update() : entityrepository.Insert());
+                var updateinsert = (domain.Data.Entity.Id != null ? entityrepository.Update(useupdatedbcommand) : entityrepository.Insert(useinsertdbcommand));
 
                 if (updateinsert.result.Success)
                 {
@@ -69,11 +69,11 @@ namespace library.Impl.Domain
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Save: no changes to persist") } }, domain);
         }
-        public virtual (Result result, V domain) Erase(V domain, IEntityRepository<T, U> entityrepository)
+        public virtual (Result result, V domain) Erase(V domain, IEntityRepository<T, U> entityrepository, bool usedbcommand = false)
         {
             if (!domain.Deleted)
             {
-                var delete = entityrepository.Delete();
+                var delete = entityrepository.Delete(usedbcommand);
 
                 if (delete.result.Success)
                 {
