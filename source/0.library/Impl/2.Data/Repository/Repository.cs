@@ -86,12 +86,12 @@ namespace library.Impl.Data.Repository
             return ExecuteNonQuery(command);
         }
 
-        protected bool UseDbCommand(bool classusedbcommand, bool commandusedbcommand, bool methodusedbcommand)
+        protected virtual bool UseDbCommand(bool classusedbcommand, bool propertyusedbcommand, bool methodusedbcommand)
         {
             bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["usedbcommand"]);
 
             if (!methodusedbcommand)
-                if (!commandusedbcommand)
+                if (!propertyusedbcommand)
                     if (!classusedbcommand)
                         if (!configusedbcommand)
                             return false;

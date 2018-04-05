@@ -255,7 +255,9 @@ namespace data.Query
             get
             {
                 if (_empresa == null)
+                {
                     Empresa = new data.Query.Empresa();
+                }
 
                 return _empresa;
             }

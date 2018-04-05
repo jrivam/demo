@@ -71,7 +71,7 @@ namespace domain.Model
         {
             if (this.IdEmpresa != null)
             {
-                Empresa = new domain.Model.Empresa(Data.Empresa);
+                Empresa = new domain.Model.Empresa(_data.Empresa);
             }
 
             return _empresa;
@@ -215,7 +215,7 @@ namespace domain.Query
             {
                 if (_empresa == null)
                 {
-                    _empresa = new domain.Query.Empresa();
+                    Empresa = new domain.Query.Empresa();
                 }
 
                 return _empresa;
