@@ -116,7 +116,7 @@ namespace presentation.Model
         {
             if (this.IdEmpresa != null)
             {
-                Empresa = new presentation.Model.Empresa(Domain.Empresa);
+                Empresa = new presentation.Model.Empresa(_domain.Empresa);
             }
 
             return _empresa;
@@ -300,6 +300,21 @@ namespace presentation.Query
         public Sucursal()
             : this(new domain.Query.Sucursal())
         {
+        }
+
+        protected presentation.Query.Empresa _empresa;
+        public virtual presentation.Query.Empresa Empresa
+        {
+            get
+            {
+                if (_empresa == null)
+                {
+                    Empresa = new presentation.Query.Empresa();
+                }
+
+                return _empresa;
+            }
+            set { if (_empresa != value) { _empresa = value; } }
         }
 
         public virtual (Result result, presentation.Model.Sucursal presentation) Retrieve(int maxdepth = 1, presentation.Model.Sucursal presentation = default(presentation.Model.Sucursal))
