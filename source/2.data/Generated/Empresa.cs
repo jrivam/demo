@@ -22,12 +22,6 @@ namespace data.Model
             protected set
             {
                 _entity = value;
-
-                //var props = _entity.GetType().GetProperties();
-                //foreach (var prop in props)
-                //{
-                //    this[prop.Name].Value = prop.GetValue(_entity, null);
-                //}
             }
         }
 
@@ -42,7 +36,7 @@ namespace data.Model
         {
             _repository = repository;
 
-            Entity = entity;
+            _entity = entity;
 
             Name = name;
             Reference = reference;
@@ -264,9 +258,9 @@ namespace data.Mapper
         }
         public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = data["Id"].Value as int?;
-            data.Entity.RazonSocial = data["RazonSocial"].Value as string;
-            data.Entity.Activo = data["Activo"].Value as bool?;
+            data.Entity.Id = data["Id"]?.Value as int?;
+            data.Entity.RazonSocial = data["RazonSocial"]?.Value as string;
+            data.Entity.Activo = data["Activo"]?.Value as bool?;
 
             return data;
         }

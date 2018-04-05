@@ -50,12 +50,20 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]domain.Model.Sucursal domain)
+        public IHttpActionResult Post([FromBody]entities.Model.Sucursal entity)
         {
             try
             {
-                if (domain == null)
+                if (entity == null)
                     return BadRequest();
+
+                var domain = new domain.Model.Sucursal()
+                {
+                    Id = entity.Id,
+                    Nombre = entity.Nombre,
+                    Fecha = entity.Fecha,
+                    Activo = entity.Activo
+                };
 
                 var save = domain.Save();
                 if (save.result.Success)
@@ -71,12 +79,20 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]domain.Model.Sucursal domain)
+        public IHttpActionResult Put(int id, [FromBody]entities.Model.Sucursal entity)
         {
             try
             {
-                if (domain == null)
+                if (entity == null)
                     return BadRequest();
+
+                var domain = new domain.Model.Sucursal()
+                {
+                    Id = entity.Id,
+                    Nombre = entity.Nombre,
+                    Fecha = entity.Fecha,
+                    Activo = entity.Activo
+                };
 
                 var save = domain.Save();
                 if (save.result.Success)

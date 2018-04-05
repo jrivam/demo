@@ -9,8 +9,6 @@ namespace Web.Api.Controllers
     {
         public IHttpActionResult Get(string razonsocial = null, bool? activo = null)
         {
-            //var domain = new domain.Model.Empresa(new data.Model.Empresa(new entities.Model.Empresa() { Id = 1, RazonSocial = "test"}));
-
             try
             {
                 var query = new domain.Query.Empresa();
@@ -59,7 +57,12 @@ namespace Web.Api.Controllers
                 if (entity == null)
                     return BadRequest();
 
-                var domain = new domain.Model.Empresa(new data.Model.Empresa(entity));
+                var domain = new domain.Model.Empresa()
+                {
+                    Id = entity.Id,
+                    RazonSocial = entity.RazonSocial,
+                    Activo = entity.Activo
+                };
 
                 var save = domain.Save();
                 if (save.result.Success)
@@ -75,18 +78,23 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]domain.Model.Empresa domain)
+        public IHttpActionResult Put(int id, [FromBody]entities.Model.Empresa entity)
         {
             try
             {
-                if (domain == null)
+                if (entity == null)
                     return BadRequest();
+
+                var domain = new domain.Model.Empresa()
+                {
+                    Id = entity.Id,
+                    RazonSocial = entity.RazonSocial,
+                    Activo = entity.Activo
+                };
 
                 var save = domain.Save();
                 if (save.result.Success)
                 {
-                    //save.domain.Sucursales_Load();
-
                     return Ok(save.domain.Data.Entity);
                 }
 

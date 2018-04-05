@@ -37,7 +37,7 @@ namespace presentation.Model
             _interactive = interactive;
             _maxdepth = maxdepth;
 
-            Domain = domain;
+            _domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object parameter) { Messenger.Default.Send<presentation.Model.Empresa>(Clear(), "EmpresaClear"); }, null);
 
