@@ -28,7 +28,7 @@ namespace domain.Model
         {
             _logic = logic;
 
-            Data = data;
+            _data = data;
         }
         public Empresa(data.Model.Empresa data)
             : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()),

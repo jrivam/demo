@@ -26,12 +26,6 @@ namespace data.Model
             protected set
             {
                 _entity = value;
-
-                //var props = _entity.GetType().GetProperties();
-                //foreach (var prop in props)
-                //{
-                //    this[prop.Name].Value = prop.GetValue(_entity, null);
-                //}
             }
         }
 
@@ -46,7 +40,7 @@ namespace data.Model
         {
             _repository = repository;
 
-            Entity = entity;
+            _entity = entity;
 
             Name = name;
             Reference = reference;
@@ -327,11 +321,11 @@ namespace data.Mapper
 
         public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = data["Id"].Value as int?;
-            data.Entity.Nombre = data["Nombre"].Value as string;
-            data.Entity.Activo = data["Activo"].Value as bool?;
-            data.Entity.Fecha = data["Fecha"].Value as DateTime?;
-            data.Entity.IdEmpresa = data["IdEmpresa"].Value as int?;
+            data.Entity.Id = data["Id"]?.Value as int?;
+            data.Entity.Nombre = data["Nombre"]?.Value as string;
+            data.Entity.Activo = data["Activo"]?.Value as bool?;
+            data.Entity.Fecha = data["Fecha"]?.Value as DateTime?;
+            data.Entity.IdEmpresa = data["IdEmpresa"]?.Value as int?;
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)

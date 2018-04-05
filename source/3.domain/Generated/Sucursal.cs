@@ -29,7 +29,7 @@ namespace domain.Model
         {
             _logic = logic;
 
-            Data = data;
+            _data = data;
         }
         public Sucursal(data.Model.Sucursal data)
             : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()),
