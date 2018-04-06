@@ -82,10 +82,7 @@ namespace data.Model
                 {
                     this["Id"].Value = Entity.Id = value;
 
-                    //if (value == null)
-                    //    Clear();
-
-                    //Sucursales?.ForEach(x => x.IdEmpresa = value);
+                    _sucursales?.ForEach(x => x.IdEmpresa = value);
                 }
             }
         }

@@ -40,6 +40,14 @@ namespace domain.Model
             : this(new data.Model.Sucursal())
         {
         }
+        public Sucursal(entities.Model.Sucursal entity)
+            : this()
+        {
+            Id = entity.Id;
+            Nombre = entity.Nombre;
+            Fecha = entity.Fecha;
+            Activo = entity.Activo;
+        }
 
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }

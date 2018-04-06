@@ -33,7 +33,6 @@ namespace Web.Api.Controllers
             try
             {
                 var load = new domain.Model.Sucursal() { Id = id }.Load();
-
                 if (load.result.Success)
                 {
                     return Ok(load.domain.Data.Entity);
@@ -57,15 +56,7 @@ namespace Web.Api.Controllers
                 if (entity == null)
                     return BadRequest();
 
-                var domain = new domain.Model.Sucursal()
-                {
-                    Id = entity.Id,
-                    Nombre = entity.Nombre,
-                    Fecha = entity.Fecha,
-                    Activo = entity.Activo
-                };
-
-                var save = domain.Save();
+                var save = new domain.Model.Sucursal(entity).Save();
                 if (save.result.Success)
                 {
                     return Created<entities.Model.Sucursal>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
@@ -86,15 +77,7 @@ namespace Web.Api.Controllers
                 if (entity == null)
                     return BadRequest();
 
-                var domain = new domain.Model.Sucursal()
-                {
-                    Id = entity.Id,
-                    Nombre = entity.Nombre,
-                    Fecha = entity.Fecha,
-                    Activo = entity.Activo
-                };
-
-                var save = domain.Save();
+                var save = new domain.Model.Sucursal(entity).Save();
                 if (save.result.Success)
                 {
                     return Ok(save.domain.Data.Entity);
@@ -112,9 +95,8 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var delete = new domain.Model.Sucursal() { Id = id }.Erase();
-
-                if (delete.result.Success)
+                var erase = new domain.Model.Sucursal() { Id = id }.Erase();
+                if (erase.result.Success)
                 {
                     return StatusCode(HttpStatusCode.NoContent);
                 }

@@ -73,6 +73,14 @@ namespace presentation.Model
                   maxdepth)
         {
         }
+        public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
+            : this(maxdepth)
+        {
+            Id = entity.Id;
+            Nombre = entity.Nombre;
+            Fecha = entity.Fecha;
+            Activo = entity.Activo;
+        }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
         public virtual void OnPropertyChanged(string propertyName)

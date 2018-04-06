@@ -8,6 +8,8 @@ namespace application
         static void Main(string[] args)
         {
             var c = new Empresa() { Id = 1 }.Load().presentation;
+            c.Sucursales_Load();
+            c.Domain.Data.Id = 2;
 
             var c1 = c.Erase().presentation;
 
