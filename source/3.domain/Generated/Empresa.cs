@@ -39,30 +39,18 @@ namespace domain.Model
             : this(new data.Model.Empresa())
         {
         }
+        public Empresa(entities.Model.Empresa entity)
+            : this()
+        {
+            Id = entity.Id;
+            RazonSocial = entity.RazonSocial;
+            Activo = entity.Activo;
+        }
 
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
-        public virtual int? Id 
-        {
-            get { return Data?.Id; }
-            set
-            {
-                if (Data?.Id != value)
-                {
-                    Data.Id = value;
-                    Changed = true;
-
-                    //if (Loaded)
-                    //{
-                    //    if (value == null)
-                    //        Clear();
-
-                    //    Sucursales?.ForEach(x => x.IdEmpresa = value);
-                    //}
-                }
-            }
-        }
+        public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 

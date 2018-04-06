@@ -71,6 +71,13 @@ namespace presentation.Model
                   maxdepth)
         {
         }
+        public Empresa(entities.Model.Empresa entity, int maxdepth = 1)
+            : this(maxdepth)
+        {
+            Id = entity.Id;
+            RazonSocial = entity.RazonSocial;
+            Activo = entity.Activo;
+        }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
         public virtual void OnPropertyChanged(string propertyName)
@@ -87,23 +94,7 @@ namespace presentation.Model
 
         public virtual ICommand EditCommand { get; set; }
 
-        public virtual int? Id
-        {
-            get { return Domain?.Id; }
-            set
-            {
-                if (Domain?.Id != value)
-                {
-                    Domain.Id = value;
-                    OnPropertyChanged("Id");
-
-                    //if (value == null)
-                    //    Clear();
-
-                    //Sucursales?.ForEach(x => x.IdEmpresa = value);
-                }
-            }
-        }
+        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 

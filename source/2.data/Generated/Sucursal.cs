@@ -79,7 +79,20 @@ namespace data.Model
         }
         public virtual IList<IEntityColumn<entities.Model.Sucursal>> Columns { get; set; } = new List<IEntityColumn<entities.Model.Sucursal>>();
 
-        public virtual int? Id { get { return Entity?.Id; } set { if (Entity?.Id != value) { this["Id"].Value = Entity.Id = value; } } }
+        public virtual int? Id
+        {
+            get
+            {
+                return Entity?.Id;
+            }
+            set
+            {
+                if (Entity?.Id != value)
+                {
+                    this["Id"].Value = Entity.Id = value;
+                }
+            }
+        }
         public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { this["Nombre"].Value = Entity.Nombre = value; } } }
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
         public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { this["Fecha"].Value = Entity.Fecha = value; } } }
