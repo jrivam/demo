@@ -9,7 +9,7 @@ namespace library.Interface.Data
         string Reference { get; }
         string Name { get; }
 
-        IList<(IQueryColumn column, OrderDirection flow)> Orders { get; set; }
+        IList<(IQueryColumn column, OrderDirection flow)> Orders { get; }
 
         IList<IQueryColumn> Columns { get; }
         IQueryColumn this[string reference] { get; }

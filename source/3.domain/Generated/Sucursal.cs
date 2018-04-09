@@ -9,27 +9,16 @@ namespace domain.Model
 {
     public partial class Sucursal : IEntityState<entities.Model.Sucursal, data.Model.Sucursal>, IEntityLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        protected data.Model.Sucursal _data;
-        public virtual data.Model.Sucursal Data
-        {
-            get
-            {
-                return _data;
-            }
-            protected set
-            {
-                _data = value;
-            }
-        }
-
         protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
+
+        public virtual data.Model.Sucursal Data { get; protected set; }
 
         public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
             data.Model.Sucursal data)
         {
             _logic = logic;
 
-            _data = data;
+            Data = data;
         }
         public Sucursal(data.Model.Sucursal data)
             : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()),
@@ -47,6 +36,8 @@ namespace domain.Model
             Nombre = entity.Nombre;
             Fecha = entity.Fecha;
             Activo = entity.Activo;
+
+            IdEmpresa = entity.IdEmpresa;
         }
 
         public virtual bool Changed { get; set; }
@@ -54,8 +45,8 @@ namespace domain.Model
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Nombre { get { return Data?.Nombre; } set { if (Data?.Nombre != value) { Data.Nombre = value; Changed = true; } } }
-        public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
         public virtual DateTime? Fecha { get { return Data?.Fecha; } set { if (Data?.Fecha != value) { Data.Fecha = value; Changed = true; } } }
+        public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
         public virtual int? IdEmpresa
         {
@@ -79,7 +70,7 @@ namespace domain.Model
         {
             if (this.IdEmpresa != null)
             {
-                Empresa = new domain.Model.Empresa(_data.Empresa);
+                Empresa = new domain.Model.Empresa(Data.Empresa);
             }
 
             return _empresa;
@@ -195,9 +186,9 @@ namespace domain.Query
 {
     public partial class Sucursal : IQueryState<data.Query.Sucursal>, IQueryLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public virtual data.Query.Sucursal Data { get; protected set; }
-
         protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
+
+        public virtual data.Query.Sucursal Data { get; protected set; }
 
         public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
             data.Query.Sucursal data)

@@ -8,27 +8,16 @@ namespace domain.Model
 {
     public partial class Empresa : IEntityState<entities.Model.Empresa, data.Model.Empresa>, IEntityLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        protected data.Model.Empresa _data;
-        public virtual data.Model.Empresa Data
-        {
-            get
-            {
-                return _data;
-            }
-            protected set
-            {
-                _data = value;
-            }
-        }
-
         protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
+
+        public virtual data.Model.Empresa Data { get; protected set; }
 
         public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
             data.Model.Empresa data)
         {
             _logic = logic;
 
-            _data = data;
+            Data = data;
         }
         public Empresa(data.Model.Empresa data)
             : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()),
@@ -153,9 +142,9 @@ namespace domain.Query
 {
     public partial class Empresa : IQueryState<data.Query.Empresa>, IQueryLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public virtual data.Query.Empresa Data { get; protected set; }
-
         protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
+
+        public virtual data.Query.Empresa Data { get; protected set; }
 
         public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
             data.Query.Empresa data)

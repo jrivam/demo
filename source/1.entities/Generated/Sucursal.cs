@@ -7,10 +7,10 @@ namespace entities.Model
     {
         public virtual int? Id { get; set; }
         public virtual string Nombre { get; set; }
-        public virtual int? IdEmpresa { get; set; }
-        public virtual bool? Activo { get; set; }
         public virtual DateTime? Fecha { get; set; }
+        public virtual bool? Activo { get; set; }
 
+        public virtual int? IdEmpresa { get; set; }
         public virtual entities.Model.Empresa Empresa { get; set; }
     }
 }
