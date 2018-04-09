@@ -13,22 +13,11 @@ namespace presentation.Model
 {
     public partial class Sucursal : INotifyPropertyChanged, IEntityView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>, IEntityInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        protected int _maxdepth;
-
-        protected domain.Model.Sucursal _domain;
-        public virtual domain.Model.Sucursal Domain
-        {
-            get
-            {
-                return _domain;
-            }
-            protected set
-            {
-                _domain = value;
-            }
-        }
-
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
+
+        public virtual domain.Model.Sucursal Domain { get; protected set; }
+
+        protected int _maxdepth;
 
         public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
             domain.Model.Sucursal domain,
@@ -37,7 +26,7 @@ namespace presentation.Model
             _interactive = interactive;
             _maxdepth = maxdepth;
 
-            _domain = domain;
+            Domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object entity) { Messenger.Default.Send<presentation.Model.Sucursal>(Clear(), "SucursalClear"); }, null);
 
@@ -73,13 +62,16 @@ namespace presentation.Model
                   maxdepth)
         {
         }
-        public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
+        public Sucursal(entities.Model.Sucursal entity, 
+            int maxdepth = 1)
             : this(maxdepth)
         {
             Id = entity.Id;
             Nombre = entity.Nombre;
             Fecha = entity.Fecha;
             Activo = entity.Activo;
+
+            IdEmpresa = entity.IdEmpresa;
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -89,18 +81,18 @@ namespace presentation.Model
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual ICommand ClearCommand { get; set; }
+        public virtual ICommand ClearCommand { get; protected set; }
 
-        public virtual ICommand LoadCommand { get; set; }
-        public virtual ICommand SaveCommand { get; set; }
-        public virtual ICommand EraseCommand { get; set; }
+        public virtual ICommand LoadCommand { get; protected set; }
+        public virtual ICommand SaveCommand { get; protected set; }
+        public virtual ICommand EraseCommand { get; protected set; }
 
-        public virtual ICommand EditCommand { get; set; }
+        public virtual ICommand EditCommand { get; protected set; }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
-        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
         public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { Domain.Fecha = value; OnPropertyChanged("Fecha"); } } }
+        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
         public virtual int? IdEmpresa
         {
@@ -124,7 +116,7 @@ namespace presentation.Model
         {
             if (this.IdEmpresa != null)
             {
-                Empresa = new presentation.Model.Empresa(_domain.Empresa);
+                Empresa = new presentation.Model.Empresa(Domain.Empresa);
             }
 
             return _empresa;
@@ -289,9 +281,9 @@ namespace presentation.Query
 {
     public partial class Sucursal : IQueryView<data.Query.Sucursal, domain.Query.Sucursal>, IQueryInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public virtual domain.Query.Sucursal Domain { get; protected set; }
-
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
+
+        public virtual domain.Query.Sucursal Domain { get; protected set; }
 
         public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
             domain.Query.Sucursal domain)

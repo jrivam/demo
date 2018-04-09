@@ -12,23 +12,12 @@ namespace data.Model
 {
     public partial class Empresa : IEntityTable<entities.Model.Empresa>, IEntityRepository<entities.Model.Empresa, data.Model.Empresa>
     {
-        protected entities.Model.Empresa _entity;
-        public virtual entities.Model.Empresa Entity
-        {
-            get
-            {
-                return _entity;
-            }
-            protected set
-            {
-                _entity = value;
-            }
-        }
-
         protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
-        public virtual string Name { get; private set; }
-        public virtual string Reference { get; private set; }
+        public virtual entities.Model.Empresa Entity { get; protected set; }
+
+        public virtual string Name { get; protected set; }
+        public virtual string Reference { get; protected set; }
 
         public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
             entities.Model.Empresa entity,
@@ -36,7 +25,7 @@ namespace data.Model
         {
             _repository = repository;
 
-            _entity = entity;
+            Entity = entity;
 
             Name = name;
             Reference = reference;
@@ -46,16 +35,19 @@ namespace data.Model
             Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
         }
         public Empresa(string connectionstringname,
-            entities.Model.Empresa entity,
-            string name = "empresa", string reference = "Empresa")
+            string name, string reference)
             : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname),
-                  entity,
+                  new entities.Model.Empresa(),
                   name, reference)
         {
         }
-        public Empresa()
-            : this(new entities.Model.Empresa())
+        public Empresa(entities.Model.Empresa entity, 
+            string connectionstringname)
+            : this(connectionstringname)
         {
+            Id = entity.Id;
+            RazonSocial = entity.RazonSocial;
+            Activo = entity.Activo;
         }
 
         public virtual bool UseDbCommand { get; set; }
@@ -71,7 +63,7 @@ namespace data.Model
                 return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IEntityColumn<entities.Model.Empresa>> Columns { get; set; } = new List<IEntityColumn<entities.Model.Empresa>>();
+        public virtual IList<IEntityColumn<entities.Model.Empresa>> Columns { get; } = new List<IEntityColumn<entities.Model.Empresa>>();
 
         public virtual int? Id
         {
@@ -179,8 +171,8 @@ namespace data.Query
     {
         protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
-        public virtual string Name { get; private set; }
-        public virtual string Reference { get; private set; }
+        public virtual string Name { get; protected set; }
+        public virtual string Reference { get; protected set; }
 
         public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
             string name, string reference)
@@ -195,13 +187,13 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
         public Empresa(string connectionstringname,
-            string name = "empresa", string reference = "Empresa")
+            string name, string reference)
             : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), 
                   name, reference)
         {
         }
 
-        public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; set; } = new List<(IQueryColumn, OrderDirection)>();
+        public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; } = new List<(IQueryColumn, OrderDirection)>();
 
         public virtual IQueryColumn this[string reference]
         {
@@ -210,7 +202,7 @@ namespace data.Query
                 return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IQueryColumn> Columns { get; set; } = new List<IQueryColumn>();
+        public virtual IList<IQueryColumn> Columns { get; } = new List<IQueryColumn>();
 
         public virtual IList<(IQueryColumn internalkey, IQueryColumn externalkey)> Joins { get; } = new List<(IQueryColumn, IQueryColumn)>();
 

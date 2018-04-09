@@ -6,8 +6,8 @@ namespace data.Model
 {
     public partial class Sucursal
     {
-        public Sucursal(entities.Model.Sucursal entity)
-            : this("test.connectionstring.name", entity)
+        public Sucursal(string connectionstringname = "test.connectionstring.name")
+            : this(connectionstringname, "sucursal", "Sucursal")
         {
             SelectDbCommand = (false, ("gsp_sucursal_select", CommandType.StoredProcedure, new List<DbParameter>()));
             InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<DbParameter>()));
@@ -21,8 +21,8 @@ namespace data.Query
 {
     public partial class Sucursal
     {
-        public Sucursal()
-            : this("test.connectionstring.name")
+        public Sucursal(string connectionstringname = "test.connectionstring.name")
+            : this(connectionstringname, "sucursal", "Sucursal")
         {            
         }
     }

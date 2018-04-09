@@ -13,10 +13,10 @@ namespace library.Interface.Presentation
 
         void OnPropertyChanged(string propertyName);
 
-        ICommand ClearCommand { get; set; }
-        ICommand LoadCommand { get; set; }
-        ICommand SaveCommand { get; set; }
-        ICommand EraseCommand { get; set; }
-        ICommand EditCommand { get; set; }
+        ICommand ClearCommand { get; }
+        ICommand LoadCommand { get; }
+        ICommand SaveCommand { get; }
+        ICommand EraseCommand { get; }
+        ICommand EditCommand { get; }
     }
 }

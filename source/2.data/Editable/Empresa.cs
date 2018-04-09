@@ -6,8 +6,8 @@ namespace data.Model
 {
     public partial class Empresa
     {
-        public Empresa(entities.Model.Empresa entity)
-           : this("test.connectionstring.name", entity)
+        public Empresa(string connectionstringname = "test.connectionstring.name")
+            : this(connectionstringname, "empresa", "Empresa")
         {
             SelectDbCommand = (false, ("gsp_empresa_select", CommandType.StoredProcedure, new List<DbParameter>()));
             InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<DbParameter>()));
@@ -21,8 +21,8 @@ namespace data.Query
 {
     public partial class Empresa
     {
-        public Empresa()
-          : this("test.connectionstring.name")
+        public Empresa(string connectionstringname = "test.connectionstring.name")
+            : this(connectionstringname, "empresa", "Empresa")
         {
         }
     }

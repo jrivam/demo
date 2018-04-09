@@ -9,30 +9,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-//using domainSucursal = domain.Model.Sucursal;
-//using dataSucursal = data.Model.Sucursal;
-
 namespace data.Model
 {
     public partial class Sucursal : IEntityTable<entities.Model.Sucursal>, IEntityRepository<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        protected entities.Model.Sucursal _entity;
-        public virtual entities.Model.Sucursal Entity
-        {
-            get
-            {
-                return _entity;
-            }
-            protected set
-            {
-                _entity = value;
-            }
-        }
-
         protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
 
-        public virtual string Name { get; private set; }
-        public virtual string Reference { get; private set; }
+        public virtual entities.Model.Sucursal Entity { get; protected set; }
+
+        public virtual string Name { get; protected set; }
+        public virtual string Reference { get; protected set; }
 
         public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository,
             entities.Model.Sucursal entity, 
@@ -40,7 +26,7 @@ namespace data.Model
         {
             _repository = repository;
 
-            _entity = entity;
+            Entity = entity;
 
             Name = name;
             Reference = reference;
@@ -51,17 +37,23 @@ namespace data.Model
             Columns.Add(new EntityColumn<DateTime?, entities.Model.Sucursal>(this, "fecha", "Fecha"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Sucursal>(this, "activo", "Activo"));
         }
-        public Sucursal(string connectionstringname,
-            entities.Model.Sucursal entity, 
-            string name = "sucursal", string reference = "Sucursal")
+        public Sucursal(string connectionstringname, 
+            string name, string reference)
             : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname),
-                    entity,
-                    name, reference)
+                  new entities.Model.Sucursal(),
+                  name, reference)
         {
         }
-        public Sucursal()
-            : this(new entities.Model.Sucursal())
+        public Sucursal(entities.Model.Sucursal entity, 
+            string connectionstringname)
+            : this(connectionstringname)
         {
+            Id = entity.Id;
+            Nombre = entity.Nombre;
+            Fecha = entity.Fecha;
+            Activo = entity.Activo;
+
+            IdEmpresa = entity.IdEmpresa;
         }
 
         public virtual bool UseDbCommand { get; set; }
@@ -77,7 +69,7 @@ namespace data.Model
                 return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IEntityColumn<entities.Model.Sucursal>> Columns { get; set; } = new List<IEntityColumn<entities.Model.Sucursal>>();
+        public virtual IList<IEntityColumn<entities.Model.Sucursal>> Columns { get; } = new List<IEntityColumn<entities.Model.Sucursal>>();
 
         public virtual int? Id
         {
@@ -94,8 +86,8 @@ namespace data.Model
             }
         }
         public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { this["Nombre"].Value = Entity.Nombre = value; } } }
-        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
         public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { this["Fecha"].Value = Entity.Fecha = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
         public virtual int? IdEmpresa
         {
@@ -225,8 +217,8 @@ namespace data.Query
     {
         protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
 
-        public virtual string Name { get; private set; }
-        public virtual string Reference { get; private set; }
+        public virtual string Name { get; protected set; }
+        public virtual string Reference { get; protected set; }
 
         public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository,
             string name, string reference)
@@ -243,13 +235,13 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
         public Sucursal(string connectionstringname,
-            string name = "sucursal", string reference = "Sucursal")
+            string name, string reference)
             : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname), 
                   name, reference)
         {
         }
 
-        public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; set; } = new List<(IQueryColumn, OrderDirection)>();
+        public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; } = new List<(IQueryColumn, OrderDirection)>();
 
         public virtual IQueryColumn this[string reference]
         {
@@ -258,7 +250,7 @@ namespace data.Query
                 return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IQueryColumn> Columns { get; set; } = new List<IQueryColumn>();
+        public virtual IList<IQueryColumn> Columns { get; } = new List<IQueryColumn>();
 
         public virtual IList<(IQueryColumn internalkey, IQueryColumn externalkey)> Joins { get => new List<(IQueryColumn, IQueryColumn)>() { (this["IdEmpresa"], Empresa["Id"]) }; }
 

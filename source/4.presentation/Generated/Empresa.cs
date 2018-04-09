@@ -13,22 +13,11 @@ namespace presentation.Model
 {
     public partial class Empresa : INotifyPropertyChanged, IEntityView<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>, IEntityInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        protected int _maxdepth;
-
-        protected domain.Model.Empresa _domain;
-        public virtual domain.Model.Empresa Domain
-        {
-            get
-            {
-                return _domain;
-            }
-            protected set
-            {
-                _domain = value;
-            }
-        }
-
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
+
+        public virtual domain.Model.Empresa Domain { get; protected set; }
+
+        protected int _maxdepth;
 
         public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
             domain.Model.Empresa domain, 
@@ -37,7 +26,7 @@ namespace presentation.Model
             _interactive = interactive;
             _maxdepth = maxdepth;
 
-            _domain = domain;
+            Domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object parameter) { Messenger.Default.Send<presentation.Model.Empresa>(Clear(), "EmpresaClear"); }, null);
 
@@ -86,13 +75,13 @@ namespace presentation.Model
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual ICommand ClearCommand { get; set; }
+        public virtual ICommand ClearCommand { get; protected set; }
 
-        public virtual ICommand LoadCommand { get; set; }
-        public virtual ICommand SaveCommand { get; set; }
-        public virtual ICommand EraseCommand { get; set; }
+        public virtual ICommand LoadCommand { get; protected set; }
+        public virtual ICommand SaveCommand { get; protected set; }
+        public virtual ICommand EraseCommand { get; protected set; }
 
-        public virtual ICommand EditCommand { get; set; }
+        public virtual ICommand EditCommand { get; protected set; }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
@@ -245,9 +234,9 @@ namespace presentation.Query
 {
     public partial class Empresa : IQueryView<data.Query.Empresa, domain.Query.Empresa>, IQueryInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public virtual domain.Query.Empresa Domain { get; protected set; }
-
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
+
+        public virtual domain.Query.Empresa Domain { get; protected set; }
 
         public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
             domain.Query.Empresa domain)
