@@ -20,8 +20,7 @@ namespace presentation.Model
         protected int _maxdepth;
 
         public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
-            domain.Model.Empresa domain, 
-            int maxdepth = 1)
+            domain.Model.Empresa domain, int maxdepth = 1)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
@@ -48,16 +47,13 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>((this, this), "EmpresaEdit");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
-        public Empresa(domain.Model.Empresa domain, 
-            int maxdepth = 1)
+        public Empresa(domain.Model.Empresa domain, int maxdepth = 1)
             : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()),
-                  domain,
-                  maxdepth)
+                  domain, maxdepth)
         {
         }
         public Empresa(int maxdepth = 1)
-            : this(new domain.Model.Empresa(), 
-                  maxdepth)
+            : this(new domain.Model.Empresa(), maxdepth)
         {
         }
         public Empresa(entities.Model.Empresa entity, int maxdepth = 1)
