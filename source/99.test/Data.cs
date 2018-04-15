@@ -68,14 +68,14 @@ namespace test
             bool read = true;
             var mockDataReader = new Moq.Mock<IDataReader>();
             mockDataReader.Setup(x => x.Read()).Returns(() => read).Callback(() => read = false);
-            mockDataReader.Setup(x => x["Id"]).Returns(Entity.Id);
-            mockDataReader.Setup(x => x["RazonSocial"]).Returns(Entity.RazonSocial);
-            mockDataReader.Setup(x => x["Activo"]).Returns(Entity.Activo);
+            mockDataReader.Setup(x => x["Empresa.Id"]).Returns(Entity.Id);
+            mockDataReader.Setup(x => x["Empresa.RazonSocial"]).Returns(Entity.RazonSocial);
+            mockDataReader.Setup(x => x["Empresa.Activo"]).Returns(Entity.Activo);
 
             mockCommand.Setup(x => x.ExecuteReader())
                 .Returns(mockDataReader.Object);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa(), "", "")
+            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
             {
                 Id = Entity.Id
             }, mockBuilder, mockCommand);
@@ -132,7 +132,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteScalar())
                 .Returns(Entity.Id);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa(), "", "")
+            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
             {
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
@@ -190,7 +190,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa(), "", "")
+            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
             {
                 Id = Entity.Id,
                 RazonSocial = Entity.RazonSocial,
@@ -249,7 +249,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa(), "", "")
+            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
             {
                 Id = Entity.Id,
                 RazonSocial = Entity.RazonSocial,

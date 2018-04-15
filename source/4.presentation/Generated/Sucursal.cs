@@ -20,8 +20,7 @@ namespace presentation.Model
         protected int _maxdepth;
 
         public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
-            domain.Model.Sucursal domain,
-            int maxdepth = 1)
+            domain.Model.Sucursal domain, int maxdepth = 1)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
@@ -50,20 +49,16 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>((this, this), "SucursalEdit");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
-        public Sucursal(domain.Model.Sucursal domain, 
-            int maxdepth = 1)
+        public Sucursal(domain.Model.Sucursal domain, int maxdepth = 1)
             : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
-                  domain,
-                  maxdepth)
+                  domain, maxdepth)
         {
         }
         public Sucursal(int maxdepth = 1)
-            : this(new domain.Model.Sucursal(), 
-                  maxdepth)
+            : this(new domain.Model.Sucursal(), maxdepth)
         {
         }
-        public Sucursal(entities.Model.Sucursal entity, 
-            int maxdepth = 1)
+        public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
             : this(maxdepth)
         {
             Id = entity.Id;

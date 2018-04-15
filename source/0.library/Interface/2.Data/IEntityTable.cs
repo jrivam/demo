@@ -21,5 +21,7 @@ namespace library.Interface.Data
 
         IList<IEntityColumn<T>> Columns { get; }
         IEntityColumn<T> this[string reference] { get; }
+
+        void InitDbCommands();
     }
 }

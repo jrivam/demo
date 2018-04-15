@@ -16,33 +16,28 @@ namespace data.Model
 
         public virtual entities.Model.Empresa Entity { get; protected set; }
 
-        public virtual string Name { get; protected set; }
-        public virtual string Reference { get; protected set; }
+        public virtual string Name { get; protected set; } = "empresa";
+        public virtual string Reference { get; protected set; } = "Empresa";
 
         public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
-            entities.Model.Empresa entity,
-            string name, string reference)
+            entities.Model.Empresa entity)
         {
             _repository = repository;
 
             Entity = entity;
 
-            Name = name;
-            Reference = reference;
-
             Columns.Add(new EntityColumn<int?, entities.Model.Empresa>(this, "id", "Id", true, true));
             Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
+
+            InitDbCommands();
         }
-        public Empresa(string connectionstringname,
-            string name, string reference)
+        public Empresa(string connectionstringname)
             : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname),
-                  new entities.Model.Empresa(),
-                  name, reference)
+                  new entities.Model.Empresa())
         {
         }
-        public Empresa(entities.Model.Empresa entity, 
-            string connectionstringname)
+        public Empresa(entities.Model.Empresa entity, string connectionstringname)
             : this(connectionstringname)
         {
             Id = entity.Id;
@@ -171,25 +166,19 @@ namespace data.Query
     {
         protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
-        public virtual string Name { get; protected set; }
-        public virtual string Reference { get; protected set; }
+        public virtual string Name { get; protected set; } = "empresa";
+        public virtual string Reference { get; protected set; } = "Empresa";
 
-        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
-            string name, string reference)
+        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository)
         {
             _repository = repository;
-
-            Name = name;
-            Reference = reference;
 
             Columns.Add(new QueryColumn<int?>(this, "id", "Id"));
             Columns.Add(new QueryColumn<string>(this, "razon_social", "RazonSocial"));
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
-        public Empresa(string connectionstringname,
-            string name, string reference)
-            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname), 
-                  name, reference)
+        public Empresa(string connectionstringname)
+            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
         {
         }
 

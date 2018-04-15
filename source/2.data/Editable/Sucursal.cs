@@ -6,8 +6,20 @@ namespace data.Model
 {
     public partial class Sucursal
     {
-        public Sucursal(string connectionstringname = "test.connectionstring.name")
-            : this(connectionstringname, "sucursal", "Sucursal")
+        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+
+        public Sucursal()
+            : this(_defaultconnectionstringname)
+        {
+
+        }
+        public Sucursal(entities.Model.Sucursal entity)
+            : this(entity, _defaultconnectionstringname)
+        {
+
+        }
+
+        public virtual void InitDbCommands()
         {
             SelectDbCommand = (false, ("gsp_sucursal_select", CommandType.StoredProcedure, new List<DbParameter>()));
             InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<DbParameter>()));
@@ -21,8 +33,10 @@ namespace data.Query
 {
     public partial class Sucursal
     {
-        public Sucursal(string connectionstringname = "test.connectionstring.name")
-            : this(connectionstringname, "sucursal", "Sucursal")
+        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+
+        public Sucursal()
+            : this(_defaultconnectionstringname)
         {            
         }
     }
