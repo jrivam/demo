@@ -228,23 +228,20 @@ namespace presentation.Query
     {
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public virtual domain.Query.Empresa Domain { get; protected set; }
+        public virtual domain.Query.Empresa Domain { get; protected set; } = new domain.Query.Empresa();
 
-        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
-            domain.Query.Empresa domain)
+        public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
         {
             _interactive = interactive;
-
-            Domain = domain;
-        }
-        public Empresa(domain.Query.Empresa domain)
-            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()),
-                  domain)
-        {
         }
         public Empresa()
-            : this(new domain.Query.Empresa())
+            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()))
         {
+        }
+        public Empresa(domain.Query.Empresa domain)
+            : this()
+        {
+            Domain = domain;
         }
 
         public virtual (Result result, presentation.Model.Empresa presentation) Retrieve(int maxdepth = 1, presentation.Model.Empresa presentation = default(presentation.Model.Empresa))
