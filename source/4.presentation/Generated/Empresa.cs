@@ -15,17 +15,15 @@ namespace presentation.Model
     {
         protected readonly IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> _interactive;
 
-        public virtual domain.Model.Empresa Domain { get; protected set; }
+        public virtual domain.Model.Empresa Domain { get; protected set; } = new domain.Model.Empresa();
 
         protected int _maxdepth;
 
         public Empresa(IInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
-            domain.Model.Empresa domain, int maxdepth = 1)
+            int maxdepth = 1)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
-
-            Domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object parameter) { Messenger.Default.Send<presentation.Model.Empresa>(Clear(), "EmpresaClear"); }, null);
 
@@ -47,21 +45,19 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>((this, this), "EmpresaEdit");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
-        public Empresa(domain.Model.Empresa domain, int maxdepth = 1)
-            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()),
-                  domain, maxdepth)
-        {
-        }
         public Empresa(int maxdepth = 1)
-            : this(new domain.Model.Empresa(), maxdepth)
+            : this(new Interactive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(new presentation.Mapper.Empresa()),
+                  maxdepth)
         {
         }
-        public Empresa(entities.Model.Empresa entity, int maxdepth = 1)
+        public Empresa(domain.Model.Empresa domain, int maxdepth = 1)
             : this(maxdepth)
         {
-            Id = entity.Id;
-            RazonSocial = entity.RazonSocial;
-            Activo = entity.Activo;
+            Domain = domain;
+        }
+        public Empresa(entities.Model.Empresa entity, int maxdepth = 1)
+            : this(new domain.Model.Empresa(entity), maxdepth)
+        {
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };

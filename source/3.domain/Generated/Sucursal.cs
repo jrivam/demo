@@ -11,33 +11,24 @@ namespace domain.Model
     {
         protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
 
-        public virtual data.Model.Sucursal Data { get; protected set; }
+        public virtual data.Model.Sucursal Data { get; protected set; } = new data.Model.Sucursal();
 
-        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
-            data.Model.Sucursal data)
+        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
         {
             _logic = logic;
-
-            Data = data;
-        }
-        public Sucursal(data.Model.Sucursal data)
-            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()),
-                  data)
-        {
         }
         public Sucursal()
-            : this(new data.Model.Sucursal())
+            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
         {
         }
-        public Sucursal(entities.Model.Sucursal entity)
+        public Sucursal(data.Model.Sucursal data)
             : this()
         {
-            Id = entity.Id;
-            Nombre = entity.Nombre;
-            Fecha = entity.Fecha;
-            Activo = entity.Activo;
-
-            IdEmpresa = entity.IdEmpresa;
+            Data = data;
+        }
+        public Sucursal(entities.Model.Sucursal entity)
+            : this(new data.Model.Sucursal(entity))
+        {
         }
 
         public virtual bool Changed { get; set; }
