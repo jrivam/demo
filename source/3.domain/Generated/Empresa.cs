@@ -10,30 +10,24 @@ namespace domain.Model
     {
         protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
 
-        public virtual data.Model.Empresa Data { get; protected set; }
+        public virtual data.Model.Empresa Data { get; protected set; } = new data.Model.Empresa();
 
-        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
-            data.Model.Empresa data)
+        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
         {
             _logic = logic;
-
-            Data = data;
-        }
-        public Empresa(data.Model.Empresa data)
-            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()),
-                  data)
-        {
         }
         public Empresa()
-            : this(new data.Model.Empresa())
+            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
         {
         }
-        public Empresa(entities.Model.Empresa entity)
+        public Empresa(data.Model.Empresa data)
             : this()
         {
-            Id = entity.Id;
-            RazonSocial = entity.RazonSocial;
-            Activo = entity.Activo;
+            Data = data;
+        }
+        public Empresa(entities.Model.Empresa entity)
+            : this(new data.Model.Empresa(entity))
+        {
         }
 
         public virtual bool Changed { get; set; }

@@ -281,20 +281,23 @@ namespace library.Impl.Data.Repository
                 var iterator = (datas ?? new List<U>()).GetEnumerator();
 
                 command.Connection.Open();
-                var reader = command.ExecuteReader();
 
-                while (reader.Read())
+                using (var reader = command.ExecuteReader())
                 {
-                    var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
+                    while (reader.Read())
+                    {
+                        var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
 
-                    _mapper.Clear(data, maxdepth);
-                    _mapper.Read(data, reader, new List<string>(), _builder.SyntaxSign.AliasSeparatorColumn, maxdepth);
-                    _mapper.Map(data, maxdepth);
+                        _mapper.Clear(data, maxdepth);
+                        _mapper.Read(data, reader, new List<string>(), _builder.SyntaxSign.AliasSeparatorColumn, maxdepth);
+                        _mapper.Map(data, maxdepth);
 
-                    enumeration.Add(data);
+                        enumeration.Add(data);
+                    }
+
+                    reader.Close();
                 }
 
-                reader.Close();
                 command.Connection.Close();
 
                 return (new Result() { Success = true }, enumeration);

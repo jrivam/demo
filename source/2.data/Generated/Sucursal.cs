@@ -15,17 +15,14 @@ namespace data.Model
     {
         protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
 
-        public virtual entities.Model.Sucursal Entity { get; protected set; }
+        public virtual entities.Model.Sucursal Entity { get; protected set; } = new entities.Model.Sucursal();
 
         public virtual string Name { get; protected set; } = "sucursal";
         public virtual string Reference { get; protected set; } = "Sucursal";
 
-        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository,
-            entities.Model.Sucursal entity)
+        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository)
         {
             _repository = repository;
-
-            Entity = entity;
 
             Columns.Add(new EntityColumn<int?, entities.Model.Sucursal>(this, "id", "Id", true, true));
             Columns.Add(new EntityColumn<string, entities.Model.Sucursal>(this, "nombre", "Nombre"));
@@ -36,19 +33,13 @@ namespace data.Model
             InitDbCommands();
         }
         public Sucursal(string connectionstringname)
-            : this(new Repository<entities.Model.Sucursal, Sucursal>(new data.Mapper.Sucursal(), connectionstringname),
-                  new entities.Model.Sucursal())
+            : this(new Repository<entities.Model.Sucursal, Sucursal>(new data.Mapper.Sucursal(), connectionstringname))
         {
         }
         public Sucursal(entities.Model.Sucursal entity, string connectionstringname)
             : this(connectionstringname)
         {
-            Id = entity.Id;
-            Nombre = entity.Nombre;
-            Fecha = entity.Fecha;
-            Activo = entity.Activo;
-
-            IdEmpresa = entity.IdEmpresa;
+            Entity = entity;
         }
 
         public virtual bool UseDbCommand { get; set; }

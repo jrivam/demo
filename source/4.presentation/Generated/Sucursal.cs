@@ -15,17 +15,15 @@ namespace presentation.Model
     {
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public virtual domain.Model.Sucursal Domain { get; protected set; }
+        public virtual domain.Model.Sucursal Domain { get; protected set; } = new domain.Model.Sucursal();
 
         protected int _maxdepth;
 
         public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
-            domain.Model.Sucursal domain, int maxdepth = 1)
+            int maxdepth = 1)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
-
-            Domain = domain;
 
             ClearCommand = new RelayCommand(delegate (object entity) { Messenger.Default.Send<presentation.Model.Sucursal>(Clear(), "SucursalClear"); }, null);
 
@@ -49,24 +47,19 @@ namespace presentation.Model
                 Messenger.Default.Send<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>((this, this), "SucursalEdit");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
-        public Sucursal(domain.Model.Sucursal domain, int maxdepth = 1)
-            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
-                  domain, maxdepth)
-        {
-        }
         public Sucursal(int maxdepth = 1)
-            : this(new domain.Model.Sucursal(), maxdepth)
+            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
+                  maxdepth)
         {
         }
-        public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
+        public Sucursal(domain.Model.Sucursal domain, int maxdepth = 1)
             : this(maxdepth)
         {
-            Id = entity.Id;
-            Nombre = entity.Nombre;
-            Fecha = entity.Fecha;
-            Activo = entity.Activo;
-
-            IdEmpresa = entity.IdEmpresa;
+            Domain = domain;
+        }
+        public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
+            : this(new domain.Model.Sucursal(entity), maxdepth)
+        {
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };

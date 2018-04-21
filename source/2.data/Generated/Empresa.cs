@@ -14,17 +14,14 @@ namespace data.Model
     {
         protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
 
-        public virtual entities.Model.Empresa Entity { get; protected set; }
+        public virtual entities.Model.Empresa Entity { get; protected set; } = new entities.Model.Empresa();
 
         public virtual string Name { get; protected set; } = "empresa";
         public virtual string Reference { get; protected set; } = "Empresa";
 
-        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository,
-            entities.Model.Empresa entity)
+        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository)
         {
             _repository = repository;
-
-            Entity = entity;
 
             Columns.Add(new EntityColumn<int?, entities.Model.Empresa>(this, "id", "Id", true, true));
             Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
@@ -33,16 +30,13 @@ namespace data.Model
             InitDbCommands();
         }
         public Empresa(string connectionstringname)
-            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname),
-                  new entities.Model.Empresa())
+            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
         {
         }
         public Empresa(entities.Model.Empresa entity, string connectionstringname)
             : this(connectionstringname)
         {
-            Id = entity.Id;
-            RazonSocial = entity.RazonSocial;
-            Activo = entity.Activo;
+            Entity = entity;
         }
 
         public virtual bool UseDbCommand { get; set; }
