@@ -271,23 +271,20 @@ namespace presentation.Query
     {
         protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
 
-        public virtual domain.Query.Sucursal Domain { get; protected set; }
+        public virtual domain.Query.Sucursal Domain { get; protected set; } = new domain.Query.Sucursal();
 
-        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
-            domain.Query.Sucursal domain)
+        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
         {
             _interactive = interactive;
-
-            Domain = domain;
-        }
-        public Sucursal(domain.Query.Sucursal domain)
-            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
-                  domain)
-        {
         }
         public Sucursal()
-            : this(new domain.Query.Sucursal())
+            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
         {
+        }
+        public Sucursal(domain.Query.Sucursal domain)
+            : this()
+        {
+            Domain = domain;
         }
 
         protected presentation.Query.Empresa _empresa;

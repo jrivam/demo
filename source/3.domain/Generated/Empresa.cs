@@ -138,23 +138,20 @@ namespace domain.Query
     {
         protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
 
-        public virtual data.Query.Empresa Data { get; protected set; }
+        public virtual data.Query.Empresa Data { get; protected set; } = new data.Query.Empresa();
 
-        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
-            data.Query.Empresa data)
+        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
         {
             _logic = logic;
-
-            Data = data;
-        }
-        public Empresa(data.Query.Empresa data)
-            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()),
-                  data)
-        {
         }
         public Empresa()
-            : this(new data.Query.Empresa())
+            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
         {
+        }
+        public Empresa(data.Query.Empresa data)
+            : this()
+        {
+            Data = data;
         }
 
         public virtual (Result result, domain.Model.Empresa domain) Retrieve(int maxdepth = 1, domain.Model.Empresa domain = default(domain.Model.Empresa))

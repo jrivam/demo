@@ -179,23 +179,20 @@ namespace domain.Query
     {
         protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
 
-        public virtual data.Query.Sucursal Data { get; protected set; }
+        public virtual data.Query.Sucursal Data { get; protected set; } = new data.Query.Sucursal();
 
-        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
-            data.Query.Sucursal data)
+        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
         {
             _logic = logic;
-
-            Data = data;
-        }
-        public Sucursal(data.Query.Sucursal data)
-            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()),
-                  data)
-        {
         }
         public Sucursal()
-            : this(new data.Query.Sucursal())
+            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
         {
+        }
+        public Sucursal(data.Query.Sucursal data)
+            : this()
+        {
+            Data = data;
         }
 
         protected domain.Query.Empresa _empresa;
