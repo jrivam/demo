@@ -1,4 +1,5 @@
 ﻿using library.Impl;
+using library.Impl.Entities;
 using library.Impl.Presentation;
 using library.Interface.Presentation;
 using System;
@@ -59,12 +60,12 @@ namespace presentation.Model
         public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
             : this(maxdepth)
         {
-            Id = entity.Id;
-            Nombre = entity.Nombre;
-            Fecha = entity.Fecha;
-            Activo = entity.Activo;
+            SetProperties(entity);
+        }
 
-            IdEmpresa = entity.IdEmpresa;
+        public void SetProperties(entities.Model.Sucursal entity)
+        {
+            Helper.SetProperties<entities.Model.Sucursal, presentation.Model.Sucursal>(entity, this);
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };

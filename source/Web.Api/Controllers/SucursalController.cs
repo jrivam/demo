@@ -53,13 +53,13 @@ namespace Web.Api.Controllers
         {
             try
             {
-                if (entity == null)
-                    return BadRequest();
-
-                var save = new domain.Model.Sucursal(entity).Save();
-                if (save.result.Success)
+                if (entity != null)
                 {
-                    return Created<entities.Model.Sucursal>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
+                    var save = new domain.Model.Sucursal(entity).Save();
+                    if (save.result.Success)
+                    {
+                        return Created<entities.Model.Sucursal>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
+                    }
                 }
 
                 return BadRequest();
@@ -74,13 +74,20 @@ namespace Web.Api.Controllers
         {
             try
             {
-                if (entity == null)
-                    return BadRequest();
-
-                var save = new domain.Model.Sucursal(entity).Save();
-                if (save.result.Success)
+                if (entity != null)
                 {
-                    return Ok(save.domain.Data.Entity);
+                    var load = new domain.Model.Sucursal() { Id = id }.Load();
+                    if (load.result.Success)
+                    {
+                        entity.Id = id;
+                        load.domain.SetProperties(entity);
+
+                        var save = load.domain.Save();
+                        if (save.result.Success)
+                        {
+                            return Ok(save.domain.Data.Entity);
+                        }
+                    }
                 }
 
                 return BadRequest();
