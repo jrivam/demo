@@ -27,8 +27,14 @@ namespace domain.Model
             Data = data;
         }
         public Sucursal(entities.Model.Sucursal entity)
-            : this(new data.Model.Sucursal(entity))
+            : this()
         {
+            Id = entity.Id;
+            Nombre = entity.Nombre;
+            Fecha = entity.Fecha;
+            Activo = entity.Activo;
+
+            IdEmpresa = entity.IdEmpresa;
         }
 
         public virtual bool Changed { get; set; }

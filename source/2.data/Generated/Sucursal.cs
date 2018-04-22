@@ -39,7 +39,12 @@ namespace data.Model
         public Sucursal(entities.Model.Sucursal entity, string connectionstringname)
             : this(connectionstringname)
         {
-            Entity = entity;
+            Id = entity.Id;
+            Nombre = entity.Nombre;
+            Fecha = entity.Fecha;
+            Activo = entity.Activo;
+
+            IdEmpresa = entity.IdEmpresa;
         }
 
         public virtual bool UseDbCommand { get; set; }

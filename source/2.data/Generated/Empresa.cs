@@ -36,7 +36,9 @@ namespace data.Model
         public Empresa(entities.Model.Empresa entity, string connectionstringname)
             : this(connectionstringname)
         {
-            Entity = entity;
+            Id = entity.Id;
+            RazonSocial = entity.RazonSocial;
+            Activo = entity.Activo;
         }
 
         public virtual bool UseDbCommand { get; set; }

@@ -26,8 +26,11 @@ namespace domain.Model
             Data = data;
         }
         public Empresa(entities.Model.Empresa entity)
-            : this(new data.Model.Empresa(entity))
+            : this()
         {
+            Id = entity.Id;
+            RazonSocial = entity.RazonSocial;
+            Activo = entity.Activo;
         }
 
         public virtual bool Changed { get; set; }
