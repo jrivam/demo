@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Impl.Domain;
+using library.Impl.Entities;
 using library.Interface.Domain;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,12 @@ namespace domain.Model
         public Empresa(entities.Model.Empresa entity)
             : this()
         {
-            Id = entity.Id;
-            RazonSocial = entity.RazonSocial;
-            Activo = entity.Activo;
+            SetProperties(entity);
+        }
+
+        public void SetProperties(entities.Model.Empresa entity)
+        {
+            Helper.SetProperties<entities.Model.Empresa, domain.Model.Empresa>(entity, this);
         }
 
         public virtual bool Changed { get; set; }

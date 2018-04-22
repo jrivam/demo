@@ -2,6 +2,7 @@
 using library.Impl.Data;
 using library.Impl.Data.Repository;
 using library.Impl.Data.Sql;
+using library.Impl.Entities;
 using library.Interface.Data;
 using library.Interface.Data.Repository;
 using System.Collections.Generic;
@@ -36,9 +37,12 @@ namespace data.Model
         public Empresa(entities.Model.Empresa entity, string connectionstringname)
             : this(connectionstringname)
         {
-            Id = entity.Id;
-            RazonSocial = entity.RazonSocial;
-            Activo = entity.Activo;
+            SetProperties(entity);
+        }
+
+        public void SetProperties(entities.Model.Empresa entity)
+        {
+            Helper.SetProperties<entities.Model.Empresa, data.Model.Empresa>(entity, this);
         }
 
         public virtual bool UseDbCommand { get; set; }

@@ -1,4 +1,5 @@
 ﻿using library.Impl;
+using library.Impl.Entities;
 using library.Impl.Presentation;
 using library.Interface.Presentation;
 using System.Collections.Generic;
@@ -58,9 +59,12 @@ namespace presentation.Model
         public Empresa(entities.Model.Empresa entity, int maxdepth = 1)
             : this(maxdepth)
         {
-            Id = entity.Id;
-            RazonSocial = entity.RazonSocial;
-            Activo = entity.Activo;
+            SetProperties(entity);
+        }
+
+        public void SetProperties(entities.Model.Empresa entity)
+        {
+            Helper.SetProperties<entities.Model.Empresa, presentation.Model.Empresa>(entity, this);
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };

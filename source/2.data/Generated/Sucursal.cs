@@ -2,6 +2,7 @@
 using library.Impl.Data;
 using library.Impl.Data.Repository;
 using library.Impl.Data.Sql;
+using library.Impl.Entities;
 using library.Interface.Data;
 using library.Interface.Data.Repository;
 using System;
@@ -39,12 +40,12 @@ namespace data.Model
         public Sucursal(entities.Model.Sucursal entity, string connectionstringname)
             : this(connectionstringname)
         {
-            Id = entity.Id;
-            Nombre = entity.Nombre;
-            Fecha = entity.Fecha;
-            Activo = entity.Activo;
+            SetProperties(entity);
+        }
 
-            IdEmpresa = entity.IdEmpresa;
+        public void SetProperties(entities.Model.Sucursal entity)
+        {
+            Helper.SetProperties<entities.Model.Sucursal, data.Model.Sucursal>(entity, this);
         }
 
         public virtual bool UseDbCommand { get; set; }

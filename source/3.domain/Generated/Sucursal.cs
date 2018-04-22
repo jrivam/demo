@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Impl.Domain;
+using library.Impl.Entities;
 using library.Interface.Domain;
 using System;
 using System.Collections.Generic;
@@ -29,12 +30,12 @@ namespace domain.Model
         public Sucursal(entities.Model.Sucursal entity)
             : this()
         {
-            Id = entity.Id;
-            Nombre = entity.Nombre;
-            Fecha = entity.Fecha;
-            Activo = entity.Activo;
+            SetProperties(entity);
+        }
 
-            IdEmpresa = entity.IdEmpresa;
+        public void SetProperties(entities.Model.Sucursal entity)
+        {
+            Helper.SetProperties<entities.Model.Sucursal, domain.Model.Sucursal>(entity, this);
         }
 
         public virtual bool Changed { get; set; }
