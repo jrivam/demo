@@ -32,7 +32,6 @@ namespace presentation.Model
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, LoadIn(_maxdepth)), "SucursalLoad");
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && Domain.Changed; });
 
-
             SaveCommand = new RelayCommand(delegate (object parameter) 
             {
                 Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Save, Save()), "SucursalSave");
@@ -58,8 +57,14 @@ namespace presentation.Model
             Domain = domain;
         }
         public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
-            : this(new domain.Model.Sucursal(entity), maxdepth)
+            : this(maxdepth)
         {
+            Id = entity.Id;
+            Nombre = entity.Nombre;
+            Fecha = entity.Fecha;
+            Activo = entity.Activo;
+
+            IdEmpresa = entity.IdEmpresa;
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };

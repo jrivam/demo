@@ -56,8 +56,11 @@ namespace presentation.Model
             Domain = domain;
         }
         public Empresa(entities.Model.Empresa entity, int maxdepth = 1)
-            : this(new domain.Model.Empresa(entity), maxdepth)
+            : this(maxdepth)
         {
+            Id = entity.Id;
+            RazonSocial = entity.RazonSocial;
+            Activo = entity.Activo;
         }
 
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
