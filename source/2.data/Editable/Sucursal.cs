@@ -19,7 +19,7 @@ namespace data.Model
 
         }
 
-        public virtual void InitDbCommands()
+        public override void InitDbCommands()
         {
             SelectDbCommand = (false, ("gsp_sucursal_select", CommandType.StoredProcedure, new List<DbParameter>()));
             InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<DbParameter>()));

@@ -1,4 +1,5 @@
-﻿using library.Interface.Data;
+﻿using library.Interface.Data.Model;
+using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
 using library.Interface.Entities;
 using System;
@@ -9,7 +10,8 @@ using System.Linq;
 
 namespace library.Impl.Data.Sql.Builder
 {
-    public class SqlServerBuilder<T> : AbstractSqlBuilder<T> where T : IEntity
+    public class SqlServerBuilder<T> : AbstractSqlBuilder<T> 
+        where T : IEntity
     {
         protected override IDictionary<DbType, object> DbTypeToSqlType
         {

@@ -1,4 +1,5 @@
-﻿using library.Interface.Data;
+﻿using library.Interface.Data.Model;
+using library.Interface.Data.Query;
 using library.Interface.Data.Repository;
 using library.Interface.Data.Sql;
 using library.Interface.Entities;
@@ -10,7 +11,8 @@ using System.Linq;
 
 namespace library.Impl.Data.Sql.Builder
 {
-    public abstract class AbstractSqlBuilder<T> : ISqlBuilder<T> where T : IEntity
+    public abstract class AbstractSqlBuilder<T> : ISqlBuilder<T> 
+        where T : IEntity
     {
         public ISqlSyntaxSign SyntaxSign { get; set; }
 

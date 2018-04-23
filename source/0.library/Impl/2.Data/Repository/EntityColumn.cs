@@ -1,11 +1,12 @@
-﻿using library.Interface.Data;
+﻿using library.Interface.Data.Model;
 using library.Interface.Data.Repository;
 using library.Interface.Entities;
 using System;
 
 namespace library.Impl.Data.Repository
 {
-    public class EntityColumn<A, T> : IEntityColumn<T> where T : IEntity
+    public class EntityColumn<A, T> : IEntityColumn<T> 
+        where T : IEntity
     {
         public virtual Type Type
         {

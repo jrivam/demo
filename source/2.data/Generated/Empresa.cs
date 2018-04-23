@@ -1,29 +1,19 @@
-﻿using library.Impl;
-using library.Impl.Data;
+﻿using library.Impl.Data.Mapper;
+using library.Impl.Data.Model;
+using library.Impl.Data.Query;
 using library.Impl.Data.Repository;
-using library.Impl.Data.Sql;
-using library.Impl.Entities;
-using library.Interface.Data;
-using library.Interface.Data.Repository;
+using library.Interface.Data.Model;
+using library.Interface.Data.Query;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace data.Model
 {
-    public partial class Empresa : IEntityTable<entities.Model.Empresa>, IEntityRepository<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractEntityRepository<entities.Model.Empresa, data.Model.Empresa>
     {
-        protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
-
-        public virtual entities.Model.Empresa Entity { get; protected set; } = new entities.Model.Empresa();
-
-        public virtual string Name { get; protected set; } = "empresa";
-        public virtual string Reference { get; protected set; } = "Empresa";
-
-        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository)
+        public Empresa(IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
+            : base(repository, "empresa", "Empresa")
         {
-            _repository = repository;
-
             Columns.Add(new EntityColumn<int?, entities.Model.Empresa>(this, "id", "Id", true, true));
             Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
@@ -31,7 +21,7 @@ namespace data.Model
             InitDbCommands();
         }
         public Empresa(string connectionstringname)
-            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
+            : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
         {
         }
         public Empresa(entities.Model.Empresa entity, string connectionstringname)
@@ -39,26 +29,6 @@ namespace data.Model
         {
             SetProperties(entity);
         }
-
-        public void SetProperties(entities.Model.Empresa entity)
-        {
-            Helper.SetProperties<entities.Model.Empresa, data.Model.Empresa>(entity, this);
-        }
-
-        public virtual bool UseDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? SelectDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? InsertDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
-
-        public virtual IEntityColumn<entities.Model.Empresa> this[string reference]
-        {
-            get
-            {
-                return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
-            }
-        }
-        public virtual IList<IEntityColumn<entities.Model.Empresa>> Columns { get; } = new List<IEntityColumn<entities.Model.Empresa>>();
 
         public virtual int? Id
         {
@@ -105,30 +75,6 @@ namespace data.Model
                 }
             }
         } 
-
-        public virtual data.Model.Empresa Clear()
-        {
-            return _repository.Clear(this);
-        }
-
-        public virtual (Result result, data.Model.Empresa data) Select(bool usedbcommand = false)
-        {
-            var select = _repository.Select(this, usedbcommand);
-
-            return select;
-        }
-        public virtual (Result result, data.Model.Empresa data) Insert(bool usedbcommand = false)
-        {
-            return _repository.Insert(this, usedbcommand);
-        }
-        public virtual (Result result, data.Model.Empresa data) Update(bool usedbcommand = false)
-        {
-            return _repository.Update(this, usedbcommand);
-        }
-        public virtual (Result result, data.Model.Empresa data) Delete(bool usedbcommand = false)
-        {
-            return _repository.Delete(this, usedbcommand);
-        }
     }
 
     public partial class Empresas : List<data.Model.Empresa>
@@ -162,62 +108,25 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Empresa : IQueryTable, IQueryRepository<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractQueryRepository<entities.Model.Empresa, data.Model.Empresa>
     {
-        protected readonly IRepository<entities.Model.Empresa, data.Model.Empresa> _repository;
-
-        public virtual string Name { get; protected set; } = "empresa";
-        public virtual string Reference { get; protected set; } = "Empresa";
-
-        public Empresa(IRepository<entities.Model.Empresa, data.Model.Empresa> repository)
+        public Empresa(IRepositoryQuery<entities.Model.Empresa, data.Model.Empresa> repository)
+            : base(repository, "empresa", "Empresa")
         {
-            _repository = repository;
-
             Columns.Add(new QueryColumn<int?>(this, "id", "Id"));
             Columns.Add(new QueryColumn<string>(this, "razon_social", "RazonSocial"));
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
         public Empresa(string connectionstringname)
-            : this(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
+            : this(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
         {
-        }
-
-        public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; } = new List<(IQueryColumn, OrderDirection)>();
-
-        public virtual IQueryColumn this[string reference]
-        {
-            get
-            {
-                return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
-            }
-        }
-        public virtual IList<IQueryColumn> Columns { get; } = new List<IQueryColumn>();
-
-        public virtual IList<(IQueryColumn internalkey, IQueryColumn externalkey)> Joins { get; } = new List<(IQueryColumn, IQueryColumn)>();
-
-        public virtual (Result result, data.Model.Empresa data) SelectSingle(int maxdepth = 1, data.Model.Empresa data = default(data.Model.Empresa))
-        {
-            return _repository.SelectSingle(this, maxdepth, data);
-        }
-        public virtual (Result result, IEnumerable<data.Model.Empresa> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<data.Model.Empresa> datas = null)
-        {
-            return _repository.SelectMultiple(this, maxdepth, top, datas);
-        }
-
-        public virtual (Result result, int rows) Update(data.Model.Empresa entity, int maxdepth = 1)
-        {
-            return _repository.Update(entity, this, maxdepth);
-        }
-        public virtual (Result result, int rows) Delete(int maxdepth = 1)
-        {
-            return _repository.Delete(this, maxdepth);
         }
     }
 }
 
 namespace data.Mapper
 {
-    public partial class Empresa : MapperTable<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractMapperTable<entities.Model.Empresa, data.Model.Empresa>
     {
         public override data.Model.Empresa CreateInstance(int maxdepth = 1, int depth = 0)
         {

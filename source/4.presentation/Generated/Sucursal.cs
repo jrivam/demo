@@ -1,31 +1,25 @@
 ﻿using library.Impl;
-using library.Impl.Entities;
 using library.Impl.Presentation;
-using library.Interface.Presentation;
+using library.Impl.Presentation.Mapper;
+using library.Impl.Presentation.Model;
+using library.Impl.Presentation.Query;
+using library.Interface.Presentation.Model;
+using library.Interface.Presentation.Query;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
 namespace presentation.Model
 {
-    public partial class Sucursal : INotifyPropertyChanged, IEntityView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>, IEntityInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : AbstractEntityInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
-
-        public virtual domain.Model.Sucursal Domain { get; protected set; } = new domain.Model.Sucursal();
-
-        protected int _maxdepth;
-
-        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
+        public Sucursal(IInteractiveView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
             int maxdepth = 1)
+            : base(interactive, maxdepth)
         {
-            _interactive = interactive;
-            _maxdepth = maxdepth;
-
             ClearCommand = new RelayCommand(delegate (object entity) { Messenger.Default.Send<presentation.Model.Sucursal>(Clear(), "SucursalClear"); }, null);
 
             LoadCommand = new RelayCommand(delegate (object parameter) 
@@ -48,7 +42,7 @@ namespace presentation.Model
             }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
         public Sucursal(int maxdepth = 1)
-            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
+            : this(new InteractiveView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
                   maxdepth)
         {
         }
@@ -62,26 +56,6 @@ namespace presentation.Model
         {
             SetProperties(entity);
         }
-
-        public void SetProperties(entities.Model.Sucursal entity)
-        {
-            Helper.SetProperties<entities.Model.Sucursal, presentation.Model.Sucursal>(entity, this);
-        }
-
-        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public virtual ICommand ClearCommand { get; protected set; }
-
-        public virtual ICommand LoadCommand { get; protected set; }
-        public virtual ICommand SaveCommand { get; protected set; }
-        public virtual ICommand EraseCommand { get; protected set; }
-
-        public virtual ICommand EditCommand { get; protected set; }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
@@ -163,11 +137,6 @@ namespace presentation.Model
             }
         }
 
-        public virtual presentation.Model.Sucursal Clear()
-        {
-            return _interactive.Clear(this, Domain);
-        }
-
         public virtual (Result result, presentation.Model.Sucursal presentation) LoadIn(int maxdepth = 1)
         {
             _maxdepth = maxdepth;
@@ -179,33 +148,11 @@ namespace presentation.Model
 
             return load;
         }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Load(bool usedbcommand = false)
-        {
-            var load = _interactive.Load(this, Domain, usedbcommand);
 
-            return load;
-        }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
-        {
-            var save = _interactive.Save(this, Domain, useinsertdbcommand, useupdatedbcommand);
-
-            SaveDependencies();
-
-            return save;
-        }
-        public virtual (Result result, presentation.Model.Sucursal presentation) Erase(bool usedbcommand = false)
-        {
-            EraseDependencies();
-
-            var erase = _interactive.Erase(this, Domain, usedbcommand);
-
-            return erase;
-        }
-
-        protected virtual void SaveDependencies()
+        protected override void SaveDependencies()
         {
         }
-        protected virtual void EraseDependencies()
+        protected override void EraseDependencies()
         {
         }
     }
@@ -273,18 +220,14 @@ namespace presentation.Model
 
 namespace presentation.Query
 {
-    public partial class Sucursal : IQueryView<data.Query.Sucursal, domain.Query.Sucursal>, IQueryInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryInteractive<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        protected readonly IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> _interactive;
-
-        public virtual domain.Query.Sucursal Domain { get; protected set; } = new domain.Query.Sucursal();
-
-        public Sucursal(IInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
+        public Sucursal(IInteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
+            : base(interactive)
         {
-            _interactive = interactive;
         }
         public Sucursal()
-            : this(new Interactive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
+            : this(new InteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
         {
         }
         public Sucursal(domain.Query.Sucursal domain)
@@ -307,21 +250,12 @@ namespace presentation.Query
             }
             set { if (_empresa != value) { _empresa = value; } }
         }
-
-        public virtual (Result result, presentation.Model.Sucursal presentation) Retrieve(int maxdepth = 1, presentation.Model.Sucursal presentation = default(presentation.Model.Sucursal))
-        {
-            return _interactive.Retrieve(Domain, maxdepth, presentation);
-        }
-        public virtual (Result result, IEnumerable<presentation.Model.Sucursal> presentations) List(int maxdepth = 1, int top = 0, IList<presentation.Model.Sucursal> presentations = null)
-        {
-            return _interactive.List(Domain, maxdepth, top, presentations);
-        }
     }
 }
 
 namespace presentation.Mapper
 {
-    public partial class Sucursal : MapperView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : AbstractMapperView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation)
         {
