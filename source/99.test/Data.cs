@@ -1,6 +1,6 @@
 ﻿using library.Impl.Data.Repository;
 using library.Impl.Data.Sql;
-using library.Interface.Data;
+using library.Interface.Data.Model;
 using library.Interface.Data.Sql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -75,7 +75,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteReader())
                 .Returns(mockDataReader.Object);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
+            return (new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object))
             {
                 Id = Entity.Id
             }, mockBuilder, mockCommand);
@@ -132,7 +132,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteScalar())
                 .Returns(Entity.Id);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
+            return (new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object))
             {
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
@@ -190,7 +190,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
+            return (new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object))
             {
                 Id = Entity.Id,
                 RazonSocial = Entity.RazonSocial,
@@ -249,7 +249,7 @@ namespace test
             mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            return (new data.Model.Empresa(new Repository<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object), new entities.Model.Empresa())
+            return (new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), mockBuilder.Object))
             {
                 Id = Entity.Id,
                 RazonSocial = Entity.RazonSocial,

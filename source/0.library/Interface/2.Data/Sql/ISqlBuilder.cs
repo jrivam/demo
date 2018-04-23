@@ -1,14 +1,17 @@
 ﻿using library.Impl.Data;
 using library.Impl.Data.Sql;
-using library.Interface.Entities;
+using library.Interface.Data.Model;
+using library.Interface.Data.Query;
 using library.Interface.Data.Repository;
+using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace library.Interface.Data.Sql
 {
-    public interface ISqlBuilder<T> where T : IEntity
+    public interface ISqlBuilder<T> 
+        where T : IEntity
     {
         ISqlSyntaxSign SyntaxSign { get; }
 

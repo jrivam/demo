@@ -1,24 +1,21 @@
-﻿using library.Impl;
-using library.Impl.Domain;
-using library.Impl.Entities;
-using library.Interface.Domain;
+﻿using library.Impl.Domain.Mapper;
+using library.Impl.Domain.Model;
+using library.Impl.Domain.Query;
+using library.Interface.Domain.Model;
+using library.Interface.Domain.Query;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace domain.Model
 {
-    public partial class Empresa : IEntityState<entities.Model.Empresa, data.Model.Empresa>, IEntityLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractEntityLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
-
-        public virtual data.Model.Empresa Data { get; protected set; } = new data.Model.Empresa();
-
-        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(ILogicState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+            : base(logic)
         {
-            _logic = logic;
         }
         public Empresa()
-            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
+            : this(new LogicState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
         {
         }
         public Empresa(data.Model.Empresa data)
@@ -31,14 +28,6 @@ namespace domain.Model
         {
             SetProperties(entity);
         }
-
-        public void SetProperties(entities.Model.Empresa entity)
-        {
-            Helper.SetProperties<entities.Model.Empresa, domain.Model.Empresa>(entity, this);
-        }
-
-        public virtual bool Changed { get; set; }
-        public virtual bool Deleted { get; set; }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
@@ -74,39 +63,11 @@ namespace domain.Model
             }
         }
 
-        public virtual domain.Model.Empresa Clear()
-        {
-            return _logic.Clear(this, Data);
-        }
-
-        public virtual (Result result, domain.Model.Empresa domain) Load(bool usedbcommand = false)
-        {
-            var load = _logic.Load(this, Data, usedbcommand);
-
-            return load;
-        }
-        public virtual (Result result, domain.Model.Empresa domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
-        {
-            var save = _logic.Save(this, Data, useinsertdbcommand, useupdatedbcommand);
-
-            SaveDependencies();
-
-            return save;
-        }
-        public virtual (Result result, domain.Model.Empresa domain) Erase(bool usedbcommand = false)
-        {
-            EraseDependencies();
-
-            var erase = _logic.Erase(this, Data, usedbcommand);
-
-            return erase;
-        }
-
-        protected virtual void SaveDependencies()
+        protected override void SaveDependencies()
         {
             _sucursales?.ToList()?.ForEach(i => { i.Save(); });
         }
-        protected virtual void EraseDependencies()
+        protected override void EraseDependencies()
         {
             _sucursales?.ToList()?.ForEach(i => { i.Erase(); });
         }
@@ -141,18 +102,14 @@ namespace domain.Model
 
 namespace domain.Query
 {
-    public partial class Empresa : IQueryState<data.Query.Empresa>, IQueryLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractQueryLogic<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        protected readonly ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> _logic;
-
-        public virtual data.Query.Empresa Data { get; protected set; } = new data.Query.Empresa();
-
-        public Empresa(ILogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+            : base(logic)
         {
-            _logic = logic;
         }
         public Empresa()
-            : this(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
+            : this(new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
         {
         }
         public Empresa(data.Query.Empresa data)
@@ -160,21 +117,12 @@ namespace domain.Query
         {
             Data = data;
         }
-
-        public virtual (Result result, domain.Model.Empresa domain) Retrieve(int maxdepth = 1, domain.Model.Empresa domain = default(domain.Model.Empresa))
-        {
-            return _logic.Retrieve(Data, maxdepth, domain);
-        }
-        public virtual (Result result, IEnumerable<domain.Model.Empresa> domains) List(int maxdepth = 1, int top = 0, IList<domain.Model.Empresa> domains = null)
-        {
-            return _logic.List(Data, maxdepth, top, domains);
-        }
     }
 }
 
 namespace domain.Mapper
 {
-    public partial class Empresa : MapperState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractMapperState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
     }
 }

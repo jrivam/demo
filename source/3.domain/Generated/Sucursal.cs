@@ -1,25 +1,22 @@
-﻿using library.Impl;
-using library.Impl.Domain;
-using library.Impl.Entities;
-using library.Interface.Domain;
+﻿using library.Impl.Domain.Mapper;
+using library.Impl.Domain.Model;
+using library.Impl.Domain.Query;
+using library.Interface.Domain.Model;
+using library.Interface.Domain.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace domain.Model
 {
-    public partial class Sucursal : IEntityState<entities.Model.Sucursal, data.Model.Sucursal>, IEntityLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractEntityLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
-
-        public virtual data.Model.Sucursal Data { get; protected set; } = new data.Model.Sucursal();
-
-        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(ILogicState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+            : base(logic)
         {
-            _logic = logic;
         }
         public Sucursal()
-            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
+            : this(new LogicState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
         {
         }
         public Sucursal(data.Model.Sucursal data)
@@ -32,14 +29,6 @@ namespace domain.Model
         {
             SetProperties(entity);
         }
-
-        public void SetProperties(entities.Model.Sucursal entity)
-        {
-            Helper.SetProperties<entities.Model.Sucursal, domain.Model.Sucursal>(entity, this);
-        }
-
-        public virtual bool Changed { get; set; }
-        public virtual bool Deleted { get; set; }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Nombre { get { return Data?.Nombre; } set { if (Data?.Nombre != value) { Data.Nombre = value; Changed = true; } } }
@@ -116,41 +105,6 @@ namespace domain.Model
                 }
             }
         }
-
-        public virtual domain.Model.Sucursal Clear()
-        {
-            return _logic.Clear(this, Data);
-        }
-
-        public virtual (Result result, domain.Model.Sucursal domain) Load(bool usedbcommand = false)
-        {
-            var load = _logic.Load(this, Data, usedbcommand);
-
-            return load;
-        }
-        public virtual (Result result, domain.Model.Sucursal domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
-        {
-            var save = _logic.Save(this, Data, useinsertdbcommand, useupdatedbcommand);
-
-            SaveDependencies();
-
-            return save;
-        }
-        public virtual (Result result, domain.Model.Sucursal domain) Erase(bool usedbcommand = false)
-        {
-            EraseDependencies();
-
-            var erase = _logic.Erase(this, Data, usedbcommand);
-
-            return erase;
-        }
-
-        protected virtual void SaveDependencies()
-        {
-        }
-        protected virtual void EraseDependencies()
-        {
-        }
     }
 
     public partial class Sucursales : List<domain.Model.Sucursal>
@@ -182,18 +136,14 @@ namespace domain.Model
 
 namespace domain.Query
 {
-    public partial class Sucursal : IQueryState<data.Query.Sucursal>, IQueryLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryLogic<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        protected readonly ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> _logic;
-
-        public virtual data.Query.Sucursal Data { get; protected set; } = new data.Query.Sucursal();
-
-        public Sucursal(ILogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(ILogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+            : base(logic)
         {
-            _logic = logic;
         }
         public Sucursal()
-            : this(new Logic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
+            : this(new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
         {
         }
         public Sucursal(data.Query.Sucursal data)
@@ -216,21 +166,12 @@ namespace domain.Query
             }
             set { if (_empresa != value) { _empresa = value; } }
         }
-
-        public virtual (Result result, domain.Model.Sucursal domain) Retrieve(int maxdepth = 1, domain.Model.Sucursal domain = default(domain.Model.Sucursal))
-        {
-            return _logic.Retrieve(Data, maxdepth, domain);
-        }
-        public virtual (Result result, IEnumerable<domain.Model.Sucursal> domains) List(int maxdepth = 1, int top = 0, IList<domain.Model.Sucursal> domains = null)
-        {
-            return _logic.List(Data, maxdepth, top, domains);
-        }
     }
 }
 
 namespace domain.Mapper
 {
-    public partial class Sucursal : MapperState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractMapperState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain)
         {

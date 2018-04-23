@@ -1,9 +1,11 @@
-﻿using System;
+﻿using library.Interface.Data.Model;
 using library.Interface.Entities;
+using System;
 
 namespace library.Interface.Data.Repository
 {
-    public interface IEntityColumn<T> where T : IEntity
+    public interface IEntityColumn<T> 
+        where T : IEntity
     {
         Type Type { get; }
 

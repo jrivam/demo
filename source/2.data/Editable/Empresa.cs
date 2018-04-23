@@ -18,7 +18,7 @@ namespace data.Model
         {
 
         }
-        public virtual void InitDbCommands()
+        public override void InitDbCommands()
         {
             SelectDbCommand = (false, ("gsp_empresa_select", CommandType.StoredProcedure, new List<DbParameter>()));
             InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<DbParameter>()));

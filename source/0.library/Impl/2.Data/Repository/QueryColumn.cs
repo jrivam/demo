@@ -1,4 +1,4 @@
-﻿using library.Interface.Data;
+﻿using library.Interface.Data.Query;
 using library.Interface.Data.Repository;
 using System;
 using System.Collections.Generic;

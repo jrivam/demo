@@ -27,7 +27,7 @@ namespace test
         {
             var dataselect = Data.Data_Select_Query();
 
-            return new domain.Model.Empresa(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()), dataselect.data)
+            return new domain.Model.Empresa(dataselect.data)
             {
             };
         }
@@ -46,7 +46,7 @@ namespace test
         {
             var datadelete = Data.Data_Delete_Query();
 
-            return new domain.Model.Empresa(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()), datadelete.data)
+            return new domain.Model.Empresa(datadelete.data)
             {
             };
         }
@@ -63,7 +63,7 @@ namespace test
         {
             var datainsert = Data.Data_Insert_Query();
 
-            return new domain.Model.Empresa(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()), datainsert.data)
+            return new domain.Model.Empresa(datainsert.data)
             {
             };
         }
@@ -88,7 +88,7 @@ namespace test
         {
             var datainsert = Data.Data_Update_Query();
 
-            return new domain.Model.Empresa(new Logic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()), datainsert.data)
+            return new domain.Model.Empresa(datainsert.data)
             {
             };
         }

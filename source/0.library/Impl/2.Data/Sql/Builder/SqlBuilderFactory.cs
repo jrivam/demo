@@ -6,7 +6,8 @@ using System.Configuration;
 
 namespace library.Impl.Data.Sql.Builder
 {
-    public static class SqlBuilderFactory<U> where U : IEntity
+    public static class SqlBuilderFactory<U> 
+        where U : IEntity
     {
         public static ISqlBuilder<U> GetBuilder(string connectionstringname) 
         {

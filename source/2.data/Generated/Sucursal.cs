@@ -1,30 +1,20 @@
-﻿using library.Impl;
-using library.Impl.Data;
+﻿using library.Impl.Data.Mapper;
+using library.Impl.Data.Model;
+using library.Impl.Data.Query;
 using library.Impl.Data.Repository;
-using library.Impl.Data.Sql;
-using library.Impl.Entities;
-using library.Interface.Data;
-using library.Interface.Data.Repository;
+using library.Interface.Data.Model;
+using library.Interface.Data.Query;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace data.Model
 {
-    public partial class Sucursal : IEntityTable<entities.Model.Sucursal>, IEntityRepository<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractEntityRepository<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
-
-        public virtual entities.Model.Sucursal Entity { get; protected set; } = new entities.Model.Sucursal();
-
-        public virtual string Name { get; protected set; } = "sucursal";
-        public virtual string Reference { get; protected set; } = "Sucursal";
-
-        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository)
+        public Sucursal(IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository)
+            : base(repository, "sucursal", "Sucursal")
         {
-            _repository = repository;
-
             Columns.Add(new EntityColumn<int?, entities.Model.Sucursal>(this, "id", "Id", true, true));
             Columns.Add(new EntityColumn<string, entities.Model.Sucursal>(this, "nombre", "Nombre"));
             Columns.Add(new EntityColumn<int?, entities.Model.Sucursal>(this, "id_empresa", "IdEmpresa"));
@@ -34,7 +24,7 @@ namespace data.Model
             InitDbCommands();
         }
         public Sucursal(string connectionstringname)
-            : this(new Repository<entities.Model.Sucursal, Sucursal>(new data.Mapper.Sucursal(), connectionstringname))
+            : this(new RepositoryTable<entities.Model.Sucursal, Sucursal>(new data.Mapper.Sucursal(), connectionstringname))
         {
         }
         public Sucursal(entities.Model.Sucursal entity, string connectionstringname)
@@ -42,26 +32,6 @@ namespace data.Model
         {
             SetProperties(entity);
         }
-
-        public void SetProperties(entities.Model.Sucursal entity)
-        {
-            Helper.SetProperties<entities.Model.Sucursal, data.Model.Sucursal>(entity, this);
-        }
-
-        public virtual bool UseDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? SelectDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? InsertDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<DbParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
-
-        public virtual IEntityColumn<entities.Model.Sucursal> this[string reference]
-        {
-            get
-            {
-                return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
-            }
-        }
-        public virtual IList<IEntityColumn<entities.Model.Sucursal>> Columns { get; } = new List<IEntityColumn<entities.Model.Sucursal>>();
 
         public virtual int? Id
         {
@@ -148,30 +118,6 @@ namespace data.Model
                 }
             }
         }
-
-        public virtual data.Model.Sucursal Clear()
-        {
-            return _repository.Clear(this);
-        }
-
-        public virtual (Result result, data.Model.Sucursal data) Select(bool usedbcommand = false)
-        {
-            var select = _repository.Select(this, usedbcommand);
-
-            return select;
-        }
-        public virtual (Result result, data.Model.Sucursal data) Insert(bool usedbcommand = false)
-        {
-            return _repository.Insert(this, usedbcommand);
-        }
-        public virtual (Result result, data.Model.Sucursal data) Update(bool usedbcommand = false)
-        {
-            return _repository.Update(this, usedbcommand);
-        }
-        public virtual (Result result, data.Model.Sucursal data) Delete(bool usedbcommand = false)
-        {
-            return _repository.Delete(this, usedbcommand);
-        }
     }
 
     public partial class Sucursales : List<data.Model.Sucursal>
@@ -205,40 +151,24 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Sucursal : IQueryTable, IQueryRepository<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryRepository<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        protected readonly IRepository<entities.Model.Sucursal, data.Model.Sucursal> _repository;
-
-        public virtual string Name { get; protected set; } = "sucursal";
-        public virtual string Reference { get; protected set; } = "Sucursal";
-
-        public Sucursal(IRepository<entities.Model.Sucursal, data.Model.Sucursal> repository)
+        public Sucursal(IRepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal> repository)
+            : base(repository, "sucursal", "Sucursal")
         {
-            _repository = repository;
-
             Columns.Add(new QueryColumn<int?>(this, "id", "Id"));
             Columns.Add(new QueryColumn<string>(this, "nombre", "Nombre"));
             Columns.Add(new QueryColumn<int?>(this, "id_empresa", "IdEmpresa"));
             Columns.Add(new QueryColumn<DateTime?>(this, "fecha", "Fecha"));
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
+
+            Joins.Add((this["IdEmpresa"], Empresa["Id"]));
         }
+
         public Sucursal(string connectionstringname)
-            : this(new Repository<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname))
+            : this(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(new data.Mapper.Sucursal(), connectionstringname))
         {
         }
-
-        public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; } = new List<(IQueryColumn, OrderDirection)>();
-
-        public virtual IQueryColumn this[string reference]
-        {
-            get
-            {
-                return Columns.SingleOrDefault(x => x.Reference.ToLower() == reference.ToLower());
-            }
-        }
-        public virtual IList<IQueryColumn> Columns { get; } = new List<IQueryColumn>();
-
-        public virtual IList<(IQueryColumn internalkey, IQueryColumn externalkey)> Joins { get => new List<(IQueryColumn, IQueryColumn)>() { (this["IdEmpresa"], Empresa["Id"]) }; }
 
         protected data.Query.Empresa _empresa;
         public virtual data.Query.Empresa Empresa
@@ -254,30 +184,12 @@ namespace data.Query
             }
             set { if (_empresa != value) { _empresa = value; } }
         }
-
-        public virtual (Result result, data.Model.Sucursal data) SelectSingle(int maxdepth = 1, data.Model.Sucursal data = default(data.Model.Sucursal))
-        {
-            return _repository.SelectSingle(this, maxdepth, data);
-        }
-        public virtual (Result result, IEnumerable<data.Model.Sucursal> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<data.Model.Sucursal> datas = null)
-        {
-            return _repository.SelectMultiple(this, maxdepth, top, datas);
-        }
-
-        public virtual (Result result, int rows) Update(data.Model.Sucursal entity, int maxdepth = 1)
-        {
-            return _repository.Update(entity, this, maxdepth);
-        }
-        public virtual (Result result, int rows) Delete(int maxdepth = 1)
-        {
-            return _repository.Delete(this, maxdepth);
-        }
     }
 }
 
 namespace data.Mapper
 {
-    public partial class Sucursal : MapperTable<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractMapperTable<entities.Model.Sucursal, data.Model.Sucursal>
     {
         public override data.Model.Sucursal CreateInstance(int maxdepth = 1, int depth = 0)
         {
