@@ -1,13 +1,14 @@
 ﻿using library.Impl.Data.Repository;
 using library.Impl.Data.Sql;
 using library.Interface.Data.Model;
+using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using System.Data;
 
-namespace test
+namespace test.Empresa
 {
     [TestClass]
     public class Data
@@ -60,7 +61,7 @@ namespace test
             return mockCommand;
         }
 
-        private (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Select()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Select()
         {
             var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
@@ -80,18 +81,18 @@ namespace test
                 Id = Entity.Id
             }, mockBuilder, mockCommand);
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Select_Query()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Select_NonDbCommand()
         {
-            var dataselect = Data_Select();
+            var dataselect = Data_Table_Select();
 
             dataselect.mockBuilder.Setup(x => x.Select(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(dataselect.mockCommand.Object);
 
             return dataselect;
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Select_DbCommand()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Select_DbCommand()
         {
-            var dataselect = Data_Select();
+            var dataselect = Data_Table_Select();
 
             dataselect.data.SelectDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             dataselect.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
@@ -100,9 +101,9 @@ namespace test
             return dataselect;
         }
         [TestMethod]
-        public void Data_Select_Query_Success()
+        public void Data_Table_Select_NonDbCommand_Success()
         {
-            var dataselect = Data_Select_Query();
+            var dataselect = Data_Table_Select_NonDbCommand();
 
             var select = dataselect.data.Select();
 
@@ -112,9 +113,9 @@ namespace test
             Assert.AreEqual(Entity.Activo, select.data.Activo);
         }
         [TestMethod]
-        public void Data_Select_DbCommand_Success()
+        public void Data_Table_Select_DbCommand_Success()
         {
-            var dataselect = Data_Select_DbCommand();
+            var dataselect = Data_Table_Select_DbCommand();
 
             var select = dataselect.data.Select();
 
@@ -124,7 +125,7 @@ namespace test
             Assert.AreEqual(Entity.Activo, select.data.Activo);
         }
 
-        private (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)Data_Insert()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)Data_Table_Insert()
         {
             var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
@@ -138,18 +139,18 @@ namespace test
                 Activo = Entity.Activo
             }, mockBuilder, mockCommand);
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Insert_Query()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Insert_NonDbCommand()
         {
-            var datainsert = Data_Insert();
+            var datainsert = Data_Table_Insert();
 
             datainsert.mockBuilder.Setup(x => x.Insert(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(datainsert.mockCommand.Object);
 
             return datainsert;
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Insert_DbCommand()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Insert_DbCommand()
         {
-            var datainsert = Data_Insert();
+            var datainsert = Data_Table_Insert();
 
             datainsert.data.InsertDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             datainsert.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
@@ -158,9 +159,9 @@ namespace test
             return datainsert;
         }
         [TestMethod]
-        public void Data_Insert_Query_Success()
+        public void Data_Table_Insert_NonDbCommand_Success()
         {
-            var datainsert = Data_Insert_Query();
+            var datainsert = Data_Table_Insert_NonDbCommand();
 
             var insert = datainsert.data.Insert();
 
@@ -170,9 +171,9 @@ namespace test
             Assert.AreEqual(Entity.Activo, insert.data.Activo);
         }
         [TestMethod]
-        public void Data_Insert_DbCommand_Success()
+        public void Data_Table_Insert_DbCommand_Success()
         {
-            var datainsert = Data_Insert_DbCommand();
+            var datainsert = Data_Table_Insert_DbCommand();
 
             var insert = datainsert.data.Insert();       
 
@@ -182,7 +183,7 @@ namespace test
             Assert.AreEqual(Entity.Activo, insert.data.Activo);
         }
 
-        private (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)Data_Update()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)Data_Table_Update()
         {
             var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
@@ -197,18 +198,18 @@ namespace test
                 Activo = Entity.Activo
             }, mockBuilder, mockCommand);
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Update_Query()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Update_NonDbCommand()
         {
-            var dataupdate = Data_Update();
+            var dataupdate = Data_Table_Update();
 
             dataupdate.mockBuilder.Setup(x => x.Update(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
                 .Returns(dataupdate.mockCommand.Object);
 
             return dataupdate;
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Update_DbCommand()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Update_DbCommand()
         {
-            var dataupdate = Data_Update();
+            var dataupdate = Data_Table_Update();
 
             dataupdate.data.UpdateDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             dataupdate.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
@@ -217,9 +218,9 @@ namespace test
             return dataupdate;
         }
         [TestMethod]
-        public void Data_Update_Query_Success()
+        public void Data_Table_Update_NonDbCommand_Success()
         {
-            var dataupdate = Data_Update_Query();
+            var dataupdate = Data_Table_Update_NonDbCommand();
 
             var update = dataupdate.data.Update();
 
@@ -229,9 +230,9 @@ namespace test
             Assert.AreEqual(Entity.Activo, update.data.Activo);
         }
         [TestMethod]
-        public void Data_Update_DbCommand_Success()
+        public void Data_Table_Update_DbCommand_Success()
         {
-            var dataupdate = Data_Update_DbCommand();
+            var dataupdate = Data_Table_Update_DbCommand();
 
             var update = dataupdate.data.Update();
 
@@ -241,7 +242,7 @@ namespace test
             Assert.AreEqual(Entity.Activo, update.data.Activo);
         }
 
-        private (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)Data_Delete()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand)Data_Table_Delete()
         {
             var mockBuilder = new Moq.Mock<ISqlBuilder<entities.Model.Empresa>>();
             var mockCommand = GetCommand(mockBuilder);
@@ -256,18 +257,26 @@ namespace test
                 Activo = Entity.Activo
             }, mockBuilder, mockCommand);
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Delete_Query()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Delete_NonDbCommand()
         {
-            var datadelete = Data_Delete();
+            var datatabledelete = Data_Table_Delete();
 
-            datadelete.mockBuilder.Setup(x => x.Delete(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
-                .Returns(datadelete.mockCommand.Object);
+            datatabledelete.mockBuilder.Setup(x => x.Delete(It.IsAny<IEntityTable<entities.Model.Empresa>>()))
+                .Returns(datatabledelete.mockCommand.Object);
 
-            return datadelete;
+            var sucursaldataquerydelete = new test.Sucursal.Data().Data_Query_Delete();
+
+            //datatabledelete.mockBuilder.Setup(x => x.Delete(It.IsAny<IQueryTable>(), It.IsAny<int>()))
+            //    .Returns(sucursaldataquerydelete.mockCommand.Object);
+
+            datatabledelete.mockBuilder.Setup(x => x.Delete(It.IsAny<IQueryTable>(), It.IsAny<int>()))
+                .Returns((IQueryTable querytable, int maxdepth) => sucursaldataquerydelete.mockCommand.Object);
+
+            return datatabledelete;
         }
-        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Delete_DbCommand()
+        public (data.Model.Empresa data, Mock<ISqlBuilder<entities.Model.Empresa>> mockBuilder, Mock<IDbCommand> mockCommand) Data_Table_Delete_DbCommand()
         {
-            var datadelete = Data_Delete();
+            var datadelete = Data_Table_Delete();
 
             datadelete.data.DeleteDbCommand = (true, ("", CommandType.StoredProcedure, new List<DbParameter>()));
             datadelete.mockBuilder.Setup(x => x.GetCommand(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<IList<DbParameter>>()))
@@ -276,18 +285,18 @@ namespace test
             return datadelete;
         }
         [TestMethod]
-        public void Data_Delete_Query_Success()
+        public void Data_Table_Delete_NonDbCommand_Success()
         {
-            var datadelete = Data_Delete_Query();
+            var datadelete = Data_Table_Delete_NonDbCommand();
 
             var delete = datadelete.data.Delete();
 
             Assert.IsTrue(delete.result.Success);
         }
         [TestMethod]
-        public void Data_Delete_DbCommand_Success()
+        public void Data_Table_Delete_DbCommand_Success()
         {
-            var datadelete = Data_Delete_DbCommand();
+            var datadelete = Data_Table_Delete_DbCommand();
 
             var delete = datadelete.data.Delete();
 

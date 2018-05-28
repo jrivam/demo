@@ -17,8 +17,6 @@ namespace data.Model
             Columns.Add(new EntityColumn<int?, entities.Model.Empresa>(this, "id", "Id", true, true));
             Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
-
-            InitDbCommands();
         }
         public Empresa(string connectionstringname)
             : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
@@ -53,7 +51,7 @@ namespace data.Model
                 var query = new data.Query.Sucursal();
                 query["IdEmpresa"]?.Where(this.Id);
 
-                Sucursales = new data.Model.Sucursales().Load(query, maxdepth, top);
+                Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(query, maxdepth, top);
             }
 
             return _sucursales;
@@ -77,32 +75,35 @@ namespace data.Model
         } 
     }
 
-    public partial class Empresas : List<data.Model.Empresa>
+    //public partial class Empresas : List<data.Model.Empresa>
+    //{
+    //    public virtual IList<entities.Model.Empresa> Entities
+    //    {
+    //        get
+    //        {
+    //            var list = new List<entities.Model.Empresa>();
+    //            this.ForEach(x => list.Add(x.Entity));
+    //            return list;
+    //        }
+    //    }
+
+    //    public Empresas()
+    //    {
+    //    }
+
+    //    public virtual data.Model.Empresas Load(data.Query.Empresa query, int maxdepth = 1, int top = 0)
+    //    {
+    //        return Load(query.SelectMultiple(maxdepth, top).datas);
+    //    }
+    //    public virtual data.Model.Empresas Load(IEnumerable<data.Model.Empresa> list)
+    //    {
+    //        this.AddRange(list);
+
+    //        return this;
+    //    }
+    //}
+    public partial class Empresas : ListEntityTable<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
-        public virtual IList<entities.Model.Empresa> Entities
-        {
-            get
-            {
-                var list = new List<entities.Model.Empresa>();
-                this.ForEach(x => list.Add(x.Entity));
-                return list;
-            }
-        }
-
-        public Empresas()
-        {
-        }
-
-        public virtual data.Model.Empresas Load(data.Query.Empresa query, int maxdepth = 1, int top = 0)
-        {
-            return Load(query.SelectMultiple(maxdepth, top).datas);
-        }
-        public virtual data.Model.Empresas Load(IEnumerable<data.Model.Empresa> list)
-        {
-            this.AddRange(list);
-
-            return this;
-        }
     }
 }
 

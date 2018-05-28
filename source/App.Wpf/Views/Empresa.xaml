@@ -34,7 +34,7 @@
         <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,114,0,0" VerticalAlignment="Top"/>
 
         <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}"/>
-        <Button x:Name="btnEliminar" Content="Eliminar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}"/>
+        <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}"/>
 
         <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Sucursales}" Margin="0,163,0,0" Grid.ColumnSpan="2">
             <DataGrid.Columns>

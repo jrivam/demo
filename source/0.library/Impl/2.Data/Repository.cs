@@ -29,6 +29,8 @@ namespace library.Impl.Data
         }
         public virtual (Result result, int rows) ExecuteNonQuery(IDbCommand command)
         {
+            var result = new Result() { Success = true };
+
             try
             {
                 command.Connection.Open();
@@ -37,7 +39,7 @@ namespace library.Impl.Data
 
                 command.Connection.Close();
 
-                return (new Result() { Success = true }, rows);
+                return (result, rows);
             }
             catch (Exception ex)
             {
@@ -51,6 +53,8 @@ namespace library.Impl.Data
         }
         public virtual (Result result, object scalar) ExecuteScalar(IDbCommand command)
         {
+            var result = new Result() { Success = true };
+
             try
             {
                 command.Connection.Open();
@@ -59,7 +63,7 @@ namespace library.Impl.Data
 
                 command.Connection.Close();
 
-                return (new Result() { Success = true }, scalar);
+                return (result, scalar);
             }
             catch (Exception ex)
             {
@@ -73,6 +77,8 @@ namespace library.Impl.Data
         }
         public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
         {
+            var result = new Result() { Success = true };
+
             try
             {
                 var enumeration = new List<U>();
@@ -98,7 +104,7 @@ namespace library.Impl.Data
 
                 command.Connection.Close();
 
-                return (new Result() { Success = true }, enumeration);
+                return (result, enumeration);
             }
             catch (Exception ex)
             {

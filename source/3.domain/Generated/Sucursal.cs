@@ -1,11 +1,10 @@
-﻿using library.Impl.Domain.Mapper;
+﻿using library.Impl;
+using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Model;
 using library.Impl.Domain.Query;
 using library.Interface.Domain.Model;
 using library.Interface.Domain.Query;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace domain.Model
 {
@@ -80,57 +79,47 @@ namespace domain.Model
             }
         }
 
-        protected domain.Model.Empresas _empresas;
-        public virtual domain.Model.Empresas Empresas
+        protected virtual Result SaveChildren2()
         {
-            get
-            {
-                if (_empresas == null)
-                {
-                    var query = new domain.Query.Empresa();
-                    query.Data["Activo"]?.Where(true);
+            var savechildren = new Result() { Success = true };
 
-                    Empresas = new domain.Model.Empresas().Load(query);
-                }
+            return savechildren;
+        }
+        protected virtual Result EraseChildren2()
+        {
+            var erasechildren = new Result() { Success = true };
 
-                return _empresas;
-            }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-
-                    Data.Empresas = _empresas?.Datas;
-                }
-            }
+            return erasechildren;
         }
     }
 
-    public partial class Sucursales : List<domain.Model.Sucursal>
+    //public partial class Sucursales : List<domain.Model.Sucursal>
+    //{
+    //    public virtual data.Model.Sucursales Datas
+    //    {
+    //        get
+    //        {
+    //            return (data.Model.Sucursales)new data.Model.Sucursales().Load(this.Select(x => x.Data).Cast<data.Model.Sucursal>());
+    //        }
+    //    }
+
+    //    public Sucursales()
+    //    {
+    //    }
+
+    //    public virtual domain.Model.Sucursales Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
+    //    {
+    //        return Load(query.List(maxdepth, top).domains);
+    //    }
+    //    public virtual domain.Model.Sucursales Load(IEnumerable<domain.Model.Sucursal> list)
+    //    {
+    //        this.AddRange(list);
+
+    //        return this;
+    //    }
+    //}
+    public partial class Sucursales : ListEntityState<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public virtual data.Model.Sucursales Datas
-        {
-            get
-            {
-                return new data.Model.Sucursales().Load(this.Select(x => x.Data).Cast<data.Model.Sucursal>());
-            }
-        }
-
-        public Sucursales()
-        {
-        }
-
-        public virtual domain.Model.Sucursales Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
-        {
-            return Load(query.List(maxdepth, top).domains);
-        }
-        public virtual domain.Model.Sucursales Load(IEnumerable<domain.Model.Sucursal> list)
-        {
-            this.AddRange(list);
-
-            return this;
-        }
     }
 }
 

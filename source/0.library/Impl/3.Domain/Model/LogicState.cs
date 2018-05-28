@@ -34,19 +34,21 @@ namespace library.Impl.Domain.Model
             {
                 var select = entityrepository.Select(usedbcommand);
 
-                if (select.result.Success)
+                if (select.result.Success && select.data != null)
                 {
                     _mapper.Clear(domain);
                     _mapper.Map(domain);
 
                     domain.Changed = false;
                     domain.Deleted = false;
+
+                    return (select.result, domain);
                 }
 
-                return (select.result, domain);
+                return (select.result, default(V));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Load: empty primary key") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Load: Id cannot be null") } }, domain);
         }
         public virtual (Result result, V domain) Save(V domain, IEntityRepository<T, U> entityrepository, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
@@ -68,21 +70,26 @@ namespace library.Impl.Domain.Model
         }
         public virtual (Result result, V domain) Erase(V domain, IEntityRepository<T, U> entityrepository, bool usedbcommand = false)
         {
-            if (!domain.Deleted)
+            if (domain.Data.Entity.Id != null)
             {
-                var delete = entityrepository.Delete(usedbcommand);
-
-                if (delete.result.Success)
+                if (!domain.Deleted)
                 {
-                    _mapper.Map(domain);
+                    var delete = entityrepository.Delete(usedbcommand);
 
-                    domain.Deleted = true;
+                    if (delete.result.Success)
+                    {
+                        _mapper.Map(domain);
+
+                        domain.Deleted = true;
+                    }
+
+                    return (delete.result, domain);
                 }
 
-                return (delete.result, domain);
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, domain);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: Id cannot be null") } }, domain);
         }
     }
 }

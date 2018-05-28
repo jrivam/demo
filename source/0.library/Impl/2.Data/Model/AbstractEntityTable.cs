@@ -1,6 +1,5 @@
 ﻿using library.Impl.Data.Sql;
 using library.Interface.Data.Model;
-using library.Interface.Data.Query;
 using library.Interface.Data.Repository;
 using library.Interface.Entities;
 using System.Collections.Generic;
@@ -42,35 +41,4 @@ namespace library.Impl.Data.Model
         }
         public virtual IList<IEntityColumn<T>> Columns { get; } = new List<IEntityColumn<T>>();
     }
-
-    //public partial class AbstractListEntityTable<S, T, U> : List<U>
-    //    where T : IEntity
-    //    where U : IEntityTable<T>
-    //    where S : IQueryRepository<T, U>
-    //{
-    //    public virtual IList<T> Entities
-    //    {
-    //        get
-    //        {
-    //            var list = new List<T>();
-    //            this.ForEach(x => list.Add(x.Entity));
-    //            return list;
-    //        }
-    //    }
-
-    //    public AbstractListEntityTable()
-    //    {
-    //    }
-
-    //    public virtual List<U> Load(S query, int maxdepth = 1, int top = 0)
-    //    {
-    //        return Load(query.SelectMultiple(maxdepth, top).datas);
-    //    }
-    //    public virtual List<U> Load(IEnumerable<U> list)
-    //    {
-    //        this.AddRange(list);
-
-    //        return this;
-    //    }
-    //}
 }

@@ -31,27 +31,29 @@ namespace library.Impl.Domain.Model
         }
         public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = _logic.Save(this as V, Data, useinsertdbcommand, useupdatedbcommand);
+            (Result result, V domain) save = _logic.Save(this as V, Data, useinsertdbcommand, useupdatedbcommand);
 
-            SaveDependencies();
+            save.result.Append(SaveChildren());
 
             return save;
         }
         public virtual (Result result, V domain) Erase(bool usedbcommand = false)
         {
-            EraseDependencies();
+            (Result result, V domain) erasechildren = (EraseChildren(), default(V));
 
-            var erase = _logic.Erase(this as V, Data, usedbcommand);
+            if (erasechildren.result.Success)
+            {
+                var erase = _logic.Erase(this as V, Data, usedbcommand);
 
-            return erase;
+                erasechildren.domain = erase.domain;
+                erasechildren.result.Append(erase.result);
+            }
+
+            return erasechildren;
         }
 
-        protected virtual void SaveDependencies()
-        {
-        }
-        protected virtual void EraseDependencies()
-        {
-        }
+        protected abstract Result SaveChildren();
+        protected abstract Result EraseChildren();
 
         public void SetProperties(T entity)
         {

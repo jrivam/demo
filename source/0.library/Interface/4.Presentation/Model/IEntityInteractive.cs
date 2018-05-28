@@ -13,7 +13,7 @@ namespace library.Interface.Presentation.Model
     {
         W Clear();
 
-        (Result result, W presentation) LoadIn(int maxdepth = 1);
+        (Result result, W presentation) LoadQuery();
         (Result result, W presentation) Load(bool usedbcommand = false);
         (Result result, W presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false);
         (Result result, W presentation) Erase(bool usedbcommand = false);

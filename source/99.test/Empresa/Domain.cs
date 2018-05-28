@@ -1,19 +1,18 @@
-﻿using library.Impl.Domain;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace test
+namespace test.Empresa
 {
     [TestClass]
     public class Domain
     {
-        public static test.Data Data;
+        public static test.Empresa.Data Data;
 
-        public Domain(test.Data data)
+        public Domain(test.Empresa.Data data)
         {
             Data = data;
         }
         public Domain()
-            : this(new test.Data())
+            : this(new test.Empresa.Data())
         {
         }
 
@@ -23,18 +22,18 @@ namespace test
 
         }
 
-        private domain.Model.Empresa Domain_Load()
+        public domain.Model.Empresa Domain_Load_Query()
         {
-            var dataselect = Data.Data_Select_Query();
+            var dataselect = Data.Data_Table_Select_NonDbCommand();
 
             return new domain.Model.Empresa(dataselect.data)
             {
             };
         }
         [TestMethod]
-        public void Domain_Load_Success()
+        public void Domain_Load_Query_Success()
         {
-            var domainload = Domain_Load().Load();
+            var domainload = Domain_Load_Query().Load();
 
             Assert.IsTrue(domainload.result.Success);
             Assert.AreEqual(Data.Entity.Id, domainload.domain.Id);
@@ -42,35 +41,35 @@ namespace test
             Assert.AreEqual(Data.Entity.Activo, domainload.domain.Activo);
         }
 
-        private domain.Model.Empresa Domain_Erase()
+        public domain.Model.Empresa Domain_Erase_Query()
         {
-            var datadelete = Data.Data_Delete_Query();
+            var datadelete = Data.Data_Table_Delete_NonDbCommand();
 
             return new domain.Model.Empresa(datadelete.data)
             {
             };
         }
         [TestMethod]
-        public void Domain_Erase_Success()
+        public void Domain_Erase_Query_Success()
         {
-            var domainerase = Domain_Erase().Erase();
+            var domainerase = Domain_Erase_Query().Erase();
 
             Assert.IsTrue(domainerase.result.Success);
             Assert.IsTrue(domainerase.domain.Deleted);
         }
 
-        private domain.Model.Empresa Domain_Save_Insert()
+        public domain.Model.Empresa Domain_Save_Query_Insert()
         {
-            var datainsert = Data.Data_Insert_Query();
+            var datainsert = Data.Data_Table_Insert_NonDbCommand();
 
             return new domain.Model.Empresa(datainsert.data)
             {
             };
         }
         [TestMethod]
-        public void Domain_Save_Insert_Success()
+        public void Domain_Save_Insert_Query_Success()
         {
-            var domainsave = Domain_Save_Insert();
+            var domainsave = Domain_Save_Query_Insert();
 
             domainsave.RazonSocial += "1";
             domainsave.Activo = false;
@@ -84,18 +83,18 @@ namespace test
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
 
-        private domain.Model.Empresa Domain_Save_Update()
+        public domain.Model.Empresa Domain_Save_Query_Update()
         {
-            var datainsert = Data.Data_Update_Query();
+            var datainsert = Data.Data_Table_Update_NonDbCommand();
 
             return new domain.Model.Empresa(datainsert.data)
             {
             };
         }
         [TestMethod]
-        public void Domain_Save_Update_Success()
+        public void Domain_Save_Update_Query_Success()
         {
-            var domainsave = Domain_Save_Insert();
+            var domainsave = Domain_Save_Query_Insert();
 
             domainsave.RazonSocial += "1";
             domainsave.Activo = false;
@@ -105,7 +104,7 @@ namespace test
             Assert.IsTrue(save.result.Success);
             Assert.IsTrue(!save.domain.Changed);
             Assert.AreEqual(Data.Entity.Id, save.domain.Id);
-            Assert.AreEqual(Data.Entity.RazonSocial + "1", save.domain.RazonSocial);
+            Assert.AreEqual($"{Data.Entity.RazonSocial}1", save.domain.RazonSocial);
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
 

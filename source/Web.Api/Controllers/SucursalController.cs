@@ -1,6 +1,7 @@
 ﻿using library.Impl.Data;
 using System;
 using System.Net;
+using System.Transactions;
 using System.Web.Http;
 
 namespace Web.Api.Controllers
@@ -24,7 +25,7 @@ namespace Web.Api.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError();
+                return InternalServerError(ex);
             }
         }
 
@@ -35,16 +36,19 @@ namespace Web.Api.Controllers
                 var load = new domain.Model.Sucursal() { Id = id }.Load();
                 if (load.result.Success)
                 {
-                    return Ok(load.domain.Data.Entity);
-                }
-                else
-                {
+                    if (load.domain != null)
+                    {
+                        return Ok(load.domain.Data.Entity);
+                    }
+
                     return NotFound();
                 }
+
+                return InternalServerError();
             }
             catch (Exception ex)
             {
-                return InternalServerError();
+                return InternalServerError(ex);
             }
         }
 
@@ -55,10 +59,17 @@ namespace Web.Api.Controllers
             {
                 if (entity != null)
                 {
-                    var save = new domain.Model.Sucursal(entity).Save();
-                    if (save.result.Success)
+                    using (var scope = new TransactionScope())
                     {
-                        return Created<entities.Model.Sucursal>(Request.RequestUri + "/" + save.domain.Id.ToString(), save.domain.Data.Entity);
+                        var save = new domain.Model.Sucursal(entity).Save();
+                        if (save.result.Success)
+                        {
+                            scope.Complete();
+
+                            return Created<entities.Model.Sucursal>($"{Request.RequestUri}/{save.domain.Id.ToString()}", save.domain.Data.Entity);
+                        }
+
+                        return InternalServerError();
                     }
                 }
 
@@ -66,7 +77,7 @@ namespace Web.Api.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError();
+                return InternalServerError(ex);
             }
         }
 
@@ -79,22 +90,36 @@ namespace Web.Api.Controllers
                     var load = new domain.Model.Sucursal() { Id = id }.Load();
                     if (load.result.Success)
                     {
-                        entity.Id = id;
-                        load.domain.SetProperties(entity);
-
-                        var save = load.domain.Save();
-                        if (save.result.Success)
+                        if (load.domain != null)
                         {
-                            return Ok(save.domain.Data.Entity);
+                            entity.Id = id;
+                            load.domain.SetProperties(entity);
+
+                            using (var scope = new TransactionScope())
+                            {
+                                var save = load.domain.Save();
+                                if (save.result.Success)
+                                {
+                                    scope.Complete();
+
+                                    return Ok(save.domain.Data.Entity);
+                                }
+
+                                return InternalServerError();
+                            }
                         }
+
+                        return NotFound();
                     }
+
+                    return InternalServerError();
                 }
 
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                return InternalServerError();
+                return InternalServerError(ex);
             }
         }
 
@@ -102,19 +127,33 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var erase = new domain.Model.Sucursal() { Id = id }.Erase();
-                if (erase.result.Success)
+                var load = new domain.Model.Empresa() { Id = id }.Load();
+                if (load.result.Success)
                 {
-                    return StatusCode(HttpStatusCode.NoContent);
-                }
-                else
-                {
+                    if (load.domain != null)
+                    {
+                        using (var scope = new TransactionScope())
+                        {
+                            var erase = load.domain.Erase();
+                            if (erase.result.Success)
+                            {
+                                scope.Complete();
+
+                                return StatusCode(HttpStatusCode.NoContent);
+                            }
+
+                            return InternalServerError();
+                        }
+                    }
+
                     return NotFound();
                 }
+
+                return InternalServerError();
             }
             catch (Exception ex)
             {
-                return InternalServerError();
+                return InternalServerError(ex);
             }
         }
     }

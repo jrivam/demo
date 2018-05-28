@@ -1,10 +1,9 @@
-﻿using library.Impl.Domain.Mapper;
+﻿using library.Impl;
+using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Model;
 using library.Impl.Domain.Query;
 using library.Interface.Domain.Model;
 using library.Interface.Domain.Query;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace domain.Model
 {
@@ -40,7 +39,7 @@ namespace domain.Model
                 var query = new domain.Query.Sucursal();
                 query.Data["IdEmpresa"]?.Where(this.Id);
 
-                Sucursales = new domain.Model.Sucursales().Load(query, maxdepth, top);
+                Sucursales = (domain.Model.Sucursales)new domain.Model.Sucursales().Load(query, maxdepth, top);
             }
 
             return _sucursales;
@@ -58,45 +57,106 @@ namespace domain.Model
                 {
                     _sucursales = value;
 
-                    Data.Sucursales = _sucursales?.Datas;
+                    Data.Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(_sucursales?.Datas);
                 }
             }
         }
 
-        protected override void SaveDependencies()
+        //protected virtual Result SaveChildren2()
+        //{
+        //    var savechildren = new Result() { Success = true };
+
+        //    if (savechildren.Success && _sucursales != null)
+        //    {
+        //        foreach (var sucursal in _sucursales)
+        //        {
+        //            var save = sucursal.Save();
+
+        //            savechildren.Success = save.result.Success;
+        //            ((List<(ResultCategory, string)>)savechildren.Messages).AddRange(save.result.Messages);
+
+        //            if (!savechildren.Success) break;
+        //        }
+        //    }
+
+        //    return savechildren;
+        //}
+        protected virtual Result SaveChildren2()
         {
-            _sucursales?.ToList()?.ForEach(i => { i.Save(); });
+            var savechildren = new Result() { Success = true };
+
+            if (savechildren.Success)
+            {
+                savechildren.Append(_sucursales?.Save());
+            }
+
+            return savechildren;
         }
-        protected override void EraseDependencies()
+        //protected virtual Result EraseChildren2()
+        //{
+        //    var erasechildren = new Result() { Success = true };
+
+        //    if (erasechildren.Success && _sucursales != null)
+        //    {
+        //        foreach (var sucursal in _sucursales)
+        //        {
+        //            var erase = sucursal.Erase();
+
+        //            erasechildren.Success = erase.result.Success;
+        //            ((List<(ResultCategory, string)>)erasechildren.Messages).AddRange(erase.result.Messages);
+
+        //            if (!erasechildren.Success) break;
+        //        }
+        //    }
+
+        //    return erasechildren;
+        //}
+        protected virtual Result EraseChildren2()
         {
-            _sucursales?.ToList()?.ForEach(i => { i.Erase(); });
+            var erasechildren = new Result() { Success = true };
+
+            if (this.Id != null)
+            {
+                if (erasechildren.Success)
+                {
+                    var query = new data.Query.Sucursal();
+                    query["IdEmpresa"]?.Where(this.Id);
+
+                    erasechildren.Append(query.Delete().result);
+                }
+            }
+
+            return erasechildren;
         }
     }
 
-    public partial class Empresas : List<domain.Model.Empresa>
+    //public partial class Empresas : List<domain.Model.Empresa>
+    //{
+    //    public virtual data.Model.Empresas Datas
+    //    {
+    //        get
+    //        {
+    //            return (data.Model.Empresas)new data.Model.Empresas().Load(this.Select(x => x.Data).Cast<data.Model.Empresa>());
+    //        }
+    //    }
+
+    //    public Empresas()
+    //    {
+    //    }
+
+    //    public virtual domain.Model.Empresas Load(domain.Query.Empresa query, int maxdepth = 1, int top = 0)
+    //    {
+    //        return Load(query.List(maxdepth, top).domains);
+    //    }
+    //    public virtual domain.Model.Empresas Load(IEnumerable<domain.Model.Empresa> list)
+    //    {
+    //        this.AddRange(list);
+
+    //        return this;
+    //    }
+    //}
+    public partial class Empresas : ListEntityState<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public virtual data.Model.Empresas Datas
-        {
-            get
-            {
-                return new data.Model.Empresas().Load(this.Select(x => x.Data).Cast<data.Model.Empresa>());
-            }
-        }
-
-        public Empresas()
-        {
-        }
-
-        public virtual domain.Model.Empresas Load(domain.Query.Empresa query, int maxdepth = 1, int top = 0)
-        {
-            return Load(query.List(maxdepth, top).domains);
-        }
-        public virtual domain.Model.Empresas Load(IEnumerable<domain.Model.Empresa> list)
-        {
-            this.AddRange(list);
-
-            return this;
-        }
     }
 }
 
