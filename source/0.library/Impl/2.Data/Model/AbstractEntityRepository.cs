@@ -15,6 +15,14 @@ namespace library.Impl.Data.Model
             : base(name, reference)
         {
             _repository = repository;
+
+            InitDbCommands();
+        }
+        public AbstractEntityRepository(IRepositoryTable<T, U> repository,
+            string name, string reference, T entity)
+            : this(repository, name, reference)
+        {
+            SetProperties(entity);
         }
 
         public virtual U Clear()

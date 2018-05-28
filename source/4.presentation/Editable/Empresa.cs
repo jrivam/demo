@@ -1,7 +1,24 @@
-﻿namespace presentation.Model
+﻿using library.Impl;
+
+namespace presentation.Model
 {
     public partial class Empresa
     {
+        protected override Result SaveChildren()
+        {
+            return SaveChildren2();
+        }
+        protected override Result EraseChildren()
+        {
+            return EraseChildren2();
+        }
+        public override (Result result, presentation.Model.Empresa presentation) LoadQuery()
+        {
+            var query = new presentation.Query.Empresa();
+            query.Domain.Data["Id"]?.Where(this.Id);
+
+            return query.Retrieve(_maxdepth, this);
+        }
     }
 }
 

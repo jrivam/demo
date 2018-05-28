@@ -19,7 +19,7 @@
         <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,173,0,0" VerticalAlignment="Top"/>
 
         <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}"/>
-        <Button x:Name="btnEliminar" Content="Eliminar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}"/>
+        <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}"/>
         <DatePicker x:Name="dpFecha" IsTodayHighlighted="True" SelectedDate="{Binding Fecha, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,142,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblFecha" Content="Fecha" HorizontalAlignment="Left" Margin="43,140,0,0" VerticalAlignment="Top" Width="44" RenderTransformOrigin="0.48,1.858"/>
         <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="RazonSocial"  Margin="92,76,10,0" VerticalAlignment="Top"/>

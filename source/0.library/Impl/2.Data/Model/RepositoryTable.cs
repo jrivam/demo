@@ -2,7 +2,6 @@
 using library.Impl.Data.Sql.Builder;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Model;
-using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
 using library.Interface.Entities;
 using System;
@@ -17,7 +16,6 @@ namespace library.Impl.Data.Repository
         where T : IEntity
         where U : IEntityTable<T>
     {
-
         public RepositoryTable(IMapperTable<T, U> mapper, ISqlBuilder<T> builder)
             : base(mapper, builder)
         {
@@ -25,65 +23,6 @@ namespace library.Impl.Data.Repository
         public RepositoryTable(IMapperTable<T, U> mapper, string connectionstringname)
             : this(mapper, SqlBuilderFactory<T>.GetBuilder(connectionstringname))
         {
-        }
-
-        public virtual U Clear(U data, int maxdepth = 1)
-        {
-            return _mapper.Clear(data, maxdepth);
-        }
-
-        public virtual (Result result, U data) SelectSingle(IQueryTable querytable, int maxdepth = 1, U data = default(U))
-        {
-            return SelectSingle(_builder.Select(querytable, maxdepth, 1), maxdepth, data);
-        }
-        public virtual (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, U data = default(U))
-        {
-            return SelectSingle(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth, data);
-        }
-        public virtual (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1, U data = default(U))
-        {
-            var executequery = ExecuteQuery(command, maxdepth, new List<U> { data });
-
-            return (executequery.result, executequery.datas.FirstOrDefault());
-        }
-
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IQueryTable querytable, int maxdepth = 1, int top = 0, IList<U> datas = null)
-        {
-            return SelectMultiple(_builder.Select(querytable, maxdepth, top), maxdepth, datas);
-        }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
-        {
-            return SelectMultiple(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
-        }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
-        {
-            return ExecuteQuery(command, maxdepth, datas);
-        }
-
-        public virtual (Result result, int rows) Update(U table, IQueryTable querytable, int maxdepth = 1)
-        {
-            return Update(_builder.Update(table, querytable, maxdepth));
-        }
-        public virtual (Result result, int rows) Update(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            return Update(_builder.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, int rows) Update(IDbCommand command)
-        {
-            return ExecuteNonQuery(command);
-        }
-
-        public virtual (Result result, int rows) Delete(IQueryTable querytable, int maxdepth = 1)
-        {
-            return Delete(_builder.Delete(querytable, maxdepth));
-        }
-        public virtual (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            return Delete(_builder.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, int rows) Delete(IDbCommand command)
-        {
-            return ExecuteNonQuery(command);
         }
 
         protected virtual bool UseDbCommand(bool classusedbcommand, bool propertyusedbcommand, bool methodusedbcommand)
@@ -98,6 +37,11 @@ namespace library.Impl.Data.Repository
 
             return true;
         }
+
+        public virtual U Clear(U data, int maxdepth = 1)
+        {
+            return _mapper.Clear(data, maxdepth);
+        }    
 
         public virtual (Result result, U data) Select(U data, bool usedbcommand = false)
         {
@@ -148,14 +92,16 @@ namespace library.Impl.Data.Repository
         {
             var executescalar = ExecuteScalar(command);
 
-            if (executescalar.scalar == null)
+            if (executescalar.result.Success)
             {
-                executescalar.result.Success = false;
-                executescalar.result.Messages.Add((ResultCategory.Information, "Insert: no rows affected"));
-            }
-            else
-            {
-                data.Entity.Id = Convert.ToInt32(executescalar.scalar);
+                if (executescalar.scalar == null)
+                {
+                    executescalar.result.Messages.Add((ResultCategory.Information, "Insert: no rows affected"));
+                }
+                else
+                {
+                    data.Entity.Id = Convert.ToInt32(executescalar.scalar);
+                }
             }
 
             return (executescalar.result, data);
@@ -184,10 +130,12 @@ namespace library.Impl.Data.Repository
         {
             var executenonquery = ExecuteNonQuery(command);
 
-            if (executenonquery.rows <= 0)
+            if (executenonquery.result.Success)
             {
-                executenonquery.result.Success = false;
-                executenonquery.result.Messages.Add((ResultCategory.Information, "Update: no rows affected"));
+                if (executenonquery.rows <= 0)
+                {
+                    executenonquery.result.Messages.Add((ResultCategory.Information, "Update: no rows affected"));
+                }
             }
 
             return (executenonquery.result, data);
@@ -216,96 +164,15 @@ namespace library.Impl.Data.Repository
         {
             var executenonquery = ExecuteNonQuery(command);
 
-            if (executenonquery.rows <= 0)
+            if (executenonquery.result.Success)
             {
-                executenonquery.result.Success = false;
-                executenonquery.result.Messages.Add((ResultCategory.Information, "Delete: no rows affected"));
+                if (executenonquery.rows <= 0)
+                {
+                    executenonquery.result.Messages.Add((ResultCategory.Information, "Delete: no rows affected"));
+                }
             }
 
             return (executenonquery.result, data);
         }
-
-        public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            return ExecuteNonQuery(_builder.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, int rows) ExecuteNonQuery(IDbCommand command)
-        {
-            try
-            {
-                command.Connection.Open();
-
-                int rows = command.ExecuteNonQuery();
-
-                command.Connection.Close();
-
-                return (new Result() { Success = true }, rows);
-            }
-            catch (Exception ex)
-            {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, -1);
-            }
-        }
-
-        public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
-        {
-            return ExecuteScalar(_builder.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, object scalar) ExecuteScalar(IDbCommand command)
-        {
-            try
-            {
-                command.Connection.Open();
-
-                object scalar = command.ExecuteScalar();
-
-                command.Connection.Close();
-
-                return (new Result() { Success = true }, scalar);
-            }
-            catch (Exception ex)
-            {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, null);
-            }
-        }
-
-        public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
-        {
-            return ExecuteQuery(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
-        }
-        public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
-        {
-            try
-            {
-                var enumeration = new List<U>();
-                var iterator = (datas ?? new List<U>()).GetEnumerator();
-
-                command.Connection.Open();
-
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
-
-                        _mapper.Clear(data, maxdepth);
-                        _mapper.Read(data, reader, new List<string>(), _builder.SyntaxSign.AliasSeparatorColumn, maxdepth);
-                        _mapper.Map(data, maxdepth);
-
-                        enumeration.Add(data);
-                    }
-
-                    reader.Close();
-                }
-
-                command.Connection.Close();
-
-                return (new Result() { Success = true }, enumeration);
-            }
-            catch (Exception ex)
-            {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, null);
-            }
-        } 
     }
 }

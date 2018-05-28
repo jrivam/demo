@@ -12,6 +12,7 @@ namespace library.Impl.Domain.Model
 
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
+
         public AbstractEntityState()
         {
         }

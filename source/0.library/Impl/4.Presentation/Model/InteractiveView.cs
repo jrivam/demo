@@ -29,13 +29,15 @@ namespace library.Impl.Presentation.Model
         {
             var load = entitylogic.Load(usedbcommand);
 
-            if (load.result.Success)
+            if (load.result.Success && load.domain != null)
             {
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);
+
+                return (load.result, presentation);
             }
 
-            return (load.result, presentation);
+            return (load.result, default(W));
         }
         public virtual (Result result, W presentation) Save(W presentation, IEntityLogic<T, U, V> entitylogic, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {

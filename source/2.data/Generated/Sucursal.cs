@@ -20,8 +20,6 @@ namespace data.Model
             Columns.Add(new EntityColumn<int?, entities.Model.Sucursal>(this, "id_empresa", "IdEmpresa"));
             Columns.Add(new EntityColumn<DateTime?, entities.Model.Sucursal>(this, "fecha", "Fecha"));
             Columns.Add(new EntityColumn<bool?, entities.Model.Sucursal>(this, "activo", "Activo"));
-
-            InitDbCommands();
         }
         public Sucursal(string connectionstringname)
             : this(new RepositoryTable<entities.Model.Sucursal, Sucursal>(new data.Mapper.Sucursal(), connectionstringname))
@@ -94,58 +92,37 @@ namespace data.Model
                 }
             }
         }
-
-        protected data.Model.Empresas _empresas;
-        public virtual data.Model.Empresas Empresas
-        {
-            get
-            {
-                if (_empresas == null)
-                {
-                    var query = new data.Query.Empresa();
-                    query["Activo"]?.Where(true);
-
-                    Empresas = new data.Model.Empresas().Load(query);
-                }
-
-                return _empresas;
-            }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-                }
-            }
-        }
     }
 
-    public partial class Sucursales : List<data.Model.Sucursal>
+    //public partial class Sucursales : List<data.Model.Sucursal>
+    //{
+    //    public virtual IList<entities.Model.Sucursal> Entities
+    //    {
+    //        get
+    //        {
+    //            var list = new List<entities.Model.Sucursal>();
+    //            this.ForEach(x => list.Add(x.Entity));
+    //            return list;
+    //        }
+    //    }
+
+    //    public Sucursales()
+    //    {
+    //    }
+
+    //    public virtual data.Model.Sucursales Load(data.Query.Sucursal query, int maxdepth = 1, int top = 0)
+    //    {
+    //        return Load(query.SelectMultiple(maxdepth, top).datas);
+    //    }
+    //    public virtual data.Model.Sucursales Load(IEnumerable<data.Model.Sucursal> list)
+    //    {
+    //        this.AddRange(list);
+
+    //        return this;
+    //    }
+    //}
+    public partial class Sucursales : ListEntityTable<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public virtual IList<entities.Model.Sucursal> Entities
-        {
-            get
-            {
-                var list = new List<entities.Model.Sucursal>();
-                this.ForEach(x => list.Add(x.Entity));
-                return list;
-            }
-        }
-
-        public Sucursales()
-        {
-        }
-
-        public virtual data.Model.Sucursales Load(data.Query.Sucursal query, int maxdepth = 1, int top = 0)
-        {
-            return Load(query.SelectMultiple(maxdepth, top).datas);
-        }
-        public virtual data.Model.Sucursales Load(IEnumerable<data.Model.Sucursal> list)
-        {
-            this.AddRange(list);
-
-            return this;
-        }
     }
 }
 

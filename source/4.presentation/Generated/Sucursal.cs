@@ -1,4 +1,5 @@
 ﻿using library.Impl;
+using library.Impl.Domain.Model;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Mapper;
 using library.Impl.Presentation.Model;
@@ -6,11 +7,6 @@ using library.Impl.Presentation.Query;
 using library.Interface.Presentation.Model;
 using library.Interface.Presentation.Query;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Windows.Input;
 
 namespace presentation.Model
 {
@@ -20,26 +16,6 @@ namespace presentation.Model
             int maxdepth = 1)
             : base(interactive, maxdepth)
         {
-            ClearCommand = new RelayCommand(delegate (object entity) { Messenger.Default.Send<presentation.Model.Sucursal>(Clear(), "SucursalClear"); }, null);
-
-            LoadCommand = new RelayCommand(delegate (object parameter) 
-            {
-                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Load, LoadIn(_maxdepth)), "SucursalLoad");
-            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && Domain.Changed; });
-
-            SaveCommand = new RelayCommand(delegate (object parameter) 
-            {
-                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Save, Save()), "SucursalSave");
-            }, delegate (object parameter) { return Domain.Changed; });
-            EraseCommand = new RelayCommand(delegate (object parameter) 
-            {
-                Messenger.Default.Send<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>((CommandAction.Erase, Erase()), "SucursalErase");
-            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
-
-            EditCommand = new RelayCommand(delegate (object parameter)
-            {
-                Messenger.Default.Send<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>((this, this), "SucursalEdit");
-            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
         public Sucursal(int maxdepth = 1)
             : this(new InteractiveView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
@@ -109,111 +85,101 @@ namespace presentation.Model
             }
         }
 
-        protected presentation.Model.Empresas _empresas;
-        public virtual presentation.Model.Empresas Empresas
+        protected virtual Result SaveChildren2()
         {
-            get
-            {
-                if (_empresas == null)
-                {
-                    var query = new presentation.Query.Empresa();
-                    query.Domain.Data["Activo"]?.Where(true);
+            var savechildren = new Result() { Success = true };
 
-                    Empresas = new presentation.Model.Empresas().Load(query);
-                }
-
-                return _empresas;
-            }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-
-                    Domain.Empresas = _empresas?.Domains;
-
-                    OnPropertyChanged("Empresas");
-                }
-            }
+            return savechildren;
         }
-
-        public virtual (Result result, presentation.Model.Sucursal presentation) LoadIn(int maxdepth = 1)
+        protected virtual Result EraseChildren2()
         {
-            _maxdepth = maxdepth;
+            var erasechildren = new Result() { Success = true };
 
-            var query = new presentation.Query.Sucursal();
-            query.Domain.Data["Id"]?.Where(this.Id);         
-
-            var load = query.Retrieve(maxdepth, this);
-
-            return load;
-        }
-
-        protected override void SaveDependencies()
-        {
-        }
-        protected override void EraseDependencies()
-        {
+            return erasechildren;
         }
     }
 
-    public partial class Sucursales : ObservableCollection<presentation.Model.Sucursal>
+    //public partial class Sucursales : ObservableCollection<presentation.Model.Sucursal>
+    //{
+    //    public virtual ICommand AddCommand { get; set; }
+
+    //    public virtual domain.Model.Sucursales Domains
+    //    {
+    //        get
+    //        {
+    //            return (domain.Model.Sucursales)new domain.Model.Sucursales().Load(this.Select(x => x.Domain).Cast<domain.Model.Sucursal>());
+    //        }
+    //    }
+
+    //    public Sucursales()
+    //    {
+    //        AddCommand = new RelayCommand(delegate (object parameter)
+    //        {
+    //            Messenger.Default.Send<presentation.Model.Sucursal>(null, "SucursalAdd");
+    //        }, delegate (object parameter) { return this != null; });
+    //    }
+
+    //    public virtual presentation.Model.Sucursales Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
+    //    {
+    //        return Load(query.List(maxdepth, top).presentations);
+    //    }
+    //    public virtual presentation.Model.Sucursales Load(IEnumerable<presentation.Model.Sucursal> list)
+    //    {
+    //        list?.ToList().ForEach(i => Add(i));
+    //        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
+    //        return this;
+    //    }
+
+    //    public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
+    //    {
+    //    }
+    //    public virtual void SucursalSave((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
+    //    {
+    //    }
+    //    public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
+    //    {
+    //        if (message.operation.presentation?.Domain.Data.Entity.Id != null)
+    //            this.Remove(message.operation.presentation);
+    //    }
+
+    //    public virtual void SucursalAdd(presentation.Model.Sucursal presentation)
+    //    {
+    //        if (presentation.Domain.Data.Entity?.Id != null)
+    //            this.Add(presentation);
+    //    }
+    //    public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
+    //    {
+    //        if (this.Count > 0)
+    //        {
+    //            var i = this.IndexOf(message.oldvalue);
+    //            if (i >= 0)
+    //                this[i] = message.newvalue;
+    //        }
+    //    }
+    //}
+    public partial class Sucursales : ListEntityView<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public virtual ICommand AddCommand { get; set; }
-
-        public virtual domain.Model.Sucursales Domains
-        {
-            get
-            {
-                return new domain.Model.Sucursales().Load(this.Select(x => x.Domain).Cast<domain.Model.Sucursal>());
-            }
-        }
-
-        public Sucursales()
-        {
-            AddCommand = new RelayCommand(delegate (object parameter)
-            {
-                Messenger.Default.Send<presentation.Model.Sucursal>(null, "SucursalAdd");
-            }, delegate (object parameter) { return this != null; });
-        }
- 
-        public virtual presentation.Model.Sucursales Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-        {
-            return Load(query.List(maxdepth, top).presentations);
-        }
-        public virtual presentation.Model.Sucursales Load(IEnumerable<presentation.Model.Sucursal> list)
-        {
-            list?.ToList().ForEach(i => Add(i));
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-
-            return this;
-        }
-
         public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
         {
+            base.CommandLoad(message);
         }
         public virtual void SucursalSave((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
         {
+            base.CommandSave(message);
         }
         public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
         {
-            if (message.operation.presentation?.Domain.Data.Entity.Id != null)
-                this.Remove(message.operation.presentation);
+            base.CommandErase(message);
         }
 
         public virtual void SucursalAdd(presentation.Model.Sucursal presentation)
         {
-            if (presentation.Domain.Data.Entity?.Id != null)
-                this.Add(presentation);
+            base.CommandAdd(presentation);
         }
         public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
-            if (this.Count > 0)
-            {
-                var i = this.IndexOf(message.oldvalue);
-                if (i >= 0)
-                    this[i] = message.newvalue;
-            }
+            base.CommandEdit(message);
         }
     }
 }

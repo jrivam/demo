@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace library.Impl.Presentation.Model
 {
-    public abstract class AbstractEntityInteractive<T, U, V, W> : AbstractEntityView<T, U, V, W>, IEntityView<T, U, V>, INotifyPropertyChanged
+    public abstract class AbstractEntityInteractive<T, U, V, W> : AbstractEntityView<T, U, V, W>, IEntityInteractive<T, U, V, W>, INotifyPropertyChanged
         where T : IEntity
         where U : IEntityTable<T>
         where V : IEntityState<T, U>, IEntityLogic<T, U, V>, new()
@@ -20,6 +20,26 @@ namespace library.Impl.Presentation.Model
             : base(maxdepth)
         {
             _interactive = interactive;
+
+            ClearCommand = new RelayCommand(delegate (object parameter) { Messenger.Default.Send<W>(Clear(), $"{Domain.Data.Reference}Clear"); }, null);
+
+            LoadCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<(CommandAction action, (Result result, W entity) operation)>((CommandAction.Load, LoadQuery()), $"{Domain.Data.Reference}Load");
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && Domain.Changed; });
+            SaveCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<(CommandAction action, (Result result, W entity) operation)>((CommandAction.Save, Save()), $"{Domain.Data.Reference}Save");
+            }, delegate (object parameter) { return Domain.Changed; });
+            EraseCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<(CommandAction action, (Result result, W entity) operation)>((CommandAction.Erase, Erase()), $"{Domain.Data.Reference}Erase");
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
+
+            EditCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<(W oldvalue, W newvalue)>((this as W, this as W), $"{Domain.Data.Reference}Edit");
+            }, delegate (object parameter) { return Domain.Data.Entity.Id != null && !Domain.Deleted; });
         }
 
         public virtual W Clear()
@@ -29,34 +49,35 @@ namespace library.Impl.Presentation.Model
 
         public virtual (Result result, W presentation) Load(bool usedbcommand = false)
         {
-            var load = _interactive.Load(this as W, Domain, usedbcommand);
-
-            return load;
+            return _interactive.Load(this as W, Domain, usedbcommand);
         }
+        public abstract (Result result, W presentation) LoadQuery();
 
         public virtual (Result result, W presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = _interactive.Save(this as W, Domain, useinsertdbcommand, useupdatedbcommand);
+            (Result result, W presentation) save = _interactive.Save(this as W, Domain, useinsertdbcommand, useupdatedbcommand);
 
-            SaveDependencies();
+            save.result.Append(SaveChildren());
 
             return save;
         }
         public virtual (Result result, W presentation) Erase(bool usedbcommand = false)
         {
-            EraseDependencies();
+            (Result result, W presentation) erasechildren = (EraseChildren(), default(W));
 
-            var erase = _interactive.Erase(this as W, Domain, usedbcommand);
+            if (erasechildren.result.Success)
+            {
+                var erase = _interactive.Erase(this as W, Domain, usedbcommand);
 
-            return erase;
+                erasechildren.presentation = erase.presentation;
+                erasechildren.result.Append(erase.result);
+            }
+
+            return erasechildren;
         }
 
-        protected virtual void SaveDependencies()
-        {
-        }
-        protected virtual void EraseDependencies()
-        {
-        }
+        protected abstract Result SaveChildren();
+        protected abstract Result EraseChildren();
 
         public void SetProperties(T entity)
         {

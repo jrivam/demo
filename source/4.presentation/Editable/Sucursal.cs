@@ -1,7 +1,50 @@
-﻿namespace presentation.Model
+﻿using library.Impl;
+
+namespace presentation.Model
 {
     public partial class Sucursal
     {
+        protected presentation.Model.Empresas _empresas;
+        public virtual presentation.Model.Empresas Empresas
+        {
+            get
+            {
+                if (_empresas == null)
+                {
+                    var query = new presentation.Query.Empresa();
+                    query.Domain.Data["Activo"]?.Where(true);
+
+                    Empresas = (presentation.Model.Empresas)new presentation.Model.Empresas().Load(query);
+                }
+
+                return _empresas;
+            }
+            set
+            {
+                if (_empresas != value)
+                {
+                    _empresas = value;
+
+                    Domain.Empresas = (domain.Model.Empresas)new domain.Model.Empresas().Load(_empresas?.Domains);
+                }
+            }
+        }
+
+        protected override Result SaveChildren()
+        {
+            return SaveChildren2();
+        }
+        protected override Result EraseChildren()
+        {
+            return EraseChildren2();
+        }
+        public override (Result result, presentation.Model.Sucursal presentation) LoadQuery()
+        {
+            var query = new presentation.Query.Sucursal();
+            query.Domain.Data["Id"]?.Where(this.Id);
+
+            return query.Retrieve(_maxdepth, this);
+        }
     }
 }
 

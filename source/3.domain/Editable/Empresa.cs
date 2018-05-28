@@ -1,8 +1,19 @@
-﻿namespace domain.Model
+﻿using library.Impl;
+
+namespace domain.Model
 {
     public partial class Empresa
     {
-        public virtual string Direccion { get; set; }  
+        //public virtual string Direccion { get; set; }
+
+        protected override Result SaveChildren()
+        {
+            return SaveChildren2();
+        }
+        protected override Result EraseChildren()
+        {
+            return EraseChildren2();
+        }
     }
 }
 
@@ -19,7 +30,7 @@ namespace domain.Mapper
     {
         public virtual domain.Model.Empresa Load(domain.Model.Empresa entity)
         {
-            entity.Direccion = "mi direccion empresa";
+            //entity.Direccion = "mi direccion empresa";
 
             return entity;
         }

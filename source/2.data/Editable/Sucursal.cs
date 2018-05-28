@@ -26,6 +26,31 @@ namespace data.Model
             UpdateDbCommand = (false, ("gsp_sucursal_update", CommandType.StoredProcedure, new List<DbParameter>()));
             DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<DbParameter>()));
         }
+
+        protected data.Model.Empresas _empresas;
+
+        public virtual data.Model.Empresas Empresas
+        {
+            get
+            {
+                if (_empresas == null)
+                {
+                    var query = new data.Query.Empresa();
+                    query["Activo"]?.Where(true);
+
+                    Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(query);
+                }
+
+                return _empresas;
+            }
+            set
+            {
+                if (_empresas != value)
+                {
+                    _empresas = value;
+                }
+            }
+        }
     }
 }
 
