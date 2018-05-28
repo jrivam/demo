@@ -15,7 +15,7 @@ INSERT INTO [dbo].[empresa]
            ([razon_social]
            ,[activo])
      VALUES
-           ('empresa 2', 2)
+           ('empresa 2', 1)
 GO
 
 --------------
