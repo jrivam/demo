@@ -22,7 +22,7 @@ namespace test.Empresa
 
         }
 
-        public domain.Model.Empresa Domain_Load_Query()
+        public domain.Model.Empresa Domain_Load_NonDbCommand()
         {
             var dataselect = Data.Data_Table_Select_NonDbCommand();
 
@@ -31,9 +31,9 @@ namespace test.Empresa
             };
         }
         [TestMethod]
-        public void Domain_Load_Query_Success()
+        public void Domain_Load_NonDbCommand_Success()
         {
-            var domainload = Domain_Load_Query().Load();
+            var domainload = Domain_Load_NonDbCommand().Load();
 
             Assert.IsTrue(domainload.result.Success);
             Assert.AreEqual(Data.Entity.Id, domainload.domain.Id);
@@ -41,7 +41,7 @@ namespace test.Empresa
             Assert.AreEqual(Data.Entity.Activo, domainload.domain.Activo);
         }
 
-        public domain.Model.Empresa Domain_Erase_Query()
+        public domain.Model.Empresa Domain_Erase_NonDbCommand()
         {
             var datadelete = Data.Data_Table_Delete_NonDbCommand();
 
@@ -50,15 +50,15 @@ namespace test.Empresa
             };
         }
         [TestMethod]
-        public void Domain_Erase_Query_Success()
+        public void Domain_Erase_NonDbCommand_Success()
         {
-            var domainerase = Domain_Erase_Query().Erase();
+            var domainerase = Domain_Erase_NonDbCommand().Erase();
 
             Assert.IsTrue(domainerase.result.Success);
             Assert.IsTrue(domainerase.domain.Deleted);
         }
 
-        public domain.Model.Empresa Domain_Save_Query_Insert()
+        public domain.Model.Empresa Domain_Save_NonDbCommand_Insert()
         {
             var datainsert = Data.Data_Table_Insert_NonDbCommand();
 
@@ -67,9 +67,9 @@ namespace test.Empresa
             };
         }
         [TestMethod]
-        public void Domain_Save_Insert_Query_Success()
+        public void Domain_Save_Insert_NonDbCommand_Success()
         {
-            var domainsave = Domain_Save_Query_Insert();
+            var domainsave = Domain_Save_NonDbCommand_Insert();
 
             domainsave.RazonSocial += "1";
             domainsave.Activo = false;
@@ -83,7 +83,7 @@ namespace test.Empresa
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
 
-        public domain.Model.Empresa Domain_Save_Query_Update()
+        public domain.Model.Empresa Domain_Save_NonDbCommand_Update()
         {
             var datainsert = Data.Data_Table_Update_NonDbCommand();
 
@@ -92,9 +92,9 @@ namespace test.Empresa
             };
         }
         [TestMethod]
-        public void Domain_Save_Update_Query_Success()
+        public void Domain_Save_Update_NonDbCommand_Success()
         {
-            var domainsave = Domain_Save_Query_Insert();
+            var domainsave = Domain_Save_NonDbCommand_Insert();
 
             domainsave.RazonSocial += "1";
             domainsave.Activo = false;

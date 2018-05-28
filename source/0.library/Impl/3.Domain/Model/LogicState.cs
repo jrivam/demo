@@ -48,7 +48,7 @@ namespace library.Impl.Domain.Model
                 return (select.result, default(V));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Load: Id cannot be null") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "Load: Id cannot be null") } }, domain);
         }
         public virtual (Result result, V domain) Save(V domain, IEntityRepository<T, U> entityrepository, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
@@ -89,7 +89,7 @@ namespace library.Impl.Domain.Model
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: already deleted") } }, domain);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Erase: Id cannot be null") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "Erase: Id cannot be null") } }, domain);
         }
     }
 }
