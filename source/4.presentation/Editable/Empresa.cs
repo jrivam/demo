@@ -1,4 +1,5 @@
 ﻿using library.Impl;
+using System.Collections.Generic;
 
 namespace presentation.Model
 {
@@ -14,10 +15,16 @@ namespace presentation.Model
         }
         public override (Result result, presentation.Model.Empresa presentation) LoadQuery()
         {
-            var query = new presentation.Query.Empresa();
-            query.Domain.Data["Id"]?.Where(this.Id);
+            if (this.Id != null)
+            {
+                var query = new presentation.Query.Empresa();
+                query.Domain.Data["Id"]?.Where(this.Id);
 
-            return query.Retrieve(_maxdepth, this);
+                return query.Retrieve(_maxdepth, this);
+            }
+
+            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "LoadQuery: Id cannot be null") } }, null);
+
         }
     }
 }
