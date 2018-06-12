@@ -1,4 +1,5 @@
 ﻿using library.Impl.Data.Sql.Providers.MySql;
+using library.Impl.Data.Sql.Providers.PostgreSql;
 using library.Impl.Data.Sql.Providers.SqlServer;
 using library.Interface.Data.Sql;
 using System;
@@ -12,10 +13,12 @@ namespace library.Impl.Data.Sql.Factory
         {
             switch (connectionstringsettings?.ProviderName)
             {
-                case "MySql.Data.MySqlClient":
-                    return new MySqlSyntaxSign();
                 case "System.Data.SqlClient":
                     return new SqlServerSyntaxSign();
+                case "MySql.Data.MySqlClient":
+                    return new MySqlSyntaxSign();
+                case "Npgsql":
+                    return new PostgreSqlSyntaxSign();
                 default:
                     throw new Exception();
             }

@@ -19,7 +19,7 @@ namespace library.Impl.Data.Sql.Providers.MySql
             get
             {
                 if (_parameterseparator == null)
-                    _parameterseparator = ConfigurationManager.AppSettings["mysql.parameter.separator"] ?? "";
+                    _parameterseparator = ConfigurationManager.AppSettings["mysql.parameter.separator"] ?? base.ParameterSeparator;
 
                 return _parameterseparator;
             }
@@ -50,7 +50,7 @@ namespace library.Impl.Data.Sql.Providers.MySql
             get
             {
                 if (_aliasseparatorcolumnkeyword == null)
-                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings["mysql.alias.separator.column.keyword"] ?? base.AliasSeparatorColumnKeyword;
+                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings["mysql.alias.separator.column.keyword"] ?? "as";
 
                 return _aliasseparatorcolumnkeyword;
             }
@@ -70,7 +70,7 @@ namespace library.Impl.Data.Sql.Providers.MySql
             get
             {
                 if (_aliasseparatortablekeyword == null)
-                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings["mysql.alias.separator.table.keyword"] ?? base.AliasSeparatorTableKeyword;
+                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings["mysql.alias.separator.table.keyword"] ?? "as";
 
                 return _aliasseparatortablekeyword;
             }

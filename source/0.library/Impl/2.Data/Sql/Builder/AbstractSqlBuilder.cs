@@ -75,13 +75,13 @@ namespace library.Impl.Data.Sql.Builder
                 yield return (c, parameter);
             }
         }
-        public virtual string GetUpdateSet(IList<IEntityColumn> columns, IList<SqlParameter> parameters)
+        public virtual string GetUpdateSet(IList<IEntityColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
         {
             var set = string.Empty;
 
             foreach (var cp in GetParameters(columns, parameters))
             {
-                set += $"{(string.IsNullOrWhiteSpace(set) ? "" : $",{Environment.NewLine}")}{cp.column.TableDescription.Name}.{cp.column.ColumnDescription.Name} = {cp.parameter.Name}";
+                set += $"{(string.IsNullOrWhiteSpace(set) ? "" : $",{Environment.NewLine}")}{(prefixtablename ? $"{cp.column.TableDescription.Name}." : string.Empty)}{cp.column.ColumnDescription.Name} = {cp.parameter.Name}";
             }
             set = $"{(!string.IsNullOrWhiteSpace(set) ? $"{set}{Environment.NewLine}" : "")}";
 
