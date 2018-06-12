@@ -44,7 +44,6 @@ namespace domain.Model
         public Empresa(entities.Model.Empresa entity)
             : this()
         {
-            //Helper.SetProperties<entities.Model.Empresa, domain.Model.Empresa>(entity, this);
             SetProperties(entity);
         }
 

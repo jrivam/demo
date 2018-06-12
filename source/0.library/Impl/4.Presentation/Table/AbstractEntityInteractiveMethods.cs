@@ -1,19 +1,13 @@
 ﻿using library.Impl.Entities;
-using library.Interface.Data.Query;
 using library.Interface.Data.Table;
-using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
-using library.Interface.Presentation.Query;
 using library.Interface.Presentation.Table;
 using System.ComponentModel;
 
 namespace library.Impl.Presentation.Table
 {
-    public abstract class AbstractEntityInteractiveMethods<S, R, Q, T, U, V, W> : AbstractEntityInteractiveProperties<T, U, V, W>, IEntityInteractiveMethods<S, R, Q, T, U, V, W>, INotifyPropertyChanged
-        where S : IQueryRepositoryMethods<T, U>
-        where R : IQueryLogicMethods<T, U, V>
-        where Q : IQueryInteractiveMethods<T, U, V, W>
+    public abstract class AbstractEntityInteractiveMethods<T, U, V, W> : AbstractEntityInteractiveProperties<T, U, V, W>, IEntityInteractiveMethods<T, U, V, W>, INotifyPropertyChanged
         where T : IEntity
         where U : IEntityRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>, new()

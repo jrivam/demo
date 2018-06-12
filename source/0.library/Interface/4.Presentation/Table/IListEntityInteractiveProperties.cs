@@ -17,7 +17,7 @@ namespace library.Interface.Data.Table
         where T : IEntity
         where U : IEntityRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
-        where W : class, IEntityInteractiveProperties<T, U, V>, IEntityInteractiveMethods<S, R, Q, T, U, V, W>
+        where W : class, IEntityInteractiveProperties<T, U, V>, IEntityInteractiveMethods<T, U, V, W>
     {
         ListEntityLogicProperties<S, R, T, U, V> Domains { get; set; }
 

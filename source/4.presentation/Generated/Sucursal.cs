@@ -10,7 +10,7 @@ using System;
 
 namespace presentation.Model
 {
-    public partial class Sucursal : AbstractEntityInteractiveMethods<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : AbstractEntityInteractiveMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public virtual presentation.Query.Sucursal Query
         {
