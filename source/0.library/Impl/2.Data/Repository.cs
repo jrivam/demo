@@ -1,8 +1,8 @@
 ﻿using library.Impl.Data.Sql;
 using library.Interface.Data;
 using library.Interface.Data.Mapper;
-using library.Interface.Data.Model;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,20 +12,20 @@ namespace library.Impl.Data
 {
     public class Repository<T, U> : IRepository<T, U> 
         where T : IEntity
-        where U : IEntityTable<T>
+        where U : IEntityRepositoryProperties<T>
     {
-        protected readonly IMapperTable<T, U> _mapper;
-        protected readonly ISqlBuilder<T> _builder;
+        protected readonly ISqlCreator _creator;
+        protected readonly IMapperRepository<T, U> _mapper;
 
-        public Repository(IMapperTable<T, U> mapper, ISqlBuilder<T> builder)
+        public Repository(ISqlCreator creator, IMapperRepository<T, U> mapper)
         {
+            _creator = creator;
             _mapper = mapper;
-            _builder = builder;
         }
         
-        public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
+        public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
-            return ExecuteNonQuery(_builder.GetCommand(commandtext, commandtype, parameters));
+            return ExecuteNonQuery(_creator.GetCommand(commandtext, commandtype, parameters));
         }
         public virtual (Result result, int rows) ExecuteNonQuery(IDbCommand command)
         {
@@ -43,13 +43,13 @@ namespace library.Impl.Data
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, -1);
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, -1);
             }
         }
 
-        public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null)
+        public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
-            return ExecuteScalar(_builder.GetCommand(commandtext, commandtype, parameters));
+            return ExecuteScalar(_creator.GetCommand(commandtext, commandtype, parameters));
         }
         public virtual (Result result, object scalar) ExecuteScalar(IDbCommand command)
         {
@@ -67,13 +67,13 @@ namespace library.Impl.Data
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, null);
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
             }
         }
 
-        public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<DbParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
         {
-            return ExecuteQuery(_builder.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
+            return ExecuteQuery(_creator.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
         }
         public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
         {
@@ -93,7 +93,7 @@ namespace library.Impl.Data
                         var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
 
                         _mapper.Clear(data, maxdepth);
-                        _mapper.Read(data, reader, new List<string>(), _builder.SyntaxSign.AliasSeparatorColumn, maxdepth);
+                        _mapper.Read(data, reader, new List<string>(), maxdepth);
                         _mapper.Map(data, maxdepth);
 
                         enumeration.Add(data);
@@ -108,7 +108,7 @@ namespace library.Impl.Data
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, ex.Message) } }, null);
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
             }
         } 
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using library.Interface.Data.Sql;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace test.Empresa
 {
@@ -26,7 +28,7 @@ namespace test.Empresa
         {
             var dataselect = Data.Data_Table_Select_NonDbCommand();
 
-            return new domain.Model.Empresa(dataselect.data)
+            return new domain.Model.Empresa(dataselect)
             {
             };
         }
@@ -41,18 +43,31 @@ namespace test.Empresa
             Assert.AreEqual(Data.Entity.Activo, domainload.domain.Activo);
         }
 
-        public domain.Model.Empresa Domain_Erase_NonDbCommand()
+        public Moq.Mock<domain.Model.Empresa> Domain_Erase_NonDbCommand()
         {
             var datadelete = Data.Data_Table_Delete_NonDbCommand();
 
-            return new domain.Model.Empresa(datadelete.data)
+            return new Moq.Mock<domain.Model.Empresa>(datadelete)
             {
+                CallBase = true
             };
         }
         [TestMethod]
         public void Domain_Erase_NonDbCommand_Success()
         {
-            var domainerase = Domain_Erase_NonDbCommand().Erase();
+            var mockRepositoryQuery = Data.GetRepositoryMock();
+            mockRepositoryQuery.mockCommand.Setup(x => x.ExecuteNonQuery())
+                .Returns(1);
+
+            var mockBuilderQuery = new Moq.Mock<ISqlBuilderQuery>();
+
+            var query = new Moq.Mock<domain.Query.Empresa>(new data.Query.Empresa(mockRepositoryQuery.mockCreator.Object, new data.Mapper.Empresa(mockRepositoryQuery.mockSyntaxSign.Object), mockBuilderQuery.Object)) { CallBase = true };
+            query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal(mockRepositoryQuery.mockCreator.Object, new data.Mapper.Sucursal(mockRepositoryQuery.mockSyntaxSign.Object), mockBuilderQuery.Object));
+
+            var erasecommand = Domain_Erase_NonDbCommand();
+            erasecommand.SetupGet(x => x.Query).Returns(query.Object);
+
+            var domainerase = erasecommand.Object.Erase();
 
             Assert.IsTrue(domainerase.result.Success);
             Assert.IsTrue(domainerase.domain.Deleted);
@@ -62,7 +77,7 @@ namespace test.Empresa
         {
             var datainsert = Data.Data_Table_Insert_NonDbCommand();
 
-            return new domain.Model.Empresa(datainsert.data)
+            return new domain.Model.Empresa(datainsert)
             {
             };
         }
@@ -87,7 +102,7 @@ namespace test.Empresa
         {
             var datainsert = Data.Data_Table_Update_NonDbCommand();
 
-            return new domain.Model.Empresa(datainsert.data)
+            return new domain.Model.Empresa(datainsert)
             {
             };
         }
@@ -107,6 +122,5 @@ namespace test.Empresa
             Assert.AreEqual($"{Data.Entity.RazonSocial}1", save.domain.RazonSocial);
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
-
     }
 }

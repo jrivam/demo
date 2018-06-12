@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using library.Impl.Data.Mapper;
-using library.Interface.Data.Model;
+using library.Interface.Data.Table;
 
 namespace application
 {
@@ -10,8 +10,8 @@ namespace application
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterGeneric(typeof(AbstractMapperTable<,>))
-                     .As(typeof(library.Interface.Data.Mapper.IMapperTable<,>))
+            builder.RegisterGeneric(typeof(BaseMapperTable<,>))
+                     .As(typeof(library.Interface.Data.Mapper.IMapperRepository<,>))
                      .InstancePerRequest();
             //builder.RegisterGeneric(typeof(library.Impl.Data.Repository.Repository<,>))
             //       .As(typeof(library.Interface.Data.IRepository<,>))
@@ -21,8 +21,8 @@ namespace application
                    .InstancePerRequest();
 
             builder.RegisterType<data.Model.Empresa>()
-                   .As<IEntityTable<entities.Model.Empresa>>()
-                   .As<IEntityRepository<entities.Model.Empresa, data.Model.Empresa>>()
+                   .As<IEntityRepositoryProperties<entities.Model.Empresa>>()
+                   .As<IEntityRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>>()
                    .InstancePerRequest();
 
             return builder.Build();

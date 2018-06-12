@@ -1,30 +1,50 @@
 ﻿using library.Impl;
 using library.Impl.Domain.Mapper;
-using library.Impl.Domain.Model;
 using library.Impl.Domain.Query;
-using library.Interface.Domain.Model;
+using library.Impl.Domain.Table;
+using library.Interface.Domain.Mapper;
 using library.Interface.Domain.Query;
+using library.Interface.Domain.Table;
 
 namespace domain.Model
 {
-    public partial class Empresa : AbstractEntityLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractEntityLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresa(ILogicState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public virtual domain.Query.Empresa Query
+        {
+            get
+            {
+                return new domain.Query.Empresa();
+            }
+        }
+
+        public Empresa(data.Model.Empresa data,
+            ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
             : base(logic)
-        {
-        }
-        public Empresa()
-            : this(new LogicState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
-        {
-        }
-        public Empresa(data.Model.Empresa data)
-            : this()
         {
             Data = data;
         }
+
+        public Empresa(data.Model.Empresa data, 
+            IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
+            : this(data, 
+                  new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
+        {
+        }
+        public Empresa(data.Model.Empresa data)
+            : this(data,
+                  new domain.Mapper.Empresa())
+        {
+        }
+        public Empresa()
+            : this(new data.Model.Empresa())
+        {
+        }
+
         public Empresa(entities.Model.Empresa entity)
             : this()
         {
+            //Helper.SetProperties<entities.Model.Empresa, domain.Model.Empresa>(entity, this);
             SetProperties(entity);
         }
 
@@ -32,24 +52,12 @@ namespace domain.Model
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
-        public virtual domain.Model.Sucursales Sucursales_Load(int maxdepth = 1, int top = 0)
-        {
-            if (this.Id != null)
-            {
-                var query = new domain.Query.Sucursal();
-                query.Data["IdEmpresa"]?.Where(this.Id);
-
-                Sucursales = (domain.Model.Sucursales)new domain.Model.Sucursales().Load(query, maxdepth, top);
-            }
-
-            return _sucursales;
-        }
         protected domain.Model.Sucursales _sucursales;
         public virtual domain.Model.Sucursales Sucursales
         {
             get
             {
-                return _sucursales ?? Sucursales_Load();
+                return _sucursales ?? (Sucursales = new domain.Model.Sucursales(Data?.Sucursales));
             }
             set
             {
@@ -62,25 +70,6 @@ namespace domain.Model
             }
         }
 
-        //protected virtual Result SaveChildren2()
-        //{
-        //    var savechildren = new Result() { Success = true };
-
-        //    if (savechildren.Success && _sucursales != null)
-        //    {
-        //        foreach (var sucursal in _sucursales)
-        //        {
-        //            var save = sucursal.Save();
-
-        //            savechildren.Success = save.result.Success;
-        //            ((List<(ResultCategory, string)>)savechildren.Messages).AddRange(save.result.Messages);
-
-        //            if (!savechildren.Success) break;
-        //        }
-        //    }
-
-        //    return savechildren;
-        //}
         protected virtual Result SaveChildren2()
         {
             var savechildren = new Result() { Success = true };
@@ -92,26 +81,7 @@ namespace domain.Model
 
             return savechildren;
         }
-        //protected virtual Result EraseChildren2()
-        //{
-        //    var erasechildren = new Result() { Success = true };
-
-        //    if (erasechildren.Success && _sucursales != null)
-        //    {
-        //        foreach (var sucursal in _sucursales)
-        //        {
-        //            var erase = sucursal.Erase();
-
-        //            erasechildren.Success = erase.result.Success;
-        //            ((List<(ResultCategory, string)>)erasechildren.Messages).AddRange(erase.result.Messages);
-
-        //            if (!erasechildren.Success) break;
-        //        }
-        //    }
-
-        //    return erasechildren;
-        //}
-        protected virtual Result EraseChildren2()
+        protected virtual Result EraseChildren2(domain.Query.Empresa query = null)
         {
             var erasechildren = new Result() { Success = true };
 
@@ -119,10 +89,11 @@ namespace domain.Model
             {
                 if (erasechildren.Success)
                 {
-                    var query = new data.Query.Sucursal();
-                    query["IdEmpresa"]?.Where(this.Id);
+                    var _query = query ?? Query;
 
-                    erasechildren.Append(query.Delete().result);
+                    _query?.Data?.Sucursal()?["IdEmpresa"]?.Where(this.Id);
+
+                    erasechildren.Append(_query?.Sucursal()?.Data?.Delete().result);
                 }
             }
 
@@ -130,59 +101,57 @@ namespace domain.Model
         }
     }
 
-    //public partial class Empresas : List<domain.Model.Empresa>
-    //{
-    //    public virtual data.Model.Empresas Datas
-    //    {
-    //        get
-    //        {
-    //            return (data.Model.Empresas)new data.Model.Empresas().Load(this.Select(x => x.Data).Cast<data.Model.Empresa>());
-    //        }
-    //    }
-
-    //    public Empresas()
-    //    {
-    //    }
-
-    //    public virtual domain.Model.Empresas Load(domain.Query.Empresa query, int maxdepth = 1, int top = 0)
-    //    {
-    //        return Load(query.List(maxdepth, top).domains);
-    //    }
-    //    public virtual domain.Model.Empresas Load(IEnumerable<domain.Model.Empresa> list)
-    //    {
-    //        this.AddRange(list);
-
-    //        return this;
-    //    }
-    //}
-    public partial class Empresas : ListEntityState<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresas : ListEntityLogicProperties<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
+        public Empresas()
+            : base()
+        {
+        }
+        public Empresas(data.Model.Empresas datas)
+            : this()
+        {
+            Datas = datas;
+        }
     }
 }
 
 namespace domain.Query
 {
-    public partial class Empresa : AbstractQueryLogic<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractQueryLogicMethods<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresa(ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(data.Query.Empresa data,
+            ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
             : base(logic)
         {
+            Data = data;
         }
-        public Empresa()
-            : this(new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(new domain.Mapper.Empresa()))
+
+        public Empresa(data.Query.Empresa data,
+            IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
+            : this(data,
+                  new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
         {
         }
         public Empresa(data.Query.Empresa data)
-            : this()
+            : this(data, new domain.Mapper.Empresa())
         {
-            Data = data;
+        }
+        public Empresa()
+            : this(new data.Query.Empresa())
+        {
+        }
+
+        protected domain.Query.Sucursal _sucursal;
+        public virtual domain.Query.Sucursal Sucursal(domain.Query.Sucursal query = null)
+        {
+            return _sucursal = query ?? _sucursal ?? new domain.Query.Sucursal(Data?.Sucursal());
         }
     }
 }
 
 namespace domain.Mapper
 {
-    public partial class Empresa : AbstractMapperState<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : BaseMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
     }
 }
