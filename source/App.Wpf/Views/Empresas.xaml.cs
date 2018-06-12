@@ -44,15 +44,15 @@ namespace WpfApp.Views
 
         public virtual void EmpresaLoad((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
         {
-            ViewModel.EmpresaLoad(message);
+            ViewModel.CommandLoad(message);
         }
         public virtual void EmpresaSave((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
         {
-            ViewModel.EmpresaSave(message);
+            ViewModel.CommandSave(message);
         }
         public virtual void EmpresaErase((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
         {
-            ViewModel.EmpresaErase(message);
+            ViewModel.CommandErase(message);
         }
 
         public virtual void EmpresaAdd(presentation.Model.Empresa entity)
@@ -63,7 +63,7 @@ namespace WpfApp.Views
 
             view.ShowDialog();
 
-            ViewModel.EmpresaAdd((presentation.Model.Empresa)view.ViewModel);
+            ViewModel.CommandAdd((presentation.Model.Empresa)view.ViewModel);
         }
         public virtual void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
         {
@@ -76,7 +76,7 @@ namespace WpfApp.Views
             if (view.ViewModel.Domain.Deleted)
                 ViewModel.Remove(message.oldvalue);
             else
-                ViewModel.EmpresaEdit((message.oldvalue, view.ViewModel));
+                ViewModel.CommandEdit((message.oldvalue, view.ViewModel));
         }
     }
 }

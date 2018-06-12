@@ -64,7 +64,7 @@ namespace WpfApp.Views
             view.ShowDialog();
 
             if (view.ViewModel.IdEmpresa == ViewModel.Id)
-                ViewModel.Sucursales.SucursalAdd((presentation.Model.Sucursal)view.ViewModel);
+                ViewModel.Sucursales.CommandAdd((presentation.Model.Sucursal)view.ViewModel);
         }
         public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
@@ -80,12 +80,12 @@ namespace WpfApp.Views
             }
             else
             {
-                ViewModel.Sucursales.SucursalEdit((message.oldvalue, view.ViewModel));
+                ViewModel.Sucursales.CommandEdit((message.oldvalue, view.ViewModel));
             }
         }
         public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
         {
-            ViewModel.Sucursales.SucursalErase(message);
+            ViewModel.Sucursales.CommandErase(message);
         }
     }
 }

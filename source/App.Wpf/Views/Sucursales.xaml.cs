@@ -45,15 +45,15 @@ namespace WpfApp.Views
 
         public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
         {
-            ViewModel.SucursalLoad(message);
+            ViewModel.CommandLoad(message);
         }
         public virtual void SucursalSave((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
         {
-            ViewModel.SucursalSave(message);
+            ViewModel.CommandSave(message);
         }
         public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
         {
-            ViewModel.SucursalErase(message);
+            ViewModel.CommandErase(message);
         }
 
         public virtual void SucursalAdd(presentation.Model.Sucursal entity)
@@ -65,7 +65,7 @@ namespace WpfApp.Views
 
             view.ShowDialog();
 
-            ViewModel.SucursalAdd((presentation.Model.Sucursal)view.ViewModel);
+            ViewModel.CommandAdd((presentation.Model.Sucursal)view.ViewModel);
         }
         public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
@@ -78,7 +78,7 @@ namespace WpfApp.Views
             if (view.ViewModel.Domain.Deleted)
                 ViewModel.Remove(message.oldvalue);
             else
-                ViewModel.SucursalEdit((message.oldvalue, view.ViewModel));
+                ViewModel.CommandEdit((message.oldvalue, view.ViewModel));
         }
     }
 }
