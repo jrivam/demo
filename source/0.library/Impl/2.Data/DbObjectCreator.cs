@@ -7,7 +7,7 @@ namespace library.Impl.Data
 {
     public class DbObjectCreator : IDbObjectCreator
     {
-        private readonly ConnectionStringSettings _connectionstringsettings;
+        protected readonly ConnectionStringSettings _connectionstringsettings;
 
         public DbObjectCreator(ConnectionStringSettings connectionstringsettings)
         {
