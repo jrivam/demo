@@ -9,7 +9,7 @@ using library.Interface.Presentation.Table;
 
 namespace presentation.Model
 {
-    public partial class Empresa : AbstractEntityInteractiveMethods<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : AbstractEntityInteractiveMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public virtual presentation.Query.Empresa Query
         {
