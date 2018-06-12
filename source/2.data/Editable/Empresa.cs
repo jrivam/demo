@@ -18,17 +18,31 @@ namespace data.Model
         {
 
         }
+
         public override void InitDbCommands()
         {
-            SelectDbCommand = (false, ("gsp_empresa_select", CommandType.StoredProcedure, new List<DbParameter>()));
-            InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<DbParameter>()));
-            UpdateDbCommand = (false, ("gsp_empresa_update", CommandType.StoredProcedure, new List<DbParameter>()));
-            DeleteDbCommand = (false, ("gsp_empresa_delete", CommandType.StoredProcedure, new List<DbParameter>()));
+            SelectDbCommand = (false, ("gsp_empresa_select", CommandType.StoredProcedure, new List<SqlParameter>()));
+            InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<SqlParameter>()));
+            UpdateDbCommand = (false, ("gsp_empresa_update", CommandType.StoredProcedure, new List<SqlParameter>()));
+            DeleteDbCommand = (false, ("gsp_empresa_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
     }
 }
 
 namespace data.Query
+{
+    public partial class Empresa
+    {
+        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+
+        public Empresa()
+            : this(_defaultconnectionstringname)
+        {
+        }
+    }
+}
+
+namespace data.Mapper
 {
     public partial class Empresa
     {

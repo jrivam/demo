@@ -1,33 +1,58 @@
 ﻿using library.Impl;
-using library.Impl.Domain.Model;
+using library.Impl.Domain.Table;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Mapper;
-using library.Impl.Presentation.Model;
 using library.Impl.Presentation.Query;
-using library.Interface.Presentation.Model;
+using library.Impl.Presentation.Table;
+using library.Interface.Presentation.Mapper;
 using library.Interface.Presentation.Query;
+using library.Interface.Presentation.Table;
 using System;
 
 namespace presentation.Model
 {
-    public partial class Sucursal : AbstractEntityInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : AbstractEntityInteractiveMethods<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public Sucursal(IInteractiveView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
+        public virtual presentation.Query.Sucursal Query
+        {
+            get
+            {
+                return new presentation.Query.Sucursal();
+            }
+        }
+
+        public Sucursal(domain.Model.Sucursal domain, 
+            IInteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
             int maxdepth = 1)
-            : base(interactive, maxdepth)
-        {
-        }
-        public Sucursal(int maxdepth = 1)
-            : this(new InteractiveView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()),
+            : base(interactive, 
                   maxdepth)
-        {
-        }
-        public Sucursal(domain.Model.Sucursal domain, int maxdepth = 1)
-            : this(maxdepth)
         {
             Domain = domain;
         }
-        public Sucursal(entities.Model.Sucursal entity, int maxdepth = 1)
+
+        public Sucursal(domain.Model.Sucursal domain, 
+            IMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper,
+             int maxdepth = 1)
+            : this(domain, 
+                  new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper),                  
+                  maxdepth)
+        {
+        }
+        public Sucursal(domain.Model.Sucursal domain, 
+             int maxdepth = 1)
+            : this(domain, 
+                    new presentation.Mapper.Sucursal(),                  
+                    maxdepth)
+        {
+        }
+        public Sucursal(int maxdepth = 1)
+            : this(new domain.Model.Sucursal(),
+                  maxdepth)
+        {
+        }
+
+        public Sucursal(entities.Model.Sucursal entity,
+            int maxdepth = 1)
             : this(maxdepth)
         {
             SetProperties(entity);
@@ -56,21 +81,12 @@ namespace presentation.Model
             }
         }
 
-        public presentation.Model.Empresa Empresa_Load()
-        {
-            if (this.IdEmpresa != null)
-            {
-                Empresa = new presentation.Model.Empresa(Domain.Empresa);
-            }
-
-            return _empresa;
-        }
         protected presentation.Model.Empresa _empresa;
         public virtual presentation.Model.Empresa Empresa
         {
             get
             {
-                return _empresa ?? Empresa_Load();
+                return _empresa ?? (Empresa = new presentation.Model.Empresa(Domain?.Empresa));
             }
             set
             {
@@ -84,82 +100,20 @@ namespace presentation.Model
                 }
             }
         }
-
-        protected virtual Result SaveChildren2()
-        {
-            var savechildren = new Result() { Success = true };
-
-            return savechildren;
-        }
-        protected virtual Result EraseChildren2()
-        {
-            var erasechildren = new Result() { Success = true };
-
-            return erasechildren;
-        }
     }
 
-    //public partial class Sucursales : ObservableCollection<presentation.Model.Sucursal>
-    //{
-    //    public virtual ICommand AddCommand { get; set; }
-
-    //    public virtual domain.Model.Sucursales Domains
-    //    {
-    //        get
-    //        {
-    //            return (domain.Model.Sucursales)new domain.Model.Sucursales().Load(this.Select(x => x.Domain).Cast<domain.Model.Sucursal>());
-    //        }
-    //    }
-
-    //    public Sucursales()
-    //    {
-    //        AddCommand = new RelayCommand(delegate (object parameter)
-    //        {
-    //            Messenger.Default.Send<presentation.Model.Sucursal>(null, "SucursalAdd");
-    //        }, delegate (object parameter) { return this != null; });
-    //    }
-
-    //    public virtual presentation.Model.Sucursales Load(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-    //    {
-    //        return Load(query.List(maxdepth, top).presentations);
-    //    }
-    //    public virtual presentation.Model.Sucursales Load(IEnumerable<presentation.Model.Sucursal> list)
-    //    {
-    //        list?.ToList().ForEach(i => Add(i));
-    //        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-
-    //        return this;
-    //    }
-
-    //    public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
-    //    {
-    //    }
-    //    public virtual void SucursalSave((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
-    //    {
-    //    }
-    //    public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
-    //    {
-    //        if (message.operation.presentation?.Domain.Data.Entity.Id != null)
-    //            this.Remove(message.operation.presentation);
-    //    }
-
-    //    public virtual void SucursalAdd(presentation.Model.Sucursal presentation)
-    //    {
-    //        if (presentation.Domain.Data.Entity?.Id != null)
-    //            this.Add(presentation);
-    //    }
-    //    public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
-    //    {
-    //        if (this.Count > 0)
-    //        {
-    //            var i = this.IndexOf(message.oldvalue);
-    //            if (i >= 0)
-    //                this[i] = message.newvalue;
-    //        }
-    //    }
-    //}
-    public partial class Sucursales : ListEntityView<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursales : ListEntityInteractiveProperties<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
+        public Sucursales()
+            : base()
+        {
+        }
+        public Sucursales(domain.Model.Sucursales domains)
+            : this()
+        {
+            Domains = domains;
+        }
+
         public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
         {
             base.CommandLoad(message);
@@ -186,42 +140,42 @@ namespace presentation.Model
 
 namespace presentation.Query
 {
-    public partial class Sucursal : AbstractQueryInteractive<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryInteractiveMethods<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public Sucursal(IInteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
+        public Sucursal(domain.Query.Sucursal domain,
+            IInteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
             : base(interactive)
-        {
-        }
-        public Sucursal()
-            : this(new InteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(new presentation.Mapper.Sucursal()))
-        {
-        }
-        public Sucursal(domain.Query.Sucursal domain)
-            : this()
         {
             Domain = domain;
         }
 
-        protected presentation.Query.Empresa _empresa;
-        public virtual presentation.Query.Empresa Empresa
+        public Sucursal(domain.Query.Sucursal domain,
+            IMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper)
+            : this(domain,
+                  new InteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper))
         {
-            get
-            {
-                if (_empresa == null)
-                {
-                    Empresa = new presentation.Query.Empresa();
-                }
+        }
+        public Sucursal(domain.Query.Sucursal domain)
+            : this(domain,
+                  new presentation.Mapper.Sucursal())
+        {
+        }
+        public Sucursal()
+            : this(new domain.Query.Sucursal())
+        {
+        }
 
-                return _empresa;
-            }
-            set { if (_empresa != value) { _empresa = value; } }
+        protected presentation.Query.Empresa _empresa;
+        public virtual presentation.Query.Empresa Empresa(presentation.Query.Empresa query = null)
+        {
+            return _empresa = query ?? _empresa ?? new presentation.Query.Empresa(Domain?.Empresa());
         }
     }
 }
 
 namespace presentation.Mapper
 {
-    public partial class Sucursal : AbstractMapperView<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : BaseMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation)
         {

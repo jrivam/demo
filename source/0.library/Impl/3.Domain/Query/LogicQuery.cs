@@ -1,8 +1,8 @@
-﻿using library.Interface.Data.Model;
-using library.Interface.Data.Query;
+﻿using library.Interface.Data.Query;
+using library.Interface.Data.Table;
 using library.Interface.Domain.Mapper;
-using library.Interface.Domain.Model;
 using library.Interface.Domain.Query;
+using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,15 +13,15 @@ namespace library.Impl.Domain.Query
 {
     public class LogicQuery<T, U, V> : Logic<T, U, V>, ILogicQuery<T, U, V> 
         where T : IEntity
-        where U : IEntityTable<T>
-        where V : IEntityState<T, U>
+        where U : IEntityRepositoryProperties<T>
+        where V : IEntityLogicProperties<T, U>
     {
-        public LogicQuery(IMapperState<T, U, V> mapper)
+        public LogicQuery(IMapperLogic<T, U, V> mapper)
             : base(mapper)
         {
         }
 
-        public virtual (Result result, V domain) Retrieve(IQueryRepository<T, U> queryrepository, int maxdepth = 1, V domain = default(V))
+        public virtual (Result result, V domain) Retrieve(IQueryRepositoryMethods<T, U> queryrepository, int maxdepth = 1, V domain = default(V))
         {
             if (domain == null)
             {
@@ -45,7 +45,7 @@ namespace library.Impl.Domain.Query
 
             return (selectsingle.result, domain);
         }
-        public virtual (Result result, IEnumerable<V> domains) List(IQueryRepository<T, U> queryrepository, int maxdepth = 1, int top = 0, IList<V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryRepositoryMethods<T, U> queryrepository, int maxdepth = 1, int top = 0, IList<V> domains = null)
         {
             var enumeration = new List<V>();
             var iterator = (domains ?? new List<V>()).GetEnumerator();

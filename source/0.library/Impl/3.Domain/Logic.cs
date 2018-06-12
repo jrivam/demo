@@ -1,19 +1,19 @@
-﻿using library.Interface.Data.Model;
+﻿using library.Interface.Data.Table;
 using library.Interface.Domain;
 using library.Interface.Domain.Mapper;
-using library.Interface.Domain.Model;
+using library.Interface.Domain.Table;
 using library.Interface.Entities;
 
 namespace library.Impl.Domain
 {
     public class Logic<T, U, V> : ILogic<T, U, V> 
         where T : IEntity
-        where U : IEntityTable<T>
-        where V : IEntityState<T, U>
+        where U : IEntityRepositoryProperties<T>
+        where V : IEntityLogicProperties<T, U>
     {
-        protected readonly IMapperState<T, U, V> _mapper;
+        protected readonly IMapperLogic<T, U, V> _mapper;
 
-        public Logic(IMapperState<T, U, V> mapper)
+        public Logic(IMapperLogic<T, U, V> mapper)
         {
             _mapper = mapper;
         }

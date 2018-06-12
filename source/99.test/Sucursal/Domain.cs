@@ -26,7 +26,7 @@ namespace test.Sucursal
         {
             var dataselect = Data.Data_Table_Select_NonDbCommand();
 
-            return new domain.Model.Sucursal(dataselect.data)
+            return new domain.Model.Sucursal(dataselect)
             {
             };
         }
@@ -47,7 +47,7 @@ namespace test.Sucursal
         {
             var datadelete = Data.Data_Table_Delete_NonDbCommand();
 
-            return new domain.Model.Sucursal(datadelete.data)
+            return new domain.Model.Sucursal(datadelete)
             {
             };
         }
@@ -64,7 +64,7 @@ namespace test.Sucursal
         {
             var datainsert = Data.Data_Table_Insert_NonDbCommand();
 
-            return new domain.Model.Sucursal(datainsert.data)
+            return new domain.Model.Sucursal(datainsert)
             {
             };
         }
@@ -89,7 +89,7 @@ namespace test.Sucursal
         {
             var datainsert = Data.Data_Table_Update_NonDbCommand();
 
-            return new domain.Model.Sucursal(datainsert.data)
+            return new domain.Model.Sucursal(datainsert)
             {
             };
         }

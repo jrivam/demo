@@ -2,7 +2,6 @@
 using library.Impl.Data;
 using library.Impl.Data.Repository;
 using library.Impl.Data.Sql.Builder;
-using library.Impl.Data.Sql.SyntaxSign;
 using presentation.Model;
 using System.Configuration;
 
@@ -13,7 +12,7 @@ namespace application
         static void Main(string[] args)
         {
             var empresa = new data.Model.Empresa() { Id = 1};
-            var list = empresa.Sucursales_Load();
+            //var list = empresa.Sucursales_Load();
 
             //IContainer container = AutofacConfig.Build();
             //var repository = container.Resolve<Repository<entities.Model.Empresa, data.Model.Empresa>>();

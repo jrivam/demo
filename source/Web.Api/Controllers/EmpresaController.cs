@@ -15,11 +15,11 @@ namespace Web.Api.Controllers
                 var query = new domain.Query.Empresa();
 
                 if (razonsocial != null)
-                    query.Data["RazonSocial"]?.Where(razonsocial, WhereOperator.Like);
+                    query?.Data?["RazonSocial"]?.Where(razonsocial, WhereOperator.Like);
                 if (activo != null)
-                    query.Data["Activo"]?.Where(activo);
+                    query?.Data?["Activo"]?.Where(activo);
 
-                return Ok(new domain.Model.Empresas().Load(query.List().domains).Datas.Entities);
+                return Ok(new domain.Model.Empresas().Load(query?.List().domains)?.Datas?.Entities);
             }
             catch (Exception ex)
             {
@@ -36,9 +36,9 @@ namespace Web.Api.Controllers
                 {
                     if (load.domain != null)
                     {
-                        load.domain.Sucursales_Load();
+                        load.domain.Data.Sucursales_Load();
 
-                        return Ok(load.domain.Data.Entity);
+                        return Ok(load.domain?.Data?.Entity);
                     }
 
                     return NotFound();
@@ -66,7 +66,7 @@ namespace Web.Api.Controllers
                         {
                             scope.Complete();
 
-                            return Created<entities.Model.Empresa>($"{Request.RequestUri}/{save.domain.Id.ToString()}", save.domain.Data.Entity);
+                            return Created<entities.Model.Empresa>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
                         return InternalServerError();
@@ -93,7 +93,7 @@ namespace Web.Api.Controllers
                         if (load.domain != null)
                         {
                             entity.Id = id;
-                            load.domain.SetProperties(entity);
+                            load.domain?.SetProperties(entity);
 
                             using (var scope = new TransactionScope())
                             {
@@ -102,7 +102,7 @@ namespace Web.Api.Controllers
                                 {
                                     scope.Complete();
 
-                                    return Ok(save.domain.Data.Entity);
+                                    return Ok(save.domain?.Data?.Entity);
                                 }
 
                                 return InternalServerError();

@@ -11,15 +11,7 @@ namespace domain.Model
         {
             get
             {
-                if (_empresas == null)
-                {
-                    var query = new domain.Query.Empresa();
-                    query.Data["Activo"]?.Where(true);
-
-                    Empresas = (domain.Model.Empresas)new domain.Model.Empresas().Load(query);
-                }
-
-                return _empresas;
+                return _empresas ?? (Empresas = new domain.Model.Empresas(Data?.Empresas));
             }
             set
             {

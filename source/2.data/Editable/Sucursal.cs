@@ -21,27 +21,26 @@ namespace data.Model
 
         public override void InitDbCommands()
         {
-            SelectDbCommand = (false, ("gsp_sucursal_select", CommandType.StoredProcedure, new List<DbParameter>()));
-            InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<DbParameter>()));
-            UpdateDbCommand = (false, ("gsp_sucursal_update", CommandType.StoredProcedure, new List<DbParameter>()));
-            DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<DbParameter>()));
+            SelectDbCommand = (false, ("gsp_sucursal_select", CommandType.StoredProcedure, new List<SqlParameter>()));
+            InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<SqlParameter>()));
+            UpdateDbCommand = (false, ("gsp_sucursal_update", CommandType.StoredProcedure, new List<SqlParameter>()));
+            DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
 
-        protected data.Model.Empresas _empresas;
+        public virtual data.Model.Empresas Empresas_Load(data.Query.Sucursal query = null)
+        {
+            var _query = query ?? Query;
 
+            _query?.Empresa()?["Activo"]?.Where(true);
+
+            return _empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_query?.Empresa());
+        }
+        protected data.Model.Empresas _empresas;
         public virtual data.Model.Empresas Empresas
         {
             get
             {
-                if (_empresas == null)
-                {
-                    var query = new data.Query.Empresa();
-                    query["Activo"]?.Where(true);
-
-                    Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(query);
-                }
-
-                return _empresas;
+                return _empresas ?? Empresas_Load();
             }
             set
             {
@@ -63,6 +62,19 @@ namespace data.Query
         public Sucursal()
             : this(_defaultconnectionstringname)
         {            
+        }
+    }
+}
+
+namespace data.Mapper
+{
+    public partial class Sucursal
+    {
+        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+
+        public Sucursal()
+            : this(_defaultconnectionstringname)
+        {
         }
     }
 }

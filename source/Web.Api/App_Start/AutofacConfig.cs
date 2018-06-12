@@ -1,11 +1,7 @@
 ﻿using Autofac;
 using Autofac.Features.ResolveAnything;
 using Autofac.Integration.WebApi;
-using data.Model;
-using library.Impl.Data;
 using library.Impl.Data.Mapper;
-using library.Interface.Data;
-using library.Interface.Data.Model;
 using System.Reflection;
 using System.Web.Http;
 
@@ -30,8 +26,8 @@ namespace Web.Api.App_Start
             //Register your Web API controllers.  
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterGeneric(typeof(AbstractMapperTable<,>))
-                     .As(typeof(library.Interface.Data.Mapper.IMapperTable<,>))
+            builder.RegisterGeneric(typeof(BaseMapperTable<,>))
+                     .As(typeof(library.Interface.Data.Mapper.IMapperRepository<,>))
                      .InstancePerRequest();
             builder.RegisterGeneric(typeof(library.Impl.Data.Repository<,>))
                    .As(typeof(library.Interface.Data.IRepository<,>))

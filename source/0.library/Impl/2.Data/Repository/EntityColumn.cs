@@ -1,12 +1,9 @@
-﻿using library.Interface.Data.Model;
-using library.Interface.Data.Repository;
-using library.Interface.Entities;
+﻿using library.Interface.Data;
 using System;
 
 namespace library.Impl.Data.Repository
 {
-    public class EntityColumn<A, T> : IEntityColumn<T> 
-        where T : IEntity
+    public class EntityColumn<A> : IEntityColumn
     {
         public virtual Type Type
         {
@@ -16,10 +13,8 @@ namespace library.Impl.Data.Repository
             }
         }
 
-        public IEntityTable<T> Table { get; }
-
-        public virtual string Name { get; }
-        public virtual string Reference { get; }
+        public virtual Description ColumnDescription { get; }
+        public virtual Description TableDescription { get; }
 
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
@@ -27,20 +22,19 @@ namespace library.Impl.Data.Repository
         public virtual object Value { get; set; }
         public virtual object DbValue { get; set; }
 
-        public EntityColumn(IEntityTable<T> table, string name, string reference)
+        public EntityColumn(Description tabledescription, string name, string reference)
         {
-            Table = table;
+            TableDescription = tabledescription;
 
-            Name = name;
-            Reference = reference;
+            ColumnDescription = new Description(name, reference);
         }
-        public EntityColumn(IEntityTable<T> table, string name, string reference, bool isprimarykey)
-            : this(table, name, reference)
+        public EntityColumn(Description tabledescription, string name, string reference, bool isprimarykey)
+            : this(tabledescription, name, reference)
         {
             IsPrimaryKey = isprimarykey;
         }
-        public EntityColumn(IEntityTable<T> table, string name, string reference, bool isprimarykey, bool isidentity)
-            : this(table, name, reference, isprimarykey)
+        public EntityColumn(Description tabledescription, string name, string reference, bool isprimarykey, bool isidentity)
+            : this(tabledescription, name, reference, isprimarykey)
         {
             IsIdentity = isidentity;
         }

@@ -1,28 +1,46 @@
 ﻿using library.Impl;
 using library.Impl.Domain.Mapper;
-using library.Impl.Domain.Model;
 using library.Impl.Domain.Query;
-using library.Interface.Domain.Model;
+using library.Impl.Domain.Table;
+using library.Interface.Domain.Mapper;
 using library.Interface.Domain.Query;
+using library.Interface.Domain.Table;
 using System;
 
 namespace domain.Model
 {
-    public partial class Sucursal : AbstractEntityLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractEntityLogicMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public Sucursal(ILogicState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public virtual domain.Query.Sucursal Query
+        {
+            get
+            {
+                return new domain.Query.Sucursal();
+            }
+        }
+
+        public Sucursal(data.Model.Sucursal data,
+            ILogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
             : base(logic)
-        {
-        }
-        public Sucursal()
-            : this(new LogicState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
-        {
-        }
-        public Sucursal(data.Model.Sucursal data)
-            : this()
         {
             Data = data;
         }
+
+        public Sucursal(data.Model.Sucursal data, 
+            IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
+            : this(data, 
+                  new LogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+        {
+        }
+        public Sucursal(data.Model.Sucursal data)
+            : this(data, new domain.Mapper.Sucursal())
+        {
+        }
+        public Sucursal()
+            : this(new data.Model.Sucursal())
+        {
+        }
+
         public Sucursal(entities.Model.Sucursal entity)
             : this()
         {
@@ -52,21 +70,12 @@ namespace domain.Model
             }
         }
 
-        public domain.Model.Empresa Empresa_Load()
-        {
-            if (this.IdEmpresa != null)
-            {
-                Empresa = new domain.Model.Empresa(Data.Empresa);
-            }
-
-            return _empresa;
-        }
         protected domain.Model.Empresa _empresa;
         public virtual domain.Model.Empresa Empresa
         {
             get
             {
-                return _empresa ?? Empresa_Load();
+                return _empresa ?? (Empresa = new domain.Model.Empresa(Data?.Empresa));
             }
             set
             {
@@ -93,74 +102,57 @@ namespace domain.Model
         }
     }
 
-    //public partial class Sucursales : List<domain.Model.Sucursal>
-    //{
-    //    public virtual data.Model.Sucursales Datas
-    //    {
-    //        get
-    //        {
-    //            return (data.Model.Sucursales)new data.Model.Sucursales().Load(this.Select(x => x.Data).Cast<data.Model.Sucursal>());
-    //        }
-    //    }
-
-    //    public Sucursales()
-    //    {
-    //    }
-
-    //    public virtual domain.Model.Sucursales Load(domain.Query.Sucursal query, int maxdepth = 1, int top = 0)
-    //    {
-    //        return Load(query.List(maxdepth, top).domains);
-    //    }
-    //    public virtual domain.Model.Sucursales Load(IEnumerable<domain.Model.Sucursal> list)
-    //    {
-    //        this.AddRange(list);
-
-    //        return this;
-    //    }
-    //}
-    public partial class Sucursales : ListEntityState<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursales : ListEntityLogicProperties<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
+        public Sucursales()
+            : base()
+        {
+        }
+        public Sucursales(data.Model.Sucursales datas)
+            : this()
+        {
+            Datas = datas;
+        }
     }
 }
 
 namespace domain.Query
 {
-    public partial class Sucursal : AbstractQueryLogic<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryLogicMethods<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public Sucursal(ILogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(data.Query.Sucursal data,
+            ILogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
             : base(logic)
-        {
-        }
-        public Sucursal()
-            : this(new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(new domain.Mapper.Sucursal()))
-        {
-        }
-        public Sucursal(data.Query.Sucursal data)
-            : this()
         {
             Data = data;
         }
 
-        protected domain.Query.Empresa _empresa;
-        public virtual domain.Query.Empresa Empresa
+        public Sucursal(data.Query.Sucursal data,
+            IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
+            : this(data,
+                  new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
         {
-            get
-            {
-                if (_empresa == null)
-                {
-                    Empresa = new domain.Query.Empresa();
-                }
+        }
+        public Sucursal(data.Query.Sucursal data)
+            : this(data, new domain.Mapper.Sucursal())
+        {
+        }
+        public Sucursal()
+            : this(new data.Query.Sucursal())
+        {
+        }
 
-                return _empresa;
-            }
-            set { if (_empresa != value) { _empresa = value; } }
+        protected domain.Query.Empresa _empresa;
+        public virtual domain.Query.Empresa Empresa(domain.Query.Empresa query = null)
+        {
+            return _empresa = query ?? _empresa ?? new domain.Query.Empresa(Data?.Empresa());
         }
     }
 }
 
 namespace domain.Mapper
 {
-    public partial class Sucursal : AbstractMapperState<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : BaseMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain)
         {

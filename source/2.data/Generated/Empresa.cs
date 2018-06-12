@@ -1,31 +1,79 @@
-﻿using library.Impl.Data.Mapper;
-using library.Impl.Data.Model;
+﻿using library.Impl;
+using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Repository;
-using library.Interface.Data.Model;
+using library.Impl.Data.Sql;
+using library.Impl.Data.Sql.Factory;
+using library.Impl.Data.Table;
+using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
+using library.Interface.Data.Sql;
+using library.Interface.Data.Table;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Linq;
 
 namespace data.Model
 {
-    public partial class Empresa : AbstractEntityRepository<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractEntityRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
     {
-        public Empresa(IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
+        public virtual data.Query.Empresa Query
+        {
+            get
+            {
+                return new data.Query.Empresa();
+            }
+        }
+
+        public Empresa(entities.Model.Empresa entity, 
+            IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
             : base(repository, "empresa", "Empresa")
         {
-            Columns.Add(new EntityColumn<int?, entities.Model.Empresa>(this, "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string, entities.Model.Empresa>(this, "razon_social", "RazonSocial"));
-            Columns.Add(new EntityColumn<bool?, entities.Model.Empresa>(this, "activo", "Activo"));
+            Entity = entity;
+
+            Columns.Add(new EntityColumn<int?>(Description, "id", "Id", true, true));
+            Columns.Add(new EntityColumn<string>(Description, "razon_social", "RazonSocial"));
+            Columns.Add(new EntityColumn<bool?>(Description, "activo", "Activo"));
         }
-        public Empresa(string connectionstringname)
-            : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
+
+        public Empresa(ConnectionStringSettings connectionstringsettings, 
+            entities.Model.Empresa entity, 
+            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
+            : this(entity, 
+                  new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mapper, connectionstringsettings))
         {
         }
+        public Empresa(ConnectionStringSettings connectionstringsettings, 
+            entities.Model.Empresa entity)
+            : this(connectionstringsettings, 
+                  entity, 
+                  new data.Mapper.Empresa(connectionstringsettings))
+        {
+        }
+        public Empresa(ConnectionStringSettings connectionstringsettings)
+            : this(connectionstringsettings, 
+                  new entities.Model.Empresa())
+        {
+        }
+        public Empresa(string connectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        {
+        }
+
         public Empresa(entities.Model.Empresa entity, string connectionstringname)
             : this(connectionstringname)
         {
             SetProperties(entity);
+        }
+
+        public override (Result result, data.Model.Empresa data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> query = null)
+        {
+            var _query = (data.Query.Empresa)query ?? Query;
+
+            _query?["Id"]?.Where(this.Id);
+
+            return _query.SelectSingle(maxdepth, this);
         }
 
         public virtual int? Id
@@ -44,14 +92,22 @@ namespace data.Model
         public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { this["RazonSocial"].Value = Entity.RazonSocial = value; } } }
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
-        public virtual data.Model.Sucursales Sucursales_Load(int maxdepth = 1, int top = 0)
+        public virtual data.Model.Sucursales Sucursales_Load(int maxdepth = 1, int top = 0, data.Query.Empresa query = null)
         {
-            if (this.Id != null)
+            if (Entity?.Sucursales != null)
             {
-                var query = new data.Query.Sucursal();
-                query["IdEmpresa"]?.Where(this.Id);
+                Sucursales = new data.Model.Sucursales(Entity?.Sucursales?.ToList());
+            }
+            else
+            {
+                if (this.Id != null)
+                {
+                    var _query = query ?? Query;
 
-                Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(query, maxdepth, top);
+                    _query?.Sucursal()?["IdEmpresa"]?.Where(this.Id);
+
+                    Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top);
+                }
             }
 
             return _sucursales;
@@ -72,44 +128,26 @@ namespace data.Model
                     Entity.Sucursales = _sucursales?.Entities;
                 }
             }
-        } 
+        }
     }
 
-    //public partial class Empresas : List<data.Model.Empresa>
-    //{
-    //    public virtual IList<entities.Model.Empresa> Entities
-    //    {
-    //        get
-    //        {
-    //            var list = new List<entities.Model.Empresa>();
-    //            this.ForEach(x => list.Add(x.Entity));
-    //            return list;
-    //        }
-    //    }
-
-    //    public Empresas()
-    //    {
-    //    }
-
-    //    public virtual data.Model.Empresas Load(data.Query.Empresa query, int maxdepth = 1, int top = 0)
-    //    {
-    //        return Load(query.SelectMultiple(maxdepth, top).datas);
-    //    }
-    //    public virtual data.Model.Empresas Load(IEnumerable<data.Model.Empresa> list)
-    //    {
-    //        this.AddRange(list);
-
-    //        return this;
-    //    }
-    //}
-    public partial class Empresas : ListEntityTable<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresas : ListEntityRepositoryProperties<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
+        public Empresas()
+            : base()
+        {
+        }
+        public Empresas(List<entities.Model.Empresa> entities)
+            : this()
+        {
+            Entities = entities;
+        }
     }
 }
 
 namespace data.Query
 {
-    public partial class Empresa : AbstractQueryRepository<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
     {
         public Empresa(IRepositoryQuery<entities.Model.Empresa, data.Model.Empresa> repository)
             : base(repository, "empresa", "Empresa")
@@ -118,17 +156,48 @@ namespace data.Query
             Columns.Add(new QueryColumn<string>(this, "razon_social", "RazonSocial"));
             Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
         }
-        public Empresa(string connectionstringname)
-            : this(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(new data.Mapper.Empresa(), connectionstringname))
+        public Empresa(ISqlCreator creator,
+            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
+            ISqlBuilderQuery builder)
+            : this(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(creator, mapper, builder))
         {
+        }
+        public Empresa(ConnectionStringSettings connectionstringsettings)
+            : this(new SqlCreator(connectionstringsettings),
+                  new data.Mapper.Empresa(connectionstringsettings),
+                  SqlBuilderQueryFactory.Create(connectionstringsettings))
+        {
+        }
+        public Empresa(string connectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        {
+        }
+
+        protected data.Query.Sucursal _sucursal;
+        public virtual data.Query.Sucursal Sucursal(data.Query.Sucursal query = null)
+        {
+            return _sucursal = query ?? _sucursal ?? new data.Query.Sucursal();
         }
     }
 }
 
 namespace data.Mapper
 {
-    public partial class Empresa : AbstractMapperTable<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : BaseMapperTable<entities.Model.Empresa, data.Model.Empresa>
     {
+        public Empresa(ISqlSyntaxSign syntaxsign)
+            : base(syntaxsign)
+        {
+        }
+        public Empresa(ConnectionStringSettings connectionstringsettings)
+            : this(SqlSyntaxSignFactory.Create(connectionstringsettings))
+        {
+        }
+        public Empresa(string connectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        {
+        }
+
         public override data.Model.Empresa CreateInstance(int maxdepth = 1, int depth = 0)
         {
             return base.CreateInstance(maxdepth, depth);
@@ -146,16 +215,16 @@ namespace data.Mapper
         }
         public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = data["Id"]?.Value as int?;
-            data.Entity.RazonSocial = data["RazonSocial"]?.Value as string;
-            data.Entity.Activo = data["Activo"]?.Value as bool?;
+            data.Entity.Id = data?["Id"]?.Value as int?;
+            data.Entity.RazonSocial = data?["RazonSocial"]?.Value as string;
+            data.Entity.Activo = data?["Activo"]?.Value as bool?;
 
             return data;
         }
 
-        public override data.Model.Empresa Read(data.Model.Empresa data, IDataReader reader, IList<string> prefixname, string aliasseparator = ".", int maxdepth = 1, int depth = 0)
+        public override data.Model.Empresa Read(data.Model.Empresa data, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            return base.Read(data, reader, prefixname, aliasseparator, maxdepth, depth);
+            return base.Read(data, reader, prefixname, maxdepth, depth);
         }
     }
 }
