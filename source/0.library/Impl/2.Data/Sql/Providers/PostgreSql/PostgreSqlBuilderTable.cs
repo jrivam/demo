@@ -64,7 +64,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
 
             var table = $"{entitytable.Description.Name}{Environment.NewLine}";
 
-            var set = GetUpdateSet(entitytable.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters);
+            var set = GetUpdateSet(entitytable.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters, false);
 
             var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters);
 

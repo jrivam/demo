@@ -6,15 +6,9 @@ namespace library.Impl.Data.Sql
     public abstract class AbstractSqlSyntaxSign : ISqlSyntaxSign
     {
         protected string _parameterprefix;
-        public virtual string ParameterPrefix
+        public abstract string ParameterPrefix
         {
-            get
-            {
-                if (_parameterprefix == null)
-                    _parameterprefix = ConfigurationManager.AppSettings["sql.parameter.prefix"] ?? "@";
-
-                return _parameterprefix;
-            }
+            get;
         }
 
         protected string _parameterseparator;
@@ -30,15 +24,9 @@ namespace library.Impl.Data.Sql
         }
 
         protected string _parameterassignment;
-        public virtual string ParameterAssignment
+        public abstract string ParameterAssignment
         {
-            get
-            {
-                if (_parameterassignment == null)
-                    _parameterassignment = ConfigurationManager.AppSettings["sql.parameter.assignment"] ?? "=";
-
-                return _parameterassignment;
-            }
+            get;
         }
 
 
@@ -55,15 +43,9 @@ namespace library.Impl.Data.Sql
         }
 
         protected string _aliasseparatorcolumnkeyword;
-        public virtual string AliasSeparatorColumnKeyword
+        public abstract string AliasSeparatorColumnKeyword
         {
-            get
-            {
-                if (_aliasseparatorcolumnkeyword == null)
-                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings["sql.alias.separator.column.keyword"] ?? "as";
-
-                return _aliasseparatorcolumnkeyword;
-            }
+            get;
         }
 
         protected string _aliasseparatortable;
@@ -79,64 +61,34 @@ namespace library.Impl.Data.Sql
         }
 
         protected string _aliasseparatortablekeyword;
-        public virtual string AliasSeparatorTableKeyword
+        public abstract string AliasSeparatorTableKeyword
         {
-            get
-            {
-                if (_aliasseparatortablekeyword == null)
-                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings["sql.alias.separator.table.keyword"] ?? "as";
-
-                return _aliasseparatortablekeyword;
-            }
+            get;
         }
 
 
         protected string _aliasenclosurecolumnopen;
-        public virtual string AliasEnclosureColumnOpen
+        public abstract string AliasEnclosureColumnOpen
         {
-            get
-            {
-                if (_aliasenclosurecolumnopen == null)
-                    _aliasenclosurecolumnopen = ConfigurationManager.AppSettings["sql.alias.enclosure.column.open"] ?? "[";
-
-                return _aliasenclosurecolumnopen;
-            }
+            get;
         }
 
         protected string _aliasenclosurecolumnclose;
-        public virtual string AliasEnclosureColumnClose
+        public abstract string AliasEnclosureColumnClose
         {
-            get
-            {
-                if (_aliasenclosurecolumnclose == null)
-                    _aliasenclosurecolumnclose = ConfigurationManager.AppSettings["sql.alias.enclosure.column.close"] ?? "]";
-
-                return _aliasenclosurecolumnclose;
-            }
+            get;
         }
 
         protected string _aliasenclosuretableopen;
-        public virtual string AliasEnclosureTableOpen
+        public abstract string AliasEnclosureTableOpen
         {
-            get
-            {
-                if (_aliasenclosuretableopen == null)
-                    _aliasenclosuretableopen = ConfigurationManager.AppSettings["sql.alias.enclosure.table.open"] ?? "[";
-
-                return _aliasenclosuretableopen;
-            }
+            get;
         }
 
         protected string _aliasenclosuretableclose;
-        public virtual string AliasEnclosureTableClose
+        public abstract string AliasEnclosureTableClose
         {
-            get
-            {
-                if (_aliasenclosuretableclose == null)
-                    _aliasenclosuretableclose = ConfigurationManager.AppSettings["sql.alias.enclosure.table.close"] ?? "]";
-
-                return _aliasenclosuretableclose;
-            }
+            get;
         }
     }
 }

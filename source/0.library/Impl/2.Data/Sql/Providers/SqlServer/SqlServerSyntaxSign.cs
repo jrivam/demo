@@ -9,7 +9,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_parameterprefix == null)
-                    _parameterprefix = ConfigurationManager.AppSettings["sqlserver.parameter.prefix"] ?? base.ParameterPrefix;
+                    _parameterprefix = ConfigurationManager.AppSettings["sqlserver.parameter.prefix"] ?? "@";
 
                 return _parameterprefix;
             }
@@ -29,7 +29,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_parameterassignment == null)
-                    _parameterassignment = ConfigurationManager.AppSettings["sqlserver.parameter.assignment"] ?? base.ParameterAssignment;
+                    _parameterassignment = ConfigurationManager.AppSettings["sqlserver.parameter.assignment"] ?? "=";
 
                 return _parameterassignment;
             }
@@ -50,7 +50,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_aliasseparatorcolumnkeyword == null)
-                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings["sqlserver.alias.separator.column.keyword"] ?? base.AliasSeparatorColumnKeyword;
+                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings["sqlserver.alias.separator.column.keyword"] ?? "as";
 
                 return _aliasseparatorcolumnkeyword;
             }
@@ -70,7 +70,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_aliasseparatortablekeyword == null)
-                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings["sqlserver.alias.separator.table.keyword"] ?? base.AliasSeparatorTableKeyword;
+                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings["sqlserver.alias.separator.table.keyword"] ?? "as";
 
                 return _aliasseparatortablekeyword;
             }
@@ -81,7 +81,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_aliasenclosurecolumnopen == null)
-                    _aliasenclosurecolumnopen = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.column.open"] ?? base.AliasEnclosureColumnOpen;
+                    _aliasenclosurecolumnopen = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.column.open"] ?? "[";
 
                 return _aliasenclosurecolumnopen;
             }
@@ -91,7 +91,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_aliasenclosurecolumnclose == null)
-                    _aliasenclosurecolumnclose = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.column.close"] ?? base.AliasEnclosureColumnClose;
+                    _aliasenclosurecolumnclose = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.column.close"] ?? "]";
 
                 return _aliasenclosurecolumnclose;
             }
@@ -101,7 +101,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_aliasenclosuretableopen == null)
-                    _aliasenclosuretableopen = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.table.open"] ?? base.AliasEnclosureTableOpen;
+                    _aliasenclosuretableopen = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.table.open"] ?? "[";
 
                 return _aliasenclosuretableopen;
             }
@@ -111,7 +111,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             get
             {
                 if (_aliasenclosuretableclose == null)
-                    _aliasenclosuretableclose = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.table.close"] ?? base.AliasEnclosureTableClose;
+                    _aliasenclosuretableclose = ConfigurationManager.AppSettings["sqlserver.alias.enclosure.table.close"] ?? "]";
 
                 return _aliasenclosuretableclose;
             }

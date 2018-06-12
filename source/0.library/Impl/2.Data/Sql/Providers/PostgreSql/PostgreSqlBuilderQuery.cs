@@ -64,13 +64,11 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
             var queryjoins = GetQueryJoins(querytable, querytable.Description.Name, maxdepth, 0);
 
-            var table = $"{_syntaxsign.AliasEnclosureTableOpen}{querytable.Description.Name}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
-
             var from = GetQueryFrom(queryjoins, querytable.Description.Name);
 
             var where = GetQueryWhere(querycolumns, parameters);
 
-            commandtext = $"delete{Environment.NewLine}{table}from {from}{where}";
+            commandtext = $"delete{Environment.NewLine}from {from}{where}";
 
             return (commandtext, parameters);
         }
