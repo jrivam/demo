@@ -1,5 +1,4 @@
-﻿using library.Impl;
-using library.Impl.Domain.Table;
+﻿using library.Impl.Domain.Table;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Mapper;
 using library.Impl.Presentation.Query;
@@ -107,33 +106,15 @@ namespace presentation.Model
         public Sucursales()
             : base()
         {
+            AddCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<presentation.Model.Sucursal>(null, "SucursalAdd");
+            }, delegate (object parameter) { return this != null; });
         }
         public Sucursales(domain.Model.Sucursales domains)
             : this()
         {
             Domains = domains;
-        }
-
-        public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
-        {
-            base.CommandLoad(message);
-        }
-        public virtual void SucursalSave((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
-        {
-            base.CommandSave(message);
-        }
-        public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal presentation) operation) message)
-        {
-            base.CommandErase(message);
-        }
-
-        public virtual void SucursalAdd(presentation.Model.Sucursal presentation)
-        {
-            base.CommandAdd(presentation);
-        }
-        public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
-        {
-            base.CommandEdit(message);
         }
     }
 }

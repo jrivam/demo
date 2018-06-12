@@ -1,5 +1,4 @@
-﻿using library.Impl;
-using library.Impl.Domain.Table;
+﻿using library.Impl.Domain.Table;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Mapper;
 using library.Impl.Presentation.Query;
@@ -87,33 +86,15 @@ namespace presentation.Model
         public Empresas()
             : base()
         {
+            AddCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<presentation.Model.Empresa>(null, "EmpresaAdd");
+            }, delegate (object parameter) { return this != null; });
         }
         public Empresas(domain.Model.Empresas domains)
             : this()
         {
             Domains = domains;
-        }
-
-        public virtual void EmpresaLoad((CommandAction action, (Result result, presentation.Model.Empresa presentation) operation) message)
-        {
-            base.CommandLoad(message);
-        }
-        public virtual void EmpresaSave((CommandAction action, (Result result, presentation.Model.Empresa presentation) operation) message)
-        {
-            base.CommandSave(message);
-        }
-        public virtual void EmpresaErase((CommandAction action, (Result result, presentation.Model.Empresa presentation) operation) message)
-        {
-            base.CommandErase(message);
-        }
-
-        public virtual void EmpresaAdd(presentation.Model.Empresa presentation)
-        {
-            base.CommandAdd(presentation);
-        }
-        public virtual void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
-        {
-            base.CommandEdit(message);
         }
     }
 }
