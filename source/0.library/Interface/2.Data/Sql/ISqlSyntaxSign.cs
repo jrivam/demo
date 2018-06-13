@@ -1,4 +1,6 @@
-﻿namespace library.Interface.Data.Sql
+﻿using library.Impl.Data;
+
+namespace library.Interface.Data.Sql
 {
     public interface ISqlSyntaxSign
     {
@@ -13,5 +15,10 @@
         string AliasEnclosureColumnClose { get; }
         string AliasEnclosureTableOpen { get; }
         string AliasEnclosureTableClose { get; }
+
+        string GetOperator(WhereOperator whereoperator);
+
+        string WhereWildcardSingle { get; }
+        string WhereWildcardAny { get; }
     }
 }

@@ -8,7 +8,6 @@ namespace library.Interface.Data.Sql
     {
         IEnumerable<(IEntityColumn column, SqlParameter parameter)> GetParameters(IList<IEntityColumn> columns, IList<SqlParameter> parameters);
 
-        string GetOperator(WhereOperator whereoperator);
         string GetUpdateSet(IList<IEntityColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true);
     }
 }

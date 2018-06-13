@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using library.Impl.Data.Sql.Builder;
+using System.Configuration;
 
 namespace library.Impl.Data.Sql.Providers.PostgreSql
 {
@@ -114,6 +115,67 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
                     _aliasenclosuretableclose = ConfigurationManager.AppSettings["postgresql.alias.enclosure.table.close"] ?? "";
 
                 return _aliasenclosuretableclose;
+            }
+        }
+
+        public override string GetOperator(WhereOperator whereoperator)
+        {
+            var sign = string.Empty;
+
+            switch (whereoperator)
+            {
+                case WhereOperator.NotEquals:
+                case WhereOperator.Equals:
+                    sign = "=";
+                    break;
+                case WhereOperator.NotGreater:
+                case WhereOperator.Greater:
+                    sign = ">";
+                    break;
+                case WhereOperator.NotLess:
+                case WhereOperator.Less:
+                    sign = "<";
+                    break;
+                case WhereOperator.EqualOrGreater:
+                    sign = ">=";
+                    break;
+                case WhereOperator.EqualOrLess:
+                    sign = "<=";
+                    break;
+                case WhereOperator.NotLikeBegin:
+                case WhereOperator.NotLikeEnd:
+                case WhereOperator.NotLike:
+                case WhereOperator.LikeBegin:
+                case WhereOperator.LikeEnd:
+                case WhereOperator.Like:
+                    sign = "like";
+                    break;
+                default:
+                    break;
+            }
+
+            return sign;
+        }
+
+        public override string WhereWildcardSingle
+        {
+            get
+            {
+                if (_wherewildcardsingle == null)
+                    _wherewildcardsingle = ConfigurationManager.AppSettings["postgresql.where.wildcard.single"] ?? "_";
+
+                return _wherewildcardsingle;
+            }
+        }
+
+        public override string WhereWildcardAny
+        {
+            get
+            {
+                if (_wherewildcardany == null)
+                    _wherewildcardany = ConfigurationManager.AppSettings["postgresql.where.wildcard.any"] ?? "%";
+
+                return _wherewildcardany;
             }
         }
     }
