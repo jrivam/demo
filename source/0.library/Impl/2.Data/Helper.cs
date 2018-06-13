@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -80,6 +81,35 @@ namespace library.Impl.Data
                     { DbType.Object, MySqlDbType.Blob },
                     { DbType.DateTimeOffset, MySqlDbType.DateTime },
                     { DbType.Time, MySqlDbType.Time },
+                };
+            }
+        }
+
+        public static IDictionary<DbType, NpgsqlDbType> DbTypeToPostgreSqlType
+        {
+            get
+            {
+                return new Dictionary<DbType, NpgsqlDbType>()
+                {
+                    { DbType.String, NpgsqlDbType.Text },
+                    { DbType.StringFixedLength, NpgsqlDbType.Text },
+                    { DbType.AnsiString, NpgsqlDbType.Text },
+                    { DbType.AnsiStringFixedLength, NpgsqlDbType.Text },
+                    { DbType.Boolean, NpgsqlDbType.Boolean },
+                    { DbType.Date, NpgsqlDbType.Date },
+                    { DbType.DateTime, NpgsqlDbType.Timestamp },
+                    { DbType.DateTime2, NpgsqlDbType.Timestamp },
+                    { DbType.DateTimeOffset, NpgsqlDbType.TimestampTZ },
+                    { DbType.Int16, NpgsqlDbType.Smallint },
+                    { DbType.Int32, NpgsqlDbType.Integer},
+                    { DbType.Int64, NpgsqlDbType.Bigint },
+                    { DbType.Decimal, NpgsqlDbType.Numeric },
+                    { DbType.VarNumeric, NpgsqlDbType.Numeric },
+                    { DbType.Currency, NpgsqlDbType.Money },
+                    { DbType.Double, NpgsqlDbType.Double },
+                    { DbType.Single, NpgsqlDbType.Real },
+                    { DbType.Binary, NpgsqlDbType.Bytea },
+                    { DbType.Time, NpgsqlDbType.Time },
                 };
             }
         }
