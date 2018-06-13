@@ -1,6 +1,5 @@
 ﻿using library.Interface.Data.Sql;
 using System.Configuration;
-using System;
 
 namespace library.Impl.Data.Sql.Builder
 {
