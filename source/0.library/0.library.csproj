@@ -103,7 +103,7 @@
     <Compile Include="Impl\2.Data\Repository\QueryColumn.cs" />
     <Compile Include="Impl\2.Data\Sql\Builder\AbstractSqlBuilderTable.cs" />
     <Compile Include="Impl\2.Data\Sql\SqlParameter.cs" />
-    <Compile Include="Impl\2.Data\Sql\AbstractSqlSyntaxSign.cs" />
+    <Compile Include="Impl\2.Data\Sql\Builder\AbstractSqlSyntaxSign.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\MySql\MySqlBuilderTable.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\SqlServer\SqlServerSyntaxSign.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\MySql\MySqlSyntaxSign.cs" />

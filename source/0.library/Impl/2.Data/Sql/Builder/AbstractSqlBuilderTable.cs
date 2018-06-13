@@ -40,7 +40,7 @@ namespace library.Impl.Data.Sql.Builder
 
             foreach (var p in GetEntityParameters(columns, parameters))
             {
-                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {p.column.TableDescription.Name}.{p.column.ColumnDescription.Name} {GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
+                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {p.column.TableDescription.Name}.{p.column.ColumnDescription.Name} {_syntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
             }
 
             return where;

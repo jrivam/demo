@@ -78,9 +78,9 @@ namespace library.Impl.Data.Sql.Builder
                 var parameter = GetParameter($"{_syntaxsign.ParameterPrefix}{string.Join(_syntaxsign.ParameterSeparator, columns.parameters)}{_syntaxsign.ParameterSeparator}{columns.column.Description.Reference}{count}", columns.column.Type, w.value, ParameterDirection.Input);
 
                 if ((w.sign & WhereOperator.LikeBegin) == WhereOperator.LikeBegin)
-                    parameter.Value = $"%{parameter.Value}";
+                    parameter.Value = $"{_syntaxsign.WhereWildcardAny}{parameter.Value}";
                 if ((w.sign & WhereOperator.LikeEnd) == WhereOperator.LikeEnd)
-                    parameter.Value = $"{parameter.Value}%";
+                    parameter.Value = $"{parameter.Value}{_syntaxsign.WhereWildcardAny}";
 
                 if (parameters.IndexOf(parameter) < 0)
                     parameters.Add(parameter);
@@ -120,7 +120,7 @@ namespace library.Impl.Data.Sql.Builder
 
                     foreach (var p in GetQueryParameters(c, parameters))
                     {
-                        where += $"{(p.counter > 1 ? " or " : "")}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
+                        where += $"{(p.counter > 1 ? " or " : "")}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {_syntaxsign.GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
                     }
 
                     where += $"){Environment.NewLine}";

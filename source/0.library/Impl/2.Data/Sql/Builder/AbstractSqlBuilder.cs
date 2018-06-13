@@ -15,45 +15,6 @@ namespace library.Impl.Data.Sql.Builder
             _syntaxsign = syntaxsign;
         }
 
-        public virtual string GetOperator(WhereOperator whereoperator)
-        {
-            var sign = string.Empty;
-
-            switch (whereoperator)
-            {
-                case WhereOperator.NotEquals:
-                case WhereOperator.Equals:
-                    sign = "=";
-                    break;
-                case WhereOperator.NotGreater:
-                case WhereOperator.Greater:
-                    sign = ">";
-                    break;
-                case WhereOperator.NotLess:
-                case WhereOperator.Less:
-                    sign = "<";
-                    break;
-                case WhereOperator.EqualOrGreater:
-                    sign = ">=";
-                    break;
-                case WhereOperator.EqualOrLess:
-                    sign = "<=";
-                    break;
-                case WhereOperator.NotLikeBegin:
-                case WhereOperator.NotLikeEnd:
-                case WhereOperator.NotLike:
-                case WhereOperator.LikeBegin:
-                case WhereOperator.LikeEnd:
-                case WhereOperator.Like:
-                    sign = "like";
-                    break;
-                default:
-                    break;
-            }
-
-            return sign;
-        }
-
         public virtual SqlParameter GetParameter(string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
         {
             var parameter = new SqlParameter();
