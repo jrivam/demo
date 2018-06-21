@@ -139,7 +139,7 @@
     <Compile Include="Interface\2.Data\Query\IQueryRepositoryMethods.cs" />
     <Compile Include="Interface\2.Data\Query\IRepositoryQuery.cs" />
     <Compile Include="Interface\2.Data\Table\IRepositoryTable.cs" />
-    <Compile Include="Interface\2.Data\Sql\IDbObjectCreator.cs" />
+    <Compile Include="Interface\2.Data\IDbObjectCreator.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlCreator.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlBuilder.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlBuilderQuery.cs" />

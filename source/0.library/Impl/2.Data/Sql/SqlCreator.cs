@@ -1,4 +1,5 @@
-﻿using library.Interface.Data.Sql;
+﻿using library.Interface.Data;
+using library.Interface.Data.Sql;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

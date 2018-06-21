@@ -1,4 +1,4 @@
-﻿using library.Interface.Data.Sql;
+﻿using library.Interface.Data;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
