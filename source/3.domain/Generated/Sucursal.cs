@@ -1,4 +1,5 @@
 ﻿using library.Impl;
+using library.Impl.Data;
 using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Query;
 using library.Impl.Domain.Table;
@@ -140,6 +141,42 @@ namespace domain.Query
         public Sucursal()
             : this(new data.Query.Sucursal())
         {
+        }
+
+        public virtual (int? value, WhereOperator? sign) Id
+        {
+            set
+            {
+                Data.Id = (value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Nombre
+        {
+            set
+            {
+                Data.Nombre = (value.value, value.sign);
+            }
+        }
+        public virtual (DateTime? value, WhereOperator? sign) Fecha
+        {
+            set
+            {
+                Data.Fecha = (value.value, value.sign);
+            }
+        }
+        public virtual (bool? value, WhereOperator? sign) Activo
+        {
+            set
+            {
+                Data.Activo = (value.value, value.sign);
+            }
+        }
+        public virtual (int? value, WhereOperator? sign) IdEmpresa
+        {
+            set
+            {
+                Data.IdEmpresa = (value.value, value.sign);
+            }
         }
 
         protected domain.Query.Empresa _empresa;

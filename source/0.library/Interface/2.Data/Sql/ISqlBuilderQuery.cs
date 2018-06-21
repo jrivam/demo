@@ -11,6 +11,6 @@ namespace library.Interface.Data.Sql
         (string commandtext, IList<SqlParameter> parameters) Update(IList<IEntityColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1);
         (string commandtext, IList<SqlParameter> parameters) Delete(IQueryRepositoryProperties querytable, int maxdepth = 1);
 
-        IEnumerable<((object value, WhereOperator sign) where, SqlParameter parameter, int counter)> GetQueryParameters((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns, IList<SqlParameter> parameters);
+        IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> GetQueryParameters((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns, IList<SqlParameter> parameters);
     }
 }

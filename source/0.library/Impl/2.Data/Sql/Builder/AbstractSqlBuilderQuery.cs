@@ -68,7 +68,7 @@ namespace library.Impl.Data.Sql.Builder
             return joins;
         }
 
-        public virtual IEnumerable<((object value, WhereOperator sign) where, SqlParameter parameter, int counter)> GetQueryParameters((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns, IList<SqlParameter> parameters)
+        public virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> GetQueryParameters((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns, IList<SqlParameter> parameters)
         {
             var count = 0;
             foreach (var w in columns.column.Wheres)

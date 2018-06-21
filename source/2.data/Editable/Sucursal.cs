@@ -1,4 +1,5 @@
-﻿using library.Impl.Data.Sql;
+﻿using library.Impl.Data;
+using library.Impl.Data.Sql;
 using System.Collections.Generic;
 using System.Data;
 
@@ -31,7 +32,7 @@ namespace data.Model
         {
             var _query = query ?? Query;
 
-            _query?.Empresa()?["Activo"]?.Where(true);
+            _query.Empresa().Activo = (true, WhereOperator.Equals);
 
             return _empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_query?.Empresa());
         }

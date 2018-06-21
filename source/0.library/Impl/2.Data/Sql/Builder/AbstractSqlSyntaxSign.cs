@@ -91,7 +91,7 @@ namespace library.Impl.Data.Sql.Builder
             get;
         }
 
-        public abstract string GetOperator(WhereOperator whereoperator);
+        public abstract string GetOperator(WhereOperator? whereoperator);
 
         protected string _wherewildcardsingle;
         public abstract string WhereWildcardSingle

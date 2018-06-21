@@ -1,4 +1,5 @@
-﻿using library.Impl.Domain.Table;
+﻿using library.Impl.Data;
+using library.Impl.Domain.Table;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Mapper;
 using library.Impl.Presentation.Query;
@@ -144,6 +145,42 @@ namespace presentation.Query
         public Sucursal()
             : this(new domain.Query.Sucursal())
         {
+        }
+
+        public virtual (int? value, WhereOperator? sign) Id
+        {
+            set
+            {
+                Domain.Id = (value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Nombre
+        {
+            set
+            {
+                Domain.Nombre = (value.value, value.sign);
+            }
+        }
+        public virtual (DateTime? value, WhereOperator? sign) Fecha
+        {
+            set
+            {
+                Domain.Fecha = (value.value, value.sign);
+            }
+        }
+        public virtual (bool? value, WhereOperator? sign) Activo
+        {
+            set
+            {
+                Domain.Activo = (value.value, value.sign);
+            }
+        }
+        public virtual (int? value, WhereOperator? sign) IdEmpresa
+        {
+            set
+            {
+                Domain.IdEmpresa = (value.value, value.sign);
+            }
         }
 
         protected presentation.Query.Empresa _empresa;

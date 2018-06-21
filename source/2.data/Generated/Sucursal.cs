@@ -1,4 +1,6 @@
-﻿using library.Impl;
+﻿using library.Extension;
+using library.Impl;
+using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Repository;
@@ -11,6 +13,7 @@ using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Data;
 
@@ -28,15 +31,16 @@ namespace data.Model
 
         public Sucursal(entities.Model.Sucursal entity, 
             IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository)
-            : base(repository, "sucursal", "Sucursal")
+            : base(repository, typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
             Entity = entity;
 
-            Columns.Add(new EntityColumn<int?>(Description, "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string>(Description, "nombre", "Nombre"));
-            Columns.Add(new EntityColumn<int?>(Description, "id_empresa", "IdEmpresa"));
-            Columns.Add(new EntityColumn<DateTime?>(Description, "fecha", "Fecha"));
-            Columns.Add(new EntityColumn<bool?>(Description, "activo", "Activo"));
+            Columns.Add(new EntityColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new EntityColumn<string>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new EntityColumn<DateTime?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new EntityColumn<bool?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+
+            Columns.Add(new EntityColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
@@ -73,7 +77,7 @@ namespace data.Model
         {
             var _query = (data.Query.Sucursal)query ?? Query;
 
-            _query?["Id"]?.Where(this.Id);
+            _query.Id = (this.Id, WhereOperator.Equals);
 
             return _query.SelectSingle(maxdepth, this);
         }
@@ -125,7 +129,7 @@ namespace data.Model
                 {
                     var _query = query ?? Query;
 
-                    _query?.Empresa()?["Id"]?.Where(this.IdEmpresa);
+                    _query.Empresa().Id = (this.IdEmpresa, WhereOperator.Equals);
 
                     Empresa = _query?.Empresa()?.SelectSingle().data;
                 }
@@ -179,13 +183,14 @@ namespace data.Query
         }
 
         public Sucursal(IRepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal> repository)
-            : base(repository, "sucursal", "Sucursal")
+            : base(repository, typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
-            Columns.Add(new QueryColumn<int?>(this, "id", "Id"));
-            Columns.Add(new QueryColumn<string>(this, "nombre", "Nombre"));
-            Columns.Add(new QueryColumn<int?>(this, "id_empresa", "IdEmpresa"));
-            Columns.Add(new QueryColumn<DateTime?>(this, "fecha", "Fecha"));
-            Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
+            Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new QueryColumn<string>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new QueryColumn<DateTime?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+
+            Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
 
             Joins.Add((this["IdEmpresa"], Empresa()["Id"]));
         }
@@ -205,6 +210,42 @@ namespace data.Query
         public Sucursal(string connectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
         {
+        }
+
+        public virtual (int? value, WhereOperator? sign) Id
+        {
+            set
+            {
+                this["Id"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Nombre
+        {
+            set
+            {
+                this["Nombre"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (DateTime? value, WhereOperator? sign) Fecha
+        {
+            set
+            {
+                this["Fecha"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (bool? value, WhereOperator? sign) Activo
+        {
+            set
+            {
+                this["Activo"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (int? value, WhereOperator? sign) IdEmpresa
+        {
+            set
+            {
+                this["IdEmpresa"].Where(value.value, value.sign);
+            }
         }
 
         protected data.Query.Empresa _empresa;

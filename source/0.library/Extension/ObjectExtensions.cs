@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace library.Extension
 {
@@ -26,6 +23,17 @@ namespace library.Extension
             }
 
             return res;
+        }
+
+        public static T GetAttributeFromType<T>(this Type instance)
+            where T : Attribute
+        {
+            return (T)instance.GetCustomAttributes(typeof(T), false).FirstOrDefault();
+        }
+        public static T GetAttributeFromTypeProperty<T>(this Type instance, string propertyName)
+            where T : Attribute
+        {
+            return (T)instance.GetProperty(propertyName).GetCustomAttributes(typeof(T), false).FirstOrDefault();
         }
     }
 }
