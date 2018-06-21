@@ -6,69 +6,29 @@ using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 
 namespace library.Impl.Data
 {
-    public class Repository<T, U> : IRepository<T, U> 
+    public class Repository<T, U> : RepositoryBase, IRepository<T, U> 
         where T : IEntity
         where U : IEntityRepositoryProperties<T>
     {
-        protected readonly ISqlCreator _creator;
         protected readonly IMapperRepository<T, U> _mapper;
 
         public Repository(ISqlCreator creator, IMapperRepository<T, U> mapper)
+            : base (creator)
         {
-            _creator = creator;
             _mapper = mapper;
         }
-        
-        public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+        public Repository(IMapperRepository<T, U> mapper, ConnectionStringSettings connectionstringsettings)
+            : this(new SqlCreator(connectionstringsettings), mapper)
         {
-            return ExecuteNonQuery(_creator.GetCommand(commandtext, commandtype, parameters));
         }
-        public virtual (Result result, int rows) ExecuteNonQuery(IDbCommand command)
+        public Repository(IMapperRepository<T, U> mapper, string connectionstringname)
+            : this(mapper, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
         {
-            var result = new Result() { Success = true };
-
-            try
-            {
-                command.Connection.Open();
-
-                int rows = command.ExecuteNonQuery();
-
-                command.Connection.Close();
-
-                return (result, rows);
-            }
-            catch (Exception ex)
-            {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, -1);
-            }
-        }
-
-        public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
-        {
-            return ExecuteScalar(_creator.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, object scalar) ExecuteScalar(IDbCommand command)
-        {
-            var result = new Result() { Success = true };
-
-            try
-            {
-                command.Connection.Open();
-
-                object scalar = command.ExecuteScalar();
-
-                command.Connection.Close();
-
-                return (result, scalar);
-            }
-            catch (Exception ex)
-            {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
-            }
         }
 
         public virtual (Result result, IEnumerable<U> datas) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)

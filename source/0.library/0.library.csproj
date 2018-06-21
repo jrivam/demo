@@ -74,6 +74,7 @@
     <Compile Include="Extension\StringExtensions.cs" />
     <Compile Include="Impl\1.Entities\Helper.cs" />
     <Compile Include="Impl\2.Data\Helper.cs" />
+    <Compile Include="Impl\2.Data\RepositoryBase.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\PostgreSql\PostgreSqlSyntaxSign.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\PostgreSql\PostgreSqlBuilderQuery.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\PostgreSql\PostgreSqlBuilderTable.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Impl\Result.cs" />
     <Compile Include="Impl\ResultCategory.cs" />
     <Compile Include="Interface\1.Entities\IEntity.cs" />
+    <Compile Include="Interface\2.Data\IRepositoryBase.cs" />
     <Compile Include="Interface\2.Data\Table\IEntityRepositoryMethods.cs" />
     <Compile Include="Interface\2.Data\Table\IEntityRepositoryProperties.cs" />
     <Compile Include="Interface\2.Data\Table\IListEntityRepositoryProperties.cs" />
