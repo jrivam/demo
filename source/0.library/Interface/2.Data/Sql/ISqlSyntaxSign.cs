@@ -16,7 +16,7 @@ namespace library.Interface.Data.Sql
         string AliasEnclosureTableOpen { get; }
         string AliasEnclosureTableClose { get; }
 
-        string GetOperator(WhereOperator whereoperator);
+        string GetOperator(WhereOperator? whereoperator);
 
         string WhereWildcardSingle { get; }
         string WhereWildcardAny { get; }

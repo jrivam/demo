@@ -1,4 +1,6 @@
-﻿using library.Impl;
+﻿using library.Extension;
+using library.Impl;
+using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Repository;
@@ -10,6 +12,7 @@ using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -28,13 +31,13 @@ namespace data.Model
 
         public Empresa(entities.Model.Empresa entity, 
             IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
-            : base(repository, "empresa", "Empresa")
+            : base(repository, typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
             Entity = entity;
 
-            Columns.Add(new EntityColumn<int?>(Description, "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string>(Description, "razon_social", "RazonSocial"));
-            Columns.Add(new EntityColumn<bool?>(Description, "activo", "Activo"));
+            Columns.Add(new EntityColumn<int?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new EntityColumn<string>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new EntityColumn<bool?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings, 
@@ -71,7 +74,7 @@ namespace data.Model
         {
             var _query = (data.Query.Empresa)query ?? Query;
 
-            _query?["Id"]?.Where(this.Id);
+            _query.Id = (this.Id, WhereOperator.Equals);
 
             return _query.SelectSingle(maxdepth, this);
         }
@@ -104,7 +107,7 @@ namespace data.Model
                 {
                     var _query = query ?? Query;
 
-                    _query?.Sucursal()?["IdEmpresa"]?.Where(this.Id);
+                    _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
 
                     Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top);
                 }
@@ -150,11 +153,11 @@ namespace data.Query
     public partial class Empresa : AbstractQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
     {
         public Empresa(IRepositoryQuery<entities.Model.Empresa, data.Model.Empresa> repository)
-            : base(repository, "empresa", "Empresa")
+            : base(repository, typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
-            Columns.Add(new QueryColumn<int?>(this, "id", "Id"));
-            Columns.Add(new QueryColumn<string>(this, "razon_social", "RazonSocial"));
-            Columns.Add(new QueryColumn<bool?>(this, "activo", "Activo"));
+            Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new QueryColumn<string>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
         public Empresa(ISqlCreator creator,
             IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
@@ -171,6 +174,28 @@ namespace data.Query
         public Empresa(string connectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
         {
+        }
+
+        public virtual (int? value, WhereOperator? sign) Id
+        {
+            set
+            {
+                this["Id"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) RazonSocial
+        {
+            set
+            {
+                this["RazonSocial"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (bool? value, WhereOperator? sign) Activo
+        {
+            set
+            {
+                this["Activo"].Where(value.value, value.sign);
+            }
         }
 
         protected data.Query.Sucursal _sucursal;

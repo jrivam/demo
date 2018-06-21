@@ -1,4 +1,5 @@
-﻿using library.Interface.Data.Query;
+﻿using library.Interface.Data;
+using library.Interface.Data.Query;
 
 namespace library.Interface.Domain.Query
 {
@@ -6,5 +7,7 @@ namespace library.Interface.Domain.Query
         where S : IQueryRepositoryProperties
     {
         S Data { get; }
+
+        IQueryColumn this[string reference] { get; }
     }
 }

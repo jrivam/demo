@@ -14,11 +14,11 @@ namespace library.Interface.Data
 
         Description Description { get; }
 
-        IList<(object value, WhereOperator sign)> Wheres { get; set; }
+        IList<(object value, WhereOperator? sign)> Wheres { get; set; }
 
-        IQueryRepositoryProperties Where((object value, WhereOperator sign) condition);
-        IQueryRepositoryProperties Where(params (object value, WhereOperator sign)[] conditions);
+        IQueryRepositoryProperties Where((object value, WhereOperator? sign) condition);
+        IQueryRepositoryProperties Where(params (object value, WhereOperator? sign)[] conditions);
 
-        IQueryRepositoryProperties Where(object value, WhereOperator sign = WhereOperator.Equals);
+        IQueryRepositoryProperties Where(object value, WhereOperator? sign = WhereOperator.Equals);
     }
 }

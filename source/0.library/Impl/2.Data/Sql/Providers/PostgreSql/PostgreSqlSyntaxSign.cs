@@ -118,7 +118,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             }
         }
 
-        public override string GetOperator(WhereOperator whereoperator)
+        public override string GetOperator(WhereOperator? whereoperator)
         {
             var sign = string.Empty;
 

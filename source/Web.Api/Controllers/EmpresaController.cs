@@ -15,9 +15,9 @@ namespace Web.Api.Controllers
                 var query = new domain.Query.Empresa();
 
                 if (razonsocial != null)
-                    query?.Data?["RazonSocial"]?.Where(razonsocial, WhereOperator.Like);
+                    query.RazonSocial = (razonsocial, WhereOperator.Like);
                 if (activo != null)
-                    query?.Data?["Activo"]?.Where(activo);
+                    query.Activo = (activo, WhereOperator.Equals);
 
                 return Ok(new domain.Model.Empresas().Load(query?.List().domains)?.Datas?.Entities);
             }
