@@ -1,7 +1,7 @@
 ﻿using library.Impl.Data.Sql.Builder;
-using library.Interface.Data;
 using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Table;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace library.Impl.Data.Sql.Providers.MySql
             return (commandtext, parameters);
         }
 
-        public override (string commandtext, IList<SqlParameter> parameters) Update(IList<IEntityColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1)
+        public override (string commandtext, IList<SqlParameter> parameters) Update(IList<ITableColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();

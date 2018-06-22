@@ -17,7 +17,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
 
         }
 
-        public override (string commandtext, IList<SqlParameter> parameters) Select(IEntityRepositoryProperties<T> entitytable)
+        public override (string commandtext, IList<SqlParameter> parameters) Select(ITableRepositoryProperties<T> entitytable)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
@@ -33,7 +33,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             return (commandtext, parameters);
         }
 
-        public override (string commandtext, IList<SqlParameter> parameters) Insert(IEntityRepositoryProperties<T> entitytable)
+        public override (string commandtext, IList<SqlParameter> parameters) Insert(ITableRepositoryProperties<T> entitytable)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
@@ -57,7 +57,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
 
             return (commandtext, parameters);
         }
-        public override (string commandtext, IList<SqlParameter> parameters) Update(IEntityRepositoryProperties<T> entitytable)
+        public override (string commandtext, IList<SqlParameter> parameters) Update(ITableRepositoryProperties<T> entitytable)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
@@ -72,7 +72,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
 
             return (commandtext, parameters);
         }
-        public override (string commandtext, IList<SqlParameter> parameters) Delete(IEntityRepositoryProperties<T> entitytable)
+        public override (string commandtext, IList<SqlParameter> parameters) Delete(ITableRepositoryProperties<T> entitytable)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();

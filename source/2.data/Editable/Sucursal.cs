@@ -1,5 +1,4 @@
-﻿using library.Impl.Data;
-using library.Impl.Data.Sql;
+﻿using library.Impl.Data.Sql;
 using System.Collections.Generic;
 using System.Data;
 
@@ -7,15 +6,15 @@ namespace data.Model
 {
     public partial class Sucursal
     {
-        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
 
         public Sucursal()
-            : this(_defaultconnectionstringname)
+            : this(_defaultappconnectionstringname)
         {
 
         }
         public Sucursal(entities.Model.Sucursal entity)
-            : this(entity, _defaultconnectionstringname)
+            : this(entity, _defaultappconnectionstringname)
         {
 
         }
@@ -58,10 +57,10 @@ namespace data.Query
 {
     public partial class Sucursal
     {
-        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
 
         public Sucursal()
-            : this(_defaultconnectionstringname)
+            : this(_defaultappconnectionstringname)
         {            
         }
     }
@@ -71,10 +70,10 @@ namespace data.Mapper
 {
     public partial class Sucursal
     {
-        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
 
         public Sucursal()
-            : this(_defaultconnectionstringname)
+            : this(_defaultappconnectionstringname)
         {
         }
     }

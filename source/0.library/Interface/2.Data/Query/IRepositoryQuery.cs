@@ -9,7 +9,7 @@ namespace library.Interface.Data.Query
 {
     public interface IRepositoryQuery<T, U>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         (Result result, U data) SelectSingle(IQueryRepositoryProperties querytable, int maxdepth = 1, U data = default(U));
         (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, U data = default(U));
@@ -19,7 +19,7 @@ namespace library.Interface.Data.Query
         (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<U> datas = null);
         (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1, IList<U> datas = null);
 
-        (Result result, int rows) Update(IList<IEntityColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1);
+        (Result result, int rows) Update(IList<ITableColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1);
         (Result result, int rows) Update(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null);
         (Result result, int rows) Update(IDbCommand command);
 

@@ -1,6 +1,6 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Query;
+﻿using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Table;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +11,7 @@ namespace library.Impl.Data.Sql.Builder
     {
         public abstract (string commandtext, IList<SqlParameter> parameters) Select(IQueryRepositoryProperties querytable, int maxdepth = 1, int top = 0);
 
-        public abstract (string commandtext, IList<SqlParameter> parameters) Update(IList<IEntityColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1);
+        public abstract (string commandtext, IList<SqlParameter> parameters) Update(IList<ITableColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1);
         public abstract (string commandtext, IList<SqlParameter> parameters) Delete(IQueryRepositoryProperties querytable, int maxdepth = 1);
 
 
@@ -42,7 +42,7 @@ namespace library.Impl.Data.Sql.Builder
             {
                 foreach (var j in query.Joins)
                 {
-                    columns.AddRange(GetQueryColumns(j.externalkey.Table, tablenames, aliasnames, maxdepth, depth));
+                    columns.AddRange(GetQueryColumns(j.externalkey.Query, tablenames, aliasnames, maxdepth, depth));
                 }
             }
 
@@ -57,11 +57,11 @@ namespace library.Impl.Data.Sql.Builder
             {
                 foreach (var j in table.Joins)
                 {
-                    var tablename = $"{(prefix == "" ? "" : $"{prefix}{tableseparator}")}{j.externalkey.Table.Description.Name}";
+                    var tablename = $"{(prefix == "" ? "" : $"{prefix}{tableseparator}")}{j.externalkey.Query.Description.Name}";
 
-                    joins.Add((table, prefix, j.externalkey.Table, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
+                    joins.Add((table, prefix, j.externalkey.Query, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
 
-                    joins.AddRange(GetQueryJoins(j.externalkey.Table, tablename, maxdepth, depth, tableseparator));
+                    joins.AddRange(GetQueryJoins(j.externalkey.Query, tablename, maxdepth, depth, tableseparator));
                 }
             }
 

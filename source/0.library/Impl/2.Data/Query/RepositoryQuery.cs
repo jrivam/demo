@@ -1,6 +1,5 @@
 ﻿using library.Impl.Data.Sql;
 using library.Impl.Data.Sql.Factory;
-using library.Interface.Data;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
@@ -11,11 +10,11 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 
-namespace library.Impl.Data.Repository
+namespace library.Impl.Data.Query
 {
     public class RepositoryQuery<T, U> : Repository<T, U>, IRepositoryQuery<T, U> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         protected readonly ISqlBuilderQuery _builder;
 
@@ -28,8 +27,8 @@ namespace library.Impl.Data.Repository
             : this(new SqlCreator(connectionstringsettings), mapper, SqlBuilderQueryFactory.Create(connectionstringsettings))
         {
         }
-        public RepositoryQuery(IMapperRepository<T, U> mapper, string connectionstringname)
-            : this(mapper, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public RepositoryQuery(IMapperRepository<T, U> mapper, string appconnectionstringname)
+            : this(mapper, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
@@ -63,7 +62,7 @@ namespace library.Impl.Data.Repository
             return ExecuteQuery(command, maxdepth, datas);
         }
 
-        public virtual (Result result, int rows) Update(IList<IEntityColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1)
+        public virtual (Result result, int rows) Update(IList<ITableColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1)
         {
             var update = _builder.Update(columns, querytable, maxdepth);
             return Update(update.commandtext, CommandType.Text, update.parameters);

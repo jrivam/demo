@@ -7,7 +7,7 @@ namespace library.Interface.Presentation
 {
     public interface IInteractive<T, U, V, W> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
         where W : IEntityInteractiveProperties<T, U, V>
     {

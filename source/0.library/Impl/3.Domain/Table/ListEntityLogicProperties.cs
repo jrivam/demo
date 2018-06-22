@@ -14,16 +14,16 @@ namespace library.Impl.Domain.Table
 {
     public class ListEntityLogicProperties<S, R, T, U, V> : List<V>, IListEntityLogicProperties<S, R, T, U, V>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
     {
-        public virtual ListEntityRepositoryProperties<S, T, U> Datas
+        public virtual ListTableRepositoryProperties<S, T, U> Datas
         {
             get
             {
-                return new ListEntityRepositoryProperties<S, T, U>().Load(this.Select(x => x.Data));
+                return new ListTableRepositoryProperties<S, T, U>().Load(this.Select(x => x.Data));
             }
             set
             {

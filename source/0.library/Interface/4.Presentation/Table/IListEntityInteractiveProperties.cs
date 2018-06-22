@@ -15,7 +15,7 @@ namespace library.Interface.Data.Table
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where W : class, IEntityInteractiveProperties<T, U, V>, IEntityInteractiveMethods<T, U, V, W>
     {

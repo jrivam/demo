@@ -1,5 +1,5 @@
-﻿using library.Impl.Data.Repository;
-using library.Interface.Data;
+﻿using library.Impl.Data.Definition;
+using library.Impl.Data.Sql;
 using library.Interface.Data.Query;
 using System.Collections.Generic;
 using System.Linq;

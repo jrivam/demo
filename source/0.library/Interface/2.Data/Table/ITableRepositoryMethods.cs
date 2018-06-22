@@ -4,9 +4,9 @@ using library.Interface.Entities;
 
 namespace library.Interface.Data.Table
 {
-    public interface IEntityRepositoryMethods<T, U> 
+    public interface ITableRepositoryMethods<T, U> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         U Clear();
 

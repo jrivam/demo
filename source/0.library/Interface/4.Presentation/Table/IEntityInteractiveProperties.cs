@@ -8,12 +8,12 @@ namespace library.Interface.Presentation.Table
 {
     public interface IEntityInteractiveProperties<T, U, V> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
     {
         V Domain { get; }
 
-        IEntityColumn this[string reference] { get; }
+        ITableColumn this[string reference] { get; }
 
         void OnPropertyChanged(string propertyName);
 

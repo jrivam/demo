@@ -1,6 +1,5 @@
-﻿using library.Impl.Data.Repository;
+﻿using library.Impl.Data.Definition;
 using library.Impl.Data.Sql;
-using library.Interface.Data;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System.Collections.Generic;
@@ -9,14 +8,14 @@ using System.Linq;
 
 namespace library.Impl.Data.Table
 {
-    public abstract class AbstractEntityRepositoryProperties<T> : IEntityRepositoryProperties<T>
+    public abstract class AbstractTableRepositoryProperties<T> : ITableRepositoryProperties<T>
         where T : IEntity, new()
     {
         public virtual T Entity { get; protected set; }
 
         public virtual Description Description { get; protected set; }
 
-        public AbstractEntityRepositoryProperties(string name, string reference)
+        public AbstractTableRepositoryProperties(string name, string reference)
         {
             Description = new Description(name, reference);
         }
@@ -31,13 +30,13 @@ namespace library.Impl.Data.Table
         {
         }
 
-        public virtual IEntityColumn this[string reference]
+        public virtual ITableColumn this[string reference]
         {
             get
             {
                 return Columns.SingleOrDefault(x => x.ColumnDescription.Reference.ToLower() == reference.ToLower());
             }
         }
-        public virtual IList<IEntityColumn> Columns { get; } = new List<IEntityColumn>();
+        public virtual IList<ITableColumn> Columns { get; } = new List<ITableColumn>();
     }
 }

@@ -8,9 +8,9 @@ using System.Reflection;
 
 namespace library.Impl.Data.Table
 {
-    public class ListEntityRepositoryProperties<S, T, U> : List<U>, IListEntityRepositoryProperties<S, T, U>
+    public class ListTableRepositoryProperties<S, T, U> : List<U>, IListTableRepositoryProperties<S, T, U>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where S : IQueryRepositoryMethods<T, U>
     {
         public virtual List<T> Entities
@@ -31,15 +31,15 @@ namespace library.Impl.Data.Table
             }
         }
 
-        public ListEntityRepositoryProperties()
+        public ListTableRepositoryProperties()
         {
         }
 
-        public virtual ListEntityRepositoryProperties<S, T, U> Load(S query, int maxdepth = 1, int top = 0)
+        public virtual ListTableRepositoryProperties<S, T, U> Load(S query, int maxdepth = 1, int top = 0)
         {
             return Load(query.SelectMultiple(maxdepth, top).datas);
         }
-        public virtual ListEntityRepositoryProperties<S, T, U> Load(IEnumerable<U> list)
+        public virtual ListTableRepositoryProperties<S, T, U> Load(IEnumerable<U> list)
         {
             this.AddRange(list);
 

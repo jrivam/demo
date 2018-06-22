@@ -1,10 +1,11 @@
-﻿using library.Interface.Data;
+﻿using library.Impl.Data.Definition;
+using library.Impl.Data.Sql;
 using library.Interface.Data.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace library.Impl.Data.Repository
+namespace library.Impl.Data.Query
 {
     public class QueryColumn<A> : IQueryColumn
     {
@@ -16,15 +17,15 @@ namespace library.Impl.Data.Repository
             }
         }
 
-        public virtual IQueryRepositoryProperties Table { get; }
+        public virtual IQueryRepositoryProperties Query { get; }
 
         public virtual Description Description { get; }
 
         public virtual IList<(object value, WhereOperator? sign)> Wheres { get; set; } = new List<(object, WhereOperator?)>();
 
-        public QueryColumn(IQueryRepositoryProperties table, string name, string reference)
+        public QueryColumn(IQueryRepositoryProperties query, string name, string reference)
         {
-            Table = table;
+            Query = query;
 
             Description = new Description(name, reference);
         }
@@ -34,13 +35,13 @@ namespace library.Impl.Data.Repository
             if (!Wheres.Contains(condition))
                 Wheres?.Add(condition);
 
-            return Table;
+            return Query;
         }
         public virtual IQueryRepositoryProperties Where(params (object value, WhereOperator? sign)[] conditions)
         {
             conditions?.ToList()?.ForEach(x => Where(x));
 
-            return Table;
+            return Query;
         }
         public virtual IQueryRepositoryProperties Where(object value, WhereOperator? sign = WhereOperator.Equals)
         {

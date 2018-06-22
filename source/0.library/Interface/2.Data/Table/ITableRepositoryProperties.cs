@@ -1,4 +1,4 @@
-﻿using library.Impl.Data.Repository;
+﻿using library.Impl.Data.Definition;
 using library.Impl.Data.Sql;
 using library.Interface.Entities;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Data;
 
 namespace library.Interface.Data.Table
 {
-    public interface IEntityRepositoryProperties<T> 
+    public interface ITableRepositoryProperties<T> 
         where T : IEntity
     {
         T Entity { get; }
@@ -19,8 +19,8 @@ namespace library.Interface.Data.Table
         (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
         (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
 
-        IList<IEntityColumn> Columns { get; }
-        IEntityColumn this[string reference] { get; }
+        IList<ITableColumn> Columns { get; }
+        ITableColumn this[string reference] { get; }
 
         void InitDbCommands();
     }

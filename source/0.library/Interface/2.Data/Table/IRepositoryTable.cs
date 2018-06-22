@@ -8,7 +8,7 @@ namespace library.Interface.Data.Table
 {
     public interface IRepositoryTable<T, U>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         U Clear(U data, int maxdepth = 1);
       

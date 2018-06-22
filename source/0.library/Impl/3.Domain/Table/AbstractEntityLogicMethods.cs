@@ -7,7 +7,7 @@ namespace library.Impl.Domain.Table
 {
     public abstract class AbstractEntityLogicMethods<T, U, V> : AbstractEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>, IEntityRepositoryMethods<T, U>, new()
+        where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>, new()
         where V : class, IEntityLogicProperties<T, U>
     {
         protected readonly ILogicTable<T, U, V> _logic;

@@ -6,15 +6,15 @@ namespace data.Model
 {
     public partial class Empresa
     {
-        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
 
         public Empresa()
-            : this(_defaultconnectionstringname)
+            : this(_defaultappconnectionstringname)
         {
 
         }
         public Empresa(entities.Model.Empresa entity)
-            : this(entity, _defaultconnectionstringname)
+            : this(entity, _defaultappconnectionstringname)
         {
 
         }
@@ -33,10 +33,10 @@ namespace data.Query
 {
     public partial class Empresa
     {
-        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
 
         public Empresa()
-            : this(_defaultconnectionstringname)
+            : this(_defaultappconnectionstringname)
         {
         }
     }
@@ -46,10 +46,10 @@ namespace data.Mapper
 {
     public partial class Empresa
     {
-        protected const string _defaultconnectionstringname = "test.connectionstring.name";
+        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
 
         public Empresa()
-            : this(_defaultconnectionstringname)
+            : this(_defaultappconnectionstringname)
         {
         }
     }

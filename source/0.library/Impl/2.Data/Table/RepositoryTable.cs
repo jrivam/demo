@@ -14,7 +14,7 @@ namespace library.Impl.Data.Table
 {
     public class RepositoryTable<T, U> : Repository<T, U>, IRepositoryTable<T, U> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         protected readonly ISqlBuilderTable<T> _builder;
 
@@ -27,8 +27,8 @@ namespace library.Impl.Data.Table
             : this(new SqlCreator(connectionstringsettings), mapper, SqlBuilderTableFactory<T>.Create(connectionstringsettings))
         {
         }
-        public RepositoryTable(IMapperRepository<T, U> mapper, string connectionstringname)
-            : this(mapper, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public RepositoryTable(IMapperRepository<T, U> mapper, string appconnectionstringname)
+            : this(mapper, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
@@ -52,8 +52,15 @@ namespace library.Impl.Data.Table
 
         public virtual (Result result, U data) Select(U data, bool usedbcommand = false)
         {
-            if (data.SelectDbCommand != null && UseDbCommand(data.UseDbCommand, data.SelectDbCommand.Value.usedbcommand, usedbcommand))
-                return Select(data, data.SelectDbCommand.Value.dbcommand);
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.SelectDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (data.SelectDbCommand != null)
+                {
+                    return Select(data, data.SelectDbCommand.Value.dbcommand);
+                }
+
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No SelectDbCommand defined.") } }, data);
+            }
 
             var select = _builder.Select(data);
             return Select(data, select.commandtext, CommandType.Text, select.parameters);
@@ -79,8 +86,15 @@ namespace library.Impl.Data.Table
 
         public virtual (Result result, U data) Insert(U data, bool usedbcommand = false)
         {
-            if (data.InsertDbCommand != null && UseDbCommand(data.UseDbCommand, data.InsertDbCommand.Value.usedbcommand, usedbcommand))
-                return Insert(data, data.InsertDbCommand.Value.dbcommand);
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.InsertDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (data.InsertDbCommand != null)
+                {
+                    return Insert(data, data.InsertDbCommand.Value.dbcommand);
+                }
+
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No InsertDbCommand defined.") } }, data);
+            }
 
             var insert = _builder.Insert(data);
             return Insert(data, insert.commandtext, CommandType.Text, insert.parameters);
@@ -118,8 +132,15 @@ namespace library.Impl.Data.Table
 
         public virtual (Result result, U data) Update(U data, bool usedbcommand = false)
         {
-            if (data.UpdateDbCommand != null && UseDbCommand(data.UseDbCommand, data.UpdateDbCommand.Value.usedbcommand, usedbcommand))
-                return Update(data, data.UpdateDbCommand.Value.dbcommand);
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.UpdateDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (data.UpdateDbCommand != null)
+                {
+                    return Update(data, data.UpdateDbCommand.Value.dbcommand);
+                }
+
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No UpdateDbCommand defined.") } }, data);
+            }
 
             var update = _builder.Update(data);
             return Update(data, update.commandtext, CommandType.Text, update.parameters);
@@ -153,8 +174,15 @@ namespace library.Impl.Data.Table
 
         public virtual (Result result, U data) Delete(U data, bool usedbcommand = false)
         {
-            if (data.DeleteDbCommand != null && UseDbCommand(data.UseDbCommand, data.DeleteDbCommand.Value.usedbcommand, usedbcommand))
-                return Delete(data, data.DeleteDbCommand.Value.dbcommand);
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.DeleteDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (data.DeleteDbCommand != null)
+                {
+                    return Delete(data, data.DeleteDbCommand.Value.dbcommand);
+                }
+
+                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No DeleteDbCommand defined.") } }, data);
+            }
 
             var delete = _builder.Delete(data);
             return Delete(data, delete.commandtext, CommandType.Text, delete.parameters);

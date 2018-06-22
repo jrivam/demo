@@ -1,5 +1,4 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Query;
+﻿using library.Interface.Data.Query;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ namespace library.Impl.Data.Query
 {
     public abstract class AbstractQueryRepositoryMethods<T, U> : AbstractQueryRepositoryProperties, IQueryRepositoryMethods<T, U>
         where T : IEntity, new()
-        where U : class, IEntityRepositoryProperties<T>
+        where U : class, ITableRepositoryProperties<T>
     {
         protected readonly IRepositoryQuery<T, U> _repository;
 
@@ -28,7 +27,7 @@ namespace library.Impl.Data.Query
             return _repository.SelectMultiple(this, maxdepth, top, datas);
         }
 
-        public virtual (Result result, int rows) Update(IList<IEntityColumn> columns, int maxdepth = 1)
+        public virtual (Result result, int rows) Update(IList<ITableColumn> columns, int maxdepth = 1)
         {
             return _repository.Update(columns, this, maxdepth);
         }

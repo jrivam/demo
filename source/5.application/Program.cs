@@ -1,11 +1,4 @@
-﻿using Autofac;
-using library.Impl.Data;
-using library.Impl.Data.Repository;
-using library.Impl.Data.Sql.Builder;
-using presentation.Model;
-using System.Configuration;
-
-namespace application
+﻿namespace application
 {
     class Program
     {

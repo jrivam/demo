@@ -1,9 +1,7 @@
 ﻿using library.Extension;
 using library.Impl;
-using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
-using library.Impl.Data.Repository;
 using library.Impl.Data.Sql;
 using library.Impl.Data.Sql.Factory;
 using library.Impl.Data.Table;
@@ -19,7 +17,7 @@ using System.Linq;
 
 namespace data.Model
 {
-    public partial class Empresa : AbstractEntityRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractTableRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
     {
         public virtual data.Query.Empresa Query
         {
@@ -35,9 +33,9 @@ namespace data.Model
         {
             Entity = entity;
 
-            Columns.Add(new EntityColumn<int?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new EntityColumn<bool?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new TableColumn<int?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new TableColumn<string>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new TableColumn<bool?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings, 
@@ -59,13 +57,13 @@ namespace data.Model
                   new entities.Model.Empresa())
         {
         }
-        public Empresa(string connectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public Empresa(string appconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
-        public Empresa(entities.Model.Empresa entity, string connectionstringname)
-            : this(connectionstringname)
+        public Empresa(entities.Model.Empresa entity, string appconnectionstringname)
+            : this(appconnectionstringname)
         {
             SetProperties(entity);
         }
@@ -134,7 +132,7 @@ namespace data.Model
         }
     }
 
-    public partial class Empresas : ListEntityRepositoryProperties<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresas : ListTableRepositoryProperties<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
         public Empresas()
             : base()
@@ -171,8 +169,8 @@ namespace data.Query
                   SqlBuilderQueryFactory.Create(connectionstringsettings))
         {
         }
-        public Empresa(string connectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public Empresa(string appconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
@@ -218,8 +216,8 @@ namespace data.Mapper
             : this(SqlSyntaxSignFactory.Create(connectionstringsettings))
         {
         }
-        public Empresa(string connectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public Empresa(string appconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 

@@ -1,5 +1,4 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Sql;
+﻿using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System;
@@ -11,18 +10,18 @@ namespace library.Impl.Data.Sql.Builder
     public abstract class AbstractSqlBuilderTable<T> : AbstractSqlBuilder, ISqlBuilderTable<T>
         where T : IEntity
     {
-        public abstract (string commandtext, IList<SqlParameter> parameters) Select(IEntityRepositoryProperties<T> entitytable);
+        public abstract (string commandtext, IList<SqlParameter> parameters) Select(ITableRepositoryProperties<T> entitytable);
 
-        public abstract (string commandtext, IList<SqlParameter> parameters) Insert(IEntityRepositoryProperties<T> entitytable);
-        public abstract (string commandtext, IList<SqlParameter> parameters) Update(IEntityRepositoryProperties<T> entitytable);
-        public abstract (string commandtext, IList<SqlParameter> parameters) Delete(IEntityRepositoryProperties<T> entitytable);
+        public abstract (string commandtext, IList<SqlParameter> parameters) Insert(ITableRepositoryProperties<T> entitytable);
+        public abstract (string commandtext, IList<SqlParameter> parameters) Update(ITableRepositoryProperties<T> entitytable);
+        public abstract (string commandtext, IList<SqlParameter> parameters) Delete(ITableRepositoryProperties<T> entitytable);
 
         public AbstractSqlBuilderTable(ISqlSyntaxSign syntaxsign)
             : base(syntaxsign)
         {
         }
 
-        public virtual IEnumerable<(IEntityColumn column, SqlParameter parameter)> GetEntityParameters(IList<IEntityColumn> columns, IList<SqlParameter> parameters)
+        public virtual IEnumerable<(ITableColumn column, SqlParameter parameter)> GetEntityParameters(IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {
             foreach (var c in columns)
             {
@@ -34,7 +33,7 @@ namespace library.Impl.Data.Sql.Builder
             }
         }
 
-        protected virtual string GetEntityWhere(IList<IEntityColumn> columns, IList<SqlParameter> parameters)
+        protected virtual string GetEntityWhere(IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {
             var where = string.Empty;
 
@@ -45,7 +44,7 @@ namespace library.Impl.Data.Sql.Builder
 
             return where;
         }
-        protected virtual string GetEntitySelectColumns(IList<IEntityColumn> columns)
+        protected virtual string GetEntitySelectColumns(IList<ITableColumn> columns)
         {
             var select = string.Empty;
 
@@ -57,7 +56,7 @@ namespace library.Impl.Data.Sql.Builder
 
             return select;
         }
-        protected virtual string GetEntityInsertColumns(IList<IEntityColumn> columns)
+        protected virtual string GetEntityInsertColumns(IList<ITableColumn> columns)
         {
             var insert = string.Empty;
 
@@ -69,7 +68,7 @@ namespace library.Impl.Data.Sql.Builder
 
             return insert;
         }
-        protected virtual string GetEntityInsertValues(IList<IEntityColumn> columns, IList<SqlParameter> parameters)
+        protected virtual string GetEntityInsertValues(IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {
             var values = string.Empty;
 

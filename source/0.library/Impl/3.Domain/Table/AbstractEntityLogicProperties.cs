@@ -7,11 +7,11 @@ namespace library.Impl.Domain.Table
 {
     public abstract class AbstractEntityLogicProperties<T, U> : IEntityLogicProperties<T, U>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>, IEntityRepositoryMethods<T, U>, new()
+        where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>, new()
     {
         public virtual U Data { get; protected set; }
 
-        public virtual IEntityColumn this[string reference]
+        public virtual ITableColumn this[string reference]
         {
             get
             {

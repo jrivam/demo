@@ -1,9 +1,7 @@
 ﻿using library.Extension;
 using library.Impl;
-using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
-using library.Impl.Data.Repository;
 using library.Impl.Data.Sql;
 using library.Impl.Data.Sql.Factory;
 using library.Impl.Data.Table;
@@ -19,7 +17,7 @@ using System.Data;
 
 namespace data.Model
 {
-    public partial class Sucursal : AbstractEntityRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractTableRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>
     {
         public virtual data.Query.Sucursal Query
         {
@@ -35,12 +33,12 @@ namespace data.Model
         {
             Entity = entity;
 
-            Columns.Add(new EntityColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
-            Columns.Add(new EntityColumn<string>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new EntityColumn<DateTime?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new EntityColumn<bool?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new TableColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new TableColumn<string>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new TableColumn<DateTime?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new TableColumn<bool?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
 
-            Columns.Add(new EntityColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new TableColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
@@ -62,13 +60,13 @@ namespace data.Model
                   new entities.Model.Sucursal())
         {
         }
-        public Sucursal(string connectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public Sucursal(string appconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
-        public Sucursal(entities.Model.Sucursal entity, string connectionstringname)
-            : this(connectionstringname)
+        public Sucursal(entities.Model.Sucursal entity, string appconnectionstringname)
+            : this(appconnectionstringname)
         {
             SetProperties(entity);
         }
@@ -156,7 +154,7 @@ namespace data.Model
         }
     }
 
-    public partial class Sucursales : ListEntityRepositoryProperties<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursales : ListTableRepositoryProperties<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
         public Sucursales()
             : base()
@@ -207,8 +205,8 @@ namespace data.Query
                   SqlBuilderQueryFactory.Create(connectionstringsettings))
         {
         }
-        public Sucursal(string connectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public Sucursal(string appconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
@@ -268,8 +266,8 @@ namespace data.Mapper
             : this(SqlSyntaxSignFactory.Create(connectionstringsettings))
         {
         }
-        public Sucursal(string connectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[connectionstringname]])
+        public Sucursal(string appconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 

@@ -1,5 +1,5 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Sql;
+﻿using library.Interface.Data.Sql;
+using library.Interface.Data.Table;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,7 +25,7 @@ namespace library.Impl.Data.Sql.Builder
 
             return parameter;
         }
-        public virtual IEnumerable<(IEntityColumn column, SqlParameter parameter)> GetParameters(IList<IEntityColumn> columns, IList<SqlParameter> parameters)
+        public virtual IEnumerable<(ITableColumn column, SqlParameter parameter)> GetParameters(IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {
             foreach (var c in columns)
             {
@@ -36,7 +36,7 @@ namespace library.Impl.Data.Sql.Builder
                 yield return (c, parameter);
             }
         }
-        public virtual string GetUpdateSet(IList<IEntityColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
+        public virtual string GetUpdateSet(IList<ITableColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
         {
             var set = string.Empty;
 
