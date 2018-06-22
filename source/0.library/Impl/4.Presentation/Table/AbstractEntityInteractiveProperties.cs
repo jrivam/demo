@@ -10,13 +10,13 @@ namespace library.Impl.Presentation.Table
 {
     public abstract class AbstractEntityInteractiveProperties<T, U, V, W> : IEntityInteractiveProperties<T, U, V>, INotifyPropertyChanged
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, new()
         where W : IEntityInteractiveProperties<T, U, V>
     {
         public virtual V Domain { get; protected set; }
 
-        public virtual IEntityColumn this[string reference]
+        public virtual ITableColumn this[string reference]
         {
             get
             {

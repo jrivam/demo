@@ -4,13 +4,13 @@ using library.Interface.Entities;
 
 namespace library.Impl.Data.Table
 {
-    public abstract class AbstractEntityRepositoryMethods<T, U> : AbstractEntityRepositoryProperties<T>, IEntityRepositoryMethods<T, U>
+    public abstract class AbstractTableRepositoryMethods<T, U> : AbstractTableRepositoryProperties<T>, ITableRepositoryMethods<T, U>
         where T : IEntity, new()
-        where U : class, IEntityRepositoryProperties<T>
+        where U : class, ITableRepositoryProperties<T>
     {
         protected readonly IRepositoryTable<T, U> _repository;
 
-        public AbstractEntityRepositoryMethods(IRepositoryTable<T, U> repository,
+        public AbstractTableRepositoryMethods(IRepositoryTable<T, U> repository,
             string name, string reference)
             : base(name, reference)
         {
@@ -18,7 +18,7 @@ namespace library.Impl.Data.Table
 
             InitDbCommands();
         }
-        public AbstractEntityRepositoryMethods(IRepositoryTable<T, U> repository,
+        public AbstractTableRepositoryMethods(IRepositoryTable<T, U> repository,
             string name, string reference, T entity)
             : this(repository, name, reference)
         {

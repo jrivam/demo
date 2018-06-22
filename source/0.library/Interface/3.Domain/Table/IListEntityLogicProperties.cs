@@ -11,12 +11,12 @@ namespace library.Interface.Data.Table
 {
     public interface IListEntityLogicProperties<S, R, T, U, V>
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
     {
-        ListEntityRepositoryProperties<S, T, U> Datas { get; set; }
+        ListTableRepositoryProperties<S, T, U> Datas { get; set; }
 
         ListEntityLogicProperties<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0);
         ListEntityLogicProperties<S, R, T, U, V> Load(IEnumerable<V> list);

@@ -9,7 +9,7 @@ namespace library.Impl.Presentation.Table
 {
     public abstract class AbstractEntityInteractiveMethods<T, U, V, W> : AbstractEntityInteractiveProperties<T, U, V, W>, IEntityInteractiveMethods<T, U, V, W>, INotifyPropertyChanged
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>, new()
         where W : class, IEntityInteractiveProperties<T, U, V>
     {

@@ -12,7 +12,7 @@ namespace library.Impl.Data.Mapper
 {
     public class BaseMapperTable<T, U> : IMapperRepository<T, U> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         protected readonly ISqlSyntaxSign _syntaxsign;
 

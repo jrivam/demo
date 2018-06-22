@@ -8,7 +8,7 @@ namespace library.Impl.Domain.Table
 {
     public class LogicTable<T, U, V> : Logic<T, U, V>, ILogicTable<T, U, V> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
     {
         public LogicTable(IMapperLogic<T, U, V> mapper)
@@ -16,7 +16,7 @@ namespace library.Impl.Domain.Table
         {
         }
 
-        public virtual V Clear(V domain, IEntityRepositoryMethods<T, U> entityrepository)
+        public virtual V Clear(V domain, ITableRepositoryMethods<T, U> entityrepository)
         {
             entityrepository.Clear();
 
@@ -28,7 +28,7 @@ namespace library.Impl.Domain.Table
             return domain;
         }
 
-        public virtual (Result result, V domain) Load(V domain, IEntityRepositoryMethods<T, U> entityrepository, bool usedbcommand = false)
+        public virtual (Result result, V domain) Load(V domain, ITableRepositoryMethods<T, U> entityrepository, bool usedbcommand = false)
         {
             if (domain.Data.Entity.Id != null)
             {
@@ -50,7 +50,7 @@ namespace library.Impl.Domain.Table
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "Load: Id cannot be null") } }, domain);
         }
-        public virtual (Result result, V domain) LoadQuery(V domain, IEntityRepositoryMethods<T, U> entityrepository, int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(V domain, ITableRepositoryMethods<T, U> entityrepository, int maxdepth = 1)
         {
             if (domain.Data.Entity.Id != null)
             {
@@ -72,7 +72,7 @@ namespace library.Impl.Domain.Table
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "LoadQuery: Id cannot be null") } }, domain);
         }
-        public virtual (Result result, V domain) Save(V domain, IEntityRepositoryMethods<T, U> entityrepository, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, V domain) Save(V domain, ITableRepositoryMethods<T, U> entityrepository, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             if (domain.Changed)
             {
@@ -90,7 +90,7 @@ namespace library.Impl.Domain.Table
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Save: no changes to persist") } }, domain);
         }
-        public virtual (Result result, V domain) Erase(V domain, IEntityRepositoryMethods<T, U> entityrepository, bool usedbcommand = false)
+        public virtual (Result result, V domain) Erase(V domain, ITableRepositoryMethods<T, U> entityrepository, bool usedbcommand = false)
         {
             if (domain.Data.Entity.Id != null)
             {

@@ -8,10 +8,10 @@ namespace library.Interface.Data.Sql
     public interface ISqlBuilderTable<T> : ISqlBuilder
         where T : IEntity
     {
-        (string commandtext, IList<SqlParameter> parameters) Select(IEntityRepositoryProperties<T> entitytable);
+        (string commandtext, IList<SqlParameter> parameters) Select(ITableRepositoryProperties<T> entitytable);
 
-        (string commandtext, IList<SqlParameter> parameters) Insert(IEntityRepositoryProperties<T> entitytable);
-        (string commandtext, IList<SqlParameter> parameters) Update(IEntityRepositoryProperties<T> entitytable);
-        (string commandtext, IList<SqlParameter> parameters) Delete(IEntityRepositoryProperties<T> entitytable);
+        (string commandtext, IList<SqlParameter> parameters) Insert(ITableRepositoryProperties<T> entitytable);
+        (string commandtext, IList<SqlParameter> parameters) Update(ITableRepositoryProperties<T> entitytable);
+        (string commandtext, IList<SqlParameter> parameters) Delete(ITableRepositoryProperties<T> entitytable);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace library.Impl.Data.Repository
+﻿namespace library.Impl.Data.Definition
 {
     public class Description
     {

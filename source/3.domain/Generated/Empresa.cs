@@ -1,5 +1,5 @@
 ﻿using library.Impl;
-using library.Impl.Data;
+using library.Impl.Data.Sql;
 using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Query;
 using library.Impl.Domain.Table;

@@ -1,9 +1,9 @@
-﻿using library.Impl.Data.Repository;
+﻿using library.Impl.Data.Definition;
 using System;
 
-namespace library.Interface.Data
+namespace library.Interface.Data.Table
 {
-    public interface IEntityColumn
+    public interface ITableColumn
     {
         Type Type { get; }
 

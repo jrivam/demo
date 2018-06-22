@@ -1,16 +1,15 @@
-﻿using library.Impl.Data;
-using library.Impl.Data.Repository;
-using library.Interface.Data.Query;
+﻿using library.Impl.Data.Definition;
+using library.Impl.Data.Sql;
 using System;
 using System.Collections.Generic;
 
-namespace library.Interface.Data
+namespace library.Interface.Data.Query
 {
     public interface IQueryColumn
     {
         Type Type { get; }
 
-        IQueryRepositoryProperties Table { get; }
+        IQueryRepositoryProperties Query { get; }
 
         Description Description { get; }
 

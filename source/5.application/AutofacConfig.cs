@@ -21,8 +21,8 @@ namespace application
                    .InstancePerRequest();
 
             builder.RegisterType<data.Model.Empresa>()
-                   .As<IEntityRepositoryProperties<entities.Model.Empresa>>()
-                   .As<IEntityRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>>()
+                   .As<ITableRepositoryProperties<entities.Model.Empresa>>()
+                   .As<ITableRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>>()
                    .InstancePerRequest();
 
             return builder.Build();

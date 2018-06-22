@@ -1,9 +1,10 @@
-﻿using library.Interface.Data;
+﻿using library.Impl.Data.Definition;
+using library.Interface.Data.Table;
 using System;
 
-namespace library.Impl.Data.Repository
+namespace library.Impl.Data.Table
 {
-    public class EntityColumn<A> : IEntityColumn
+    public class TableColumn<A> : ITableColumn
     {
         public virtual Type Type
         {
@@ -22,18 +23,18 @@ namespace library.Impl.Data.Repository
         public virtual object Value { get; set; }
         public virtual object DbValue { get; set; }
 
-        public EntityColumn(Description tabledescription, string name, string reference)
+        public TableColumn(Description tabledescription, string name, string reference)
         {
             TableDescription = tabledescription;
 
             ColumnDescription = new Description(name, reference);
         }
-        public EntityColumn(Description tabledescription, string name, string reference, bool isprimarykey)
+        public TableColumn(Description tabledescription, string name, string reference, bool isprimarykey)
             : this(tabledescription, name, reference)
         {
             IsPrimaryKey = isprimarykey;
         }
-        public EntityColumn(Description tabledescription, string name, string reference, bool isprimarykey, bool isidentity)
+        public TableColumn(Description tabledescription, string name, string reference, bool isprimarykey, bool isidentity)
             : this(tabledescription, name, reference, isprimarykey)
         {
             IsIdentity = isidentity;

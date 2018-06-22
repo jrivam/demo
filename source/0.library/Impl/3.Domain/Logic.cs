@@ -8,7 +8,7 @@ namespace library.Impl.Domain
 {
     public class Logic<T, U, V> : ILogic<T, U, V> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
     {
         protected readonly IMapperLogic<T, U, V> _mapper;

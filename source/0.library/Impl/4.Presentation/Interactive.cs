@@ -9,7 +9,7 @@ namespace library.Impl.Presentation
 {
     public class Interactive<T, U, V, W> : IInteractive<T, U, V, W> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
         where W : IEntityInteractiveProperties<T, U, V>
     {

@@ -1,4 +1,4 @@
-﻿namespace library.Impl.Data
+﻿namespace library.Impl.Data.Sql
 {
     public enum OrderDirection
     {

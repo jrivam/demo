@@ -13,7 +13,7 @@ namespace library.Impl.Domain.Query
 {
     public class LogicQuery<T, U, V> : Logic<T, U, V>, ILogicQuery<T, U, V> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
     {
         public LogicQuery(IMapperLogic<T, U, V> mapper)

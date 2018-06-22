@@ -7,7 +7,7 @@ namespace library.Interface.Data.Mapper
 {
     public interface IMapperRepository<T, U> 
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
     {
         U Read(U data, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0);
 

@@ -10,7 +10,7 @@ namespace library.Impl.Domain.Query
     public abstract class AbstractQueryLogicMethods<S, T, U, V> : AbstractQueryLogicProperties<S>, IQueryLogicMethods<T, U, V>
         where S : IQueryRepositoryProperties, IQueryRepositoryMethods<T, U>, new()
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>, IEntityRepositoryMethods<T, U>
+        where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>
         where V : IEntityLogicProperties<T, U>
     {
         protected readonly ILogicQuery<T, U, V> _logic;

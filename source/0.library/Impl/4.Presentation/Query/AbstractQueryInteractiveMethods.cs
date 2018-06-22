@@ -13,7 +13,7 @@ namespace library.Impl.Presentation.Query
         where S : IQueryRepositoryProperties
         where R : IQueryLogicProperties<S>, IQueryLogicMethods<T, U, V>, new()
         where T : IEntity
-        where U : IEntityRepositoryProperties<T>
+        where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where W : IEntityInteractiveProperties<T, U, V>
     {
