@@ -25,19 +25,16 @@ namespace library.Impl.Presentation.Query
 
         public virtual (Result result, W presentation) Retrieve(IQueryLogicMethods<T, U, V> querylogic, int maxdepth = 1, W presentation = default(W))
         {
-            if (presentation == null)
+            var retrieve = querylogic.Retrieve(maxdepth);
+
+            if (retrieve.result.Success)
             {
                 presentation = (W)Activator.CreateInstance(typeof(W),
                         BindingFlags.CreateInstance |
                         BindingFlags.Public |
                         BindingFlags.Instance |
-                        BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
-            }
+                        BindingFlags.OptionalParamBinding, null, new object[] { retrieve.domain, maxdepth }, CultureInfo.CurrentCulture);
 
-            var retrieve = querylogic.Retrieve(maxdepth, presentation.Domain);
-
-            if (retrieve.result.Success)
-            {
                 _mapper.Clear(presentation);
                 _mapper.Map(presentation);
             }

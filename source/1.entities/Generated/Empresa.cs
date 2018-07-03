@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace entities.Model
 {
+    [MetadataType(typeof(EmpresaDecoration))]
     [Table("empresa")]
     public partial class Empresa : IEntity
     {

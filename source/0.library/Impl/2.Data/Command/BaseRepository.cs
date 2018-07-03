@@ -35,11 +35,11 @@ namespace library.Impl.Data.Command
                 {
                     while (reader.Read())
                     {
-                        var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth);
+                        var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(maxdepth, 0);
 
-                        _mapper.Clear(data, maxdepth);
-                        _mapper.Read(data, reader, new List<string>(), maxdepth);
-                        _mapper.Map(data, maxdepth);
+                        _mapper.Clear(data, maxdepth, 0);
+                        _mapper.Read(data, reader, new List<string>(), maxdepth, 0);
+                        _mapper.Map(data, maxdepth, 0);
 
                         enumeration.Add(data);
                     }

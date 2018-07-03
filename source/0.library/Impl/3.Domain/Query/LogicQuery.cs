@@ -23,19 +23,16 @@ namespace library.Impl.Domain.Query
 
         public virtual (Result result, V domain) Retrieve(IQueryRepositoryMethods<T, U> queryrepository, int maxdepth = 1, V domain = default(V))
         {
-            if (domain == null)
+            var selectsingle = queryrepository.SelectSingle(maxdepth);
+
+            if (selectsingle.result.Success)
             {
                 domain = (V)Activator.CreateInstance(typeof(V),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, null, CultureInfo.CurrentCulture);
-            }
+                    BindingFlags.OptionalParamBinding, null, new object[] { selectsingle.data }, CultureInfo.CurrentCulture);
 
-            var selectsingle = queryrepository.SelectSingle(maxdepth, domain.Data);
-
-            if (selectsingle.result.Success)
-            {
                 _mapper.Clear(domain);
                 _mapper.Map(domain);
 

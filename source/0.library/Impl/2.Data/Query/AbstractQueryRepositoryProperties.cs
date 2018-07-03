@@ -14,6 +14,11 @@ namespace library.Impl.Data.Query
             Description = new Description(name, reference);
         }
 
+        public virtual IList<(IQueryColumn internalkey, IQueryColumn externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
+        {
+            return new List<(IQueryColumn internalkey, IQueryColumn externalkey)>();
+        }
+
         public virtual IList<(IQueryColumn column, OrderDirection flow)> Orders { get; } = new List<(IQueryColumn, OrderDirection)>();
 
         public virtual IQueryColumn this[string reference]
@@ -24,8 +29,6 @@ namespace library.Impl.Data.Query
             }
         }
         public virtual IList<IQueryColumn> Columns { get; } = new List<IQueryColumn>();
-
-        public virtual IList<(IQueryColumn internalkey, IQueryColumn externalkey)> Joins { get; } = new List<(IQueryColumn, IQueryColumn)>();
 
         public void ClearWhere()
         {

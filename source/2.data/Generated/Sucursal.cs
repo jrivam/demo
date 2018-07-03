@@ -180,6 +180,18 @@ namespace data.Query
             }
         }
 
+        public override IList<(IQueryColumn internalkey, IQueryColumn externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
+        {
+            var joins = new List<(IQueryColumn internalkey, IQueryColumn externalkey)>();
+
+            if (_empresa != null || depth < maxdepth || maxdepth == 0)
+            {
+                joins.Add((this["IdEmpresa"], Empresa()["Id"]));
+            }
+
+            return joins;
+        }
+
         public Sucursal(IRepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal> repository)
             : base(repository, typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
@@ -189,13 +201,11 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
 
             Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
-
-            Joins.Add((this["IdEmpresa"], Empresa()["Id"]));
         }
 
         public Sucursal(ISqlCreator creator, 
-            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
-            ISqlBuilderQuery builder)
+        IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
+        ISqlBuilderQuery builder)
             : this(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(creator, mapper, builder))
         {
         }
@@ -238,6 +248,7 @@ namespace data.Query
                 this["Activo"].Where(value.value, value.sign);
             }
         }
+
         public virtual (int? value, WhereOperator? sign) IdEmpresa
         {
             set
@@ -291,15 +302,7 @@ namespace data.Mapper
             data.Entity.Activo = null;
             data.Entity.IdEmpresa = null;
 
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                data.Empresa = new data.Mapper.Empresa().Clear(data?.Empresa, maxdepth, depth);
-            }
-            else
-            {
-                data.Empresa = null;
-            }
+            data.Entity.Empresa = null;
 
             return data;
         }

@@ -193,7 +193,7 @@ namespace domain.Mapper
     {
         public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain)
         {
-            domain = base.Clear(domain);
+            //domain = base.Clear(domain);
 
             domain.Empresa = null;
 
@@ -201,7 +201,7 @@ namespace domain.Mapper
         }
         public override domain.Model.Sucursal Map(domain.Model.Sucursal domain)
         {
-            domain = base.Map(domain);
+            //domain = base.Map(domain);
 
             return domain;
         }

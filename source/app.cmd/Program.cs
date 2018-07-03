@@ -1,4 +1,5 @@
-﻿using System;
+﻿using library.Impl.Data.Sql;
+using System;
 using System.Linq;
 
 namespace app.cmd
@@ -16,7 +17,22 @@ namespace app.cmd
             //    }
             //}
 
-            Benchmark.Test();
+            //Benchmark.Test();
+
+            var e = new entities.Model.Empresa();
+
+            var query = new domain.Query.Sucursal();
+
+            //query.Id = (value: 5, sign: WhereOperator.Equals);
+            query.Nombre = (value: "sucursal 1", sign: WhereOperator.Equals);
+            query.Activo = (value: true, sign: WhereOperator.Equals);
+
+            query.Empresa().Id = (value: 3, sign: WhereOperator.Equals);
+
+            //query?["Id"]?.Where(3)?["RazonSocial"]?.Where("empresa", WhereOperator.Like)?["Activo"]?.Where(true);
+
+            //var empresa1 = query.List(2);
+            var empresa1 = query.Retrieve(2);
 
             Console.ReadLine();
         }

@@ -9,6 +9,7 @@ namespace library.Interface.Data.Query
         where T : IEntity
         where U : ITableRepositoryProperties<T>
     {
+
         (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U));
         (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<U> datas = null);
 
