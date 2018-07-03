@@ -35,6 +35,7 @@ namespace library.Impl.Data.Table
             return _repository.Select(this as U, usedbcommand);
         }
         public abstract (Result result, U data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>));
+
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
         {
             return _repository.Insert(this as U, usedbcommand);
