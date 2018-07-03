@@ -9,16 +9,11 @@ namespace library.Impl.Data.Sql.Builder
 {
     public abstract class AbstractSqlBuilderQuery : AbstractSqlBuilder, ISqlBuilderQuery
     {
-        public AbstractSqlBuilderQuery(ISqlSyntaxSign syntaxsign)
-            : base(syntaxsign)
-        {
-        }
-
-        public abstract (string commandtext, IList<SqlParameter> parameters) 
+        public abstract (string commandtext, IList<SqlParameter> parameters)
             Select
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
             IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename, 
+            string tablename,
             int top = 0);
 
         public abstract (string commandtext, IList<SqlParameter> parameters)
@@ -34,8 +29,13 @@ namespace library.Impl.Data.Sql.Builder
             IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename);
 
-        public virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> 
-            GetQueryParameters
+        public AbstractSqlBuilderQuery(ISqlSyntaxSign syntaxsign)
+            : base(syntaxsign)
+        {
+        }
+
+        protected virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> 
+            GetParameters
             ((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns, 
             IList<SqlParameter> parameters)
         {
@@ -59,7 +59,7 @@ namespace library.Impl.Data.Sql.Builder
         }
 
         protected virtual string 
-            GetQueryFrom
+            GetFrom
             (IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins, 
             string tablename)
         {
@@ -79,7 +79,7 @@ namespace library.Impl.Data.Sql.Builder
         }
 
         protected virtual string 
-            GetQueryWhere
+            GetWhere
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> columns, 
             IList<SqlParameter> parameters)
         {
@@ -93,7 +93,7 @@ namespace library.Impl.Data.Sql.Builder
 
                     var columnname = $"{_syntaxsign.AliasEnclosureTableOpen}{string.Join(_syntaxsign.AliasSeparatorTable, c.tablenames)}{_syntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name}";
 
-                    foreach (var p in GetQueryParameters(c, parameters))
+                    foreach (var p in GetParameters(c, parameters))
                     {
                         where += $"{(p.counter > 1 ? " or " : "")}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {_syntaxsign.GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
                     }
@@ -106,7 +106,7 @@ namespace library.Impl.Data.Sql.Builder
         }
 
         protected virtual string 
-            GetQuerySelectColumns
+            GetSelectColumns
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> columns)
         {
             var select = string.Empty;

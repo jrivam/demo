@@ -26,10 +26,5 @@ namespace library.Interface.Data.Sql
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
             IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename);
-
-        IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)>
-            GetQueryParameters
-            ((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns,
-            IList<SqlParameter> parameters);
     }
 }

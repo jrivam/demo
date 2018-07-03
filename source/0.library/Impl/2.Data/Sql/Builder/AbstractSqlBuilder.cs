@@ -27,6 +27,7 @@ namespace library.Impl.Data.Sql.Builder
 
             return parameter;
         }
+
         public virtual IEnumerable<(ITableColumn column, SqlParameter parameter)> 
             GetParameters
             (IList<ITableColumn> columns, IList<SqlParameter> parameters)
@@ -40,6 +41,7 @@ namespace library.Impl.Data.Sql.Builder
                 yield return (c, parameter);
             }
         }
+
         public virtual string 
             GetUpdateSet
             (IList<ITableColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)

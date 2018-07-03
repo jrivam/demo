@@ -25,11 +25,11 @@ namespace library.Impl.Data.Sql.Providers.MySql
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
 
-            var columns = GetQuerySelectColumns(querycolumns);
+            var columns = GetSelectColumns(querycolumns);
 
-            var from = GetQueryFrom(queryjoins, tablename);
+            var from = GetFrom(queryjoins, tablename);
 
-            var where = GetQueryWhere(querycolumns, parameters);
+            var where = GetWhere(querycolumns, parameters);
 
             commandtext = $"select{Environment.NewLine}{columns}from {from}{where}";
             commandtext += $"{(top > 0 ? $" limit {top.ToString()}" : "")}";
@@ -47,11 +47,11 @@ namespace library.Impl.Data.Sql.Providers.MySql
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
 
-            var from = GetQueryFrom(queryjoins, tablename);
+            var from = GetFrom(queryjoins, tablename);
 
             var set = GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters);
 
-            var where = GetQueryWhere(querycolumns, parameters);
+            var where = GetWhere(querycolumns, parameters);
 
             commandtext = $"update{Environment.NewLine}{from}set {set}{where}";
 
@@ -69,9 +69,9 @@ namespace library.Impl.Data.Sql.Providers.MySql
 
             var table = $"{_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
 
-            var from = GetQueryFrom(queryjoins, tablename);
+            var from = GetFrom(queryjoins, tablename);
 
-            var where = GetQueryWhere(querycolumns, parameters);
+            var where = GetWhere(querycolumns, parameters);
 
             commandtext = $"delete{Environment.NewLine}{table}from {from}{where}";
 

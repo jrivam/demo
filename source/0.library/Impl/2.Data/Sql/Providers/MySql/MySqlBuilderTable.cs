@@ -22,11 +22,11 @@ namespace library.Impl.Data.Sql.Providers.MySql
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
 
-            var columns = GetEntitySelectColumns(entitytable.Columns);
+            var columns = GetSelectColumns(entitytable.Columns);
 
             var table = $"{entitytable.Description.Name}{Environment.NewLine}";
 
-            var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters);
+            var where = GetWhere(entitytable.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters);
 
             commandtext = $"select{Environment.NewLine}{columns}from {table}{where}";
 
@@ -40,9 +40,9 @@ namespace library.Impl.Data.Sql.Providers.MySql
 
             var table = $"{entitytable.Description.Name}{Environment.NewLine}";
 
-            var insert = GetEntityInsertColumns(entitytable.Columns.Where(c => !c.IsIdentity).ToList());
+            var insert = GetInsertColumns(entitytable.Columns.Where(c => !c.IsIdentity).ToList());
 
-            var values = GetEntityInsertValues(entitytable.Columns.Where(c => !c.IsIdentity).ToList(), parameters);
+            var values = GetInsertValues(entitytable.Columns.Where(c => !c.IsIdentity).ToList(), parameters);
 
             commandtext = $"insert{Environment.NewLine}into {table}{insert}values {values}";
 
@@ -66,7 +66,7 @@ namespace library.Impl.Data.Sql.Providers.MySql
 
             var set = GetUpdateSet(entitytable.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters);
 
-            var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters);
+            var where = GetWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters);
 
             commandtext = $"update{Environment.NewLine}{table}set {set}{where}";
 
@@ -79,7 +79,7 @@ namespace library.Impl.Data.Sql.Providers.MySql
 
             var table = $"{entitytable.Description.Name}{Environment.NewLine}";
 
-            var where = GetEntityWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters);
+            var where = GetWhere(entitytable.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters);
 
             commandtext = $"delete{Environment.NewLine}from {table}{where}";
 

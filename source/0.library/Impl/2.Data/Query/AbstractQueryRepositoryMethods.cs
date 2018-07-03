@@ -11,14 +11,12 @@ namespace library.Impl.Data.Query
     {
         protected readonly IRepositoryQuery<T, U> _repository;
 
-
         public AbstractQueryRepositoryMethods(IRepositoryQuery<T, U> repository,
             string name, string reference)
             : base(name, reference)
         {
             _repository = repository;
         }
-
 
         protected virtual IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)>
             GetQueryColumns
@@ -73,7 +71,6 @@ namespace library.Impl.Data.Query
             return joins;
         }
 
-
         public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))
         {
             var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
@@ -96,7 +93,6 @@ namespace library.Impl.Data.Query
 
             return _repository.Update(querycolumns, queryjoins, Description.Name, columns);
         }
-
         public virtual (Result result, int rows) Delete(int maxdepth = 1)
         {
             var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
