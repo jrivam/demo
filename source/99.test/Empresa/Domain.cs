@@ -1,6 +1,8 @@
-﻿using library.Interface.Data.Sql;
+﻿using library.Impl;
+using library.Interface.Data.Sql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Moq.Protected;
 
 namespace test.Empresa
 {
@@ -65,6 +67,7 @@ namespace test.Empresa
             query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal(mockRepositoryQuery.mockCreator.Object, new data.Mapper.Sucursal(mockRepositoryQuery.mockSyntaxSign.Object), mockBuilderQuery.Object));
 
             var erasecommand = Domain_Erase_NonDbCommand();
+            //erasecommand.Protected().Setup<Result>("EraseChildren2", ItExpr.IsAny<domain.Query.Sucursal>()).Returns(new Result() { Success = true });
             erasecommand.SetupGet(x => x.Query).Returns(query.Object);
 
             var domainerase = erasecommand.Object.Erase();

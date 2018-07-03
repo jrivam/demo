@@ -157,6 +157,7 @@ namespace data.Query
             Columns.Add(new QueryColumn<string>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
             Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
+
         public Empresa(ISqlCreator creator,
             IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
             ISqlBuilderQuery builder)

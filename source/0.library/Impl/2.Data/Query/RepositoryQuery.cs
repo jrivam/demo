@@ -32,60 +32,113 @@ namespace library.Impl.Data.Query
         {
         }
 
-        public virtual (Result result, U data) SelectSingle(IQueryRepositoryProperties querytable, int maxdepth = 1, U data = default(U))
+        public virtual (Result result, U data) 
+            SelectSingle
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename, 
+            int maxdepth = 1, 
+            U data = default(U))
         {
-            var select = _builder.Select(querytable, maxdepth, 1);
+            var select = _builder.Select(querycolumns, queryjoins, tablename, 1);
             return SelectSingle(select.commandtext, CommandType.Text, select.parameters, maxdepth, data);
         }
-        public virtual (Result result, U data) SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, U data = default(U))
+
+        public virtual (Result result, U data) 
+            SelectSingle
+            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
+            int maxdepth = 1, U 
+            data = default(U))
         {
             return SelectSingle(_creator.GetCommand(commandtext, commandtype, parameters), maxdepth, data);
         }
-        public virtual (Result result, U data) SelectSingle(IDbCommand command, int maxdepth = 1, U data = default(U))
+
+        public virtual (Result result, U data) 
+            SelectSingle
+            (IDbCommand command, 
+            int maxdepth = 1, 
+            U data = default(U))
         {
             var executequery = ExecuteQuery(command, maxdepth, data == null ? default(List<U>) : new List<U> { data });
 
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
 
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IQueryRepositoryProperties querytable, int maxdepth = 1, int top = 0, IList<U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) 
+            SelectMultiple
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename, 
+            int maxdepth = 1, int top = 0, 
+            IList<U> datas = null)
         {
-            var select = _builder.Select(querytable, maxdepth, top);
+            var select = _builder.Select(querycolumns, queryjoins, tablename, top);
             return SelectMultiple(select.commandtext, CommandType.Text, select.parameters, maxdepth, datas);
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(string commandtext,  CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<U> datas = null)
+
+        public virtual (Result result, IEnumerable<U> datas) 
+            SelectMultiple
+            (string commandtext,  CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
+            int maxdepth = 1, 
+            IList<U> datas = null)
         {
             return SelectMultiple(_creator.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(IDbCommand command, int maxdepth = 1, IList<U> datas = null)
+
+        public virtual (Result result, IEnumerable<U> datas) 
+            SelectMultiple
+            (IDbCommand command, 
+            int maxdepth = 1, 
+            IList<U> datas = null)
         {
             return ExecuteQuery(command, maxdepth, datas);
         }
 
-        public virtual (Result result, int rows) Update(IList<ITableColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1)
+        public virtual (Result result, int rows) 
+            Update
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename, 
+            IList<ITableColumn> columns)
         {
-            var update = _builder.Update(columns, querytable, maxdepth);
+            var update = _builder.Update(querycolumns, queryjoins, tablename, columns);
             return Update(update.commandtext, CommandType.Text, update.parameters);
         }
-        public virtual (Result result, int rows) Update(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+
+        public virtual (Result result, int rows) 
+            Update
+            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
             return Update(_creator.GetCommand(commandtext, commandtype, parameters));
         }
-        public virtual (Result result, int rows) Update(IDbCommand command)
+
+        public virtual (Result result, int rows) 
+            Update
+            (IDbCommand command)
         {
             return ExecuteNonQuery(command);
         }
 
-        public virtual (Result result, int rows) Delete(IQueryRepositoryProperties querytable, int maxdepth = 1)
+        public virtual (Result result, int rows) 
+            Delete
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename)
         {
-            var delete = _builder.Delete(querytable, maxdepth);
+            var delete = _builder.Delete(querycolumns, queryjoins, tablename);
             return Delete(delete.commandtext, CommandType.Text, delete.parameters);
         }
-        public virtual (Result result, int rows) Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+
+        public virtual (Result result, int rows) 
+            Delete
+            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
             return Delete(_creator.GetCommand(commandtext, commandtype, parameters));
         }
-        public virtual (Result result, int rows) Delete(IDbCommand command)
+
+        public virtual (Result result, int rows) 
+            Delete
+            (IDbCommand command)
         {
             return ExecuteNonQuery(command);
         }

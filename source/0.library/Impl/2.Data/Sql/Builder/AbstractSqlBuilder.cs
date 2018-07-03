@@ -15,7 +15,9 @@ namespace library.Impl.Data.Sql.Builder
             _syntaxsign = syntaxsign;
         }
 
-        public virtual SqlParameter GetParameter(string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
+        public virtual SqlParameter 
+            GetParameter
+            (string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
         {
             var parameter = new SqlParameter();
             parameter.Name = name;
@@ -25,7 +27,9 @@ namespace library.Impl.Data.Sql.Builder
 
             return parameter;
         }
-        public virtual IEnumerable<(ITableColumn column, SqlParameter parameter)> GetParameters(IList<ITableColumn> columns, IList<SqlParameter> parameters)
+        public virtual IEnumerable<(ITableColumn column, SqlParameter parameter)> 
+            GetParameters
+            (IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {
             foreach (var c in columns)
             {
@@ -36,7 +40,9 @@ namespace library.Impl.Data.Sql.Builder
                 yield return (c, parameter);
             }
         }
-        public virtual string GetUpdateSet(IList<ITableColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
+        public virtual string 
+            GetUpdateSet
+            (IList<ITableColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
         {
             var set = string.Empty;
 

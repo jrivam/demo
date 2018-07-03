@@ -197,7 +197,7 @@ namespace presentation.Mapper
     {
         public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation)
         {
-            presentation = base.Clear(presentation);
+            //presentation = base.Clear(presentation);
 
             presentation.Empresa = null;
 

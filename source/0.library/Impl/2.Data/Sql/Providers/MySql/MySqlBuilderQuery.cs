@@ -15,17 +15,19 @@ namespace library.Impl.Data.Sql.Providers.MySql
         {
         }
 
-        public override (string commandtext, IList<SqlParameter> parameters) Select(IQueryRepositoryProperties querytable, int maxdepth = 1, int top = 0)
+        public override (string commandtext, IList<SqlParameter> parameters)
+            Select
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename,
+            int top = 0)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
 
-            var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(querytable, querytable.Description.Name, maxdepth, 0);
-
             var columns = GetQuerySelectColumns(querycolumns);
 
-            var from = GetQueryFrom(queryjoins, querytable.Description.Name);
+            var from = GetQueryFrom(queryjoins, tablename);
 
             var where = GetQueryWhere(querycolumns, parameters);
 
@@ -35,15 +37,17 @@ namespace library.Impl.Data.Sql.Providers.MySql
             return (commandtext, parameters);
         }
 
-        public override (string commandtext, IList<SqlParameter> parameters) Update(IList<ITableColumn> columns, IQueryRepositoryProperties querytable, int maxdepth = 1)
+        public override (string commandtext, IList<SqlParameter> parameters)
+            Update
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename,
+            IList<ITableColumn> columns)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
 
-            var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(querytable, querytable.Description.Name, maxdepth, 0);
-
-            var from = GetQueryFrom(queryjoins, querytable.Description.Name);
+            var from = GetQueryFrom(queryjoins, tablename);
 
             var set = GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters);
 
@@ -53,17 +57,19 @@ namespace library.Impl.Data.Sql.Providers.MySql
 
             return (commandtext, parameters);
         }
-        public override (string commandtext, IList<SqlParameter> parameters) Delete(IQueryRepositoryProperties querytable, int maxdepth = 1)
+
+        public override (string commandtext, IList<SqlParameter> parameters)
+            Delete
+            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
+            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            string tablename)
         {
             string commandtext = string.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter>();
 
-            var querycolumns = GetQueryColumns(querytable, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(querytable, querytable.Description.Name, maxdepth, 0);
+            var table = $"{_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
 
-            var table = $"{_syntaxsign.AliasEnclosureTableOpen}{querytable.Description.Name}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
-
-            var from = GetQueryFrom(queryjoins, querytable.Description.Name);
+            var from = GetQueryFrom(queryjoins, tablename);
 
             var where = GetQueryWhere(querycolumns, parameters);
 
