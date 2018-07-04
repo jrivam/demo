@@ -49,23 +49,23 @@ namespace library.Impl.Data.Query
             return columns;
         }
 
-        protected virtual IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
+        protected virtual IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
             GetQueryJoins
             (IQueryRepositoryProperties table,
-            string prefix = "",
-            int maxdepth = 1, int depth = 0,
-            string tableseparator = "_")
+            IList<string> prefix,
+            int maxdepth = 1, int depth = 0)
         {
-            var joins = new List<(IQueryRepositoryProperties, string, IQueryRepositoryProperties, string, IList<(IQueryColumn, IQueryColumn)>)>();
+            var joins = new List<(IQueryRepositoryProperties, IList<string>, IQueryRepositoryProperties, IList<string>, IList<(IQueryColumn, IQueryColumn)>)>();
 
             depth++;
             foreach (var j in table.GetJoins(maxdepth, depth))
             {
-                var tablename = $"{(prefix == "" ? "" : $"{prefix}{tableseparator}")}{j.externalkey.Query.Description.Name}";
+                var tablename = new List<string>(prefix);
+                tablename.Add(j.externalkey.Query.Description.Name);
 
                 joins.Add((table, prefix, j.externalkey.Query, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
 
-                joins.AddRange(GetQueryJoins(j.externalkey.Query, tablename, maxdepth, depth, tableseparator));
+                joins.AddRange(GetQueryJoins(j.externalkey.Query, tablename, maxdepth, depth));
             }
 
             return joins;
@@ -74,14 +74,14 @@ namespace library.Impl.Data.Query
         public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))
         {
             var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, Description.Name, maxdepth, 0);
+            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
 
-            return _repository.SelectSingle(querycolumns, queryjoins, Description.Name, maxdepth, data);
+            return _repository.SelectSingle(querycolumns, queryjoins,  Description.Name, maxdepth, data);
         }
         public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<U> datas = null)
         {
             var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, Description.Name, maxdepth, 0);
+            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
 
             return _repository.SelectMultiple(querycolumns, queryjoins, Description.Name, maxdepth, top, datas);
         }
@@ -89,14 +89,14 @@ namespace library.Impl.Data.Query
         public virtual (Result result, int rows) Update(IList<ITableColumn> columns, int maxdepth = 1)
         {
             var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, Description.Name, maxdepth, 0);
+            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
 
             return _repository.Update(querycolumns, queryjoins, Description.Name, columns);
         }
         public virtual (Result result, int rows) Delete(int maxdepth = 1)
         {
             var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, Description.Name, maxdepth, 0);
+            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
 
             return _repository.Delete(querycolumns, queryjoins, Description.Name);
         }

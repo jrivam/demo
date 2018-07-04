@@ -14,8 +14,6 @@ namespace library.Interface.Data.Query
         IList<IQueryColumn> Columns { get; }
         IQueryColumn this[string reference] { get; }
 
-        //IList<(IQueryColumn internalkey, IQueryColumn externalkey)> Joins { get; }
-
         void ClearWhere();
     }
 }
