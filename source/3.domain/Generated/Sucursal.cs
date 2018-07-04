@@ -191,17 +191,15 @@ namespace domain.Mapper
 {
     public partial class Sucursal : BaseMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain)
+        public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
-            //domain = base.Clear(domain);
+            domain = base.Clear(domain, maxdepth, depth);
 
-            domain.Empresa = null;
-
-            return domain;
-        }
-        public override domain.Model.Sucursal Map(domain.Model.Sucursal domain)
-        {
-            //domain = base.Map(domain);
+            depth++;
+            if (depth >= maxdepth)
+            {
+                domain.Empresa = null;
+            }
 
             return domain;
         }

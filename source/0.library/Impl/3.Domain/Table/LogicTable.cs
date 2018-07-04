@@ -23,8 +23,6 @@ namespace library.Impl.Domain.Table
             domain.Changed = false;
             domain.Deleted = false;
 
-            _mapper.Map(domain);
-
             return domain;
         }
 
@@ -36,8 +34,7 @@ namespace library.Impl.Domain.Table
 
                 if (select.result.Success && select.data != null)
                 {
-                    _mapper.Clear(domain);
-                    _mapper.Map(domain);
+                    _mapper.Clear(domain, 1, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;
@@ -58,8 +55,7 @@ namespace library.Impl.Domain.Table
 
                 if (select.result.Success && select.data != null)
                 {
-                    _mapper.Clear(domain);
-                    _mapper.Map(domain);
+                    _mapper.Clear(domain, maxdepth, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;
@@ -80,8 +76,6 @@ namespace library.Impl.Domain.Table
 
                 if (updateinsert.result.Success)
                 {
-                    _mapper.Map(domain);
-
                     domain.Changed = false;
                 }
 
@@ -100,8 +94,6 @@ namespace library.Impl.Domain.Table
 
                     if (delete.result.Success)
                     {
-                        _mapper.Map(domain);
-
                         domain.Deleted = true;
                     }
 

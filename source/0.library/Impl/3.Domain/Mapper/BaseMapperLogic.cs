@@ -10,12 +10,7 @@ namespace library.Impl.Domain.Mapper
         where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
     {
-        public virtual V Clear(V domain)
-        {
-            return domain;
-        }
-
-        public virtual V Map(V domain)
+        public virtual V Clear(V domain, int maxdepth = 1, int depth = 0)
         {
             return domain;
         }

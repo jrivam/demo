@@ -20,7 +20,7 @@ namespace library.Impl.Presentation.Table
         {
             entitylogic.Clear();
 
-            _mapper.Map(presentation);
+            _mapper.Raise(presentation);
 
             return presentation;
         }
@@ -31,8 +31,8 @@ namespace library.Impl.Presentation.Table
 
             if (load.result.Success && load.domain != null)
             {
-                _mapper.Clear(presentation);
-                _mapper.Map(presentation);
+                _mapper.Clear(presentation, 1, 0);
+                _mapper.Raise(presentation);
 
                 return (load.result, presentation);
             }
@@ -45,8 +45,8 @@ namespace library.Impl.Presentation.Table
 
             if (load.result.Success && load.domain != null)
             {
-                _mapper.Clear(presentation);
-                _mapper.Map(presentation);
+                _mapper.Clear(presentation, maxdepth, 0);
+                _mapper.Raise(presentation);
 
                 return (load.result, presentation);
             }
@@ -59,7 +59,7 @@ namespace library.Impl.Presentation.Table
 
             if (save.result.Success)
             {
-                _mapper.Map(presentation);
+                _mapper.Raise(presentation);
             }
 
             return (save.result, presentation);
@@ -70,7 +70,7 @@ namespace library.Impl.Presentation.Table
 
             if (erase.result.Success)
             {
-                _mapper.Map(presentation);
+                _mapper.Raise(presentation);
             }
 
             return (erase.result, presentation);

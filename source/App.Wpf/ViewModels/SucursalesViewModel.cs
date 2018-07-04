@@ -5,7 +5,7 @@
         public SucursalesViewModel()
             : base()
         {
-            Load(new presentation.Query.Sucursal(), 1);
+            Load(new presentation.Query.Sucursal(), 2);
         }
     }
 }
