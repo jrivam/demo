@@ -18,7 +18,7 @@ namespace library.Impl.Data.Table
             get
             {
                 var list = new List<T>();
-                this.ForEach(x => list.Add(x.Entity));
+                this?.ForEach(x => list.Add(x.Entity));
                 return list;
             }
             set
@@ -27,7 +27,9 @@ namespace library.Impl.Data.Table
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, null, new object[] { x }, CultureInfo.CurrentCulture)));
+                           BindingFlags.OptionalParamBinding, 
+                           null, new object[] { x }, 
+                           CultureInfo.CurrentCulture)));
             }
         }
 
@@ -41,7 +43,10 @@ namespace library.Impl.Data.Table
         }
         public virtual ListTableRepositoryProperties<S, T, U> Load(IEnumerable<U> list)
         {
-            this.AddRange(list);
+            if (list != null)
+            {
+                this.AddRange(list);
+            }
 
             return this;
         }

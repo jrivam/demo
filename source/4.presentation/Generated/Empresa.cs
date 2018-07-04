@@ -74,7 +74,7 @@ namespace presentation.Model
                 {
                     _sucursales = value;
 
-                    Domain.Sucursales = (domain.Model.Sucursales)new domain.Model.Sucursales().Load(_sucursales?.Domains);
+                    Domain.Sucursales = _sucursales != null ? (domain.Model.Sucursales)new domain.Model.Sucursales().Load(_sucursales?.Domains) : null;
 
                     OnPropertyChanged("Sucursales");
                 }
@@ -82,7 +82,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Empresas : ListEntityInteractiveProperties<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresas : ListTableInteractiveProperties<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresas()
             : base()
@@ -161,5 +161,13 @@ namespace presentation.Mapper
 {
     public partial class Empresa : BaseMapperInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
+        public override presentation.Model.Empresa Clear(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
+        {
+            presentation = base.Clear(presentation, maxdepth, depth);
+
+            presentation.Sucursales = null;
+
+            return presentation;
+        }
     }
 }

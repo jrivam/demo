@@ -96,7 +96,7 @@
     <Compile Include="Impl\2.Data\Sql\Factory\SqlBuilderQueryFactory.cs" />
     <Compile Include="Impl\2.Data\Sql\Providers\SqlServer\SqlServerBuilderQuery.cs" />
     <Compile Include="Impl\3.Domain\Table\AbstractEntityLogicMethods.cs" />
-    <Compile Include="Impl\3.Domain\Table\ListEntityLogicProperties.cs" />
+    <Compile Include="Impl\3.Domain\Table\ListTableLogicProperties.cs" />
     <Compile Include="Impl\3.Domain\Query\AbstractQueryLogicMethods.cs" />
     <Compile Include="Impl\3.Domain\Query\AbstractQueryLogicProperties.cs" />
     <Compile Include="Impl\3.Domain\Table\AbstractEntityLogicProperties.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Impl\2.Data\Mapper\BaseMapperTable.cs" />
     <Compile Include="Impl\4.Presentation\Table\AbstractEntityInteractiveMethods.cs" />
     <Compile Include="Impl\4.Presentation\Table\AbstractEntityInteractiveProperties.cs" />
-    <Compile Include="Impl\4.Presentation\Table\ListEntityInteractiveProperties.cs" />
+    <Compile Include="Impl\4.Presentation\Table\ListTableInteractiveProperties.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryInteractiveMethods.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryInteractiveProperties.cs" />
     <Compile Include="Impl\4.Presentation\CommandAction.cs" />

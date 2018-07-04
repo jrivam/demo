@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace library.Impl.Domain.Table
 {
-    public class ListEntityLogicProperties<S, R, T, U, V> : List<V>, IListEntityLogicProperties<S, R, T, U, V>
+    public class ListTableLogicProperties<S, R, T, U, V> : List<V>, IListEntityLogicProperties<S, R, T, U, V>
         where T : IEntity
         where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
@@ -23,7 +23,7 @@ namespace library.Impl.Domain.Table
         {
             get
             {
-                return new ListTableRepositoryProperties<S, T, U>().Load(this.Select(x => x.Data));
+                return new ListTableRepositoryProperties<S, T, U>().Load(this?.Select(x => x.Data));
             }
             set
             {
@@ -31,21 +31,26 @@ namespace library.Impl.Domain.Table
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, null, new object[] { x }, CultureInfo.CurrentCulture)));
+                           BindingFlags.OptionalParamBinding, 
+                           null, new object[] { x }, 
+                           CultureInfo.CurrentCulture)));
             }
         }
 
-        public ListEntityLogicProperties()
+        public ListTableLogicProperties()
         {
         }
 
-        public virtual ListEntityLogicProperties<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0)
+        public virtual ListTableLogicProperties<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0)
         {
             return Load(query.List(maxdepth, top).domains);
         }
-        public virtual ListEntityLogicProperties<S, R, T, U, V> Load(IEnumerable<V> list)
+        public virtual ListTableLogicProperties<S, R, T, U, V> Load(IEnumerable<V> list)
         {
-            this.AddRange(list);
+            if (list != null)
+            {
+                this.AddRange(list);
+            }
 
             return this;
         }

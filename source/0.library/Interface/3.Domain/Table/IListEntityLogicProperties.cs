@@ -18,8 +18,8 @@ namespace library.Interface.Data.Table
     {
         ListTableRepositoryProperties<S, T, U> Datas { get; set; }
 
-        ListEntityLogicProperties<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0);
-        ListEntityLogicProperties<S, R, T, U, V> Load(IEnumerable<V> list);
+        ListTableLogicProperties<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0);
+        ListTableLogicProperties<S, R, T, U, V> Load(IEnumerable<V> list);
 
         Result Save();
         Result Erase();
