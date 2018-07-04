@@ -12,12 +12,12 @@ namespace library.Impl.Presentation.Mapper
         where V : IEntityLogicProperties<T, U>
         where W : IEntityInteractiveProperties<T, U, V>
     {
-        public virtual W Clear(W presentation)
+        public virtual W Clear(W presentation, int maxdepth = 1, int depth = 0)
         {
             return presentation;
         }
 
-        public virtual W Map(W presentation)
+        public virtual W Raise(W presentation)
         {
             foreach (var column in presentation.Domain.Data.Columns)
             {

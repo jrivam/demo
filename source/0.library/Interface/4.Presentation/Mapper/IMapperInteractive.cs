@@ -11,7 +11,7 @@ namespace library.Interface.Presentation.Mapper
         where V : IEntityLogicProperties<T, U>
         where W : IEntityInteractiveProperties<T, U, V>
     {
-        W Clear(W presentation);
-        W Map(W presentation);
+        W Clear(W presentation, int maxdepth = 1, int depth = 0);
+        W Raise(W presentation);
     }
 }

@@ -25,16 +25,16 @@ namespace library.Impl.Domain.Query
         {
             var selectsingle = queryrepository.SelectSingle(maxdepth);
 
-            if (selectsingle.result.Success)
+            if (selectsingle.result.Success && selectsingle.data != null)
             {
                 domain = (V)Activator.CreateInstance(typeof(V),
                     BindingFlags.CreateInstance |
                     BindingFlags.Public |
                     BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, new object[] { selectsingle.data }, CultureInfo.CurrentCulture);
+                    BindingFlags.OptionalParamBinding, 
+                    null, new object[] { selectsingle.data }, CultureInfo.CurrentCulture);
 
-                _mapper.Clear(domain);
-                _mapper.Map(domain);
+                _mapper.Clear(domain, maxdepth, 0);
 
                 domain.Changed = false;
                 domain.Deleted = false;
@@ -48,7 +48,7 @@ namespace library.Impl.Domain.Query
             var iterator = (domains ?? new List<V>()).GetEnumerator();
 
             var selectmultiple = queryrepository.SelectMultiple(maxdepth, top);
-            if (selectmultiple.result.Success)
+            if (selectmultiple.result.Success && selectmultiple.datas != null)
             {
                 foreach (var data in selectmultiple.datas)
                 {
@@ -56,10 +56,10 @@ namespace library.Impl.Domain.Query
                         BindingFlags.CreateInstance |
                         BindingFlags.Public |
                         BindingFlags.Instance |
-                        BindingFlags.OptionalParamBinding, null, new object[] { data }, CultureInfo.CurrentCulture);
+                        BindingFlags.OptionalParamBinding, 
+                        null, new object[] { data }, CultureInfo.CurrentCulture);
 
-                    _mapper.Clear(domain);
-                    _mapper.Map(domain);
+                    _mapper.Clear(domain, maxdepth, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;

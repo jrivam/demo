@@ -9,7 +9,6 @@ namespace library.Interface.Domain.Mapper
         where U : ITableRepositoryProperties<T>
         where V : IEntityLogicProperties<T, U>
     {
-        V Clear(V domain);
-        V Map(V domain);
+        V Clear(V domain, int maxdepth = 1, int depth = 0);
     }
 }

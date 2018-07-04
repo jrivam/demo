@@ -195,17 +195,21 @@ namespace presentation.Mapper
 {
     public partial class Sucursal : BaseMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation)
+        public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
         {
-            //presentation = base.Clear(presentation);
+            presentation = base.Clear(presentation, maxdepth, depth);
 
-            presentation.Empresa = null;
+            depth++;
+            if (depth >= maxdepth)
+            {
+                presentation.Empresa = null;
+            }
 
             return presentation;
         }
-        public override presentation.Model.Sucursal Map(presentation.Model.Sucursal presentation)
+        public override presentation.Model.Sucursal Raise(presentation.Model.Sucursal presentation)
         {
-            presentation = base.Map(presentation);
+            presentation = base.Raise(presentation);
 
             presentation.OnPropertyChanged("Empresa");
 

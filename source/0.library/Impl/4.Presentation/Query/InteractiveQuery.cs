@@ -27,16 +27,17 @@ namespace library.Impl.Presentation.Query
         {
             var retrieve = querylogic.Retrieve(maxdepth);
 
-            if (retrieve.result.Success)
+            if (retrieve.result.Success && retrieve.domain != null)
             {
                 presentation = (W)Activator.CreateInstance(typeof(W),
                         BindingFlags.CreateInstance |
                         BindingFlags.Public |
                         BindingFlags.Instance |
-                        BindingFlags.OptionalParamBinding, null, new object[] { retrieve.domain, maxdepth }, CultureInfo.CurrentCulture);
+                        BindingFlags.OptionalParamBinding, 
+                        null, new object[] { retrieve.domain, maxdepth }, CultureInfo.CurrentCulture);
 
-                _mapper.Clear(presentation);
-                _mapper.Map(presentation);
+                _mapper.Clear(presentation, maxdepth, 0);
+                _mapper.Raise(presentation);
             }
 
             return (retrieve.result, presentation);
@@ -47,18 +48,22 @@ namespace library.Impl.Presentation.Query
             var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
             var list = querylogic.List(maxdepth, top);
-            foreach (var domain in list.domains)
+            if (list.result.Success && list.domains != null)
             {
-                var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
-                    BindingFlags.CreateInstance |
-                    BindingFlags.Public |
-                    BindingFlags.Instance |
-                    BindingFlags.OptionalParamBinding, null, new object[] { domain, maxdepth }, CultureInfo.CurrentCulture);
+                foreach (var domain in list.domains)
+                {
+                    var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
+                        BindingFlags.CreateInstance |
+                        BindingFlags.Public |
+                        BindingFlags.Instance |
+                        BindingFlags.OptionalParamBinding, 
+                        null, new object[] { domain, maxdepth }, CultureInfo.CurrentCulture);
 
-                _mapper.Clear(presentation);
-                _mapper.Map(presentation);
+                    _mapper.Clear(presentation, maxdepth, 0);
+                    _mapper.Raise(presentation);
 
-                enumeration.Add(presentation);
+                    enumeration.Add(presentation);
+                }
             }
 
             return (list.result, enumeration);
