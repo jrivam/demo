@@ -20,7 +20,7 @@ namespace entities.Model
         public virtual bool? Activo { get; set; }
 
         [Column("id_empresa")]
-        [ForeignKey("Empresa")]
+        [ForeignKey("empresa")]
         public virtual int? IdEmpresa { get; set; }
         public virtual entities.Model.Empresa Empresa { get; set; }
     }
