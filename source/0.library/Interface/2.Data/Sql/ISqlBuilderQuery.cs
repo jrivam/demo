@@ -10,21 +10,21 @@ namespace library.Interface.Data.Sql
         (string commandtext, IList<SqlParameter> parameters) 
             Select
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns, 
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins, 
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins, 
             string tablename,
             int top = 0);
 
         (string commandtext, IList<SqlParameter> parameters)
             Update
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename,
             IList<ITableColumn> columns);
 
         (string commandtext, IList<SqlParameter> parameters)
             Delete
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename);
     }
 }

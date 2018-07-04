@@ -14,7 +14,7 @@ namespace library.Interface.Data.Query
         (Result result, U data) 
             SelectSingle
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename,
             int maxdepth = 1, U data = default(U));
 
@@ -32,7 +32,7 @@ namespace library.Interface.Data.Query
         (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename, 
             int maxdepth = 1, int top = 0, 
             IList<U> datas = null);
@@ -52,7 +52,7 @@ namespace library.Interface.Data.Query
         (Result result, int rows)
             Update
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename,
             IList<ITableColumn> columns);
 
@@ -67,7 +67,7 @@ namespace library.Interface.Data.Query
         (Result result, int rows)
             Delete
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename);
         
         (Result result, int rows) 

@@ -12,21 +12,21 @@ namespace library.Impl.Data.Sql.Builder
         public abstract (string commandtext, IList<SqlParameter> parameters)
             Select
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename,
             int top = 0);
 
         public abstract (string commandtext, IList<SqlParameter> parameters)
             Update
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename,
             IList<ITableColumn> columns);
 
         public abstract (string commandtext, IList<SqlParameter> parameters)
             Delete
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
+            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
             string tablename);
 
         public AbstractSqlBuilderQuery(ISqlSyntaxSign syntaxsign)
@@ -60,17 +60,20 @@ namespace library.Impl.Data.Sql.Builder
 
         protected virtual string 
             GetFrom
-            (IList<(IQueryRepositoryProperties internaltable, string internalalias, IQueryRepositoryProperties externaltable, string externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins, 
+            (IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins, 
             string tablename)
         {
             var from = $"{tablename} {_syntaxsign.AliasSeparatorTableKeyword} {_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
             foreach (var j in joins)
             {
-                from += $"left join {j.externaltable.Description.Name} {_syntaxsign.AliasSeparatorTableKeyword} {_syntaxsign.AliasEnclosureTableOpen}{j.externalalias}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}on ";
+                var internalalias = string.Join(_syntaxsign.AliasSeparatorTable, j.internalalias);
+                var externalalias = string.Join(_syntaxsign.AliasSeparatorTable, j.externalalias);
+                    
+                from += $"left join {j.externaltable.Description.Name} {_syntaxsign.AliasSeparatorTableKeyword} {_syntaxsign.AliasEnclosureTableOpen}{externalalias}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}on ";
                 var joinons = string.Empty;
                 foreach (var on in j.joins)
                 {
-                    joinons += $"{(string.IsNullOrWhiteSpace(joinons) ? "" : "and")} {_syntaxsign.AliasEnclosureTableOpen}{j.internalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.internalkey.Description.Name} = {_syntaxsign.AliasEnclosureTableOpen}{j.externalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.externalkey.Description.Name}";
+                    joinons += $"{(string.IsNullOrWhiteSpace(joinons) ? "" : "and")} {_syntaxsign.AliasEnclosureTableOpen}{internalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.internalkey.Description.Name} = {_syntaxsign.AliasEnclosureTableOpen}{externalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.externalkey.Description.Name}";
                 }
                 from += $"{joinons}{Environment.NewLine}";
             }
