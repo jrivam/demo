@@ -103,7 +103,7 @@ namespace domain.Model
         }
     }
 
-    public partial class Sucursales : ListEntityLogicProperties<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursales : ListTableLogicProperties<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public Sucursales()
             : base()

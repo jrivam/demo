@@ -102,7 +102,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Sucursales : ListEntityInteractiveProperties<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursales : ListTableInteractiveProperties<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public Sucursales()
             : base()

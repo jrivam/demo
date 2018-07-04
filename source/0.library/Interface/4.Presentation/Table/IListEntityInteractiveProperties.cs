@@ -19,9 +19,9 @@ namespace library.Interface.Data.Table
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where W : class, IEntityInteractiveProperties<T, U, V>, IEntityInteractiveMethods<T, U, V, W>
     {
-        ListEntityLogicProperties<S, R, T, U, V> Domains { get; set; }
+        ListTableLogicProperties<S, R, T, U, V> Domains { get; set; }
 
-        ListEntityInteractiveProperties<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0);
-        ListEntityInteractiveProperties<S, R, Q, T, U, V, W> Load(IEnumerable<W> list);
+        ListTableInteractiveProperties<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0);
+        ListTableInteractiveProperties<S, R, Q, T, U, V, W> Load(IEnumerable<W> list);
     }
 }

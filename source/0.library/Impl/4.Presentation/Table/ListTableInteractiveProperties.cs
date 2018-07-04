@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace library.Impl.Domain.Table
 {
-    public class ListEntityInteractiveProperties<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListEntityInteractiveProperties<S, R, Q, T, U, V, W>
+    public class ListTableInteractiveProperties<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListEntityInteractiveProperties<S, R, Q, T, U, V, W>
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
@@ -25,11 +25,11 @@ namespace library.Impl.Domain.Table
         where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
         where W : class, IEntityInteractiveProperties<T, U, V>, IEntityInteractiveMethods<T, U, V, W>
     {
-        public virtual ListEntityLogicProperties<S, R, T, U, V> Domains
+        public virtual ListTableLogicProperties<S, R, T, U, V> Domains
         {
             get
             {
-                return new ListEntityLogicProperties<S, R, T, U, V>().Load(this.Select(x => x.Domain));
+                return new ListTableLogicProperties<S, R, T, U, V>().Load(this?.Select(x => x.Domain));
             }
             set
             {
@@ -37,24 +37,29 @@ namespace library.Impl.Domain.Table
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, null, new object[] { x }, CultureInfo.CurrentCulture)));
+                           BindingFlags.OptionalParamBinding, null, 
+                           new object[] { x }, 
+                           CultureInfo.CurrentCulture)));
             }
         }
 
         public virtual ICommand AddCommand { get; set; }
 
-        public ListEntityInteractiveProperties()
+        public ListTableInteractiveProperties()
         {
         }
 
-        public virtual ListEntityInteractiveProperties<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0)
+        public virtual ListTableInteractiveProperties<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0)
         {
             return Load(query.List(maxdepth, top).presentations);
         }
-        public virtual ListEntityInteractiveProperties<S, R, Q, T, U, V, W> Load(IEnumerable<W> list)
+        public virtual ListTableInteractiveProperties<S, R, Q, T, U, V, W> Load(IEnumerable<W> list)
         {
-            foreach(var item in list)
-                this.CommandAdd(item);
+            if (list != null)
+            {
+                foreach (var item in list)
+                    this.CommandAdd(item);
+            }
 
             return this;
         }

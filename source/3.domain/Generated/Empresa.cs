@@ -65,7 +65,7 @@ namespace domain.Model
                 {
                     _sucursales = value;
 
-                    Data.Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(_sucursales?.Datas);
+                    Data.Sucursales = _sucursales != null ? (data.Model.Sucursales)new data.Model.Sucursales().Load(_sucursales?.Datas) : null;
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace domain.Model
         }
     }
 
-    public partial class Empresas : ListEntityLogicProperties<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresas : ListTableLogicProperties<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public Empresas()
             : base()
@@ -175,5 +175,13 @@ namespace domain.Mapper
 {
     public partial class Empresa : BaseMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
+        public override domain.Model.Empresa Clear(domain.Model.Empresa domain, int maxdepth = 1, int depth = 0)
+        {
+            domain = base.Clear(domain, maxdepth, depth);
+
+            domain.Sucursales = null;
+
+            return domain;
+        }
     }
 }
