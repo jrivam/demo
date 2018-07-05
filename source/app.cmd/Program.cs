@@ -19,8 +19,6 @@ namespace app.cmd
 
             //Benchmark.Test();
 
-            var e = new entities.Model.Empresa();
-
             var query = new domain.Query.Sucursal();
 
             query.Id = (value: 5, sign: WhereOperator.Equals);

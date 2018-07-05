@@ -92,7 +92,6 @@ namespace Web.Api.Controllers
                     {
                         if (load.domain != null)
                         {
-                            entity.Id = id;
                             load.domain?.SetProperties(entity);
 
                             using (var scope = new TransactionScope())

@@ -13,7 +13,11 @@ namespace library.Impl.Entities
             {
                 var propto = propsto?.Where(x => x.Name == propfrom.Name).SingleOrDefault();
 
-                propto?.SetValue(to, propfrom.GetValue(from, null), null);
+                var value = propfrom.GetValue(from, null);
+                if (value != null)
+                {
+                    propto?.SetValue(to, value, null);
+                }
             }
 
             return to;
