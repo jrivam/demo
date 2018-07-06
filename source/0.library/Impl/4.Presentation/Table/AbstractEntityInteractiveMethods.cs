@@ -69,9 +69,9 @@ namespace library.Impl.Presentation.Table
            return erase;
         }
 
-        public W SetProperties(T entity)
+        public W SetProperties(T entity, bool nulls = false)
         {
-            return Helper.SetProperties<T, W>(entity, this as W);
+            return Helper.SetProperties<T, W>(entity, this as W, nulls);
         }
     }
 }

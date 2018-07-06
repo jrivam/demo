@@ -27,8 +27,8 @@ namespace data.Model
             }
         }
 
-        public Empresa(entities.Model.Empresa entity, 
-            IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
+        public Empresa(IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository,
+            entities.Model.Empresa entity)
             : base(repository, typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
             Entity = entity;
@@ -38,18 +38,18 @@ namespace data.Model
             Columns.Add(new TableColumn<bool?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
-        public Empresa(ConnectionStringSettings connectionstringsettings, 
-            entities.Model.Empresa entity, 
-            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
-            : this(entity, 
-                  new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mapper, connectionstringsettings))
+        public Empresa(ConnectionStringSettings connectionstringsettings,
+            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
+            entities.Model.Empresa entity)
+            : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mapper, connectionstringsettings),
+                  entity)
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings, 
             entities.Model.Empresa entity)
             : this(connectionstringsettings, 
-                  entity, 
-                  new data.Mapper.Empresa(connectionstringsettings))
+                  new data.Mapper.Empresa(connectionstringsettings),
+                  entity)
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings)
@@ -62,10 +62,10 @@ namespace data.Model
         {
         }
 
-        public Empresa(entities.Model.Empresa entity, string appconnectionstringname)
+        public Empresa(string appconnectionstringname, entities.Model.Empresa entity)
             : this(appconnectionstringname)
         {
-            SetProperties(entity);
+            SetProperties(entity, true);
         }
 
         public override (Result result, data.Model.Empresa data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> query = null)
@@ -158,16 +158,14 @@ namespace data.Query
             Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
-        public Empresa(ISqlCreator creator,
-            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
-            ISqlBuilderQuery builder)
-            : this(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(creator, mapper, builder))
+        public Empresa(ConnectionStringSettings connectionstringsettings,
+            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
+            : this(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(mapper, connectionstringsettings))
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings)
-            : this(new SqlCreator(connectionstringsettings),
-                  new data.Mapper.Empresa(connectionstringsettings),
-                  SqlBuilderQueryFactory.Create(connectionstringsettings))
+            : this(connectionstringsettings,
+                  new data.Mapper.Empresa(connectionstringsettings))
         {
         }
         public Empresa(string appconnectionstringname)

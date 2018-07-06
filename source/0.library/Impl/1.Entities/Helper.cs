@@ -4,7 +4,7 @@ namespace library.Impl.Entities
 {
     public class Helper
     {
-        public static U SetProperties<T, U>(T from, U to)
+        public static U SetProperties<T, U>(T from, U to, bool nulls = false)
         {
             var propsfrom = from?.GetType().GetProperties();
             var propsto = to?.GetType().GetProperties();
@@ -14,7 +14,7 @@ namespace library.Impl.Entities
                 var propto = propsto?.Where(x => x.Name == propfrom.Name).SingleOrDefault();
 
                 var value = propfrom.GetValue(from, null);
-                if (value != null)
+                if (value != null || nulls)
                 {
                     propto?.SetValue(to, value, null);
                 }

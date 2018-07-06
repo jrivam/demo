@@ -14,7 +14,7 @@ namespace data.Model
 
         }
         public Empresa(entities.Model.Empresa entity)
-            : this(entity, _defaultappconnectionstringname)
+            : this(_defaultappconnectionstringname, entity)
         {
 
         }

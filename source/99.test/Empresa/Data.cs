@@ -35,7 +35,7 @@ namespace test.Empresa
         }
 
         public (Mock<IDbCommand> mockCommand, Mock<ISqlSyntaxSign> mockSyntaxSign, Mock<ISqlCreator> mockCreator) 
-            GetRepositoryMock()
+            GetDatabaseMock()
         {
             //var mockMapper = new Moq.Mock<IMapperTable<domain.Model.Empresa, data.Model.Empresa>>();
 
@@ -70,7 +70,7 @@ namespace test.Empresa
 
         public data.Model.Empresa Data_Table_Select()
         {
-            var mockRepository = GetRepositoryMock();
+            var mockDatabase = GetDatabaseMock();
 
             bool read = true;
             var mockDataReader = new Moq.Mock<IDataReader>();
@@ -79,16 +79,17 @@ namespace test.Empresa
             mockDataReader.Setup(x => x["Empresa.RazonSocial"]).Returns(Entity.RazonSocial);
             mockDataReader.Setup(x => x["Empresa.Activo"]).Returns(Entity.Activo);
 
-            mockRepository.mockCommand.Setup(x => x.ExecuteReader())
+            mockDatabase.mockCommand.Setup(x => x.ExecuteReader())
                 .Returns(mockDataReader.Object);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable<entities.Model.Empresa>>();
+            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
+            var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new entities.Model.Empresa()
-            {
-                Id = Entity.Id
-            }, 
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockRepository.mockCreator.Object, new data.Mapper.Empresa(mockRepository.mockSyntaxSign.Object), mockBuilderTable.Object));
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+                new entities.Model.Empresa()
+                {
+                    Id = Entity.Id
+                });
         }
         public data.Model.Empresa Data_Table_Select_NonDbCommand()
         {
@@ -131,19 +132,20 @@ namespace test.Empresa
 
         public data.Model.Empresa Data_Table_Insert()
         {
-            var mockRepository = GetRepositoryMock();
+            var mockDatabase = GetDatabaseMock();
 
-            mockRepository.mockCommand.Setup(x => x.ExecuteScalar())
+            mockDatabase.mockCommand.Setup(x => x.ExecuteScalar())
                 .Returns(Entity.Id);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable<entities.Model.Empresa>>();
+            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
+            var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new entities.Model.Empresa()
-            {
-                RazonSocial = Entity.RazonSocial,
-                Activo = Entity.Activo
-            },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockRepository.mockCreator.Object, new data.Mapper.Empresa(mockRepository.mockSyntaxSign.Object), mockBuilderTable.Object));
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+                new entities.Model.Empresa()
+                {
+                    RazonSocial = Entity.RazonSocial,
+                    Activo = Entity.Activo
+                });
         }
         public data.Model.Empresa Data_Table_Insert_NonDbCommand()
         {
@@ -186,20 +188,21 @@ namespace test.Empresa
 
         public data.Model.Empresa Data_Table_Update()
         {
-            var mockRepository = GetRepositoryMock();
+            var mockDatabase = GetDatabaseMock();
 
-            mockRepository.mockCommand.Setup(x => x.ExecuteNonQuery())
+            mockDatabase.mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable<entities.Model.Empresa>>();
+            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
+            var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new entities.Model.Empresa()
-            {
-                Id = Entity.Id,
-                RazonSocial = Entity.RazonSocial,
-                Activo = Entity.Activo
-            },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockRepository.mockCreator.Object, new data.Mapper.Empresa(mockRepository.mockSyntaxSign.Object), mockBuilderTable.Object));
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+                new entities.Model.Empresa()
+                {
+                    Id = Entity.Id,
+                    RazonSocial = Entity.RazonSocial,
+                    Activo = Entity.Activo
+                });
         }
         public data.Model.Empresa Data_Table_Update_NonDbCommand()
         {
@@ -242,20 +245,21 @@ namespace test.Empresa
 
         public data.Model.Empresa Data_Table_Delete()
         {
-            var mockRepository = GetRepositoryMock();
+            var mockDatabase = GetDatabaseMock();
 
-            mockRepository.mockCommand.Setup(x => x.ExecuteNonQuery())
+            mockDatabase.mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable<entities.Model.Empresa>>();
+            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
+            var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new entities.Model.Empresa()
-            {
-                Id = Entity.Id,
-                RazonSocial = Entity.RazonSocial,
-                Activo = Entity.Activo
-            },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockRepository.mockCreator.Object, new data.Mapper.Empresa(mockRepository.mockSyntaxSign.Object), mockBuilderTable.Object));
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+                new entities.Model.Empresa()
+                {
+                    Id = Entity.Id,
+                    RazonSocial = Entity.RazonSocial,
+                    Activo = Entity.Activo
+                });
         }
         public data.Model.Empresa Data_Table_Delete_NonDbCommand()
         {

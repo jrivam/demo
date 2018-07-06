@@ -1,4 +1,5 @@
 ﻿using library.Impl.Data.Sql;
+using library.Impl.Data.Sql.Builder;
 using library.Impl.Data.Sql.Factory;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Sql;
@@ -16,15 +17,20 @@ namespace library.Impl.Data.Table
         where T : IEntity
         where U : ITableRepositoryProperties<T>
     {
-        protected readonly ISqlBuilderTable<T> _builder;
+        protected readonly ISqlBuilderTable _builder;
+        protected readonly ISqlCommandBuilder _commandbuilder;
 
-        public RepositoryTable(ISqlCreator creator, IMapperRepository<T, U> mapper, ISqlBuilderTable<T> builder)
+        public RepositoryTable(ISqlCreator creator, IMapperRepository<T, U> mapper, 
+            ISqlBuilderTable builder, ISqlCommandBuilder commandbuilder)
             : base(creator, mapper)
         {
             _builder = builder;
+            _commandbuilder = commandbuilder;
         }
         public RepositoryTable(IMapperRepository<T, U> mapper, ConnectionStringSettings connectionstringsettings)
-            : this(new SqlCreator(connectionstringsettings), mapper, SqlBuilderTableFactory<T>.Create(connectionstringsettings))
+            : this(new SqlCreator(connectionstringsettings), mapper,
+                  new SqlBuilderTable(SqlSyntaxSignFactory.Create(connectionstringsettings)),
+                  SqlCommandBuilderFactory.Create(connectionstringsettings))
         {
         }
         public RepositoryTable(IMapperRepository<T, U> mapper, string appconnectionstringname)
@@ -62,8 +68,13 @@ namespace library.Impl.Data.Table
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No SelectDbCommand defined.") } }, data);
             }
 
-            var select = _builder.Select(data);
-            return Select(data, select.commandtext, CommandType.Text, select.parameters);
+            var parameters = new List<SqlParameter>();
+
+            var select = _commandbuilder.Select(_builder.GetSelectColumns(data.Columns),
+                $"{data.Description.Name}",
+                _builder.GetWhere(data.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
+
+            return Select(data, select, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Select(U data, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
@@ -79,7 +90,7 @@ namespace library.Impl.Data.Table
         }
         public virtual (Result result, U data) Select(U data, IDbCommand command)
         {
-            var executequery = ExecuteQuery(command, 1, data == null ? default(List<U>) : new List<U> { data });
+            var executequery = ExecuteQuery(command, 1, data != null ? new List<U> { data } : default(List<U>));
 
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
@@ -96,8 +107,21 @@ namespace library.Impl.Data.Table
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No InsertDbCommand defined.") } }, data);
             }
 
-            var insert = _builder.Insert(data);
-            return Insert(data, insert.commandtext, CommandType.Text, insert.parameters);
+            var parameters = new List<SqlParameter>();
+
+            var output = string.Empty;
+
+            foreach (var c in data.Columns.Where(c => c.IsIdentity).ToList())
+            {
+                output += $"{(string.IsNullOrWhiteSpace(output) ? " " : ", ")}";
+            }
+
+            var insert = _commandbuilder.Insert($"{data.Description.Name}",
+                _builder.GetInsertColumns(data.Columns.Where(c => !c.IsIdentity).ToList()),
+                _builder.GetInsertValues(data.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
+                output);
+
+            return Insert(data, insert, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Insert(U data, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
@@ -142,8 +166,14 @@ namespace library.Impl.Data.Table
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No UpdateDbCommand defined.") } }, data);
             }
 
-            var update = _builder.Update(data);
-            return Update(data, update.commandtext, CommandType.Text, update.parameters);
+            var parameters = new List<SqlParameter>();
+
+            var update = _commandbuilder.Update($"{data.Description.Name}",
+                $"{data.Description.Name}",
+                _builder.GetUpdateSet(data.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters),
+                _builder.GetWhere(data.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
+
+            return Update(data, update, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Update(U data, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
@@ -184,8 +214,13 @@ namespace library.Impl.Data.Table
                 return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No DeleteDbCommand defined.") } }, data);
             }
 
-            var delete = _builder.Delete(data);
-            return Delete(data, delete.commandtext, CommandType.Text, delete.parameters);
+            var parameters = new List<SqlParameter>();
+
+            var delete = _commandbuilder.Delete($"{data.Description.Name}", 
+                $"{data.Description.Name}",
+                _builder.GetWhere(data.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
+
+            return Delete(data, delete, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Delete(U data, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
