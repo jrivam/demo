@@ -132,7 +132,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Empresa() { Id = id }.Load();
+                var load = new domain.Model.Sucursal() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
