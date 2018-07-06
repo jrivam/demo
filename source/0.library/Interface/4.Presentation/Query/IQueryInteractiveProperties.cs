@@ -1,5 +1,4 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Query;
+﻿using library.Interface.Data.Query;
 using library.Interface.Domain.Query;
 
 namespace library.Interface.Presentation.Query
