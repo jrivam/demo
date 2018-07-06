@@ -20,21 +20,22 @@ namespace domain.Model
             }
         }
 
-        public Sucursal(data.Model.Sucursal data,
-            ILogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(ILogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
+            data.Model.Sucursal data)
             : base(logic)
         {
             Data = data;
         }
 
-        public Sucursal(data.Model.Sucursal data, 
-            IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
-            : this(data, 
-                  new LogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+        public Sucursal(IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper,
+            data.Model.Sucursal data)
+            : this(new LogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper),
+              data)
         {
         }
         public Sucursal(data.Model.Sucursal data)
-            : this(data, new domain.Mapper.Sucursal())
+            : this(new domain.Mapper.Sucursal(),
+                  data)
         {
         }
         public Sucursal()
@@ -45,7 +46,7 @@ namespace domain.Model
         public Sucursal(entities.Model.Sucursal entity)
             : this()
         {
-            SetProperties(entity);
+            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }

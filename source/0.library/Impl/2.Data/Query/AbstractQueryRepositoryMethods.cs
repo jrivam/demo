@@ -18,87 +18,22 @@ namespace library.Impl.Data.Query
             _repository = repository;
         }
 
-        protected virtual IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)>
-            GetQueryColumns
-            (IQueryRepositoryProperties query,
-            IList<string> tablenames,
-            IList<string> aliasnames,
-            int maxdepth = 1, int depth = 0)
-        {
-            var columns = new List<(IQueryColumn, IList<string>, IList<string>)>();
-
-            if (tablenames == null)
-                tablenames = new List<string>();
-            tablenames.Add(query.Description.Name);
-
-            if (aliasnames == null)
-                aliasnames = new List<string>();
-            aliasnames.Add(query.Description.Reference);
-
-            foreach (var c in query.Columns)
-            {
-                columns.Add((c, new List<string>(tablenames), new List<string>(aliasnames)));
-            }
-
-            depth++;
-            foreach (var j in query.GetJoins(maxdepth, depth))
-            {
-                columns.AddRange(GetQueryColumns(j.externalkey.Query, tablenames, aliasnames, maxdepth, depth));
-            }
-
-            return columns;
-        }
-
-        protected virtual IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
-            GetQueryJoins
-            (IQueryRepositoryProperties table,
-            IList<string> prefix,
-            int maxdepth = 1, int depth = 0)
-        {
-            var joins = new List<(IQueryRepositoryProperties, IList<string>, IQueryRepositoryProperties, IList<string>, IList<(IQueryColumn, IQueryColumn)>)>();
-
-            depth++;
-            foreach (var j in table.GetJoins(maxdepth, depth))
-            {
-                var tablename = new List<string>(prefix);
-                tablename.Add(j.externalkey.Query.Description.Name);
-
-                joins.Add((table, prefix, j.externalkey.Query, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
-
-                joins.AddRange(GetQueryJoins(j.externalkey.Query, tablename, maxdepth, depth));
-            }
-
-            return joins;
-        }
-
         public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))
         {
-            var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
-
-            return _repository.SelectSingle(querycolumns, queryjoins,  Description.Name, maxdepth, data);
+            return _repository.SelectSingle(this, maxdepth, data);
         }
         public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<U> datas = null)
         {
-            var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
-
-            return _repository.SelectMultiple(querycolumns, queryjoins, Description.Name, maxdepth, top, datas);
+            return _repository.SelectMultiple(this, maxdepth, top, datas);
         }
 
         public virtual (Result result, int rows) Update(IList<ITableColumn> columns, int maxdepth = 1)
         {
-            var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
-
-            return _repository.Update(querycolumns, queryjoins, Description.Name, columns);
+            return _repository.Update(this, columns, maxdepth);
         }
         public virtual (Result result, int rows) Delete(int maxdepth = 1)
         {
-            var querycolumns = GetQueryColumns(this, null, null, maxdepth, 0);
-            var queryjoins = GetQueryJoins(this, new List<string>() { Description.Name }, maxdepth, 0);
-
-            return _repository.Delete(querycolumns, queryjoins, Description.Name);
+            return _repository.Delete(this, maxdepth);
         }
     }
 }

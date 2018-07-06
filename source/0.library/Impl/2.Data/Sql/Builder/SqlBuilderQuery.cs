@@ -1,40 +1,72 @@
 ﻿using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
-using library.Interface.Data.Table;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace library.Impl.Data.Sql.Builder
 {
-    public abstract class AbstractSqlBuilderQuery : AbstractSqlBuilder, ISqlBuilderQuery
+    public class SqlBuilderQuery : AbstractSqlBuilder, ISqlBuilderQuery
     {
-        public abstract (string commandtext, IList<SqlParameter> parameters)
-            Select
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename,
-            int top = 0);
-
-        public abstract (string commandtext, IList<SqlParameter> parameters)
-            Update
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename,
-            IList<ITableColumn> columns);
-
-        public abstract (string commandtext, IList<SqlParameter> parameters)
-            Delete
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename);
-
-        public AbstractSqlBuilderQuery(ISqlSyntaxSign syntaxsign)
+        public SqlBuilderQuery(ISqlSyntaxSign syntaxsign)
             : base(syntaxsign)
         {
         }
 
-        protected virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> 
+        public virtual IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)>
+            GetQueryColumns
+            (IQueryRepositoryProperties query,
+            IList<string> tablenames,
+            IList<string> aliasnames,
+            int maxdepth = 1, int depth = 0)
+        {
+            var columns = new List<(IQueryColumn, IList<string>, IList<string>)>();
+
+            if (tablenames == null)
+                tablenames = new List<string>();
+            tablenames.Add(query.Description.Name);
+
+            if (aliasnames == null)
+                aliasnames = new List<string>();
+            aliasnames.Add(query.Description.Reference);
+
+            foreach (var c in query.Columns)
+            {
+                columns.Add((c, new List<string>(tablenames), new List<string>(aliasnames)));
+            }
+
+            depth++;
+            foreach (var j in query.GetJoins(maxdepth, depth))
+            {
+                columns.AddRange(GetQueryColumns(j.externalkey.Query, tablenames, aliasnames, maxdepth, depth));
+            }
+
+            return columns;
+        }
+
+        public virtual IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
+            GetQueryJoins
+            (IQueryRepositoryProperties query,
+            IList<string> prefix,
+            int maxdepth = 1, int depth = 0)
+        {
+            var joins = new List<(IQueryRepositoryProperties, IList<string>, IQueryRepositoryProperties, IList<string>, IList<(IQueryColumn, IQueryColumn)>)>();
+
+            depth++;
+            foreach (var j in query.GetJoins(maxdepth, depth))
+            {
+                var tablename = new List<string>(prefix);
+                tablename.Add(j.externalkey.Query.Description.Name);
+
+                joins.Add((query, prefix, j.externalkey.Query, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
+
+                joins.AddRange(GetQueryJoins(j.externalkey.Query, tablename, maxdepth, depth));
+            }
+
+            return joins;
+        }    
+
+        public virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> 
             GetParameters
             ((IQueryColumn column, IList<string> aliases, IList<string> parameters) columns, 
             IList<SqlParameter> parameters)
@@ -58,7 +90,7 @@ namespace library.Impl.Data.Sql.Builder
             }
         }
 
-        protected virtual string 
+        public virtual string 
             GetFrom
             (IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins, 
             string tablename)
@@ -81,7 +113,7 @@ namespace library.Impl.Data.Sql.Builder
             return from;
         }
 
-        protected virtual string 
+        public virtual string 
             GetWhere
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> columns, 
             IList<SqlParameter> parameters)
@@ -108,7 +140,7 @@ namespace library.Impl.Data.Sql.Builder
             return where;
         }
 
-        protected virtual string 
+        public virtual string 
             GetSelectColumns
             (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> columns)
         {

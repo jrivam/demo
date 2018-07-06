@@ -13,9 +13,7 @@ namespace library.Interface.Data.Query
     {
         (Result result, U data) 
             SelectSingle
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename,
+            (IQueryRepositoryProperties query, 
             int maxdepth = 1, U data = default(U));
 
         (Result result, U data) 
@@ -31,9 +29,7 @@ namespace library.Interface.Data.Query
 
         (Result result, IEnumerable<U> datas) 
             SelectMultiple
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename, 
+            (IQueryRepositoryProperties query,
             int maxdepth = 1, int top = 0, 
             IList<U> datas = null);
 
@@ -51,10 +47,9 @@ namespace library.Interface.Data.Query
 
         (Result result, int rows)
             Update
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename,
-            IList<ITableColumn> columns);
+            (IQueryRepositoryProperties query,
+            IList<ITableColumn> columns,
+            int maxdepth = 1);
 
         (Result result, int rows) 
             Update
@@ -66,9 +61,8 @@ namespace library.Interface.Data.Query
 
         (Result result, int rows)
             Delete
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename);
+            (IQueryRepositoryProperties query,
+            int maxdepth = 1);
         
         (Result result, int rows) 
             Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null);

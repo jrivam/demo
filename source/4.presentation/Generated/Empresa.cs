@@ -20,8 +20,8 @@ namespace presentation.Model
             }
         }
 
-        public Empresa(domain.Model.Empresa domain,
-            IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,            
+        public Empresa(IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
+            domain.Model.Empresa domain,
             int maxdepth = 1)
             : base(interactive, 
                   maxdepth)
@@ -29,32 +29,31 @@ namespace presentation.Model
             Domain = domain;
         }
 
-        public Empresa(domain.Model.Empresa domain, 
-            IMapperInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper,
+        public Empresa(IMapperInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper,
+             domain.Model.Empresa domain, 
              int maxdepth = 1)
-            : this(domain, 
-                  new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper),                  
+            : this(new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper),
+                  domain,
                   maxdepth)
         {
         }
         public Empresa(domain.Model.Empresa domain, 
              int maxdepth = 1)
-            : this(domain, 
-                    new presentation.Mapper.Empresa(),                  
+            : this(new presentation.Mapper.Empresa(),
+                    domain,
                     maxdepth)
         {
+        }
+        public Empresa(entities.Model.Empresa entity, 
+            int maxdepth = 1)
+            : this(maxdepth)
+        {
+            SetProperties(entity, true);
         }
         public Empresa(int maxdepth = 1)
             : this(new domain.Model.Empresa(),
                   maxdepth)
         {
-        }
-
-        public Empresa(entities.Model.Empresa entity, 
-            int maxdepth = 1)
-            : this(maxdepth)
-        {
-            SetProperties(entity);
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }

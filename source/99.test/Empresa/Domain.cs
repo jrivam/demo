@@ -1,4 +1,5 @@
 ﻿using library.Impl;
+using library.Impl.Data.Query;
 using library.Interface.Data.Sql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -57,14 +58,15 @@ namespace test.Empresa
         [TestMethod]
         public void Domain_Erase_NonDbCommand_Success()
         {
-            var mockRepositoryQuery = Data.GetRepositoryMock();
-            mockRepositoryQuery.mockCommand.Setup(x => x.ExecuteNonQuery())
+            var mockDatabaseQuery = Data.GetDatabaseMock();
+            mockDatabaseQuery.mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
             var mockBuilderQuery = new Moq.Mock<ISqlBuilderQuery>();
+            var mockCommandBuilderQuery = new Moq.Mock<ISqlCommandBuilder>();
 
-            var query = new Moq.Mock<domain.Query.Empresa>(new data.Query.Empresa(mockRepositoryQuery.mockCreator.Object, new data.Mapper.Empresa(mockRepositoryQuery.mockSyntaxSign.Object), mockBuilderQuery.Object)) { CallBase = true };
-            query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal(mockRepositoryQuery.mockCreator.Object, new data.Mapper.Sucursal(mockRepositoryQuery.mockSyntaxSign.Object), mockBuilderQuery.Object));
+            var query = new Moq.Mock<domain.Query.Empresa>(new data.Query.Empresa(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(mockDatabaseQuery.mockCreator.Object, new data.Mapper.Empresa(mockDatabaseQuery.mockSyntaxSign.Object), mockBuilderQuery.Object, mockCommandBuilderQuery.Object))) { CallBase = true };
+            query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabaseQuery.mockCreator.Object, new data.Mapper.Sucursal(mockDatabaseQuery.mockSyntaxSign.Object), mockBuilderQuery.Object, mockCommandBuilderQuery.Object)));
 
             var erasecommand = Domain_Erase_NonDbCommand();
             //erasecommand.Protected().Setup<Result>("EraseChildren2", ItExpr.IsAny<domain.Query.Sucursal>()).Returns(new Result() { Success = true });

@@ -21,8 +21,8 @@ namespace presentation.Model
             }
         }
 
-        public Sucursal(domain.Model.Sucursal domain, 
-            IInteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
+        public Sucursal(IInteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
+            domain.Model.Sucursal domain,
             int maxdepth = 1)
             : base(interactive, 
                   maxdepth)
@@ -30,32 +30,31 @@ namespace presentation.Model
             Domain = domain;
         }
 
-        public Sucursal(domain.Model.Sucursal domain, 
-            IMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper,
+        public Sucursal(IMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper,
+             domain.Model.Sucursal domain,
              int maxdepth = 1)
-            : this(domain, 
-                  new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper),                  
-                  maxdepth)
+            : this(new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper),
+                    domain,
+                    maxdepth)
         {
         }
         public Sucursal(domain.Model.Sucursal domain, 
              int maxdepth = 1)
-            : this(domain, 
-                    new presentation.Mapper.Sucursal(),                  
+            : this(new presentation.Mapper.Sucursal(),
+                    domain,
                     maxdepth)
         {
+        }
+        public Sucursal(entities.Model.Sucursal entity,
+            int maxdepth = 1)
+            : this(maxdepth)
+        {
+            SetProperties(entity, true);
         }
         public Sucursal(int maxdepth = 1)
             : this(new domain.Model.Sucursal(),
                   maxdepth)
         {
-        }
-
-        public Sucursal(entities.Model.Sucursal entity,
-            int maxdepth = 1)
-            : this(maxdepth)
-        {
-            SetProperties(entity);
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }

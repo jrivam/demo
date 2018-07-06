@@ -27,8 +27,8 @@ namespace data.Model
             }
         }
 
-        public Sucursal(entities.Model.Sucursal entity, 
-            IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository)
+        public Sucursal(IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository,
+            entities.Model.Sucursal entity)
             : base(repository, typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
             Entity = entity;
@@ -42,17 +42,17 @@ namespace data.Model
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
-            entities.Model.Sucursal entity, 
-            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
-            : this(entity, 
-                  new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mapper, connectionstringsettings))
+            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
+            entities.Model.Sucursal entity)
+            : this(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mapper, connectionstringsettings),
+                  entity)
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings,
             entities.Model.Sucursal entity)
             : this(connectionstringsettings, 
-                  entity, 
-                  new data.Mapper.Sucursal(connectionstringsettings))
+                  new data.Mapper.Sucursal(connectionstringsettings),
+                  entity)
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings)
@@ -65,10 +65,10 @@ namespace data.Model
         {
         }
 
-        public Sucursal(entities.Model.Sucursal entity, string appconnectionstringname)
+        public Sucursal(string appconnectionstringname, entities.Model.Sucursal entity)
             : this(appconnectionstringname)
         {
-            SetProperties(entity);
+            SetProperties(entity, true);
         }
 
         public override (Result result, data.Model.Sucursal data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> query = null)
@@ -203,16 +203,14 @@ namespace data.Query
             Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
-        public Sucursal(ISqlCreator creator, 
-        IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
-        ISqlBuilderQuery builder)
-            : this(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(creator, mapper, builder))
+        public Sucursal(ConnectionStringSettings connectionstringsettings,
+            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
+            : this(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(mapper, connectionstringsettings))
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings)
-            : this(new SqlCreator(connectionstringsettings),
-                  new data.Mapper.Sucursal(connectionstringsettings),
-                  SqlBuilderQueryFactory.Create(connectionstringsettings))
+            : this(connectionstringsettings,
+                  new data.Mapper.Sucursal(connectionstringsettings))
         {
         }
         public Sucursal(string appconnectionstringname)

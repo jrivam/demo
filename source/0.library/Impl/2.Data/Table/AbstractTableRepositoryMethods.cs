@@ -49,9 +49,9 @@ namespace library.Impl.Data.Table
             return _repository.Delete(this as U, usedbcommand);
         }
 
-        public U SetProperties(T entity)
+        public U SetProperties(T entity, bool nulls = false)
         {
-            return Entities.Helper.SetProperties<T, U>(entity, this as U);
+            return Entities.Helper.SetProperties<T, U>(entity, this as U, nulls);
         }
     }
 }

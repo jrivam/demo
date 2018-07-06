@@ -1,37 +1,18 @@
 ﻿using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
-using library.Interface.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace library.Impl.Data.Sql.Builder
 {
-    public abstract class AbstractSqlBuilderTable<T> : AbstractSqlBuilder, ISqlBuilderTable<T>
-        where T : IEntity
+    public class SqlBuilderTable : AbstractSqlBuilder, ISqlBuilderTable
     {
-        public abstract (string commandtext, IList<SqlParameter> parameters) 
-            Select
-            (ITableRepositoryProperties<T> entitytable);
-
-        public abstract (string commandtext, IList<SqlParameter> parameters) 
-            Insert
-            (ITableRepositoryProperties<T> entitytable);
-
-        public abstract (string commandtext, IList<SqlParameter> parameters) 
-            Update
-            (ITableRepositoryProperties<T> entitytable);
-
-        public abstract (string commandtext, IList<SqlParameter> parameters) 
-            Delete
-            (ITableRepositoryProperties<T> entitytable);
-
-        public AbstractSqlBuilderTable(ISqlSyntaxSign syntaxsign)
+        public SqlBuilderTable(ISqlSyntaxSign syntaxsign)
             : base(syntaxsign)
         {
         }
 
-        protected virtual string
+        public virtual string
             GetSelectColumns
             (IList<ITableColumn> columns)
         {
@@ -46,7 +27,7 @@ namespace library.Impl.Data.Sql.Builder
             return select;
         }
 
-        protected virtual string 
+        public virtual string 
             GetWhere
             (IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {
@@ -60,7 +41,7 @@ namespace library.Impl.Data.Sql.Builder
             return where;
         }
 
-        protected virtual string 
+        public virtual string 
             GetInsertColumns
             (IList<ITableColumn> columns)
         {
@@ -75,7 +56,7 @@ namespace library.Impl.Data.Sql.Builder
             return insert;
         }
 
-        protected virtual string 
+        public virtual string 
             GetInsertValues
             (IList<ITableColumn> columns, IList<SqlParameter> parameters)
         {

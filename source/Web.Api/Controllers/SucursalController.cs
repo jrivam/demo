@@ -21,7 +21,13 @@ namespace Web.Api.Controllers
                 if (activo != null)
                     query.Activo = (activo, WhereOperator.Equals);
 
-                return Ok(new domain.Model.Sucursales().Load(query?.List().domains)?.Datas?.Entities);
+                var list = query.List();
+                if (list.result.Success)
+                {
+                    return Ok(new domain.Model.Sucursales().Load(list.domains)?.Datas?.Entities);
+                }
+
+                return InternalServerError();
             }
             catch (Exception ex)
             {

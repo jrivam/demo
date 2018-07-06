@@ -19,22 +19,22 @@ namespace domain.Model
             }
         }
 
-        public Empresa(data.Model.Empresa data,
-            ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
+            data.Model.Empresa data)
             : base(logic)
         {
             Data = data;
         }
 
-        public Empresa(data.Model.Empresa data, 
-            IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
-            : this(data, 
-                  new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
+        public Empresa(IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper,
+            data.Model.Empresa data)
+            : this(new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper),
+                  data)
         {
         }
         public Empresa(data.Model.Empresa data)
-            : this(data,
-                  new domain.Mapper.Empresa())
+            : this(new domain.Mapper.Empresa(),
+                  data)
         {
         }
         public Empresa()
@@ -45,7 +45,7 @@ namespace domain.Model
         public Empresa(entities.Model.Empresa entity)
             : this()
         {
-            SetProperties(entity);
+            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }

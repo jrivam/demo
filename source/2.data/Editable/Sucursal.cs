@@ -14,7 +14,7 @@ namespace data.Model
 
         }
         public Sucursal(entities.Model.Sucursal entity)
-            : this(entity, _defaultappconnectionstringname)
+            : this(_defaultappconnectionstringname, entity)
         {
 
         }

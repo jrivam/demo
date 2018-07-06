@@ -1,4 +1,5 @@
 ﻿using library.Impl.Data.Sql;
+using library.Impl.Data.Sql.Builder;
 using library.Impl.Data.Sql.Factory;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
@@ -17,14 +18,19 @@ namespace library.Impl.Data.Query
         where U : ITableRepositoryProperties<T>
     {
         protected readonly ISqlBuilderQuery _builder;
+        protected readonly ISqlCommandBuilder _commandbuilder;
 
-        public RepositoryQuery(ISqlCreator creator, IMapperRepository<T, U> mapper, ISqlBuilderQuery builder)
+        public RepositoryQuery(ISqlCreator creator, IMapperRepository<T, U> mapper, 
+            ISqlBuilderQuery builder, ISqlCommandBuilder commandbuilder)
             : base(creator, mapper)
         {
             _builder = builder;
+            _commandbuilder = commandbuilder;
         }
         public RepositoryQuery(IMapperRepository<T, U> mapper, ConnectionStringSettings connectionstringsettings)
-            : this(new SqlCreator(connectionstringsettings), mapper, SqlBuilderQueryFactory.Create(connectionstringsettings))
+            : this(new SqlCreator(connectionstringsettings), mapper, 
+                  new SqlBuilderQuery(SqlSyntaxSignFactory.Create(connectionstringsettings)),
+                  SqlCommandBuilderFactory.Create(connectionstringsettings))
         {
         }
         public RepositoryQuery(IMapperRepository<T, U> mapper, string appconnectionstringname)
@@ -34,14 +40,20 @@ namespace library.Impl.Data.Query
 
         public virtual (Result result, U data) 
             SelectSingle
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename, 
+            (IQueryRepositoryProperties query,
             int maxdepth = 1, 
             U data = default(U))
         {
-            var select = _builder.Select(querycolumns, queryjoins, tablename, 1);
-            return SelectSingle(select.commandtext, CommandType.Text, select.parameters, maxdepth, data);
+            var parameters = new List<SqlParameter>();
+
+            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+
+            var select = _commandbuilder.Select(_builder.GetSelectColumns(querycolumns),
+                _builder.GetFrom(queryjoins, query.Description.Name),
+                _builder.GetWhere(querycolumns, parameters), 1);
+
+            return SelectSingle(select, CommandType.Text, parameters, maxdepth, data);
         }
 
         public virtual (Result result, U data) 
@@ -59,21 +71,27 @@ namespace library.Impl.Data.Query
             int maxdepth = 1, 
             U data = default(U))
         {
-            var executequery = ExecuteQuery(command, maxdepth, data == null ? default(List<U>) : new List<U> { data });
+            var executequery = ExecuteQuery(command, maxdepth, data != null ? new List<U> { data } : default(List<U>));
 
             return (executequery.result, executequery.datas.FirstOrDefault());
         }
 
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename, 
+            (IQueryRepositoryProperties query,
             int maxdepth = 1, int top = 0, 
             IList<U> datas = null)
         {
-            var select = _builder.Select(querycolumns, queryjoins, tablename, top);
-            return SelectMultiple(select.commandtext, CommandType.Text, select.parameters, maxdepth, datas);
+            var parameters = new List<SqlParameter>();
+
+            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+
+            var select = _commandbuilder.Select(_builder.GetSelectColumns(querycolumns),
+                _builder.GetFrom(queryjoins, query.Description.Name),
+                _builder.GetWhere(querycolumns, parameters), top);
+
+            return SelectMultiple(select, CommandType.Text, parameters, maxdepth, datas);
         }
 
         public virtual (Result result, IEnumerable<U> datas) 
@@ -96,13 +114,21 @@ namespace library.Impl.Data.Query
 
         public virtual (Result result, int rows) 
             Update
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename, 
-            IList<ITableColumn> columns)
+            (IQueryRepositoryProperties query,
+            IList<ITableColumn> columns,
+            int maxdepth = 1)
         {
-            var update = _builder.Update(querycolumns, queryjoins, tablename, columns);
-            return Update(update.commandtext, CommandType.Text, update.parameters);
+            var parameters = new List<SqlParameter>();
+
+            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+
+            var update = _commandbuilder.Update($"{query.Description.Name}",
+                _builder.GetFrom(queryjoins, query.Description.Name),
+                _builder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters),
+                _builder.GetWhere(querycolumns, parameters));
+
+            return Update(update, CommandType.Text, parameters);
         }
 
         public virtual (Result result, int rows) 
@@ -121,12 +147,19 @@ namespace library.Impl.Data.Query
 
         public virtual (Result result, int rows) 
             Delete
-            (IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)> querycolumns,
-            IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)> queryjoins,
-            string tablename)
+            (IQueryRepositoryProperties query,
+            int maxdepth = 1)
         {
-            var delete = _builder.Delete(querycolumns, queryjoins, tablename);
-            return Delete(delete.commandtext, CommandType.Text, delete.parameters);
+            var parameters = new List<SqlParameter>();
+
+            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+
+            var delete = _commandbuilder.Delete($"{query.Description.Name}", 
+                _builder.GetFrom(queryjoins, query.Description.Name),
+                _builder.GetWhere(querycolumns, parameters));
+
+            return Delete(delete, CommandType.Text, parameters);
         }
 
         public virtual (Result result, int rows) 
