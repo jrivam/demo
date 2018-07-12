@@ -1,5 +1,4 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Table;
+﻿using library.Interface.Data.Table;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation.Table;
@@ -8,11 +7,11 @@ using System.Windows.Input;
 
 namespace library.Impl.Presentation.Table
 {
-    public abstract class AbstractEntityInteractiveProperties<T, U, V, W> : IEntityInteractiveProperties<T, U, V>, INotifyPropertyChanged
+    public abstract class AbstractTableInteractiveProperties<T, U, V, W> : ITableInteractiveProperties<T, U, V>, INotifyPropertyChanged
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>, new()
-        where W : IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>, new()
+        where W : ITableInteractiveProperties<T, U, V>
     {
         public virtual V Domain { get; protected set; }
 
@@ -41,7 +40,7 @@ namespace library.Impl.Presentation.Table
 
         public virtual ICommand EditCommand { get; protected set; }
 
-        public AbstractEntityInteractiveProperties(int maxdepth = 1)
+        public AbstractTableInteractiveProperties(int maxdepth = 1)
         {
             _maxdepth = maxdepth;
         }

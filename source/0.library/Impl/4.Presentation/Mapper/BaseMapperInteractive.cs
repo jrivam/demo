@@ -9,8 +9,8 @@ namespace library.Impl.Presentation.Mapper
     public class BaseMapperInteractive<T, U, V, W> : IMapperInteractive<T, U, V, W> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
-        where W : IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>
+        where W : ITableInteractiveProperties<T, U, V>
     {
         public virtual W Clear(W presentation, int maxdepth = 1, int depth = 0)
         {

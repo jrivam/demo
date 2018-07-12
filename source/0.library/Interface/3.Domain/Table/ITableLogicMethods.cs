@@ -4,10 +4,10 @@ using library.Interface.Entities;
 
 namespace library.Interface.Domain.Table
 {
-    public interface IEntityLogicMethods<T, U, V> 
+    public interface ITableLogicMethods<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
         V Clear();
 

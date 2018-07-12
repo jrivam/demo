@@ -8,8 +8,12 @@ namespace library.Impl.Domain.Mapper
     public class BaseMapperLogic<T, U, V> : IMapperLogic<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
+        public BaseMapperLogic()
+        {
+        }
+
         public virtual V Clear(V domain, int maxdepth = 1, int depth = 0)
         {
             return domain;

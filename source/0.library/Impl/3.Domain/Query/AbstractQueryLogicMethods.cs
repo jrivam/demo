@@ -11,7 +11,7 @@ namespace library.Impl.Domain.Query
         where S : IQueryRepositoryProperties, IQueryRepositoryMethods<T, U>, new()
         where T : IEntity
         where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
         protected readonly ILogicQuery<T, U, V> _logic;
 

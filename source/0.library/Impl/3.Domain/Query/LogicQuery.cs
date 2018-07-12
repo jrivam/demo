@@ -14,7 +14,7 @@ namespace library.Impl.Domain.Query
     public class LogicQuery<T, U, V> : Logic<T, U, V>, ILogicQuery<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
         public LogicQuery(IMapperLogic<T, U, V> mapper)
             : base(mapper)

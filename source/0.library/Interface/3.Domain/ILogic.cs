@@ -7,7 +7,7 @@ namespace library.Interface.Domain
     public interface ILogic<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
     }
 }

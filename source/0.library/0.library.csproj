@@ -95,11 +95,11 @@
     <Compile Include="Impl\2.Data\Sql\Factory\SqlSyntaxSignFactory.cs" />
     <Compile Include="Impl\2.Data\Sql\SqlCreator.cs" />
     <Compile Include="Impl\2.Data\Sql\Builder\AbstractSqlBuilder.cs" />
-    <Compile Include="Impl\3.Domain\Table\AbstractEntityLogicMethods.cs" />
+    <Compile Include="Impl\3.Domain\Table\AbstractTableLogicMethods.cs" />
     <Compile Include="Impl\3.Domain\Table\ListTableLogicProperties.cs" />
     <Compile Include="Impl\3.Domain\Query\AbstractQueryLogicMethods.cs" />
     <Compile Include="Impl\3.Domain\Query\AbstractQueryLogicProperties.cs" />
-    <Compile Include="Impl\3.Domain\Table\AbstractEntityLogicProperties.cs" />
+    <Compile Include="Impl\3.Domain\Table\AbstractTableLogicProperties.cs" />
     <Compile Include="Impl\3.Domain\Query\LogicQuery.cs" />
     <Compile Include="Impl\3.Domain\Table\LogicTable.cs" />
     <Compile Include="Impl\3.Domain\Mapper\BaseMapperLogic.cs" />
@@ -115,8 +115,8 @@
     <Compile Include="Impl\2.Data\Sql\WhereOperator.cs" />
     <Compile Include="Impl\3.Domain\Logic.cs" />
     <Compile Include="Impl\2.Data\Mapper\BaseMapperTable.cs" />
-    <Compile Include="Impl\4.Presentation\Table\AbstractEntityInteractiveMethods.cs" />
-    <Compile Include="Impl\4.Presentation\Table\AbstractEntityInteractiveProperties.cs" />
+    <Compile Include="Impl\4.Presentation\Table\AbstractTableInteractiveMethods.cs" />
+    <Compile Include="Impl\4.Presentation\Table\AbstractTableInteractiveProperties.cs" />
     <Compile Include="Impl\4.Presentation\Table\ListTableInteractiveProperties.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryInteractiveMethods.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryInteractiveProperties.cs" />
@@ -144,14 +144,14 @@
     <Compile Include="Interface\2.Data\Sql\ISqlCreator.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlBuilder.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlBuilderQuery.cs" />
-    <Compile Include="Interface\3.Domain\Table\IEntityLogicMethods.cs" />
-    <Compile Include="Interface\3.Domain\Table\IListEntityLogicProperties.cs" />
+    <Compile Include="Interface\3.Domain\Table\ITableLogicMethods.cs" />
+    <Compile Include="Interface\3.Domain\Table\IListTableLogicProperties.cs" />
     <Compile Include="Interface\3.Domain\Table\ILogicTable.cs" />
     <Compile Include="Interface\3.Domain\Query\ILogicQuery.cs" />
     <Compile Include="Interface\3.Domain\Query\IQueryLogicMethods.cs" />
-    <Compile Include="Interface\4.Presentation\Table\IEntityInteractiveMethods.cs" />
+    <Compile Include="Interface\4.Presentation\Table\ITableInteractiveMethods.cs" />
     <Compile Include="Interface\4.Presentation\Table\IInteractiveTable.cs" />
-    <Compile Include="Interface\4.Presentation\Table\IListEntityInteractiveProperties.cs" />
+    <Compile Include="Interface\4.Presentation\Table\IListTableInteractiveProperties.cs" />
     <Compile Include="Interface\4.Presentation\Query\IInteractiveQuery.cs" />
     <Compile Include="Interface\4.Presentation\Mapper\IMapperInteractive.cs" />
     <Compile Include="Interface\2.Data\Mapper\IMapperRepository.cs" />
@@ -166,8 +166,8 @@
     <Compile Include="Interface\2.Data\Sql\ISqlSyntaxSign.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlBuilderTable.cs" />
     <Compile Include="Interface\3.Domain\ILogic.cs" />
-    <Compile Include="Interface\3.Domain\Table\IEntityLogicProperties.cs" />
-    <Compile Include="Interface\4.Presentation\Table\IEntityInteractiveProperties.cs" />
+    <Compile Include="Interface\3.Domain\Table\ITableLogicProperties.cs" />
+    <Compile Include="Interface\4.Presentation\Table\ITableInteractiveProperties.cs" />
     <Compile Include="Interface\4.Presentation\IInteractive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

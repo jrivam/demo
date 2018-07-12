@@ -5,11 +5,11 @@ using library.Interface.Entities;
 
 namespace library.Interface.Presentation.Table
 {
-    public interface IEntityInteractiveMethods<T, U, V, W>
+    public interface ITableInteractiveMethods<T, U, V, W>
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
-        where W : class, IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>
+        where W : class, ITableInteractiveProperties<T, U, V>
     {
         W Clear();
 

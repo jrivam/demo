@@ -1,5 +1,4 @@
-﻿using library.Impl;
-using library.Impl.Domain.Table;
+﻿using library.Impl.Domain.Table;
 using library.Interface.Data.Query;
 using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
@@ -10,14 +9,14 @@ using System.Collections.Generic;
 
 namespace library.Interface.Data.Table
 {
-    public interface IListEntityInteractiveProperties<S, R, Q, T, U, V, W>
+    public interface IListTableInteractiveProperties<S, R, Q, T, U, V, W>
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
-        where W : class, IEntityInteractiveProperties<T, U, V>, IEntityInteractiveMethods<T, U, V, W>
+        where V : ITableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
+        where W : class, ITableInteractiveProperties<T, U, V>, ITableInteractiveMethods<T, U, V, W>
     {
         ListTableLogicProperties<S, R, T, U, V> Domains { get; set; }
 

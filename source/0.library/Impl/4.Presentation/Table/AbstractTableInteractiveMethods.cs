@@ -7,15 +7,15 @@ using System.ComponentModel;
 
 namespace library.Impl.Presentation.Table
 {
-    public abstract class AbstractEntityInteractiveMethods<T, U, V, W> : AbstractEntityInteractiveProperties<T, U, V, W>, IEntityInteractiveMethods<T, U, V, W>, INotifyPropertyChanged
+    public abstract class AbstractTableInteractiveMethods<T, U, V, W> : AbstractTableInteractiveProperties<T, U, V, W>, ITableInteractiveMethods<T, U, V, W>, INotifyPropertyChanged
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>, new()
-        where W : class, IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>, ITableLogicMethods<T, U, V>, new()
+        where W : class, ITableInteractiveProperties<T, U, V>
     {
         protected readonly IInteractiveTable<T, U, V, W> _interactive;
 
-        public AbstractEntityInteractiveMethods(IInteractiveTable<T, U, V, W> interactive,
+        public AbstractTableInteractiveMethods(IInteractiveTable<T, U, V, W> interactive,
             int maxdepth = 1)
             : base(maxdepth)
         {

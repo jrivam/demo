@@ -15,8 +15,8 @@ namespace library.Impl.Presentation.Query
     public class InteractiveQuery<T, U, V, W> : Interactive<T, U, V, W>, IInteractiveQuery<T, U, V, W> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
-        where W : IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>
+        where W : ITableInteractiveProperties<T, U, V>
     {
         public InteractiveQuery(IMapperInteractive<T, U, V, W> mapper)
             : base(mapper)
