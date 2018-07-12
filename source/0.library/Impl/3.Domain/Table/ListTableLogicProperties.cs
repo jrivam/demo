@@ -12,10 +12,10 @@ using System.Reflection;
 
 namespace library.Impl.Domain.Table
 {
-    public class ListTableLogicProperties<S, R, T, U, V> : List<V>, IListEntityLogicProperties<S, R, T, U, V>
+    public class ListTableLogicProperties<S, R, T, U, V> : List<V>, IListTableLogicProperties<S, R, T, U, V>
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
+        where V : ITableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
     {

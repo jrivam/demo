@@ -16,6 +16,10 @@ namespace library.Impl.Data.Mapper
     {
         protected readonly ISqlSyntaxSign _syntaxsign;
 
+        public BaseMapperTable()
+        {
+        }
+
         public BaseMapperTable(ISqlSyntaxSign syntaxsign)
         {
             _syntaxsign = syntaxsign;

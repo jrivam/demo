@@ -14,8 +14,8 @@ namespace library.Impl.Presentation.Query
         where R : IQueryLogicProperties<S>, IQueryLogicMethods<T, U, V>, new()
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
-        where W : IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
+        where W : ITableInteractiveProperties<T, U, V>
     {
         protected readonly IInteractiveQuery<T, U, V, W> _interactive;
 

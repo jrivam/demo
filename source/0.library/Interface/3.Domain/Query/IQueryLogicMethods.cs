@@ -9,7 +9,7 @@ namespace library.Interface.Domain.Query
     public interface IQueryLogicMethods<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
         (Result result, V domain) Retrieve(int maxdepth, V domain = default(V));
         (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IList<V> domains = null);

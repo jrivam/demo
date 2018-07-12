@@ -7,7 +7,7 @@ namespace library.Interface.Domain.Table
     public interface ILogicTable<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
         V Clear(V domain, ITableRepositoryMethods<T, U> entityrepository);
 

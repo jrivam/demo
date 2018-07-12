@@ -9,10 +9,10 @@ using System.Collections.Generic;
 
 namespace library.Interface.Data.Table
 {
-    public interface IListEntityLogicProperties<S, R, T, U, V>
+    public interface IListTableLogicProperties<S, R, T, U, V>
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
+        where V : ITableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
     {

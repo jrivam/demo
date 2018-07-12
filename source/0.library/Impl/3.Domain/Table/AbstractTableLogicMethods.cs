@@ -5,14 +5,14 @@ using library.Interface.Entities;
 
 namespace library.Impl.Domain.Table
 {
-    public abstract class AbstractEntityLogicMethods<T, U, V> : AbstractEntityLogicProperties<T, U>, IEntityLogicMethods<T, U, V>
+    public abstract class AbstractTableLogicMethods<T, U, V> : AbstractTableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
         where T : IEntity
         where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>, new()
-        where V : class, IEntityLogicProperties<T, U>
+        where V : class, ITableLogicProperties<T, U>
     {
         protected readonly ILogicTable<T, U, V> _logic;
 
-        public AbstractEntityLogicMethods(ILogicTable<T, U, V> logic)
+        public AbstractTableLogicMethods(ILogicTable<T, U, V> logic)
             : base()
         {
             _logic = logic;

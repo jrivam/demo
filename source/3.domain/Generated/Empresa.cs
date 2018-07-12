@@ -9,7 +9,7 @@ using library.Interface.Domain.Table;
 
 namespace domain.Model
 {
-    public partial class Empresa : AbstractEntityLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractTableLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public virtual domain.Query.Empresa Query
         {

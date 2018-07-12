@@ -9,7 +9,7 @@ namespace library.Impl.Domain.Table
     public class LogicTable<T, U, V> : Logic<T, U, V>, ILogicTable<T, U, V> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
+        where V : ITableLogicProperties<T, U>
     {
         public LogicTable(IMapperLogic<T, U, V> mapper)
             : base(mapper)

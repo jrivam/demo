@@ -1,10 +1,9 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Table;
+﻿using library.Interface.Data.Table;
 using library.Interface.Entities;
 
 namespace library.Interface.Domain.Table
 {
-    public interface IEntityLogicProperties<T, U> 
+    public interface ITableLogicProperties<T, U> 
         where T: IEntity
         where U : ITableRepositoryProperties<T>
     {

@@ -10,7 +10,7 @@ using System;
 
 namespace domain.Model
 {
-    public partial class Sucursal : AbstractEntityLogicMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractTableLogicMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public virtual domain.Query.Sucursal Query
         {

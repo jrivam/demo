@@ -8,8 +8,8 @@ namespace library.Interface.Presentation.Mapper
     public interface IMapperInteractive<T, U, V, W> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
-        where V : IEntityLogicProperties<T, U>
-        where W : IEntityInteractiveProperties<T, U, V>
+        where V : ITableLogicProperties<T, U>
+        where W : ITableInteractiveProperties<T, U, V>
     {
         W Clear(W presentation, int maxdepth = 1, int depth = 0);
         W Raise(W presentation);

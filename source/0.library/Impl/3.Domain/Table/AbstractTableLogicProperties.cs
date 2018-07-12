@@ -1,11 +1,10 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Table;
+﻿using library.Interface.Data.Table;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 
 namespace library.Impl.Domain.Table
 {
-    public abstract class AbstractEntityLogicProperties<T, U> : IEntityLogicProperties<T, U>
+    public abstract class AbstractTableLogicProperties<T, U> : ITableLogicProperties<T, U>
         where T : IEntity
         where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>, new()
     {
@@ -22,7 +21,7 @@ namespace library.Impl.Domain.Table
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
-        public AbstractEntityLogicProperties()
+        public AbstractTableLogicProperties()
         {
         }
     }
