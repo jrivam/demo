@@ -12,6 +12,5 @@ namespace library.Interface.Data
         where U : ITableRepositoryProperties<T>
     {
         (Result result, IEnumerable<U> datas) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<U> datas = null);
-        (Result result, IEnumerable<U> datas) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<U> datas = null);
     }
 }
