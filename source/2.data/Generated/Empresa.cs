@@ -227,11 +227,11 @@ namespace data.Mapper
 
         public override data.Model.Empresa Clear(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data.Id = null;
-            data.RazonSocial = null;
-            data.Activo = null;
+            data.Entity.Id = null;
+            data.Entity.RazonSocial = null;
+            data.Entity.Activo = null;
 
-            data.Sucursales = null;
+            data.Entity.Sucursales = null;
 
             return data;
         }
