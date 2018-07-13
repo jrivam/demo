@@ -10,7 +10,7 @@ using System.Data;
 
 namespace library.Impl.Data
 {
-    public class Repository<T, U> : BaseRepository<T, U>, IRepository<T, U> 
+    public class Repository<T, U> : DbRepository<T, U>, IRepository<T, U> 
         where T : IEntity
         where U : ITableRepositoryProperties<T>
     {

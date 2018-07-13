@@ -8,13 +8,13 @@ using System.Data;
 
 namespace library.Impl.Data
 {
-    public class BaseRepository<T, U> : RepositoryBulk
+    public class DbRepository<T, U> : RepositoryBulk
         where T : IEntity
         where U : ITableRepositoryProperties<T>
     {
         protected readonly IMapperRepository<T, U> _mapper;
 
-        public BaseRepository(ISqlCreator creator, IMapperRepository<T, U> mapper)
+        public DbRepository(ISqlCreator creator, IMapperRepository<T, U> mapper)
             : base(creator)
         {
             _mapper = mapper;

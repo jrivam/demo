@@ -7,7 +7,7 @@ using System.Data;
 
 namespace library.Impl.Data
 {
-    public class RepositoryBulk : BaseRepositoryBulk, IRepositoryBulk 
+    public class RepositoryBulk : DbRepositoryBulk, IRepositoryBulk 
     {
         protected readonly ISqlCreator _creator;
 
