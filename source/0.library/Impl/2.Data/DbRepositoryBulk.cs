@@ -5,9 +5,9 @@ using System.Data;
 
 namespace library.Impl.Data
 {
-    public class BaseRepositoryBulk : IBaseRepositoryBulk
+    public class DbRepositoryBulk : IDbRepositoryBulk
     {
-        public BaseRepositoryBulk()
+        public DbRepositoryBulk()
         {
         }
 

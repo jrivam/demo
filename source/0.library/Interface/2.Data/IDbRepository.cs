@@ -6,7 +6,7 @@ using System.Data;
 
 namespace library.Interface.Data
 {
-    public interface IBaseRepository<T, U>
+    public interface IDbRepository<T, U>
         where T : IEntity
         where U : ITableRepositoryProperties<T>
     {
