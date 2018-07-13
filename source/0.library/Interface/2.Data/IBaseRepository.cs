@@ -4,7 +4,7 @@ using library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
-namespace library.Interface.Data.Command
+namespace library.Interface.Data
 {
     public interface IBaseRepository<T, U>
         where T : IEntity

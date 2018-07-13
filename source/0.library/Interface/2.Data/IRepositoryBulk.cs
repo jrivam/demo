@@ -3,7 +3,7 @@ using library.Impl.Data.Sql;
 using System.Collections.Generic;
 using System.Data;
 
-namespace library.Interface.Data.Command
+namespace library.Interface.Data
 {
     public interface IRepositoryBulk
     {
