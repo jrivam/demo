@@ -1,11 +1,11 @@
 ﻿using library.Impl.Data.Sql;
 using library.Impl.Domain.Table;
 using library.Impl.Presentation;
-using library.Impl.Presentation.Mapper;
 using library.Impl.Presentation.Query;
+using library.Impl.Presentation.Raiser;
 using library.Impl.Presentation.Table;
-using library.Interface.Presentation.Mapper;
 using library.Interface.Presentation.Query;
+using library.Interface.Presentation.Raiser;
 using library.Interface.Presentation.Table;
 using System;
 
@@ -30,26 +30,32 @@ namespace presentation.Model
             Domain = domain;
         }
 
-        public Sucursal(IMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper,
+        public Sucursal(IRaiserInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> raiser,
              domain.Model.Sucursal domain,
              int maxdepth = 1)
-            : this(new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper),
+            : this(new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(raiser),
                     domain,
                     maxdepth)
         {
         }
         public Sucursal(domain.Model.Sucursal domain, 
              int maxdepth = 1)
-            : this(new presentation.Mapper.Sucursal(),
+            : this(new presentation.Raiser.Sucursal(),
                     domain,
                     maxdepth)
         {
         }
-        public Sucursal(entities.Model.Sucursal entity,
+        public Sucursal(data.Model.Sucursal data,
             int maxdepth = 1)
-            : this(maxdepth)
+            : this(new domain.Model.Sucursal(data),
+                  maxdepth)
         {
-            SetProperties(entity, true);
+        }
+        public Sucursal(entities.Model.Sucursal entity,
+          int maxdepth = 1)
+          : this(new data.Model.Sucursal(entity), 
+                maxdepth)
+        {
         }
         public Sucursal(int maxdepth = 1)
             : this(new domain.Model.Sucursal(),
@@ -101,7 +107,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Sucursales : ListTableInteractiveProperties<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursales : ListPresentation<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public Sucursales()
             : base()
@@ -131,14 +137,14 @@ namespace presentation.Query
         }
 
         public Sucursal(domain.Query.Sucursal domain,
-            IMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper)
+            IRaiserInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> mapper)
             : this(domain,
                   new InteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper))
         {
         }
         public Sucursal(domain.Query.Sucursal domain)
             : this(domain,
-                  new presentation.Mapper.Sucursal())
+                  new presentation.Raiser.Sucursal())
         {
         }
         public Sucursal()
@@ -190,27 +196,31 @@ namespace presentation.Query
     }
 }
 
-namespace presentation.Mapper
+namespace presentation.Raiser
 {
-    public partial class Sucursal : BaseMapperInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursal : BaseRaiserInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public override presentation.Model.Sucursal Clear(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
         {
             presentation = base.Clear(presentation, maxdepth, depth);
 
             depth++;
-            if (depth >= maxdepth)
+            if (depth < maxdepth)
             {
                 presentation.Empresa = null;
             }
 
             return presentation;
         }
-        public override presentation.Model.Sucursal Raise(presentation.Model.Sucursal presentation)
+        public override presentation.Model.Sucursal Raise(presentation.Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
         {
             presentation = base.Raise(presentation);
 
-            presentation.OnPropertyChanged("Empresa");
+            depth++;
+            if (depth < maxdepth)
+            {
+                presentation.OnPropertyChanged("Empresa");
+            }
 
             return presentation;
         }

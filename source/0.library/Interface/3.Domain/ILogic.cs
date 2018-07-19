@@ -1,13 +1,12 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
+﻿using library.Impl;
+using library.Interface.Data.Table;
 using library.Interface.Entities;
 
 namespace library.Interface.Domain
 {
-    public interface ILogic<T, U, V> 
+    public interface ILogic<T, U> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
+        where U : ITableRepository, ITableEntity<T>, ITableRepositoryMethods<T, U>
     {
     }
 }

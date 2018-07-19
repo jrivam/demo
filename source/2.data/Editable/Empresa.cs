@@ -41,16 +41,3 @@ namespace data.Query
         }
     }
 }
-
-namespace data.Mapper
-{
-    public partial class Empresa
-    {
-        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
-
-        public Empresa()
-            : this(_defaultappconnectionstringname)
-        {
-        }
-    }
-}

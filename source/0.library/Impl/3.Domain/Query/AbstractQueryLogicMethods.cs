@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace library.Impl.Domain.Query
 {
-    public abstract class AbstractQueryLogicMethods<S, T, U, V> : AbstractQueryLogicProperties<S>, IQueryLogicMethods<T, U, V>
-        where S : IQueryRepositoryProperties, IQueryRepositoryMethods<T, U>, new()
+    public abstract class AbstractQueryLogicMethods<S, T, U, V> : AbstractQueryLogic<S>, IQueryLogicMethods<T, U, V>
         where T : IEntity
-        where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>
-        where V : ITableLogicProperties<T, U>
+        where U : ITableRepository, ITableEntity<T>, ITableRepositoryMethods<T, U>
+        where V : ITableLogic<T, U>
+        where S : IQueryRepository, IQueryRepositoryMethods<T, U>, new()
     {
         protected readonly ILogicQuery<T, U, V> _logic;
 

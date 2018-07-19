@@ -6,31 +6,24 @@ using System.Collections.Generic;
 
 namespace library.Impl.Domain.Table
 {
-    public class LogicTable<T, U, V> : Logic<T, U, V>, ILogicTable<T, U, V> 
+    public class LogicTable<T, U, V> : Logic<T, U>, ILogicTable<T, U, V> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
+        where U : ITableRepository, ITableEntity<T>, ITableRepositoryMethods<T, U>
+        where V : ITableLogic<T, U>
     {
+        protected readonly IMapperLogic<T, U, V> _mapper;
+
         public LogicTable(IMapperLogic<T, U, V> mapper)
-            : base(mapper)
+            : base()
         {
+            _mapper = mapper;
         }
 
-        public virtual V Clear(V domain, ITableRepositoryMethods<T, U> entityrepository)
-        {
-            entityrepository.Clear();
-
-            domain.Changed = false;
-            domain.Deleted = false;
-
-            return domain;
-        }
-
-        public virtual (Result result, V domain) Load(V domain, ITableRepositoryMethods<T, U> entityrepository, bool usedbcommand = false)
+        public virtual (Result result, V domain) Load(V domain, bool usedbcommand = false)
         {
             if (domain.Data.Entity.Id != null)
             {
-                var select = entityrepository.Select(usedbcommand);
+                var select = domain.Data.Select(usedbcommand);
 
                 if (select.result.Success && select.data != null)
                 {
@@ -47,32 +40,33 @@ namespace library.Impl.Domain.Table
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "Load: Id cannot be null") } }, domain);
         }
-        public virtual (Result result, V domain) LoadQuery(V domain, ITableRepositoryMethods<T, U> entityrepository, int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(V domain, int maxdepth = 1)
         {
             if (domain.Data.Entity.Id != null)
             {
-                var select = entityrepository.SelectQuery(maxdepth);
+                var selectquery = domain.Data.SelectQuery(maxdepth);
 
-                if (select.result.Success && select.data != null)
+                if (selectquery.result.Success && selectquery.data != null)
                 {
                     _mapper.Clear(domain, maxdepth, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;
 
-                    return (select.result, domain);
+                    return (selectquery.result, domain);
                 }
 
-                return (select.result, default(V));
+                return (selectquery.result, default(V));
             }
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "LoadQuery: Id cannot be null") } }, domain);
         }
-        public virtual (Result result, V domain) Save(V domain, ITableRepositoryMethods<T, U> entityrepository, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+
+        public virtual (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             if (domain.Changed)
             {
-                var updateinsert = (domain.Data.Entity.Id != null ? entityrepository.Update(useupdatedbcommand) : entityrepository.Insert(useinsertdbcommand));
+                var updateinsert = (domain.Data.Entity.Id != null ? domain.Data.Update(useupdatedbcommand) : domain.Data.Insert(useinsertdbcommand));
 
                 if (updateinsert.result.Success)
                 {
@@ -84,13 +78,13 @@ namespace library.Impl.Domain.Table
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, "Save: no changes to persist") } }, domain);
         }
-        public virtual (Result result, V domain) Erase(V domain, ITableRepositoryMethods<T, U> entityrepository, bool usedbcommand = false)
+        public virtual (Result result, V domain) Erase(V domain, bool usedbcommand = false)
         {
             if (domain.Data.Entity.Id != null)
             {
                 if (!domain.Deleted)
                 {
-                    var delete = entityrepository.Delete(usedbcommand);
+                    var delete = domain.Data.Delete(usedbcommand);
 
                     if (delete.result.Success)
                     {

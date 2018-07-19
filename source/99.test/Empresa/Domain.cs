@@ -65,8 +65,25 @@ namespace test.Empresa
             var mockBuilderQuery = new Moq.Mock<ISqlBuilderQuery>();
             var mockCommandBuilderQuery = new Moq.Mock<ISqlCommandBuilder>();
 
-            var query = new Moq.Mock<domain.Query.Empresa>(new data.Query.Empresa(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(mockDatabaseQuery.mockCreator.Object, new data.Mapper.Empresa(mockDatabaseQuery.mockSyntaxSign.Object), mockBuilderQuery.Object, mockCommandBuilderQuery.Object))) { CallBase = true };
-            query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabaseQuery.mockCreator.Object, new data.Mapper.Sucursal(mockDatabaseQuery.mockSyntaxSign.Object), mockBuilderQuery.Object, mockCommandBuilderQuery.Object)));
+            var query = new Moq.Mock<domain.Query.Empresa>(new data.Query.Empresa
+                (
+                    new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+                    (mockDatabaseQuery.mockCreator.Object, 
+                    new entities.Reader.Empresa(),
+                    new data.Mapper.Empresa(),
+                    mockDatabaseQuery.mockSyntaxSign.Object,
+                    mockCommandBuilderQuery.Object, mockBuilderQuery.Object))
+                 )
+            { CallBase = true };
+            query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal
+                (
+                    new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+                    (mockDatabaseQuery.mockCreator.Object,
+                    new entities.Reader.Sucursal(),
+                    new data.Mapper.Sucursal(),
+                    mockDatabaseQuery.mockSyntaxSign.Object,
+                    mockCommandBuilderQuery.Object, mockBuilderQuery.Object))
+                );
 
             var erasecommand = Domain_Erase_NonDbCommand();
             //erasecommand.Protected().Setup<Result>("EraseChildren2", ItExpr.IsAny<domain.Query.Sucursal>()).Returns(new Result() { Success = true });

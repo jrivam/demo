@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Impl.Data.Sql;
+using library.Impl.Domain;
 using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Query;
 using library.Impl.Domain.Table;
@@ -37,15 +38,13 @@ namespace domain.Model
                   data)
         {
         }
+        public Empresa(entities.Model.Empresa entity)
+            : this(new data.Model.Empresa(entity))
+        {
+        }
         public Empresa()
             : this(new data.Model.Empresa())
         {
-        }
-
-        public Empresa(entities.Model.Empresa entity)
-            : this()
-        {
-            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
@@ -101,7 +100,7 @@ namespace domain.Model
         }
     }
 
-    public partial class Empresas : ListTableLogicProperties<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresas : ListDomain<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public Empresas()
             : base()

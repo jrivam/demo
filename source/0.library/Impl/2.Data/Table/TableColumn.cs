@@ -14,28 +14,38 @@ namespace library.Impl.Data.Table
             }
         }
 
-        public virtual Description ColumnDescription { get; }
-        public virtual Description TableDescription { get; }
+        public virtual Description Description { get; }
 
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
 
         public virtual object Value { get; set; }
-        public virtual object DbValue { get; set; }
 
-        public TableColumn(Description tabledescription, string name, string reference)
+        protected object _dbvalue;
+        public virtual object DbValue
         {
-            TableDescription = tabledescription;
-
-            ColumnDescription = new Description(name, reference);
+            get
+            {
+                return _dbvalue;
+            }
+            set
+            {
+                _dbvalue = value;
+                this.Value = _dbvalue;
+            }
         }
-        public TableColumn(Description tabledescription, string name, string reference, bool isprimarykey)
-            : this(tabledescription, name, reference)
+
+        public TableColumn(string name, string reference)
+        {
+            Description = new Description(name, reference);
+        }
+        public TableColumn(string name, string reference, bool isprimarykey)
+            : this(name, reference)
         {
             IsPrimaryKey = isprimarykey;
         }
-        public TableColumn(Description tabledescription, string name, string reference, bool isprimarykey, bool isidentity)
-            : this(tabledescription, name, reference, isprimarykey)
+        public TableColumn(string name, string reference, bool isprimarykey, bool isidentity)
+            : this(name, reference, isprimarykey)
         {
             IsIdentity = isidentity;
         }

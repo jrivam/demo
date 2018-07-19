@@ -6,12 +6,12 @@ namespace library.Interface.Data.Sql
 {
     public interface ISqlBuilder
     {
-        IEnumerable<(ITableColumn column, SqlParameter parameter)> 
+        IEnumerable<((ITableRepository table, ITableColumn column) tablecolumn, SqlParameter parameter)>
             GetParameters
-            (IList<ITableColumn> columns, IList<SqlParameter> parameters);
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters);
 
-        string 
+        string
             GetUpdateSet
-            (IList<ITableColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true);
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters, bool prefixtablename = true);
     }
 }

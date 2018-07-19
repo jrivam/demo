@@ -6,9 +6,10 @@ namespace library.Interface.Domain.Mapper
 {
     public interface IMapperLogic<T, U, V> 
         where T: IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>
     {
+        V CreateInstance(U data);
         V Clear(V domain, int maxdepth = 1, int depth = 0);
     }
 }

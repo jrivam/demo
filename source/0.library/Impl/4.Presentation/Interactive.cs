@@ -2,22 +2,16 @@
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation;
-using library.Interface.Presentation.Mapper;
-using library.Interface.Presentation.Table;
 
 namespace library.Impl.Presentation
 {
-    public class Interactive<T, U, V, W> : IInteractive<T, U, V, W> 
+    public class Interactive<T, U, V> : IInteractive<T, U, V> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
-        where W : ITableInteractiveProperties<T, U, V>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>
     {
-        protected readonly IMapperInteractive<T, U, V, W> _mapper;
-
-        public Interactive(IMapperInteractive<T, U, V, W> mapper)
+        public Interactive()
         {
-            _mapper = mapper;
         }
     }
 }

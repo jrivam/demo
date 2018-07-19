@@ -85,7 +85,11 @@ namespace test.Empresa
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Empresa(),
+                new data.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Empresa()
                 {
                     Id = Entity.Id
@@ -140,7 +144,11 @@ namespace test.Empresa
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Empresa(),
+                new data.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Empresa()
                 {
                     RazonSocial = Entity.RazonSocial,
@@ -196,7 +204,11 @@ namespace test.Empresa
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Empresa(),
+                new data.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Empresa()
                 {
                     Id = Entity.Id,
@@ -253,7 +265,11 @@ namespace test.Empresa
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object, new data.Mapper.Empresa(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Empresa(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Empresa(),
+                new data.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Empresa()
                 {
                     Id = Entity.Id,

@@ -17,42 +17,34 @@ namespace library.Impl.Data.Query
             }
         }
 
-        public virtual IQueryRepositoryProperties Query { get; }
-
         public virtual Description Description { get; }
 
         public virtual IList<(object value, WhereOperator? sign)> Wheres { get; set; } = new List<(object, WhereOperator?)>();
 
-        public QueryColumn(IQueryRepositoryProperties query, string name, string reference)
+        public QueryColumn(string name, string reference)
         {
-            Query = query;
-
             Description = new Description(name, reference);
         }
 
-        public virtual IQueryRepositoryProperties Where((object value, WhereOperator? sign) condition)
+        public virtual void Where((object value, WhereOperator? sign) condition)
         {
             if (!Wheres.Contains(condition))
                 Wheres?.Add(condition);
-
-            return Query;
         }
-        public virtual IQueryRepositoryProperties Where(params (object value, WhereOperator? sign)[] conditions)
+        public virtual void Where(params (object value, WhereOperator? sign)[] conditions)
         {
             conditions?.ToList()?.ForEach(x => Where(x));
-
-            return Query;
         }
-        public virtual IQueryRepositoryProperties Where(object value, WhereOperator? sign = WhereOperator.Equals)
+        public virtual void Where(object value, WhereOperator? sign = WhereOperator.Equals)
         {
             if (value is IList<object>)
-                return Where(((IList<object>)value).Select(x => (x, sign)).ToArray());
+                Where(((IList<object>)value).Select(x => (x, sign)).ToArray());
             else
-                return Where((value, sign));
+                Where((value, sign));
         }
-        public virtual IQueryRepositoryProperties Where(IList<object> value, WhereOperator sign = WhereOperator.Equals)
+        public virtual void Where(IList<object> value, WhereOperator sign = WhereOperator.Equals)
         {
-            return Where(value.Select(x => (x, sign)).ToArray());
+            Where(value.Select(x => (x, sign)).ToArray());
         }
     }
 }

@@ -1,14 +1,16 @@
 ﻿using library.Extension;
 using library.Impl;
+using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Sql;
-using library.Impl.Data.Sql.Factory;
 using library.Impl.Data.Table;
+using library.Impl.Entities;
+using library.Impl.Entities.Reader;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
-using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
+using library.Interface.Entities.Reader;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,29 +31,32 @@ namespace data.Model
 
         public Sucursal(IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository,
             entities.Model.Sucursal entity)
-            : base(repository, typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+            : base(repository, 
+                  typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
             Entity = entity;
 
-            Columns.Add(new TableColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
-            Columns.Add(new TableColumn<string>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new TableColumn<DateTime?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new TableColumn<bool?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new TableColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new TableColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
 
-            Columns.Add(new TableColumn<int?>(Description, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
+            IReaderEntity<entities.Model.Sucursal> reader,
             IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
             entities.Model.Sucursal entity)
-            : this(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mapper, connectionstringsettings),
+            : this(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings),
                   entity)
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings,
             entities.Model.Sucursal entity)
             : this(connectionstringsettings, 
-                  new data.Mapper.Sucursal(connectionstringsettings),
+                  new entities.Reader.Sucursal(),
+                  new data.Mapper.Sucursal(),
                   entity)
         {
         }
@@ -60,15 +65,15 @@ namespace data.Model
                   new entities.Model.Sucursal())
         {
         }
-        public Sucursal(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+        public Sucursal(string appconnectionstringname, entities.Model.Sucursal entity)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]],
+                  entity)
         {
         }
-
-        public Sucursal(string appconnectionstringname, entities.Model.Sucursal entity)
-            : this(appconnectionstringname)
+        public Sucursal(string appconnectionstringname)
+            : this(appconnectionstringname,
+                new entities.Model.Sucursal())
         {
-            SetProperties(entity, true);
         }
 
         public override (Result result, data.Model.Sucursal data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> query = null)
@@ -154,13 +159,13 @@ namespace data.Model
         }
     }
 
-    public partial class Sucursales : ListTableRepositoryProperties<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursales : ListData<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
         public Sucursales()
             : base()
         {
         }
-        public Sucursales(List<entities.Model.Sucursal> entities)
+        public Sucursales(ListEntity<entities.Model.Sucursal> entities)
             : this()
         {
             Entities = entities;
@@ -170,7 +175,7 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Sucursal : AbstractQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryRepositoryMethods<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
         public virtual data.Query.Sucursal Query
         {
@@ -180,37 +185,40 @@ namespace data.Query
             }
         }
 
-        public override IList<(IQueryColumn internalkey, IQueryColumn externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
+        public override IList<(IQueryRepository internaltable, IQueryColumn internalkey, IQueryRepository externaltable, IQueryColumn externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
         {
-            var joins = new List<(IQueryColumn internalkey, IQueryColumn externalkey)>();
+            var joins = new List<(IQueryRepository internaltable, IQueryColumn internalkey, IQueryRepository externaltable, IQueryColumn externalkey)>();
 
             if (_empresa != null || depth < maxdepth || maxdepth == 0)
             {
-                joins.Add((this["IdEmpresa"], Empresa()["Id"]));
+                joins.Add((this, this["IdEmpresa"], Empresa(), Empresa()["Id"]));
             }
 
             return joins;
         }
 
-        public Sucursal(IRepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal> repository)
-            : base(repository, typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+        public Sucursal(IRepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal> repository)
+            : base(repository, 
+                  typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
-            Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
-            Columns.Add(new QueryColumn<string>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new QueryColumn<DateTime?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new QueryColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new QueryColumn<bool?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
 
-            Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
+            IReaderEntity<entities.Model.Sucursal> reader,
             IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
-            : this(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(mapper, connectionstringsettings))
+            : this(new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings)
             : this(connectionstringsettings,
-                  new data.Mapper.Sucursal(connectionstringsettings))
+                  new entities.Reader.Sucursal(),
+                  new data.Mapper.Sucursal())
         {
         }
         public Sucursal(string appconnectionstringname)
@@ -263,73 +271,111 @@ namespace data.Query
     }
 }
 
-namespace data.Mapper
+namespace entities.Model
 {
-    public partial class Sucursal : BaseMapperTable<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursales : ListEntity<entities.Model.Sucursal>
     {
-        public Sucursal(ISqlSyntaxSign syntaxsign)
-            : base(syntaxsign)
+        public Sucursales()
+            : base()
         {
         }
-        public Sucursal(ConnectionStringSettings connectionstringsettings)
-            : this(SqlSyntaxSignFactory.Create(connectionstringsettings))
+        public Sucursales(List<entities.Model.Sucursal> list)
+            : this()
         {
+            List = list;
         }
-        public Sucursal(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+    }
+}
+
+namespace entities.Reader
+{
+    public partial class Sucursal : BaseReaderEntity<entities.Model.Sucursal>
+    {
+        public Sucursal()
+            : base()
         {
         }
 
-        public override data.Model.Sucursal CreateInstance(int maxdepth = 1, int depth = 0)
+        public override entities.Model.Sucursal CreateInstance()
         {
-            var instance = base.CreateInstance(maxdepth, depth);
+            return base.CreateInstance();
+        }
+
+        public override entities.Model.Sucursal Clear(entities.Model.Sucursal entity, int maxdepth = 1, int depth = 0)
+        {
+            entity.Id = null;
+            entity.Nombre = null;
+            entity.Fecha = null;
+            entity.Activo = null;
+            entity.IdEmpresa = null;
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                instance.Empresa = new data.Mapper.Empresa().CreateInstance(maxdepth, depth);
+                entity.Empresa = null;
             }
 
-            return instance;
+            return entity;
         }
+
+        public override entities.Model.Sucursal Read(entities.Model.Sucursal entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
+        {
+            prefixname.Add("Sucursal");
+
+            var prefix = string.Join(columnseparator, prefixname);
+            prefix += (prefix == string.Empty ? prefix : columnseparator);
+
+            entity.Id = reader[$"{prefix}Id"] as int?;
+            entity.Nombre = reader[$"{prefix}Nombre"] as string;
+            entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
+            entity.Activo = reader[$"{prefix}Activo"] as bool?;
+
+            entity.IdEmpresa = reader[$"{prefix}IdEmpresa"] as int?;
+
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                entity.Empresa = new entities.Reader.Empresa().Read(new entities.Model.Empresa(), reader, new List<string>(prefixname), columnseparator, maxdepth, depth);
+            }
+
+            return entity;
+        }
+    }
+}
+
+
+namespace data.Mapper
+{
+    public partial class Sucursal : BaseMapperRepository<entities.Model.Sucursal, data.Model.Sucursal>
+    {
+        public Sucursal()
+            : base()
+        {
+        }
+
         public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = null;
-            data.Entity.Nombre = null;
-            data.Entity.Fecha = null;
-            data.Entity.Activo = null;
-            data.Entity.IdEmpresa = null;
-
-            data.Entity.Empresa = null;
+            data["Id"].DbValue = null;
+            data["Nombre"].DbValue = null;
+            data["Activo"].DbValue = null;
+            data["Fecha"].DbValue = null;
+            data["IdEmpresa"].DbValue = null;
 
             return data;
         }
 
         public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = data?["Id"]?.Value as int?;
-            data.Entity.Nombre = data?["Nombre"]?.Value as string;
-            data.Entity.Activo = data?["Activo"]?.Value as bool?;
-            data.Entity.Fecha = data?["Fecha"]?.Value as DateTime?;
-            data.Entity.IdEmpresa = data?["IdEmpresa"]?.Value as int?;
+            data["Id"].DbValue = data.Entity.Id;
+            data["Nombre"].DbValue = data.Entity.Nombre;
+            data["Activo"].DbValue = data.Entity.Activo;
+            data["Fecha"].DbValue = data.Entity.Fecha;
+            data["IdEmpresa"].DbValue = data.Entity.IdEmpresa;
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                data.Empresa = new data.Mapper.Empresa().Map(data?.Empresa, maxdepth, depth);
-            }
-
-            return data;
-        }
-
-        public override data.Model.Sucursal Read(data.Model.Sucursal data, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
-        {
-            data = base.Read(data, reader, prefixname, maxdepth, depth);
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                data.Empresa = new data.Mapper.Empresa().Read(data?.Empresa, reader, prefixname, maxdepth, depth);
+                data.Empresa = new data.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
             }
 
             return data;

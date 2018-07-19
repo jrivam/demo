@@ -9,9 +9,9 @@ namespace library.Interface.Presentation.Query
 {
     public interface IQueryInteractiveMethods<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
-        where W : ITableInteractiveProperties<T, U, V>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>
+        where W : ITableInteractive<T, U, V>
     {
         (Result result, W presentation) Retrieve(int maxdepth, W presentation = default(W));
         (Result result, IEnumerable<W> presentations) List(int maxdepth = 1, int top = 0, IList<W> presentations = null);

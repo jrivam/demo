@@ -28,13 +28,13 @@ namespace library.Impl.Data.Sql.Builder
             return parameter;
         }
 
-        public virtual IEnumerable<(ITableColumn column, SqlParameter parameter)> 
+        public virtual IEnumerable<((ITableRepository table, ITableColumn column) tablecolumn, SqlParameter parameter)>
             GetParameters
-            (IList<ITableColumn> columns, IList<SqlParameter> parameters)
+            (IList<(ITableRepository table, ITableColumn column)> columns, IList<SqlParameter> parameters)
         {
             foreach (var c in columns)
             {
-                var parameter = GetParameter($"{_syntaxsign.ParameterPrefix}{c.TableDescription.Reference}{_syntaxsign.ParameterSeparator}{c.ColumnDescription.Reference}", c.Type, c.Value, ParameterDirection.Input);
+                var parameter = GetParameter($"{_syntaxsign.ParameterPrefix}{c.table.Description.Reference}{_syntaxsign.ParameterSeparator}{c.column.Description.Reference}", c.column.Type, c.column.Value, ParameterDirection.Input);
                 if (parameters.IndexOf(parameter) < 0)
                     parameters.Add(parameter);
 
@@ -42,15 +42,15 @@ namespace library.Impl.Data.Sql.Builder
             }
         }
 
-        public virtual string 
+        public virtual string
             GetUpdateSet
-            (IList<ITableColumn> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
+            (IList<(ITableRepository table, ITableColumn column)> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
         {
             var set = string.Empty;
 
             foreach (var cp in GetParameters(columns, parameters))
             {
-                set += $"{(string.IsNullOrWhiteSpace(set) ? "" : $",{Environment.NewLine}")}{(prefixtablename ? $"{cp.column.TableDescription.Name}." : string.Empty)}{cp.column.ColumnDescription.Name} = {cp.parameter.Name}";
+                set += $"{(string.IsNullOrWhiteSpace(set) ? "" : $",{Environment.NewLine}")}{(prefixtablename ? $"{cp.tablecolumn.table.Description.Name}." : string.Empty)}{cp.tablecolumn.column.Description.Name} = {cp.parameter.Name}";
             }
             set = $"{(!string.IsNullOrWhiteSpace(set) ? $"{set}{Environment.NewLine}" : "")}";
 

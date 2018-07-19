@@ -1,17 +1,19 @@
-﻿using library.Interface.Data.Query;
+﻿using library.Interface.Data;
+using library.Interface.Data.Query;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System.Collections.Generic;
 
 namespace library.Impl.Data.Query
 {
-    public abstract class AbstractQueryRepositoryMethods<T, U> : AbstractQueryRepositoryProperties, IQueryRepositoryMethods<T, U>
+    public abstract class AbstractQueryRepositoryMethods<S, T, U> : AbstractQueryRepository, IQueryRepositoryMethods<T, U>
         where T : IEntity, new()
-        where U : class, ITableRepositoryProperties<T>
+        where U : class, ITableRepository, ITableEntity<T>
+        where S : IQueryRepositoryMethods<T, U>
     {
-        protected readonly IRepositoryQuery<T, U> _repository;
+        protected readonly IRepositoryQuery<S, T, U> _repository;
 
-        public AbstractQueryRepositoryMethods(IRepositoryQuery<T, U> repository,
+        public AbstractQueryRepositoryMethods(IRepositoryQuery<S, T, U> repository,
             string name, string reference)
             : base(name, reference)
         {
@@ -22,14 +24,14 @@ namespace library.Impl.Data.Query
         {
             return _repository.SelectSingle(this, maxdepth, data);
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IList<U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
         {
             return _repository.SelectMultiple(this, maxdepth, top, datas);
         }
 
-        public virtual (Result result, int rows) Update(IList<ITableColumn> columns, int maxdepth = 1)
+        public virtual (Result result, int rows) Update(IList<(ITableRepository table, ITableColumn column)> tablecolumns, int maxdepth = 1)
         {
-            return _repository.Update(this, columns, maxdepth);
+            return _repository.Update(this, tablecolumns, maxdepth);
         }
         public virtual (Result result, int rows) Delete(int maxdepth = 1)
         {
