@@ -6,11 +6,9 @@ namespace library.Interface.Domain.Table
 {
     public interface ITableLogicMethods<T, U, V> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>
     {
-        V Clear();
-
         (Result result, V domain) Load(bool usedbcommand = false);
         (Result result, V domain) LoadQuery(int maxdepth = 1);
         (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false);

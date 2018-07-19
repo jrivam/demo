@@ -6,10 +6,8 @@ namespace library.Interface.Data.Table
 {
     public interface ITableRepositoryMethods<T, U> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
+        where U : ITableRepository, ITableEntity<T>
     {
-        U Clear();
-
         (Result result, U data) Select(bool usedbcommand = false);
         (Result result, U data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>));
         (Result result, U data) Insert(bool usedbcommand = false);

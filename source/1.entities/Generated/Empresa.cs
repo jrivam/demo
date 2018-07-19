@@ -20,3 +20,4 @@ namespace entities.Model
         public virtual ICollection<entities.Model.Sucursal> Sucursales { get; set; }
     }
 }
+

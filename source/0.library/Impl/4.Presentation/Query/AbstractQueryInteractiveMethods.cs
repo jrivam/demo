@@ -9,13 +9,13 @@ using System.Collections.Generic;
 
 namespace library.Impl.Presentation.Query
 {
-    public abstract class AbstractQueryInteractiveMethods<S, R, T, U, V, W> : AbstractQueryInteractiveProperties<S, R>, IQueryInteractiveMethods<T, U, V, W>
-        where S : IQueryRepositoryProperties
-        where R : IQueryLogicProperties<S>, IQueryLogicMethods<T, U, V>, new()
+    public abstract class AbstractQueryInteractiveMethods<S, R, T, U, V, W> : AbstractQueryInteractive<S, R>, IQueryInteractiveMethods<T, U, V, W>
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
-        where W : ITableInteractiveProperties<T, U, V>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
+        where W : ITableInteractive<T, U, V>
+        where S : IQueryRepository
+        where R : IQueryLogic<S>, IQueryLogicMethods<T, U, V>, new()
     {
         protected readonly IInteractiveQuery<T, U, V, W> _interactive;
 

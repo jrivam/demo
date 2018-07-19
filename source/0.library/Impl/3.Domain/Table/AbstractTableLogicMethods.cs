@@ -5,10 +5,10 @@ using library.Interface.Entities;
 
 namespace library.Impl.Domain.Table
 {
-    public abstract class AbstractTableLogicMethods<T, U, V> : AbstractTableLogicProperties<T, U>, ITableLogicMethods<T, U, V>
+    public abstract class AbstractTableLogicMethods<T, U, V> : AbstractTableLogic<T, U>, ITableLogicMethods<T, U, V>
         where T : IEntity
-        where U : ITableRepositoryProperties<T>, ITableRepositoryMethods<T, U>, new()
-        where V : class, ITableLogicProperties<T, U>
+        where U : ITableRepository, ITableEntity<T>, ITableRepositoryMethods<T, U>, new()
+        where V : class, ITableLogic<T, U>
     {
         protected readonly ILogicTable<T, U, V> _logic;
 
@@ -18,26 +18,21 @@ namespace library.Impl.Domain.Table
             _logic = logic;
         }
 
-        public virtual V Clear()
-        {
-            return _logic.Clear(this as V, Data);
-        }
-
         public virtual (Result result, V domain) Load(bool usedbcommand = false)
         {
-            var load = _logic.Load(this as V, Data, usedbcommand);
+            var load = _logic.Load(this as V, usedbcommand);
 
             return load;
         }
         public virtual (Result result, V domain) LoadQuery(int maxdepth = 1)
         {
-            var load = _logic.LoadQuery(this as V, Data, maxdepth);
+            var load = _logic.LoadQuery(this as V, maxdepth);
 
             return load;
         }
         public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            (Result result, V domain) save = _logic.Save(this as V, Data, useinsertdbcommand, useupdatedbcommand);
+            (Result result, V domain) save = _logic.Save(this as V, useinsertdbcommand, useupdatedbcommand);
 
             save.result.Append(SaveChildren());
 
@@ -49,7 +44,7 @@ namespace library.Impl.Domain.Table
 
             if (erasechildren.result.Success)
             {
-                var erase = _logic.Erase(this as V, Data, usedbcommand);
+                var erase = _logic.Erase(this as V, usedbcommand);
 
                 erasechildren.domain = erase.domain;
                 erasechildren.result.Append(erase.result);

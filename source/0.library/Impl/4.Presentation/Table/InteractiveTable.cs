@@ -1,76 +1,71 @@
 ﻿using library.Interface.Data.Table;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
-using library.Interface.Presentation.Mapper;
+using library.Interface.Presentation.Raiser;
 using library.Interface.Presentation.Table;
 
 namespace library.Impl.Presentation.Table
 {
-    public class InteractiveTable<T, U, V, W> : Interactive<T, U, V, W>, IInteractiveTable<T, U, V, W> 
+    public class InteractiveTable<T, U, V, W> : Interactive<T, U, V>, IInteractiveTable<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
-        where W : ITableInteractiveProperties<T, U, V>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
+        where W : ITableInteractive<T, U, V>
     {
-        public InteractiveTable(IMapperInteractive<T, U, V, W> mapper)
-            : base(mapper)
-        {
-        }
-        public virtual W Clear(W presentation, ITableLogicMethods<T, U, V> entitylogic)
-        {
-            entitylogic.Clear();
+        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
 
-            _mapper.Raise(presentation);
-
-            return presentation;
+        public InteractiveTable(IRaiserInteractive<T, U, V, W> raiser)
+            : base()
+        {
+            _raiser = raiser;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, ITableLogicMethods<T, U, V> entitylogic, bool usedbcommand = false)
+        public virtual (Result result, W presentation) Load(W presentation, bool usedbcommand = false)
         {
-            var load = entitylogic.Load(usedbcommand);
+            var load = presentation.Domain.Load(usedbcommand);
 
             if (load.result.Success && load.domain != null)
             {
-                _mapper.Clear(presentation, 1, 0);
-                _mapper.Raise(presentation);
+                _raiser.Clear(presentation, 1, 0);
+                _raiser.Raise(presentation, 1, 0);
 
                 return (load.result, presentation);
             }
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W presentation) LoadQuery(W presentation, ITableLogicMethods<T, U, V> entitylogic, int maxdepth = 1)
+        public virtual (Result result, W presentation) LoadQuery(W presentation, int maxdepth = 1)
         {
-            var load = entitylogic.LoadQuery(maxdepth);
+            var loadquery = presentation.Domain.LoadQuery(maxdepth);
 
-            if (load.result.Success && load.domain != null)
+            if (loadquery.result.Success && loadquery.domain != null)
             {
-                _mapper.Clear(presentation, maxdepth, 0);
-                _mapper.Raise(presentation);
+                _raiser.Clear(presentation, maxdepth, 0);
+                _raiser.Raise(presentation, maxdepth, 0);
 
-                return (load.result, presentation);
+                return (loadquery.result, presentation);
             }
 
-            return (load.result, default(W));
+            return (loadquery.result, default(W));
         }
-        public virtual (Result result, W presentation) Save(W presentation, ITableLogicMethods<T, U, V> entitylogic, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W presentation) Save(W presentation, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = entitylogic.Save(useinsertdbcommand, useupdatedbcommand);
+            var save = presentation.Domain.Save(useinsertdbcommand, useupdatedbcommand);
 
             if (save.result.Success)
             {
-                _mapper.Raise(presentation);
+                _raiser.Raise(presentation);
             }
 
             return (save.result, presentation);
         }
-        public virtual (Result result, W presentation) Erase(W presentation, ITableLogicMethods<T, U, V> entitylogic, bool usedbcommand = false)
+        public virtual (Result result, W presentation) Erase(W presentation, bool usedbcommand = false)
         {
-            var erase = entitylogic.Erase(usedbcommand);
+            var erase = presentation.Domain.Erase(usedbcommand);
 
             if (erase.result.Success)
             {
-                _mapper.Raise(presentation);
+                _raiser.Raise(presentation);
             }
 
             return (erase.result, presentation);

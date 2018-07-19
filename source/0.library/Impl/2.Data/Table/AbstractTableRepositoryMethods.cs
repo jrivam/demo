@@ -4,9 +4,9 @@ using library.Interface.Entities;
 
 namespace library.Impl.Data.Table
 {
-    public abstract class AbstractTableRepositoryMethods<T, U> : AbstractTableRepositoryProperties<T>, ITableRepositoryMethods<T, U>
+    public abstract class AbstractTableRepositoryMethods<T, U> : AbstractTableRepository<T>, ITableRepositoryMethods<T, U>
         where T : IEntity, new()
-        where U : class, ITableRepositoryProperties<T>
+        where U : class, ITableRepository, ITableEntity<T>
     {
         protected readonly IRepositoryTable<T, U> _repository;
 
@@ -23,11 +23,6 @@ namespace library.Impl.Data.Table
             : this(repository, name, reference)
         {
             SetProperties(entity);
-        }
-
-        public virtual U Clear()
-        {
-            return _repository.Clear(this as U);
         }
 
         public virtual (Result result, U data) Select(bool usedbcommand = false)

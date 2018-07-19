@@ -22,7 +22,7 @@ namespace Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new domain.Model.Empresas().Load(list.domains)?.Datas?.Entities);
+                    return Ok(new domain.Model.Empresas().Load(list.domains)?.Datas?.Entities?.List);
                 }
 
                 return InternalServerError();

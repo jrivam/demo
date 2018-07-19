@@ -9,15 +9,13 @@ namespace library.Interface.Data.Query
     {
         Type Type { get; }
 
-        IQueryRepositoryProperties Query { get; }
-
         Description Description { get; }
 
         IList<(object value, WhereOperator? sign)> Wheres { get; set; }
 
-        IQueryRepositoryProperties Where((object value, WhereOperator? sign) condition);
-        IQueryRepositoryProperties Where(params (object value, WhereOperator? sign)[] conditions);
+        void Where((object value, WhereOperator? sign) condition);
+        void Where(params (object value, WhereOperator? sign)[] conditions);
 
-        IQueryRepositoryProperties Where(object value, WhereOperator? sign = WhereOperator.Equals);
+        void Where(object value, WhereOperator? sign = WhereOperator.Equals);
     }
 }

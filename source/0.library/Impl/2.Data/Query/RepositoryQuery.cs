@@ -1,11 +1,14 @@
 ﻿using library.Impl.Data.Sql;
 using library.Impl.Data.Sql.Builder;
 using library.Impl.Data.Sql.Factory;
+using library.Impl.Entities.Repository;
+using library.Interface.Data;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
+using library.Interface.Entities.Reader;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,34 +16,61 @@ using System.Linq;
 
 namespace library.Impl.Data.Query
 {
-    public class RepositoryQuery<T, U> : Repository<T, U>, IRepositoryQuery<T, U> 
+    public class RepositoryQuery<S, T, U> : Repository<T>, IRepositoryQuery<S, T, U> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
+        where U : ITableRepository, ITableEntity<T>
+        where S : IQueryRepositoryMethods<T, U>
     {
-        protected readonly ISqlBuilderQuery _builder;
+        protected readonly IMapperRepository<T, U> _mapper;
+        protected readonly ISqlSyntaxSign _syntaxsign;
         protected readonly ISqlCommandBuilder _commandbuilder;
+        protected readonly ISqlBuilderQuery _builder;
 
-        public RepositoryQuery(ISqlCreator creator, IMapperRepository<T, U> mapper, 
-            ISqlBuilderQuery builder, ISqlCommandBuilder commandbuilder)
-            : base(creator, mapper)
+        public RepositoryQuery(ISqlCreator creator, IReaderEntity<T> reader,
+            IMapperRepository<T, U> mapper,
+            ISqlSyntaxSign syntaxsign,
+            ISqlCommandBuilder commandbuilder, ISqlBuilderQuery builder)
+            : base(creator, reader)
         {
+            _mapper = mapper;
+            _syntaxsign = syntaxsign;
             _builder = builder;
             _commandbuilder = commandbuilder;
         }
-        public RepositoryQuery(IMapperRepository<T, U> mapper, ConnectionStringSettings connectionstringsettings)
-            : this(new SqlCreator(connectionstringsettings), mapper, 
-                  new SqlBuilderQuery(SqlSyntaxSignFactory.Create(connectionstringsettings)),
-                  SqlCommandBuilderFactory.Create(connectionstringsettings))
+
+        public RepositoryQuery(ISqlCreator creator, IReaderEntity<T> reader,
+            IMapperRepository<T, U> mapper,
+            ISqlSyntaxSign syntaxsign,
+            ISqlCommandBuilder commandbuilder)
+            : this(creator, reader,
+                  mapper,
+                  syntaxsign,
+                  commandbuilder,
+                  new SqlBuilderQuery(syntaxsign))
         {
         }
-        public RepositoryQuery(IMapperRepository<T, U> mapper, string appconnectionstringname)
-            : this(mapper, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+        public RepositoryQuery(IReaderEntity<T> reader, 
+            IMapperRepository<T, U> mapper, 
+            ConnectionStringSettings connectionstringsettings)
+            : this(new SqlCreator(connectionstringsettings), reader,
+                  mapper,
+                  SqlSyntaxSignFactory.Create(connectionstringsettings),
+                  SqlCommandBuilderFactory.Create(connectionstringsettings),
+                  new SqlBuilderQuery(SqlSyntaxSignFactory.Create(connectionstringsettings)))
+        {
+        }
+        public RepositoryQuery(IReaderEntity<T> reader, 
+            IMapperRepository<T, U> mapper, 
+            string appconnectionstringname)
+            : this(reader, 
+                  mapper, 
+                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
 
         public virtual (Result result, U data) 
             SelectSingle
-            (IQueryRepositoryProperties query,
+            (IQueryRepository query,
             int maxdepth = 1, 
             U data = default(U))
         {
@@ -71,16 +101,26 @@ namespace library.Impl.Data.Query
             int maxdepth = 1, 
             U data = default(U))
         {
-            var executequery = ExecuteQuery(command, maxdepth, data != null ? new List<U> { data } : default(List<U>));
+            var executequery = ExecuteQuery(command, _syntaxsign.AliasSeparatorColumn, maxdepth, data != null && data.Entity != null ? new List<T> { data.Entity } : default(List<T>));
 
-            return (executequery.result, executequery.datas.FirstOrDefault());
+            if (executequery.result.Success && executequery.entities != null)
+            {
+                data = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
+
+                _mapper.Clear(data, 1, 0);
+                _mapper.Map(data, 1, 0);
+
+                return (executequery.result, data);
+            }
+
+            return (executequery.result, default(U));
         }
 
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
-            (IQueryRepositoryProperties query,
-            int maxdepth = 1, int top = 0, 
-            IList<U> datas = null)
+            (IQueryRepository query,
+            int maxdepth = 1, int top = 0,
+            IListData<T, U> datas = null)
         {
             var parameters = new List<SqlParameter>();
 
@@ -97,8 +137,8 @@ namespace library.Impl.Data.Query
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (string commandtext,  CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1, 
-            IList<U> datas = null)
+            int maxdepth = 1,
+            IListData<T, U> datas = null)
         {
             return SelectMultiple(_creator.GetCommand(commandtext, commandtype, parameters), maxdepth, datas);
         }
@@ -106,16 +146,36 @@ namespace library.Impl.Data.Query
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (IDbCommand command, 
-            int maxdepth = 1, 
-            IList<U> datas = null)
+            int maxdepth = 1,
+            IListData<T, U> datas = null)
         {
-            return ExecuteQuery(command, maxdepth, datas);
+            var enumeration = new List<U>();
+            var iterator = (datas ?? new ListData<S, T, U>()).GetEnumerator();
+
+            var executequery = ExecuteQuery(command, _syntaxsign.AliasSeparatorColumn, maxdepth, datas?.Entities);
+
+            if (executequery.result.Success && executequery.entities != null)
+            {
+                foreach (var entity in executequery.entities)
+                {
+                    var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(entity);
+
+                    _mapper.Clear(data, maxdepth, 0);
+                    _mapper.Map(data, maxdepth, 0);
+
+                    enumeration.Add(data);
+                }
+
+                return (executequery.result, enumeration);
+            }
+
+            return (executequery.result, default(IList<U>));
         }
 
         public virtual (Result result, int rows) 
             Update
-            (IQueryRepositoryProperties query,
-            IList<ITableColumn> columns,
+            (IQueryRepository query,
+            IList<(ITableRepository table, ITableColumn column)> tablecolumns,
             int maxdepth = 1)
         {
             var parameters = new List<SqlParameter>();
@@ -125,7 +185,7 @@ namespace library.Impl.Data.Query
 
             var update = _commandbuilder.Update($"{query.Description.Name}",
                 _builder.GetFrom(queryjoins, query.Description.Name),
-                _builder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters),
+                _builder.GetUpdateSet(tablecolumns.Where(c => !c.column.IsIdentity && c.column.Value != c.column.DbValue).ToList(), parameters),
                 _builder.GetWhere(querycolumns, parameters));
 
             return Update(update, CommandType.Text, parameters);
@@ -147,7 +207,7 @@ namespace library.Impl.Data.Query
 
         public virtual (Result result, int rows) 
             Delete
-            (IQueryRepositoryProperties query,
+            (IQueryRepository query,
             int maxdepth = 1)
         {
             var parameters = new List<SqlParameter>();

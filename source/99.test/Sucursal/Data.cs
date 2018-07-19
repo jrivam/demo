@@ -91,7 +91,11 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, new data.Mapper.Sucursal(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, 
+                new entities.Reader.Sucursal(),
+                new data.Mapper.Sucursal(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Sucursal()
                 {
                     Id = Entity.Id
@@ -150,7 +154,11 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, new data.Mapper.Sucursal(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Sucursal(),
+                new data.Mapper.Sucursal(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Sucursal()
                 {
                     Nombre = Entity.Nombre,
@@ -212,7 +220,11 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, new data.Mapper.Sucursal(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Sucursal(),
+                new data.Mapper.Sucursal(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Sucursal()
                 {
                     Id = Entity.Id,
@@ -232,7 +244,11 @@ namespace test.Sucursal
             var mockBuilderQuery = new Moq.Mock<ISqlBuilderQuery>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Query.Sucursal(new RepositoryQuery<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, new data.Mapper.Sucursal(mockDatabase.mockSyntaxSign.Object), mockBuilderQuery.Object, mockCommandBuilder.Object));
+            return new data.Query.Sucursal(new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Sucursal(),
+                new data.Mapper.Sucursal(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderQuery.Object));
         }
         public data.Model.Sucursal Data_Table_Update_NonDbCommand()
         {
@@ -287,7 +303,11 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, new data.Mapper.Sucursal(mockDatabase.mockSyntaxSign.Object), mockBuilderTable.Object, mockCommandBuilder.Object),
+            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+                new entities.Reader.Sucursal(),
+                new data.Mapper.Sucursal(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, mockBuilderTable.Object),
                 new entities.Model.Sucursal()
                 {
                     Id = Entity.Id,

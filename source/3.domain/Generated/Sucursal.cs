@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Impl.Data.Sql;
+using library.Impl.Domain;
 using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Query;
 using library.Impl.Domain.Table;
@@ -38,15 +39,13 @@ namespace domain.Model
                   data)
         {
         }
+        public Sucursal(entities.Model.Sucursal entity)
+            : this(new data.Model.Sucursal(entity))
+        {
+        }
         public Sucursal()
             : this(new data.Model.Sucursal())
         {
-        }
-
-        public Sucursal(entities.Model.Sucursal entity)
-            : this()
-        {
-            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
@@ -104,7 +103,7 @@ namespace domain.Model
         }
     }
 
-    public partial class Sucursales : ListTableLogicProperties<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursales : ListDomain<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public Sucursales()
             : base()

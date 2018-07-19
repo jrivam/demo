@@ -8,14 +8,14 @@ namespace library.Interface.Data.Sql
     {
         IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)>
             GetQueryColumns
-            (IQueryRepositoryProperties query,
+            (IQueryRepository query,
             IList<string> tablenames,
             IList<string> aliasnames,
             int maxdepth = 1, int depth = 0);
 
-        IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
+        IList<(IQueryRepository internaltable, IList<string> internalalias, IQueryRepository externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
             GetQueryJoins
-            (IQueryRepositoryProperties query,
+            (IQueryRepository query,
             IList<string> prefix,
             int maxdepth = 1, int depth = 0);
 
@@ -26,7 +26,7 @@ namespace library.Interface.Data.Sql
 
         string
             GetFrom
-            (IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins,
+            (IList<(IQueryRepository internaltable, IList<string> internalalias, IQueryRepository externaltable, IList<string> externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins,
             string tablename);
 
         string

@@ -1,14 +1,16 @@
 ﻿using library.Extension;
 using library.Impl;
+using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Sql;
-using library.Impl.Data.Sql.Factory;
 using library.Impl.Data.Table;
+using library.Impl.Entities;
+using library.Impl.Entities.Reader;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
-using library.Interface.Data.Sql;
 using library.Interface.Data.Table;
+using library.Interface.Entities.Reader;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
@@ -29,26 +31,29 @@ namespace data.Model
 
         public Empresa(IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository,
             entities.Model.Empresa entity)
-            : base(repository, typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
+            : base(repository, 
+                  typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
             Entity = entity;
 
-            Columns.Add(new TableColumn<int?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
-            Columns.Add(new TableColumn<string>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new TableColumn<bool?>(Description, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new TableColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
+            IReaderEntity<entities.Model.Empresa> reader,
             IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
             entities.Model.Empresa entity)
-            : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mapper, connectionstringsettings),
+            : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings),
                   entity)
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings, 
             entities.Model.Empresa entity)
             : this(connectionstringsettings, 
-                  new data.Mapper.Empresa(connectionstringsettings),
+                  new entities.Reader.Empresa(),
+                  new data.Mapper.Empresa(),
                   entity)
         {
         }
@@ -57,15 +62,15 @@ namespace data.Model
                   new entities.Model.Empresa())
         {
         }
-        public Empresa(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+        public Empresa(string appconnectionstringname, entities.Model.Empresa entity)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]],
+                  entity)
         {
         }
-
-        public Empresa(string appconnectionstringname, entities.Model.Empresa entity)
-            : this(appconnectionstringname)
+        public Empresa(string appconnectionstringname)
+            : this(appconnectionstringname,
+                new entities.Model.Empresa())
         {
-            SetProperties(entity, true);
         }
 
         public override (Result result, data.Model.Empresa data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> query = null)
@@ -97,7 +102,7 @@ namespace data.Model
         {
             if (Entity?.Sucursales != null)
             {
-                Sucursales = new data.Model.Sucursales(Entity?.Sucursales?.ToList());
+                Sucursales = new data.Model.Sucursales(new entities.Model.Sucursales(Entity?.Sucursales?.ToList()));
             }
             else
             {
@@ -132,13 +137,13 @@ namespace data.Model
         }
     }
 
-    public partial class Empresas : ListTableRepositoryProperties<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresas : ListData<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
         public Empresas()
             : base()
         {
         }
-        public Empresas(List<entities.Model.Empresa> entities)
+        public Empresas(ListEntity<entities.Model.Empresa> entities)
             : this()
         {
             Entities = entities;
@@ -148,24 +153,27 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Empresa : AbstractQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractQueryRepositoryMethods<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
-        public Empresa(IRepositoryQuery<entities.Model.Empresa, data.Model.Empresa> repository)
-            : base(repository, typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
+        public Empresa(IRepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa> repository)
+            : base(repository, 
+                  typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
-            Columns.Add(new QueryColumn<int?>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
-            Columns.Add(new QueryColumn<string>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new QueryColumn<bool?>(this, typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new QueryColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
+            IReaderEntity<entities.Model.Empresa> reader,
             IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
-            : this(new RepositoryQuery<entities.Model.Empresa, data.Model.Empresa>(mapper, connectionstringsettings))
+            : this(new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings)
             : this(connectionstringsettings,
-                  new data.Mapper.Empresa(connectionstringsettings))
+                  new entities.Reader.Empresa(),
+                  new data.Mapper.Empresa())
         {
         }
         public Empresa(string appconnectionstringname)
@@ -203,50 +211,82 @@ namespace data.Query
     }
 }
 
-namespace data.Mapper
+namespace entities.Model
 {
-    public partial class Empresa : BaseMapperTable<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresas : ListEntity<entities.Model.Empresa>
     {
-        public Empresa(ISqlSyntaxSign syntaxsign)
-            : base(syntaxsign)
+        public Empresas()
+            : base()
         {
         }
-        public Empresa(ConnectionStringSettings connectionstringsettings)
-            : this(SqlSyntaxSignFactory.Create(connectionstringsettings))
+        public Empresas(List<entities.Model.Empresa> list)
+            : this()
         {
+            List = list;
         }
-        public Empresa(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+    }
+}
+
+namespace entities.Reader
+{
+    public partial class Empresa : BaseReaderEntity<entities.Model.Empresa>
+    {
+        public Empresa()
+            : base()
         {
         }
 
-        public override data.Model.Empresa CreateInstance(int maxdepth = 1, int depth = 0)
+        public override entities.Model.Empresa Clear(entities.Model.Empresa entity, int maxdepth = 1, int depth = 0)
         {
-            return base.CreateInstance(maxdepth, depth);
+            entity.Id = null;
+            entity.RazonSocial = null;
+            entity.Activo = null;
+
+            entity.Sucursales = null;
+
+            return entity;
+        }
+
+        public override entities.Model.Empresa Read(entities.Model.Empresa entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
+        {
+            prefixname.Add("Empresa");
+
+            var prefix = string.Join(columnseparator, prefixname);
+            prefix += (prefix == string.Empty ? prefix : columnseparator);
+
+            entity.Id = reader[$"{prefix}Id"] as int?;
+            entity.RazonSocial = reader[$"{prefix}RazonSocial"] as string;
+            entity.Activo = reader[$"{prefix}Activo"] as bool?;
+
+            return entity;
+        }
+    }
+}
+
+namespace data.Mapper
+{
+    public partial class Empresa : BaseMapperRepository<entities.Model.Empresa, data.Model.Empresa>
+    {
+        public Empresa()
+            : base()
+        {
         }
 
         public override data.Model.Empresa Clear(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = null;
-            data.Entity.RazonSocial = null;
-            data.Entity.Activo = null;
-
-            data.Entity.Sucursales = null;
+            data["Id"].DbValue = null;
+            data["RazonSocial"].DbValue = null;
+            data["Activo"].DbValue = null;
 
             return data;
         }
         public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data.Entity.Id = data?["Id"]?.Value as int?;
-            data.Entity.RazonSocial = data?["RazonSocial"]?.Value as string;
-            data.Entity.Activo = data?["Activo"]?.Value as bool?;
+            data["Id"].DbValue = data.Entity.Id;
+            data["RazonSocial"].DbValue = data.Entity.RazonSocial;
+            data["Activo"].DbValue = data.Entity.Activo;
 
             return data;
-        }
-
-        public override data.Model.Empresa Read(data.Model.Empresa data, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
-        {
-            return base.Read(data, reader, prefixname, maxdepth, depth);
         }
     }
 }

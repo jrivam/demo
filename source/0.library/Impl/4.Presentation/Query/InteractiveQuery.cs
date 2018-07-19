@@ -2,25 +2,25 @@
 using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
-using library.Interface.Presentation.Mapper;
 using library.Interface.Presentation.Query;
+using library.Interface.Presentation.Raiser;
 using library.Interface.Presentation.Table;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
 
 namespace library.Impl.Presentation.Query
 {
-    public class InteractiveQuery<T, U, V, W> : Interactive<T, U, V, W>, IInteractiveQuery<T, U, V, W> 
+    public class InteractiveQuery<T, U, V, W> : Interactive<T, U, V>, IInteractiveQuery<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepositoryProperties<T>
-        where V : ITableLogicProperties<T, U>
-        where W : ITableInteractiveProperties<T, U, V>
+        where U : ITableRepository, ITableEntity<T>
+        where V : ITableLogic<T, U>
+        where W : ITableInteractive<T, U, V>
     {
-        public InteractiveQuery(IMapperInteractive<T, U, V, W> mapper)
-            : base(mapper)
+        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
+
+        public InteractiveQuery(IRaiserInteractive<T, U, V, W> raiser)
+            : base()
         {
+            _raiser = raiser;
         }
 
         public virtual (Result result, W presentation) Retrieve(IQueryLogicMethods<T, U, V> querylogic, int maxdepth = 1, W presentation = default(W))
@@ -29,15 +29,10 @@ namespace library.Impl.Presentation.Query
 
             if (retrieve.result.Success && retrieve.domain != null)
             {
-                presentation = (W)Activator.CreateInstance(typeof(W),
-                        BindingFlags.CreateInstance |
-                        BindingFlags.Public |
-                        BindingFlags.Instance |
-                        BindingFlags.OptionalParamBinding, 
-                        null, new object[] { retrieve.domain, maxdepth }, CultureInfo.CurrentCulture);
+                presentation = _raiser.CreateInstance(retrieve.domain, maxdepth);
 
-                _mapper.Clear(presentation, maxdepth, 0);
-                _mapper.Raise(presentation);
+                _raiser.Clear(presentation, maxdepth, 0);
+                _raiser.Raise(presentation, maxdepth, 0);
             }
 
             return (retrieve.result, presentation);
@@ -52,15 +47,10 @@ namespace library.Impl.Presentation.Query
             {
                 foreach (var domain in list.domains)
                 {
-                    var presentation = iterator.MoveNext() ? iterator.Current : (W)Activator.CreateInstance(typeof(W),
-                        BindingFlags.CreateInstance |
-                        BindingFlags.Public |
-                        BindingFlags.Instance |
-                        BindingFlags.OptionalParamBinding, 
-                        null, new object[] { domain, maxdepth }, CultureInfo.CurrentCulture);
+                    var presentation = iterator.MoveNext() ? iterator.Current : _raiser.CreateInstance(domain, maxdepth);
 
-                    _mapper.Clear(presentation, maxdepth, 0);
-                    _mapper.Raise(presentation);
+                    _raiser.Clear(presentation, maxdepth, 0);
+                    _raiser.Raise(presentation, maxdepth, 0);
 
                     enumeration.Add(presentation);
                 }

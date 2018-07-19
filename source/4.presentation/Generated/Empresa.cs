@@ -1,11 +1,10 @@
 ﻿using library.Impl.Data.Sql;
-using library.Impl.Domain.Table;
 using library.Impl.Presentation;
-using library.Impl.Presentation.Mapper;
 using library.Impl.Presentation.Query;
+using library.Impl.Presentation.Raiser;
 using library.Impl.Presentation.Table;
-using library.Interface.Presentation.Mapper;
 using library.Interface.Presentation.Query;
+using library.Interface.Presentation.Raiser;
 using library.Interface.Presentation.Table;
 
 namespace presentation.Model
@@ -29,24 +28,31 @@ namespace presentation.Model
             Domain = domain;
         }
 
-        public Empresa(IMapperInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper,
+        public Empresa(IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
              domain.Model.Empresa domain, 
              int maxdepth = 1)
-            : this(new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper),
+            : this(new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
                   domain,
                   maxdepth)
         {
         }
         public Empresa(domain.Model.Empresa domain, 
              int maxdepth = 1)
-            : this(new presentation.Mapper.Empresa(),
+            : this(new presentation.Raiser.Empresa(),
                     domain,
                     maxdepth)
         {
         }
+        public Empresa(data.Model.Empresa data,
+            int maxdepth = 1)
+            : this(new domain.Model.Empresa(data),
+                  maxdepth)
+        {
+        }
         public Empresa(entities.Model.Empresa entity, 
             int maxdepth = 1)
-            : this(maxdepth)
+            : this(new data.Model.Empresa(entity), 
+                  maxdepth)
         {
             SetProperties(entity, true);
         }
@@ -81,7 +87,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Empresas : ListTableInteractiveProperties<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresas : ListPresentation<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresas()
             : base()
@@ -111,14 +117,14 @@ namespace presentation.Query
         }
 
         public Empresa(domain.Query.Empresa domain,
-            IMapperInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper)
+            IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper)
             : this(domain,
                   new InteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
         {
         }
         public Empresa(domain.Query.Empresa domain)
             : this(domain,
-                  new presentation.Mapper.Empresa())
+                  new presentation.Raiser.Empresa())
         {
         }
         public Empresa()
@@ -156,9 +162,9 @@ namespace presentation.Query
     }
 }
 
-namespace presentation.Mapper
+namespace presentation.Raiser
 {
-    public partial class Empresa : BaseMapperInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : BaseRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public override presentation.Model.Empresa Clear(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
         {

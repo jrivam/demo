@@ -26,11 +26,11 @@ namespace Web.Api.App_Start
             //Register your Web API controllers.  
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterGeneric(typeof(BaseMapperTable<,>))
+            builder.RegisterGeneric(typeof(BaseMapperRepository<,>))
                      .As(typeof(library.Interface.Data.Mapper.IMapperRepository<,>))
                      .InstancePerRequest();
-            builder.RegisterGeneric(typeof(library.Impl.Data.Repository<,>))
-                   .As(typeof(library.Interface.Data.IRepository<,>))
+            builder.RegisterGeneric(typeof(library.Impl.Entities.Repository.Repository<>))
+                   .As(typeof(library.Interface.Entities.Repository.IRepository<>))
                    .InstancePerRequest();
 
             builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());

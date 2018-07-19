@@ -65,16 +65,3 @@ namespace data.Query
         }
     }
 }
-
-namespace data.Mapper
-{
-    public partial class Sucursal
-    {
-        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
-
-        public Sucursal()
-            : this(_defaultappconnectionstringname)
-        {
-        }
-    }
-}

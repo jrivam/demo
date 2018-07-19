@@ -7,8 +7,7 @@ namespace library.Interface.Data.Table
     {
         Type Type { get; }
 
-        Description ColumnDescription { get; }
-        Description TableDescription { get; }
+        Description Description { get; }
 
         bool IsPrimaryKey { get; }
         bool IsIdentity { get; }

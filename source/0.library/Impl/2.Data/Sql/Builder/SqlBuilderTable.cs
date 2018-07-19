@@ -14,55 +14,55 @@ namespace library.Impl.Data.Sql.Builder
 
         public virtual string
             GetSelectColumns
-            (IList<ITableColumn> columns)
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns)
         {
             var select = string.Empty;
 
-            foreach (var c in columns)
+            foreach (var c in tablecolumns)
             {
-                select += $"{(string.IsNullOrWhiteSpace(select) ? "" : $",{Environment.NewLine}")}{c.TableDescription.Name}.{c.ColumnDescription.Name} {_syntaxsign.AliasSeparatorColumnKeyword} {_syntaxsign.AliasEnclosureColumnOpen}{c.TableDescription.Reference}{_syntaxsign.AliasSeparatorColumn}{c.ColumnDescription.Reference}{_syntaxsign.AliasEnclosureColumnClose}";
+                select += $"{(string.IsNullOrWhiteSpace(select) ? "" : $",{Environment.NewLine}")}{c.table.Description.Name}.{c.column.Description.Name} {_syntaxsign.AliasSeparatorColumnKeyword} {_syntaxsign.AliasEnclosureColumnOpen}{c.table.Description.Reference}{_syntaxsign.AliasSeparatorColumn}{c.column.Description.Reference}{_syntaxsign.AliasEnclosureColumnClose}";
             }
             select = $"{(!string.IsNullOrWhiteSpace(select) ? $"{select}{Environment.NewLine}" : "")}";
 
             return select;
         }
 
-        public virtual string 
+        public virtual string
             GetWhere
-            (IList<ITableColumn> columns, IList<SqlParameter> parameters)
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters)
         {
             var where = string.Empty;
 
-            foreach (var p in GetParameters(columns, parameters))
+            foreach (var p in GetParameters(tablecolumns, parameters))
             {
-                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {p.column.TableDescription.Name}.{p.column.ColumnDescription.Name} {_syntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
+                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {p.tablecolumn.table.Description.Name}.{p.tablecolumn.column.Description.Name} {_syntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
             }
 
             return where;
         }
 
-        public virtual string 
+        public virtual string
             GetInsertColumns
-            (IList<ITableColumn> columns)
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns)
         {
             var insert = string.Empty;
 
-            foreach (var c in columns)
+            foreach (var c in tablecolumns)
             {
-                insert += $"{(string.IsNullOrWhiteSpace(insert) ? "" : $",{Environment.NewLine}")}{c.ColumnDescription.Name}";
+                insert += $"{(string.IsNullOrWhiteSpace(insert) ? "" : $",{Environment.NewLine}")}{c.column.Description.Name}";
             }
             insert = $"{(!string.IsNullOrWhiteSpace(insert) ? $"({insert}){Environment.NewLine}" : "")}";
 
             return insert;
         }
 
-        public virtual string 
+        public virtual string
             GetInsertValues
-            (IList<ITableColumn> columns, IList<SqlParameter> parameters)
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters)
         {
             var values = string.Empty;
 
-            foreach (var p in GetParameters(columns, parameters))
+            foreach (var p in GetParameters(tablecolumns, parameters))
             {
                 values += $"{(string.IsNullOrWhiteSpace(values) ? "" : $",{Environment.NewLine}")}{p.parameter.Name}";
             }

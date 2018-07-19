@@ -15,7 +15,7 @@ namespace library.Impl.Data.Sql.Builder
 
         public virtual IList<(IQueryColumn column, IList<string> tablenames, IList<string> aliasnames)>
             GetQueryColumns
-            (IQueryRepositoryProperties query,
+            (IQueryRepository query,
             IList<string> tablenames,
             IList<string> aliasnames,
             int maxdepth = 1, int depth = 0)
@@ -38,29 +38,29 @@ namespace library.Impl.Data.Sql.Builder
             depth++;
             foreach (var j in query.GetJoins(maxdepth, depth))
             {
-                columns.AddRange(GetQueryColumns(j.externalkey.Query, tablenames, aliasnames, maxdepth, depth));
+                columns.AddRange(GetQueryColumns(j.externaltable, tablenames, aliasnames, maxdepth, depth));
             }
 
             return columns;
         }
 
-        public virtual IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
+        public virtual IList<(IQueryRepository internaltable, IList<string> internalalias, IQueryRepository externaltable, IList<string> externalalias, IList<(IQueryColumn, IQueryColumn)> joins)>
             GetQueryJoins
-            (IQueryRepositoryProperties query,
+            (IQueryRepository query,
             IList<string> prefix,
             int maxdepth = 1, int depth = 0)
         {
-            var joins = new List<(IQueryRepositoryProperties, IList<string>, IQueryRepositoryProperties, IList<string>, IList<(IQueryColumn, IQueryColumn)>)>();
+            var joins = new List<(IQueryRepository, IList<string>, IQueryRepository, IList<string>, IList<(IQueryColumn, IQueryColumn)>)>();
 
             depth++;
             foreach (var j in query.GetJoins(maxdepth, depth))
             {
                 var tablename = new List<string>(prefix);
-                tablename.Add(j.externalkey.Query.Description.Name);
+                tablename.Add(j.externaltable.Description.Name);
 
-                joins.Add((query, prefix, j.externalkey.Query, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
+                joins.Add((query, prefix, j.externaltable, tablename, new List<(IQueryColumn, IQueryColumn)>() { (j.internalkey, j.externalkey) }));
 
-                joins.AddRange(GetQueryJoins(j.externalkey.Query, tablename, maxdepth, depth));
+                joins.AddRange(GetQueryJoins(j.externaltable, tablename, maxdepth, depth));
             }
 
             return joins;
@@ -92,7 +92,7 @@ namespace library.Impl.Data.Sql.Builder
 
         public virtual string 
             GetFrom
-            (IList<(IQueryRepositoryProperties internaltable, IList<string> internalalias, IQueryRepositoryProperties externaltable, IList<string> externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins, 
+            (IList<(IQueryRepository internaltable, IList<string> internalalias, IQueryRepository externaltable, IList<string> externalalias, IList<(IQueryColumn internalkey, IQueryColumn externalkey)> joins)> joins, 
             string tablename)
         {
             var from = $"{tablename} {_syntaxsign.AliasSeparatorTableKeyword} {_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
