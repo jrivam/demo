@@ -52,14 +52,14 @@ namespace library.Impl.Presentation
 
         public virtual ListPresentation<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(maxdepth, top).presentations);
+            return Load(query?.List(maxdepth, top).presentations);
         }
         public virtual ListPresentation<S, R, Q, T, U, V, W> Load(IEnumerable<W> list)
         {
             if (list != null)
             {
                 foreach (var item in list)
-                    this.CommandAdd(item);
+                    this?.CommandAdd(item);
             }
 
             return this;

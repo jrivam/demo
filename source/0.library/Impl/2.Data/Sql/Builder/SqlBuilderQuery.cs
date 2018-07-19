@@ -105,7 +105,7 @@ namespace library.Impl.Data.Sql.Builder
                 var joinons = string.Empty;
                 foreach (var on in j.joins)
                 {
-                    joinons += $"{(string.IsNullOrWhiteSpace(joinons) ? "" : "and")} {_syntaxsign.AliasEnclosureTableOpen}{internalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.internalkey.Description.Name} = {_syntaxsign.AliasEnclosureTableOpen}{externalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.externalkey.Description.Name}";
+                    joinons += $"{(string.IsNullOrWhiteSpace(joinons) ? string.Empty : "and")} {_syntaxsign.AliasEnclosureTableOpen}{internalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.internalkey.Description.Name} = {_syntaxsign.AliasEnclosureTableOpen}{externalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.externalkey.Description.Name}";
                 }
                 from += $"{joinons}{Environment.NewLine}";
             }
@@ -130,7 +130,7 @@ namespace library.Impl.Data.Sql.Builder
 
                     foreach (var p in GetParameters(c, parameters))
                     {
-                        where += $"{(p.counter > 1 ? " or " : "")}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {_syntaxsign.GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
+                        where += $"{(p.counter > 1 ? " or " : string.Empty)}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {_syntaxsign.GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
                     }
 
                     where += $"){Environment.NewLine}";
@@ -151,11 +151,11 @@ namespace library.Impl.Data.Sql.Builder
             {
                 var tablename = $"{string.Join(_syntaxsign.AliasSeparatorTable, c.tablenames)}";
 
-                select += $"{(string.IsNullOrWhiteSpace(select) ? "" : $",{(lasttable == tablename ? " " : Environment.NewLine)}")}{_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name} {_syntaxsign.AliasSeparatorColumnKeyword} {_syntaxsign.AliasEnclosureColumnOpen}{string.Join(_syntaxsign.AliasSeparatorColumn, c.aliasnames)}{_syntaxsign.AliasSeparatorColumn}{c.column.Description.Reference}{_syntaxsign.AliasEnclosureColumnClose}";
+                select += $"{(string.IsNullOrWhiteSpace(select) ? string.Empty : $",{(lasttable == tablename ? " " : Environment.NewLine)}")}{_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name} {_syntaxsign.AliasSeparatorColumnKeyword} {_syntaxsign.AliasEnclosureColumnOpen}{string.Join(_syntaxsign.AliasSeparatorColumn, c.aliasnames)}{_syntaxsign.AliasSeparatorColumn}{c.column.Description.Reference}{_syntaxsign.AliasEnclosureColumnClose}";
 
                 lasttable = tablename;
             };
-            select = $"{(!string.IsNullOrWhiteSpace(select) ? $"{select}{Environment.NewLine}" : "")}";
+            select = $"{(!string.IsNullOrWhiteSpace(select) ? $"{select}{Environment.NewLine}" : string.Empty)}";
 
             return select;
         }

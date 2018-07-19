@@ -17,6 +17,7 @@ namespace library.Impl.Entities.Repository
             : base(creator, reader)
         {
         }
+
         public Repository(IReaderEntity<T> reader, ConnectionStringSettings connectionstringsettings)
             : this(new SqlCreator(connectionstringsettings), reader)
         {

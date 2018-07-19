@@ -16,6 +16,7 @@ namespace library.Impl.Entities.Repository
         {
             _creator = creator;
         }
+
         public RepositoryBulk(ConnectionStringSettings appconnectionstringsettings)
             : this(new SqlCreator(appconnectionstringsettings))
         {

@@ -1,5 +1,4 @@
 ﻿using library.Impl.Data;
-using library.Impl.Data.Table;
 using library.Interface.Data.Query;
 using library.Interface.Data.Table;
 using library.Interface.Domain;
@@ -45,7 +44,7 @@ namespace library.Impl.Domain
 
         public virtual ListDomain<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.List(maxdepth, top).domains);
+            return Load(query?.List(maxdepth, top).domains);
         }
         public virtual ListDomain<S, R, T, U, V> Load(IEnumerable<V> list)
         {

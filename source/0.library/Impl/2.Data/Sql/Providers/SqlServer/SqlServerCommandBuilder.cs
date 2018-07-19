@@ -14,7 +14,7 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             var commandtext = string.Empty;
 
             commandtext = $"select{Environment.NewLine}{columns}{Environment.NewLine}from {from}{Environment.NewLine}{where}";
-            commandtext = commandtext.Replace("select", $"select{(top > 0 ? $" top {top.ToString()}" : "")}");
+            commandtext = commandtext.Replace("select", $"select{(top > 0 ? $" top {top.ToString()}" : string.Empty)}");
 
             return commandtext;
         }

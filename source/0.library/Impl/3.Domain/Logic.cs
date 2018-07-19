@@ -1,7 +1,6 @@
 ﻿using library.Interface.Data.Table;
 using library.Interface.Domain;
 using library.Interface.Entities;
-using System.Collections.Generic;
 
 namespace library.Impl.Domain
 {

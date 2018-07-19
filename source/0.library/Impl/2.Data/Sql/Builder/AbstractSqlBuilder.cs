@@ -50,9 +50,9 @@ namespace library.Impl.Data.Sql.Builder
 
             foreach (var cp in GetParameters(columns, parameters))
             {
-                set += $"{(string.IsNullOrWhiteSpace(set) ? "" : $",{Environment.NewLine}")}{(prefixtablename ? $"{cp.tablecolumn.table.Description.Name}." : string.Empty)}{cp.tablecolumn.column.Description.Name} = {cp.parameter.Name}";
+                set += $"{(string.IsNullOrWhiteSpace(set) ? string.Empty : $",{Environment.NewLine}")}{(prefixtablename ? $"{cp.tablecolumn.table.Description.Name}." : string.Empty)}{cp.tablecolumn.column.Description.Name} = {cp.parameter.Name}";
             }
-            set = $"{(!string.IsNullOrWhiteSpace(set) ? $"{set}{Environment.NewLine}" : "")}";
+            set = $"{(!string.IsNullOrWhiteSpace(set) ? $"{set}{Environment.NewLine}" : string.Empty)}";
 
             return set;
         }

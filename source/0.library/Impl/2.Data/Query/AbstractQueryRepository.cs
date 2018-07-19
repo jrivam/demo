@@ -9,6 +9,7 @@ namespace library.Impl.Data.Query
     public abstract class AbstractQueryRepository : IQueryRepository
     {
         public virtual Description Description { get; protected set; }
+
         public AbstractQueryRepository(string name, string reference)
         {
             Description = new Description(name, reference);

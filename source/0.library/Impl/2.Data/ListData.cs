@@ -40,7 +40,7 @@ namespace library.Impl.Data
 
         public virtual ListData<S, T, U> Load(S query, int maxdepth = 1, int top = 0)
         {
-            return Load(query.SelectMultiple(maxdepth, top).datas);
+            return Load(query?.SelectMultiple(maxdepth, top).datas);
         }
         public virtual ListData<S, T, U> Load(IEnumerable<U> list)
         {

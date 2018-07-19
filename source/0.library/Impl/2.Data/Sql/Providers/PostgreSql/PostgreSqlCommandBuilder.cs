@@ -14,7 +14,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             var commandtext = string.Empty;
 
             commandtext = $"select{Environment.NewLine}{columns}{Environment.NewLine}from {from}{Environment.NewLine}{where}";
-            commandtext += $"{(top > 0 ? $" limit {top.ToString()}" : "")}";
+            commandtext += $"{(top > 0 ? $" limit {top.ToString()}" : string.Empty)}";
 
             return commandtext;
         }
