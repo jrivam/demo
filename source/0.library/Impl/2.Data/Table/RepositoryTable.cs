@@ -4,6 +4,7 @@ using library.Impl.Data.Sql.Factory;
 using library.Impl.Entities.Repository;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Sql.Builder;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using library.Interface.Entities.Reader;

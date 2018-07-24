@@ -2,7 +2,7 @@
 using library.Interface.Data.Table;
 using System.Collections.Generic;
 
-namespace library.Interface.Data.Sql
+namespace library.Interface.Data.Sql.Builder
 {
     public interface ISqlBuilderTable : ISqlBuilder
     {

@@ -1,5 +1,6 @@
 ﻿using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.Data;

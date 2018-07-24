@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace library.Impl.Data
 {
-    public class ListData<S, T, U> : List<U>, IListDataMethods<S, T, U>, IListData<T, U>
+    public class ListData<S, T, U> : List<U>, IListData<T, U>, IListDataMethods<S, T, U>
         where T : IEntity
         where U : ITableRepository, ITableEntity<T>
         where S : IQueryRepositoryMethods<T, U>

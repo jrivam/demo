@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace library.Impl.Domain
 {
-    public class ListDomain<S, R, T, U, V> : List<V>, IListDomainMethods<S, R, T, U, V>, IListDomain<S, T, U, V>
+    public class ListDomain<S, R, T, U, V> : List<V>, IListDomain<S, T, U, V>, IListDomainMethods<S, R, T, U, V>
         where T : IEntity
         where U : ITableRepository, ITableEntity<T>
         where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>

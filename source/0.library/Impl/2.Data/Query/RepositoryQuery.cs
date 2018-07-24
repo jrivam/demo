@@ -6,6 +6,7 @@ using library.Interface.Data;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Sql.Builder;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using library.Interface.Entities.Reader;
