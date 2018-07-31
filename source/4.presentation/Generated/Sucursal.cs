@@ -30,8 +30,8 @@ namespace presentation.Model
             Domain = domain;
         }
 
-        public Sucursal(IRaiserInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> raiser,
-             domain.Model.Sucursal domain,
+        public Sucursal(domain.Model.Sucursal domain, 
+            IRaiserInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> raiser,             
              int maxdepth = 1)
             : this(new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(raiser),
                     domain,
@@ -40,8 +40,8 @@ namespace presentation.Model
         }
         public Sucursal(domain.Model.Sucursal domain, 
              int maxdepth = 1)
-            : this(new presentation.Raiser.Sucursal(),
-                    domain,
+            : this(domain, 
+                  new presentation.Raiser.Sucursal(),                    
                     maxdepth)
         {
         }

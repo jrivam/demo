@@ -27,15 +27,15 @@ namespace domain.Model
             Data = data;
         }
 
-        public Empresa(IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper,
-            data.Model.Empresa data)
+        public Empresa(data.Model.Empresa data,
+            IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
             : this(new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper),
                   data)
         {
         }
         public Empresa(data.Model.Empresa data)
-            : this(new domain.Mapper.Empresa(),
-                  data)
+            : this(data,
+                  new domain.Mapper.Empresa())
         {
         }
         public Empresa(entities.Model.Empresa entity)
@@ -118,8 +118,8 @@ namespace domain.Query
 {
     public partial class Empresa : AbstractQueryLogicMethods<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresa(data.Query.Empresa data,
-            ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+        public Empresa(ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
+            data.Query.Empresa data)
             : base(logic)
         {
             Data = data;
@@ -127,8 +127,8 @@ namespace domain.Query
 
         public Empresa(data.Query.Empresa data,
             IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
-            : this(data,
-                  new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
+            : this(new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper),
+                  data)
         {
         }
         public Empresa(data.Query.Empresa data)
