@@ -28,8 +28,8 @@ namespace presentation.Model
             Domain = domain;
         }
 
-        public Empresa(IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
-             domain.Model.Empresa domain, 
+        public Empresa(domain.Model.Empresa domain,
+            IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
              int maxdepth = 1)
             : this(new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
                   domain,
@@ -38,8 +38,8 @@ namespace presentation.Model
         }
         public Empresa(domain.Model.Empresa domain, 
              int maxdepth = 1)
-            : this(new presentation.Raiser.Empresa(),
-                    domain,
+            : this(domain,
+                  new presentation.Raiser.Empresa(),
                     maxdepth)
         {
         }

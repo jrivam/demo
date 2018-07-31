@@ -28,15 +28,15 @@ namespace domain.Model
             Data = data;
         }
 
-        public Sucursal(IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper,
-            data.Model.Sucursal data)
+        public Sucursal(data.Model.Sucursal data,
+            IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
             : this(new LogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper),
               data)
         {
         }
         public Sucursal(data.Model.Sucursal data)
-            : this(new domain.Mapper.Sucursal(),
-                  data)
+            : this(data,
+                  new domain.Mapper.Sucursal())
         {
         }
         public Sucursal(entities.Model.Sucursal entity)
@@ -121,8 +121,8 @@ namespace domain.Query
 {
     public partial class Sucursal : AbstractQueryLogicMethods<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public Sucursal(data.Query.Sucursal data,
-            ILogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(ILogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
+            data.Query.Sucursal data)
             : base(logic)
         {
             Data = data;
@@ -130,8 +130,8 @@ namespace domain.Query
 
         public Sucursal(data.Query.Sucursal data,
             IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
-            : this(data,
-                  new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+            : this(new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper),
+                  data)
         {
         }
         public Sucursal(data.Query.Sucursal data)
