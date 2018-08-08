@@ -53,8 +53,18 @@ namespace library.Impl.Domain.Table
             return erasechildren;
         }
 
-        protected abstract Result SaveChildren();
-        protected abstract Result EraseChildren();
+        protected virtual Result SaveChildren()
+        {
+            var savechildren = new Result() { Success = true };
+
+            return savechildren;
+        }
+        protected virtual Result EraseChildren()
+        {
+            var erasechildren = new Result() { Success = true };
+
+            return erasechildren;
+        }
 
         public V SetProperties(T entity, bool nulls = false)
         {

@@ -12,14 +12,6 @@ namespace domain.Model
 {
     public partial class Empresa : AbstractTableLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public virtual domain.Query.Empresa Query
-        {
-            get
-            {
-                return new domain.Query.Empresa();
-            }
-        }
-
         public Empresa(ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
             data.Model.Empresa data)
             : base(logic)
@@ -69,9 +61,9 @@ namespace domain.Model
             }
         }
 
-        protected virtual Result SaveChildren2()
+        protected override Result SaveChildren()
         {
-            var savechildren = new Result() { Success = true };
+            var savechildren = base.SaveChildren();
 
             if (savechildren.Success)
             {
@@ -80,19 +72,19 @@ namespace domain.Model
 
             return savechildren;
         }
-        protected virtual Result EraseChildren2(domain.Query.Empresa query = null)
+        protected override Result EraseChildren()
         {
-            var erasechildren = new Result() { Success = true };
+            var erasechildren = base.EraseChildren();
 
             if (this.Id != null)
             {
                 if (erasechildren.Success)
                 {
-                    var _query = query ?? Query;
+                    var _query = Data.Query;
 
                     _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                    erasechildren.Append(_query?.Sucursal()?.Data?.Delete().result);
+                    erasechildren.Append(_query?.Sucursal()?.Delete().result);
                 }
             }
 

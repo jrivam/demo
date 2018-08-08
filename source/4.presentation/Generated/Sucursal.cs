@@ -1,5 +1,4 @@
 ﻿using library.Impl.Data.Sql;
-using library.Impl.Domain.Table;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Query;
 using library.Impl.Presentation.Raiser;
@@ -13,14 +12,6 @@ namespace presentation.Model
 {
     public partial class Sucursal : AbstractTableInteractiveMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public virtual presentation.Query.Sucursal Query
-        {
-            get
-            {
-                return new presentation.Query.Sucursal();
-            }
-        }
-
         public Sucursal(IInteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
             domain.Model.Sucursal domain,
             int maxdepth = 1)

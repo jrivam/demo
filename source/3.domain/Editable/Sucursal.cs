@@ -1,6 +1,4 @@
-﻿using library.Impl;
-
-namespace domain.Model
+﻿namespace domain.Model
 {
     public partial class Sucursal
     {
@@ -22,15 +20,6 @@ namespace domain.Model
                     Data.Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_empresas?.Datas);
                 }
             }
-        }
-
-        protected override Result SaveChildren()
-        {
-            return SaveChildren2();
-        }
-        protected override Result EraseChildren()
-        {
-            return EraseChildren2();
         }
     }
 }

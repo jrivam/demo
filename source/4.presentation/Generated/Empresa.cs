@@ -11,14 +11,6 @@ namespace presentation.Model
 {
     public partial class Empresa : AbstractTableInteractiveMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public virtual presentation.Query.Empresa Query
-        {
-            get
-            {
-                return new presentation.Query.Empresa();
-            }
-        }
-
         public Empresa(IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
             domain.Model.Empresa domain,
             int maxdepth = 1)
