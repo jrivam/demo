@@ -80,11 +80,9 @@ namespace domain.Model
             {
                 if (erasechildren.Success)
                 {
-                    var _query = Data.Query;
+                    Data.Query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                    _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
-
-                    erasechildren.Append(_query?.Sucursal()?.Delete().result);
+                    erasechildren.Append(Data.Query?.Sucursal()?.Delete().result);
                 }
             }
 
