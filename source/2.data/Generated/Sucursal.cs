@@ -177,14 +177,6 @@ namespace data.Query
 {
     public partial class Sucursal : AbstractQueryRepositoryMethods<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public virtual data.Query.Sucursal Query
-        {
-            get
-            {
-                return new data.Query.Sucursal();
-            }
-        }
-
         public override IList<(IQueryRepository internaltable, IQueryColumn internalkey, IQueryRepository externaltable, IQueryColumn externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
         {
             var joins = new List<(IQueryRepository internaltable, IQueryColumn internalkey, IQueryRepository externaltable, IQueryColumn externalkey)>();

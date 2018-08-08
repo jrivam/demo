@@ -1,5 +1,4 @@
-﻿using library.Impl;
-using library.Impl.Data.Sql;
+﻿using library.Impl.Data.Sql;
 using library.Impl.Domain;
 using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Query;
@@ -13,14 +12,6 @@ namespace domain.Model
 {
     public partial class Sucursal : AbstractTableLogicMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public virtual domain.Query.Sucursal Query
-        {
-            get
-            {
-                return new domain.Query.Sucursal();
-            }
-        }
-
         public Sucursal(ILogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic,
             data.Model.Sucursal data)
             : base(logic)
@@ -87,19 +78,6 @@ namespace domain.Model
                     Data.Empresa = _empresa?.Data;
                 }
             }
-        }
-
-        protected virtual Result SaveChildren2()
-        {
-            var savechildren = new Result() { Success = true };
-
-            return savechildren;
-        }
-        protected virtual Result EraseChildren2()
-        {
-            var erasechildren = new Result() { Success = true };
-
-            return erasechildren;
         }
     }
 
