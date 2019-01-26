@@ -1,16 +1,25 @@
 ﻿using library.Impl.Data.Sql.Builder;
+using System;
 using System.Configuration;
 
 namespace library.Impl.Data.Sql.Providers.PostgreSql
 {
     public class PostgreSqlSyntaxSign : AbstractSqlSyntaxSign
     {
+        public override string ProviderName
+        {
+            get
+            {
+                return "postgresql";
+            }
+        }
+
         public override string ParameterPrefix
         {
             get
             {
                 if (_parameterprefix == null)
-                    _parameterprefix = ConfigurationManager.AppSettings["postgresql.parameter.prefix"] ?? "@";
+                    _parameterprefix = ConfigurationManager.AppSettings[$"{ProviderName}.parameter.prefix"] ?? "@";
 
                 return _parameterprefix;
             }
@@ -20,7 +29,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_parameterseparator == null)
-                    _parameterseparator = ConfigurationManager.AppSettings["postgresql.parameter.separator"] ?? base.ParameterSeparator;
+                    _parameterseparator = ConfigurationManager.AppSettings[$"{ ProviderName}.parameter.separator"] ?? base.ParameterSeparator;
 
                 return _parameterseparator;
             }
@@ -30,7 +39,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_parameterassignment == null)
-                    _parameterassignment = ConfigurationManager.AppSettings["postgresql.parameter.assignment"] ?? ":=";
+                    _parameterassignment = ConfigurationManager.AppSettings[$"{ProviderName}.parameter.assignment"] ?? ":=";
 
                 return _parameterassignment;
             }
@@ -41,7 +50,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasseparatorcolumn == null)
-                    _aliasseparatorcolumn = ConfigurationManager.AppSettings["postgresql.alias.separator.column"] ?? base.AliasSeparatorColumn;
+                    _aliasseparatorcolumn = ConfigurationManager.AppSettings[$"{ProviderName}.alias.separator.column"] ?? base.AliasSeparatorColumn;
 
                 return _aliasseparatorcolumn;
             }
@@ -51,7 +60,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasseparatorcolumnkeyword == null)
-                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings["postgresql.alias.separator.column.keyword"] ?? "as";
+                    _aliasseparatorcolumnkeyword = ConfigurationManager.AppSettings[$"{ProviderName}.alias.separator.column.keyword"] ?? "as";
 
                 return _aliasseparatorcolumnkeyword;
             }
@@ -61,7 +70,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasseparatortable == null)
-                    _aliasseparatortable = ConfigurationManager.AppSettings["postgresql.alias.separator.table"] ?? base.AliasSeparatorTable;
+                    _aliasseparatortable = ConfigurationManager.AppSettings[$"{ProviderName}.alias.separator.table"] ?? base.AliasSeparatorTable;
 
                 return _aliasseparatortable;
             }
@@ -71,7 +80,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasseparatortablekeyword == null)
-                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings["postgresql.alias.separator.table.keyword"] ?? "as";
+                    _aliasseparatortablekeyword = ConfigurationManager.AppSettings[$"{ProviderName}.alias.separator.table.keyword"] ?? "as";
 
                 return _aliasseparatortablekeyword;
             }
@@ -82,7 +91,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasenclosurecolumnopen == null)
-                    _aliasenclosurecolumnopen = ConfigurationManager.AppSettings["postgresql.alias.enclosure.column.open"] ?? "\"";
+                    _aliasenclosurecolumnopen = ConfigurationManager.AppSettings[$"{ProviderName}.alias.enclosure.column.open"] ?? "\"";
 
                 return _aliasenclosurecolumnopen;
             }
@@ -92,7 +101,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasenclosurecolumnclose == null)
-                    _aliasenclosurecolumnclose = ConfigurationManager.AppSettings["postgresql.alias.enclosure.column.close"] ?? "\"";
+                    _aliasenclosurecolumnclose = ConfigurationManager.AppSettings[$"{ProviderName}.alias.enclosure.column.close"] ?? "\"";
 
                 return _aliasenclosurecolumnclose;
             }
@@ -102,7 +111,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasenclosuretableopen == null)
-                    _aliasenclosuretableopen = ConfigurationManager.AppSettings["postgresql.alias.enclosure.table.open"] ?? "";
+                    _aliasenclosuretableopen = ConfigurationManager.AppSettings[$"{ProviderName}.alias.enclosure.table.open"] ?? "";
 
                 return _aliasenclosuretableopen;
             }
@@ -112,11 +121,33 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_aliasenclosuretableclose == null)
-                    _aliasenclosuretableclose = ConfigurationManager.AppSettings["postgresql.alias.enclosure.table.close"] ?? "";
+                    _aliasenclosuretableclose = ConfigurationManager.AppSettings[$"{ProviderName}.alias.enclosure.table.close"] ?? "";
 
                 return _aliasenclosuretableclose;
             }
         }
+
+        public override bool UpdateSetUseAlias
+        {
+            get
+            {
+                var updatesetusealias = ConfigurationManager.AppSettings[$"{ProviderName}.update.set.use.alias"];
+                _updatesetusealias = string.IsNullOrWhiteSpace(updatesetusealias) ? false : Convert.ToBoolean(updatesetusealias);
+                    
+                return _updatesetusealias;
+            }
+        }
+        public override bool UpdateWhereUseAlias
+        {
+            get
+            {
+                var updatewhereusealias = ConfigurationManager.AppSettings[$"{ProviderName}.update.where.use.alias"];
+                _updatewhereusealias = string.IsNullOrWhiteSpace(updatewhereusealias) ? true : Convert.ToBoolean(updatewhereusealias);
+
+                return _updatewhereusealias;
+            }
+        }
+
 
         public override string GetOperator(WhereOperator? whereoperator)
         {
@@ -162,7 +193,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_wherewildcardsingle == null)
-                    _wherewildcardsingle = ConfigurationManager.AppSettings["postgresql.where.wildcard.single"] ?? "_";
+                    _wherewildcardsingle = ConfigurationManager.AppSettings[$"{ProviderName}.where.wildcard.single"] ?? "_";
 
                 return _wherewildcardsingle;
             }
@@ -173,7 +204,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 if (_wherewildcardany == null)
-                    _wherewildcardany = ConfigurationManager.AppSettings["postgresql.where.wildcard.any"] ?? "%";
+                    _wherewildcardany = ConfigurationManager.AppSettings[$"{ProviderName}.where.wildcard.any"] ?? "%";
 
                 return _wherewildcardany;
             }

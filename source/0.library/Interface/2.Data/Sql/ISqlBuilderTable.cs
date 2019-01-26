@@ -7,7 +7,7 @@ namespace library.Interface.Data.Sql.Builder
     public interface ISqlBuilderTable : ISqlBuilder
     {
         string GetSelectColumns(IList<(ITableRepository table, ITableColumn column)> tablecolumns);
-        string GetWhere(IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters);
+        string GetWhere(IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters, bool prefixtablename = true);
         string GetInsertColumns(IList<(ITableRepository table, ITableColumn column)> tablecolumns);
         string GetInsertValues(IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters);
     }

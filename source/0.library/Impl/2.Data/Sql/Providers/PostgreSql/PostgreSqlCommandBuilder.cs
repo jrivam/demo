@@ -31,7 +31,7 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
         {
             var commandtext = string.Empty;
 
-            commandtext = $"update{Environment.NewLine}{table}{Environment.NewLine}set {set}{Environment.NewLine}from {from}{Environment.NewLine}{where}";
+            commandtext = $"update{Environment.NewLine}{table}{Environment.NewLine}set {set}{Environment.NewLine}{where}";
 
             return commandtext;
         }

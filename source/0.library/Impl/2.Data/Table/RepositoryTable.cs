@@ -70,12 +70,6 @@ namespace library.Impl.Data.Table
         {
             bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["usedbcommand"]);
 
-            //if (!methodusedbcommand)
-            //    if (!propertyusedbcommand)
-            //        if (!classusedbcommand)
-            //            if (!configusedbcommand)
-            //                return false;
-
             return (methodusedbcommand || propertyusedbcommand || classusedbcommand || configusedbcommand);
         } 
 
@@ -213,8 +207,8 @@ namespace library.Impl.Data.Table
 
             var update = _commandbuilder.Update($"{data.Description.Name}",
                 $"{data.Description.Name}",
-                _builder.GetUpdateSet(tablecolumns.Where(c => !c.column.IsIdentity && c.column.Value != c.column.DbValue).ToList(), parameters),
-                _builder.GetWhere(tablecolumns.Where(c => c.column.IsPrimaryKey && c.column.DbValue != null).ToList(), parameters));
+                _builder.GetUpdateSet(tablecolumns.Where(c => !c.column.IsIdentity && c.column.Value != c.column.DbValue).ToList(), parameters, _syntaxsign.UpdateSetUseAlias),
+                _builder.GetWhere(tablecolumns.Where(c => c.column.IsPrimaryKey && c.column.DbValue != null).ToList(), parameters, _syntaxsign.UpdateWhereUseAlias));
 
             return Update(data, update, CommandType.Text, parameters);
         }

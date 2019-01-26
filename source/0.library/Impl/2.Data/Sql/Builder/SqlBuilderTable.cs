@@ -30,13 +30,13 @@ namespace library.Impl.Data.Sql.Builder
 
         public virtual string
             GetWhere
-            (IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters)
+            (IList<(ITableRepository table, ITableColumn column)> tablecolumns, IList<SqlParameter> parameters, bool prefixtablename = true)
         {
             var where = string.Empty;
 
             foreach (var p in GetParameters(tablecolumns, parameters))
             {
-                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {p.tablecolumn.table.Description.Name}.{p.tablecolumn.column.Description.Name} {_syntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
+                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {(prefixtablename ? $"{p.tablecolumn.table.Description.Name}." : string.Empty)}{p.tablecolumn.column.Description.Name} {_syntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
             }
 
             return where;

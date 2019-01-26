@@ -186,7 +186,7 @@ namespace library.Impl.Data.Query
 
             var update = _commandbuilder.Update($"{query.Description.Name}",
                 _builder.GetFrom(queryjoins, query.Description.Name),
-                _builder.GetUpdateSet(tablecolumns.Where(c => !c.column.IsIdentity && c.column.Value != c.column.DbValue).ToList(), parameters),
+                _builder.GetUpdateSet(tablecolumns.Where(c => !c.column.IsIdentity && c.column.Value != c.column.DbValue).ToList(), parameters, _syntaxsign.UpdateSetUseAlias),
                 _builder.GetWhere(querycolumns, parameters));
 
             return Update(update, CommandType.Text, parameters);
