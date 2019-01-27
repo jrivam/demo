@@ -42,9 +42,11 @@ namespace library.Impl.Domain
         {
         }
 
-        public virtual ListDomain<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0)
+        public virtual (Result result, ListDomain<S, R, T, U, V> list) Load(R query, int maxdepth = 1, int top = 0)
         {
-            return Load(query?.List(maxdepth, top).domains);
+            var list = query.List(maxdepth, top);
+
+            return (list.result, Load(list.domains));
         }
         public virtual ListDomain<S, R, T, U, V> Load(IEnumerable<V> list)
         {

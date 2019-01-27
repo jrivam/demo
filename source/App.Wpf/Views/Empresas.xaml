@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:WpfApp.Views"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Empresas" Height="300" Width="300" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Empresas" Height="339" Width="439" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.DataContext>
         <viewmodels:EmpresasViewModel/>
@@ -15,9 +15,15 @@
     <Window.Resources>
         <ResourceDictionary Source="../Styles.xaml" />
     </Window.Resources>
-    
+
     <Grid>
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding}" Margin="0,37,0,0">
+        <Button x:Name="btnAddEmpresa" Content="Adicionar Empresa" Command="{Binding AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
+        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+            <StatusBarItem HorizontalAlignment="Left">
+                <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding}" Margin="0,37,0,30">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -76,6 +82,5 @@
 
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="btnAddEmpresa" Content="Adicionar Empresa" Command="{Binding AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
     </Grid>
 </Window>

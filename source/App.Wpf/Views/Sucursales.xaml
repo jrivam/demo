@@ -6,17 +6,17 @@
         xmlns:views="clr-namespace:WpfApp.Views"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Sucursales" Height="300" Width="300" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Sucursales" Height="324" Width="336" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
     <Window.DataContext>
         <viewmodels:SucursalesViewModel/>
     </Window.DataContext>
-    
+
     <Window.Resources>
         <ResourceDictionary Source="../Styles.xaml" />
     </Window.Resources>
 
     <Grid>
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding}" Margin="0,37,0,0" >
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding}" Margin="0,37,0,30" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -42,7 +42,7 @@
                                 <TextBox x:Name="txtRazonSocial" Text="{Binding Nombre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>                    
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Empresa">
@@ -57,7 +57,7 @@
                         <DataTemplate>
                             <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="RazonSocial"/>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>                    
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Fecha" CellStyle="{StaticResource DataGridCellHorizontalCenter}">
@@ -103,6 +103,10 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
-
+        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+            <StatusBarItem HorizontalAlignment="Left">
+                <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

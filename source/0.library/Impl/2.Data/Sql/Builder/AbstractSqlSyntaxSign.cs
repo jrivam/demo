@@ -1,4 +1,5 @@
 ﻿using library.Interface.Data.Sql;
+using System;
 using System.Configuration;
 
 namespace library.Impl.Data.Sql.Builder
@@ -98,15 +99,27 @@ namespace library.Impl.Data.Sql.Builder
         }
 
         protected bool _updatesetusealias;
-        public abstract bool UpdateSetUseAlias
+        public virtual bool UpdateSetUseAlias
         {
-            get;
+            get
+            {
+                var updatesetusealias = ConfigurationManager.AppSettings["sql.update.set.use.alias"];
+                _updatesetusealias = !string.IsNullOrWhiteSpace(updatesetusealias) ? Convert.ToBoolean(updatesetusealias): true;
+
+                return _updatesetusealias;
+            }
         }
 
         protected bool _updatewhereusealias;
-        public abstract bool UpdateWhereUseAlias
+        public virtual bool UpdateWhereUseAlias
         {
-            get;
+            get
+            {
+                var updatewhereusealias = ConfigurationManager.AppSettings["sql.update.where.use.alias"];
+                _updatewhereusealias = !string.IsNullOrWhiteSpace(updatewhereusealias) ? Convert.ToBoolean(updatewhereusealias) : true;
+
+                return _updatewhereusealias;
+            }
         }
 
         public abstract string GetOperator(WhereOperator? whereoperator);

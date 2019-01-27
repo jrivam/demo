@@ -1,7 +1,4 @@
-﻿using library.Impl.Presentation;
-using presentation.Model;
-
-namespace WpfApp.ViewModels
+﻿namespace WpfApp.ViewModels
 {
     public class EmpresaViewModel : presentation.Model.Empresa
     {

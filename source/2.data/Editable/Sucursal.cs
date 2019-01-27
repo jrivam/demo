@@ -33,7 +33,7 @@ namespace data.Model
 
             _query.Empresa().Activo = (true, WhereOperator.Equals);
 
-            return _empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_query?.Empresa());
+            return _empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_query?.Empresa()).list;
         }
         protected data.Model.Empresas _empresas;
         public virtual data.Model.Empresas Empresas

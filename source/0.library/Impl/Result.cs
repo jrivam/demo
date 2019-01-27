@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace library.Impl
@@ -8,11 +9,29 @@ namespace library.Impl
         public bool Success { get; set; }
         public IList<(ResultCategory category, string message)> Messages { get; set; } = new List<(ResultCategory, string)>() { };
 
+        public string Message
+        {
+            get
+            {
+                return String.Join("/", Messages.ToArray()).Replace(Environment.NewLine, string.Empty);
+            }
+        }
+
         public Result()
         {
         }
-        public Result(IList<(ResultCategory category, string message)> messages)
+        public Result(Result result)
             : this()
+        {
+            Append(result);
+        }
+        public Result(IList<(ResultCategory category, string message)> messages)
+           : this()
+        {
+            messages?.ToList()?.ForEach(x => Messages.Add(x));
+        }
+        public Result(Result result, IList<(ResultCategory category, string message)> messages)
+            : this(result)
         {
             messages?.ToList()?.ForEach(x => Messages.Add(x));
         }

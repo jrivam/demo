@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace library.Impl.Presentation
 {
-    public class ListPresentation<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListPresentationMethods<S, R, Q, T, U, V, W>, IListPresentation<S, R, T, U, V, W>
+    public class ListPresentation<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListPresentationMethods<S, R, Q, T, U, V, W>, IListPresentation<S, R, T, U, V, W>, IStatus
         where T : IEntity
         where U : ITableRepository, ITableEntity<T>
         where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
@@ -26,6 +26,8 @@ namespace library.Impl.Presentation
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
     {
+        public string Status { get; protected set; } = string.Empty;
+
         public virtual ListDomain<S, R, T, U, V> Domains
         {
             get
@@ -50,9 +52,15 @@ namespace library.Impl.Presentation
         {
         }
 
-        public virtual ListPresentation<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0)
+        public virtual Result Load(Q query, int maxdepth = 1, int top = 0)
         {
-            return Load(query?.List(maxdepth, top).presentations);
+            Status = "Loading";
+            var list = query.List(maxdepth, top);
+            Status = list.result.Message;
+
+            Load(list.presentations);
+
+            return list.result;
         }
         public virtual ListPresentation<S, R, Q, T, U, V, W> Load(IEnumerable<W> list)
         {
@@ -65,17 +73,21 @@ namespace library.Impl.Presentation
             return this;
         }
         
-        public virtual void CommandLoad((CommandAction action, (Result result, W presentation) operation) message)
+        public virtual (Result result, W presentation) CommandLoad((CommandAction action, (Result result, W presentation) operation) message)
         {
+            return message.operation;
         }
-        public virtual void CommandSave((CommandAction action, (Result result, W presentation) operation) message)
+        public virtual (Result result, W presentation) CommandSave((CommandAction action, (Result result, W presentation) operation) message)
         {
+            return message.operation;
         }
-        public virtual void CommandErase((CommandAction action, (Result result, W presentation) operation) message)
+        public virtual (Result result, W presentation) CommandErase((CommandAction action, (Result result, W presentation) operation) message)
         {
             if (message.operation.result.Success)
                 if (message.operation.presentation?.Domain.Data.Entity.Id != null)
                     this.Remove(message.operation.presentation);
+
+            return message.operation;
         }
 
         public virtual void CommandAdd(W presentation)

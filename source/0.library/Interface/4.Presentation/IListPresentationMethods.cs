@@ -1,4 +1,5 @@
-﻿using library.Impl.Presentation;
+﻿using library.Impl;
+using library.Impl.Presentation;
 using library.Interface.Data.Query;
 using library.Interface.Data.Table;
 using library.Interface.Domain.Query;
@@ -19,7 +20,7 @@ namespace library.Interface.Presentation
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
     {
-        ListPresentation<S, R, Q, T, U, V, W> Load(Q query, int maxdepth = 1, int top = 0);
+        Result Load(Q query, int maxdepth = 1, int top = 0);
         ListPresentation<S, R, Q, T, U, V, W> Load(IEnumerable<W> list);
     }
 }

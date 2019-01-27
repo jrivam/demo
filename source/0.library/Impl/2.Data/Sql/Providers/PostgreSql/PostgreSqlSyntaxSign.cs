@@ -132,22 +132,11 @@ namespace library.Impl.Data.Sql.Providers.PostgreSql
             get
             {
                 var updatesetusealias = ConfigurationManager.AppSettings[$"{ProviderName}.update.set.use.alias"];
-                _updatesetusealias = string.IsNullOrWhiteSpace(updatesetusealias) ? false : Convert.ToBoolean(updatesetusealias);
-                    
+                _updatesetusealias = !string.IsNullOrWhiteSpace(updatesetusealias) ? Convert.ToBoolean(updatesetusealias) : false;
+
                 return _updatesetusealias;
             }
         }
-        public override bool UpdateWhereUseAlias
-        {
-            get
-            {
-                var updatewhereusealias = ConfigurationManager.AppSettings[$"{ProviderName}.update.where.use.alias"];
-                _updatewhereusealias = string.IsNullOrWhiteSpace(updatewhereusealias) ? true : Convert.ToBoolean(updatewhereusealias);
-
-                return _updatewhereusealias;
-            }
-        }
-
 
         public override string GetOperator(WhereOperator? whereoperator)
         {

@@ -16,7 +16,7 @@ namespace library.Interface.Domain
         where S : IQueryRepositoryMethods<T, U>
         where R : IQueryLogicMethods<T, U, V>
     {
-        ListDomain<S, R, T, U, V> Load(R query, int maxdepth = 1, int top = 0);
+        (Result result, ListDomain<S, R, T, U, V> list) Load(R query, int maxdepth = 1, int top = 0);
         ListDomain<S, R, T, U, V> Load(IEnumerable<V> list);
 
         Result Save();

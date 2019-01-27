@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Sucursal" Height="300" Width="300" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Sucursal" Height="284" Width="325" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.DataContext>
         <viewmodels:SucursalViewModel/>
@@ -25,5 +25,10 @@
         <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="RazonSocial"  Margin="92,76,10,0" VerticalAlignment="Top"/>
 
         <Label x:Name="lblEmpresa" Content="Empresa" HorizontalAlignment="Left" Margin="31,73,0,0" VerticalAlignment="Top" Width="56"/>
+        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+            <StatusBarItem HorizontalAlignment="Left">
+                <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

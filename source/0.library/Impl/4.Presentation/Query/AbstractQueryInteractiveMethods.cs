@@ -27,11 +27,19 @@ namespace library.Impl.Presentation.Query
 
         public virtual (Result result, W presentation) Retrieve(int maxdepth = 1, W presentation = default(W))
         {
-            return _interactive.Retrieve(Domain, maxdepth, presentation);
+            Status = "Loading";
+            var retrieve = _interactive.Retrieve(Domain, maxdepth, presentation);
+            Status = retrieve.result.Message;
+
+            return retrieve;
         }
         public virtual (Result result, IEnumerable<W> presentations) List(int maxdepth = 1, int top = 0, IList<W> presentations = null)
         {
-            return _interactive.List(Domain, maxdepth, top, presentations);
+            Status = "Loading";
+            var list = _interactive.List(Domain, maxdepth, top, presentations);
+            Status = list.result.Message;
+
+            return list;
         }
     }
 }

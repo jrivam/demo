@@ -68,7 +68,7 @@ namespace library.Impl.Data.Table
 
         protected virtual bool UseDbCommand(bool classusedbcommand, bool propertyusedbcommand, bool methodusedbcommand)
         {
-            bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["usedbcommand"]);
+            bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["database.forceusedbcommand"]);
 
             return (methodusedbcommand || propertyusedbcommand || classusedbcommand || configusedbcommand);
         } 

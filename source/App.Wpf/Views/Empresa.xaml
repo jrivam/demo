@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Empresa" Height="300" Width="300" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Empresa" Height="346" Width="523" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.DataContext>
         <viewmodels:EmpresaViewModel/>
@@ -14,13 +14,13 @@
     <Window.Resources>
         <ResourceDictionary Source="../Styles.xaml" />
     </Window.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="171*"/>
-            <ColumnDefinition Width="121*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocial, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,87,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocial, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,87,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
         <!--<Window.Resources>
         <viewmodels:Empresa x:Key="ViewModel" />
@@ -28,15 +28,15 @@
     <Grid DataContext="{StaticResource ViewModel}">
         <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocial, UpdateSourceTrigger=PropertyChanged, Source={StaticResource ViewModel}}" HorizontalAlignment="Left" Height="22" Margin="92,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190"/>-->
 
-        <Label x:Name="lblId" Content="Id" HorizontalAlignment="Left" Margin="67,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.688,0.587"/>
-        <Label x:Name="txtId" Content="{Binding Id, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" Grid.ColumnSpan="2" />
-        <Label x:Name="lblRazonSocial" Content="Razon Social" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top"/>
-        <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,114,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblId" Content="Id" HorizontalAlignment="Left" Margin="67,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.688,0.587" Height="26" Width="20"/>
+        <Label x:Name="txtId" Content="{Binding Id, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" />
+        <Label x:Name="lblRazonSocial" Content="Razon Social" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
+        <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,114,0,0" VerticalAlignment="Top" Height="15" Width="53"/>
 
-        <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}"/>
-        <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}"/>
+        <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}" Height="20"/>
+        <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}" Height="20"/>
 
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Sucursales}" Margin="0,163,0,0" Grid.ColumnSpan="2">
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Sucursales}" Margin="0,163,0,30">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -47,7 +47,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Header="Nombre">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -107,6 +107,11 @@
 
             </DataGrid.Columns>
         </DataGrid>
-        <Button  x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding Sucursales.AddCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Width="123"/>
+        <Button  x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding Sucursales.AddCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
+        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+            <StatusBarItem HorizontalAlignment="Left">
+                <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

@@ -158,6 +158,7 @@
     <Compile Include="Interface\3.Domain\Query\ILogicQuery.cs" />
     <Compile Include="Interface\3.Domain\Query\IQueryLogicMethods.cs" />
     <Compile Include="Interface\4.Presentation\IListPresentationMethods.cs" />
+    <Compile Include="Interface\4.Presentation\IStatus.cs" />
     <Compile Include="Interface\4.Presentation\Table\ITableInteractiveMethods.cs" />
     <Compile Include="Interface\4.Presentation\Table\IInteractiveTable.cs" />
     <Compile Include="Interface\4.Presentation\IListPresentation.cs" />

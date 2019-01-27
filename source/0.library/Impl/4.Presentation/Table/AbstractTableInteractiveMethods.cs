@@ -43,24 +43,36 @@ namespace library.Impl.Presentation.Table
 
         public virtual (Result result, W presentation) Load(bool usedbcommand = false)
         {
-            return _interactive.Load(this as W, usedbcommand);
+            Status = "Loading";
+            var load = _interactive.Load(this as W, usedbcommand);
+            Status = load.result.Message;
+
+            return load;
         }
         public virtual (Result result, W presentation) LoadQuery(int maxdepth = 1)
         {
-            return _interactive.LoadQuery(this as W, maxdepth);
+            Status = "Loading";
+            var loadquery = _interactive.LoadQuery(this as W, maxdepth);
+            Status = loadquery.result.Message;
+
+            return loadquery;
         }
 
         public virtual (Result result, W presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            (Result result, W presentation) save = _interactive.Save(this as W, useinsertdbcommand, useupdatedbcommand);
+            Status = "Saving";
+            var save = _interactive.Save(this as W, useinsertdbcommand, useupdatedbcommand);
+            Status = save.result.Message;
 
             return save;
         }
         public virtual (Result result, W presentation) Erase(bool usedbcommand = false)
         {
+            Status = "Deleting";
             var erase = _interactive.Erase(this as W, usedbcommand);
+            Status = erase.result.Message;
 
-           return erase;
+            return erase;
         }
 
         public W SetProperties(T entity, bool nulls = false)

@@ -127,16 +127,6 @@ namespace library.Impl.Data.Sql.Providers.SqlServer
             }
         }
 
-        public override bool UpdateSetUseAlias
-        {
-            get
-            {
-                var updatesetusealias = ConfigurationManager.AppSettings[$"{ProviderName}.update.set.use.alias"];
-                _updatesetusealias = string.IsNullOrWhiteSpace(updatesetusealias) ? true : Convert.ToBoolean(updatesetusealias);
-
-                return _updatesetusealias;
-            }
-        }
         public override bool UpdateWhereUseAlias
         {
             get

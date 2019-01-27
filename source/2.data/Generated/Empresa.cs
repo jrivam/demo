@@ -112,7 +112,7 @@ namespace data.Model
 
                     _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                    Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top);
+                    Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top).list;
                 }
             }
 
