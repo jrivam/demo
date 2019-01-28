@@ -6,9 +6,12 @@ using System.Web.Http;
 
 namespace Web.Api.Controllers
 {
+    [RoutePrefix("api/empresa")]
     public class EmpresaController : ApiController
     {
-        public IHttpActionResult Get(string razonsocial = null, bool? activo = null)
+        [HttpGet]
+        [Route("search")]
+        public IHttpActionResult Search(string razonsocial = null, bool? activo = null)
         {
             try
             {
@@ -33,6 +36,13 @@ namespace Web.Api.Controllers
             }
         }
 
+        [HttpGet]
+        public IHttpActionResult GetAll()
+        {
+            return Search();
+        }
+
+        [HttpGet]
         public IHttpActionResult Get(int id)
         {
             try
@@ -59,7 +69,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]entities.Model.Empresa entity)
+        public IHttpActionResult Create([FromBody]entities.Model.Empresa entity)
         {
             try
             {
@@ -87,7 +97,8 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]entities.Model.Empresa entity)
+        [HttpPut]
+        public IHttpActionResult Update(int id, [FromBody]entities.Model.Empresa entity)
         {
             try
             {
@@ -128,6 +139,7 @@ namespace Web.Api.Controllers
             }
         }
 
+        [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
             try

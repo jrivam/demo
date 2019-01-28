@@ -6,9 +6,12 @@ using System.Web.Http;
 
 namespace Web.Api.Controllers
 {
+    [RoutePrefix("api/sucursal")]
     public class SucursalController : ApiController
     {
-        public IHttpActionResult Get(string nombre = null, bool? activo = null, string fecha = null)
+        [HttpGet]
+        [Route("search")]
+        public IHttpActionResult Search(string nombre = null, bool? activo = null, string fecha = null)
         {
             try
             {
@@ -35,6 +38,13 @@ namespace Web.Api.Controllers
             }
         }
 
+        [HttpGet]
+        public IHttpActionResult GetAll()
+        {
+            return Search();
+        }
+
+        [HttpGet]
         public IHttpActionResult Get(int id)
         {
             try
@@ -59,7 +69,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post([FromBody]entities.Model.Sucursal entity)
+        public IHttpActionResult Create([FromBody]entities.Model.Sucursal entity)
         {
             try
             {
@@ -87,7 +97,8 @@ namespace Web.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]entities.Model.Sucursal entity)
+        [HttpPut]
+        public IHttpActionResult Update(int id, [FromBody]entities.Model.Sucursal entity)
         {
             try
             {
@@ -128,6 +139,7 @@ namespace Web.Api.Controllers
             }
         }
 
+        [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
             try
