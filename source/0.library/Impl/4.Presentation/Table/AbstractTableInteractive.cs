@@ -26,7 +26,14 @@ namespace library.Impl.Presentation.Table
                 _status = value;
                 OnPropertyChanged("Status");
             }
-        } 
+        }
+
+        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public virtual V Domain { get; protected set; }
 
@@ -40,21 +47,16 @@ namespace library.Impl.Presentation.Table
 
         protected int _maxdepth;
 
-        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public virtual ICommand LoadCommand { get; protected set; }
         public virtual ICommand SaveCommand { get; protected set; }
         public virtual ICommand EraseCommand { get; protected set; }
 
         public virtual ICommand EditCommand { get; protected set; }
 
-        public AbstractTableInteractive(int maxdepth = 1)
+        public AbstractTableInteractive(V domain, int maxdepth = 1)
         {
+            Domain = domain;
+
             _maxdepth = maxdepth;
         }
     }

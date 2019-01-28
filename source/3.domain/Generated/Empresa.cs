@@ -12,17 +12,17 @@ namespace domain.Model
 {
     public partial class Empresa : AbstractTableLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresa(ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
-            data.Model.Empresa data)
-            : base(logic)
+        public Empresa(data.Model.Empresa data,
+            ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+            : base(data, 
+                  logic)
         {
-            Data = data;
         }
 
         public Empresa(data.Model.Empresa data,
             IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
-            : this(new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper),
-                  data)
+            : this(data,
+                  new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
         {
         }
         public Empresa(data.Model.Empresa data)
@@ -92,14 +92,13 @@ namespace domain.Model
 
     public partial class Empresas : ListDomain<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresas()
-            : base()
+        public Empresas(data.Model.Empresas datas)
+            : base(datas)
         {
         }
-        public Empresas(data.Model.Empresas datas)
-            : this()
+        public Empresas()
+            : this(new data.Model.Empresas())
         {
-            Datas = datas;
         }
     }
 }
@@ -108,17 +107,17 @@ namespace domain.Query
 {
     public partial class Empresa : AbstractQueryLogicMethods<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresa(ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic,
-            data.Query.Empresa data)
-            : base(logic)
+        public Empresa(data.Query.Empresa data,
+            ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+            : base(data, 
+                  logic)
         {
-            Data = data;
         }
 
         public Empresa(data.Query.Empresa data,
             IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
-            : this(new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper),
-                  data)
+            : this(data, 
+                  new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
         {
         }
         public Empresa(data.Query.Empresa data)

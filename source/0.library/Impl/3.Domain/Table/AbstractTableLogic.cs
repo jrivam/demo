@@ -21,8 +21,9 @@ namespace library.Impl.Domain.Table
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
-        public AbstractTableLogic()
+        public AbstractTableLogic(U data)
         {
+            Data = data;
         }
     }
 }

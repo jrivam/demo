@@ -10,6 +10,7 @@ using library.Interface.Presentation.Table;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -17,7 +18,7 @@ using System.Windows.Input;
 
 namespace library.Impl.Presentation
 {
-    public class ListPresentation<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListPresentationMethods<S, R, Q, T, U, V, W>, IListPresentation<S, R, T, U, V, W>, IStatus
+    public class ListPresentation<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListPresentationMethods<S, R, Q, T, U, V, W>, IListPresentation<S, R, T, U, V, W>, INotifyPropertyChanged, IStatus
         where T : IEntity
         where U : ITableRepository, ITableEntity<T>
         where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
@@ -26,8 +27,6 @@ namespace library.Impl.Presentation
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
     {
-        public string Status { get; protected set; } = string.Empty;
-
         public virtual ListDomain<S, R, T, U, V> Domains
         {
             get
@@ -40,27 +39,76 @@ namespace library.Impl.Presentation
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, null, 
-                           new object[] { x }, 
+                           BindingFlags.OptionalParamBinding, null,
+                           new object[] { x },
                            CultureInfo.CurrentCulture)));
             }
         }
 
-        public virtual ICommand AddCommand { get; set; }
+        private string _status = string.Empty;
+        public string Status
+        {
+            get
+            {
+                return _status;
+            }
+            protected set
+            {
+                _status = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Status"));
+            }
+        }
 
-        public ListPresentation()
+        public virtual string Name { get; protected set; }
+
+        protected Q _query;
+        protected int _maxdepth = 1;
+
+        public virtual ICommand AddCommand { get; set; }
+        public virtual ICommand RefreshCommand { get; set; }
+
+        public ListPresentation(ListDomain<S, R, T, U, V> domains, 
+            string name, 
+            Q query, int maxdepth = 1, int top = 0)
+        {
+            Domains = domains;
+
+            Name = name;
+
+            _query = query;
+            _maxdepth = maxdepth;
+
+            AddCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<W>(null, $"{Name}Add");
+            }, delegate (object parameter) { return this != null; });
+            RefreshCommand = new RelayCommand(delegate (object parameter)
+            {
+                Messenger.Default.Send<int>(top, $"{Name}Refresh");
+            }, delegate (object parameter) { return true; });
+        }
+        public ListPresentation(string name,
+                    Q query, int maxdepth = 1, int top = 0)
+            : this(new ListDomain<S, R, T, U, V>(), 
+                  name, 
+                  query, maxdepth, top)
         {
         }
 
-        public virtual Result Load(Q query, int maxdepth = 1, int top = 0)
+        public virtual (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Refresh(int top = 0)
+        {
+            this.ClearItems();
+
+            return Load(_query, _maxdepth, top);
+        }
+
+        public virtual (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Load(Q query, int maxdepth = 1, int top = 0)
         {
             Status = "Loading";
             var list = query.List(maxdepth, top);
             Status = list.result.Message;
 
-            Load(list.presentations);
-
-            return list.result;
+            return (list.result, Load(list.presentations));
         }
         public virtual ListPresentation<S, R, Q, T, U, V, W> Load(IEnumerable<W> list)
         {
@@ -90,11 +138,6 @@ namespace library.Impl.Presentation
             return message.operation;
         }
 
-        public virtual void CommandAdd(W presentation)
-        {
-            if (presentation.Domain.Data.Entity?.Id != null)
-                this.Add(presentation);
-        }
         public virtual void CommandEdit((W oldvalue, W newvalue) message)
         {
             if (this.Count > 0)
@@ -102,6 +145,26 @@ namespace library.Impl.Presentation
                 var i = this.IndexOf(message.oldvalue);
                 if (i >= 0)
                     this[i] = message.newvalue;
+            }
+        }
+
+        public virtual void CommandAdd(W presentation)
+        {
+            if (presentation.Domain.Data.Entity?.Id != null)
+                this.Add(presentation);
+        }
+        public virtual void CommandRefresh((Result result, ListPresentation<S, R, Q, T, U, V, W> presentations) operation)
+        {
+            if (operation.result.Success)
+            {
+                if (operation.presentations.Count == 0)
+                {
+                    Status = "No records found.";
+                }
+                else
+                {
+                    Status = $"Total records: {operation.presentations.Count}";
+                }
             }
         }
     }

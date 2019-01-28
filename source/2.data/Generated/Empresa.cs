@@ -29,13 +29,12 @@ namespace data.Model
             }
         }
 
-        public Empresa(IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository,
-            entities.Model.Empresa entity)
-            : base(repository, 
+        public Empresa(entities.Model.Empresa entity,
+            IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
+            : base(entity, 
+                  repository, 
                   typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
-            Entity = entity;
-
             Columns.Add(new TableColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
             Columns.Add(new TableColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
             Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
@@ -45,8 +44,8 @@ namespace data.Model
             IReaderEntity<entities.Model.Empresa> reader,
             IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
             entities.Model.Empresa entity)
-            : this(new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings),
-                  entity)
+            : this(entity,
+                  new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings, 
@@ -139,14 +138,13 @@ namespace data.Model
 
     public partial class Empresas : ListData<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
-        public Empresas()
-            : base()
+        public Empresas(ListEntity<entities.Model.Empresa> entities)
+            : base(entities)
         {
         }
-        public Empresas(ListEntity<entities.Model.Empresa> entities)
-            : this()
+        public Empresas()
+            : this(new entities.Model.Empresas())
         {
-            Entities = entities;
         }
     }
 }

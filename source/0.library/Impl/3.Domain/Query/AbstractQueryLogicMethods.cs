@@ -15,8 +15,8 @@ namespace library.Impl.Domain.Query
     {
         protected readonly ILogicQuery<T, U, V> _logic;
 
-        public AbstractQueryLogicMethods(ILogicQuery<T, U, V> logic)
-            : base()
+        public AbstractQueryLogicMethods(S data, ILogicQuery<T, U, V> logic)
+            : base(data)
         {
             _logic = logic;
         }

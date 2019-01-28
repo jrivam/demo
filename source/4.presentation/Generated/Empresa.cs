@@ -11,20 +11,20 @@ namespace presentation.Model
 {
     public partial class Empresa : AbstractTableInteractiveMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public Empresa(IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
-            domain.Model.Empresa domain,
+        public Empresa(domain.Model.Empresa domain,
+            IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
             int maxdepth = 1)
-            : base(interactive, 
+            : base(domain, 
+                  interactive, 
                   maxdepth)
         {
-            Domain = domain;
         }
 
         public Empresa(domain.Model.Empresa domain,
             IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
              int maxdepth = 1)
-            : this(new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
-                  domain,
+            : this(domain,
+                  new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
                   maxdepth)
         {
         }
@@ -63,7 +63,7 @@ namespace presentation.Model
         {
             get
             {
-                return _sucursales ?? (Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales));
+                return _sucursales ?? (Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales, new Query.Sucursal()));
             }
             set
             {
@@ -81,18 +81,22 @@ namespace presentation.Model
 
     public partial class Empresas : ListPresentation<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public Empresas()
-            : base()
+        public Empresas(domain.Model.Empresas domains,
+            presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
+            : base(domains, "Empresas",
+                  query, maxdepth, top)
         {
-            AddCommand = new RelayCommand(delegate (object parameter)
-            {
-                Messenger.Default.Send<presentation.Model.Empresa>(null, "EmpresaAdd");
-            }, delegate (object parameter) { return this != null; });
         }
-        public Empresas(domain.Model.Empresas domains)
-            : this()
+
+        public Empresas(domain.Model.Empresas domains, int maxdepth = 1, int top = 0)
+            : this(domains, 
+                  new presentation.Query.Empresa(), maxdepth, top)
         {
-            Domains = domains;
+        }
+        public Empresas(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
+            : this(new domain.Model.Empresas(),
+                  query, maxdepth, top)
+        {
         }
     }
 }
@@ -103,9 +107,9 @@ namespace presentation.Query
     {
         public Empresa(domain.Query.Empresa domain,
             IInteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
-            : base(interactive)
+            : base(domain,
+                  interactive)
         {
-            Domain = domain;
         }
 
         public Empresa(domain.Query.Empresa domain,

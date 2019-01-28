@@ -19,8 +19,9 @@ namespace library.Impl.Presentation.Query
     {
         protected readonly IInteractiveQuery<T, U, V, W> _interactive;
 
-        public AbstractQueryInteractiveMethods(IInteractiveQuery<T, U, V, W> interactive)
-            : base()
+        public AbstractQueryInteractiveMethods(R domain,
+            IInteractiveQuery<T, U, V, W> interactive)
+            : base(domain)
         {
             _interactive = interactive;
         }

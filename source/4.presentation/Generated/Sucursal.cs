@@ -12,20 +12,20 @@ namespace presentation.Model
 {
     public partial class Sucursal : AbstractTableInteractiveMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public Sucursal(IInteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,
-            domain.Model.Sucursal domain,
+        public Sucursal(domain.Model.Sucursal domain, 
+            IInteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive,           
             int maxdepth = 1)
-            : base(interactive, 
+            : base(domain, 
+                  interactive, 
                   maxdepth)
         {
-            Domain = domain;
         }
 
         public Sucursal(domain.Model.Sucursal domain, 
             IRaiserInteractive<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> raiser,             
              int maxdepth = 1)
-            : this(new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(raiser),
-                    domain,
+            : this(domain, 
+                  new InteractiveTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(raiser),                    
                     maxdepth)
         {
         }
@@ -100,18 +100,18 @@ namespace presentation.Model
 
     public partial class Sucursales : ListPresentation<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
-        public Sucursales()
-            : base()
+        public Sucursales(domain.Model.Sucursales domains,
+            presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
+            : base(domains, "Sucursales",
+                  query, maxdepth, top)
         {
-            AddCommand = new RelayCommand(delegate (object parameter)
-            {
-                Messenger.Default.Send<presentation.Model.Sucursal>(null, "SucursalAdd");
-            }, delegate (object parameter) { return this != null; });
         }
-        public Sucursales(domain.Model.Sucursales domains)
-            : this()
+
+        public Sucursales(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
+            : this(new domain.Model.Sucursales(),
+                  query, maxdepth, top)
         {
-            Domains = domains;
+
         }
     }
 }
@@ -122,9 +122,9 @@ namespace presentation.Query
     {
         public Sucursal(domain.Query.Sucursal domain,
             IInteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal> interactive)
-            : base(interactive)
+            : base(domain,
+                  interactive)
         {
-            Domain = domain;
         }
 
         public Sucursal(domain.Query.Sucursal domain,

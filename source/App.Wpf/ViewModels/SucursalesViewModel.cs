@@ -3,9 +3,8 @@
     public class SucursalesViewModel : presentation.Model.Sucursales
     {
         public SucursalesViewModel()
-            : base()
+            : base(new presentation.Query.Sucursal(), 2)
         {
-            var load = Load(new presentation.Query.Sucursal(), 2);
         }
     }
 }

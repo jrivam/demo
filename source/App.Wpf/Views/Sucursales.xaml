@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:WpfApp.Views"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Sucursales" Height="324" Width="336" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Sucursales" Height="324" Width="456" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
     <Window.DataContext>
         <viewmodels:SucursalesViewModel/>
     </Window.DataContext>
@@ -108,5 +108,6 @@
                 <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
             </StatusBarItem>
         </StatusBar>
+        <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding RefreshCommand}" CommandParameter="{Binding}" Margin="0,10,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="163"/>
     </Grid>
 </Window>

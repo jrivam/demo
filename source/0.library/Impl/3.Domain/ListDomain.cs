@@ -32,13 +32,18 @@ namespace library.Impl.Domain
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, 
-                           null, new object[] { x }, 
+                           BindingFlags.OptionalParamBinding,
+                           null, new object[] { x },
                            CultureInfo.CurrentCulture)));
             }
         }
 
+        public ListDomain(ListData<S, T, U> datas)
+        {
+            Datas = datas;
+        }
         public ListDomain()
+            : this(new ListData<S, T, U>())
         {
         }
 

@@ -3,9 +3,8 @@
     public class EmpresasViewModel : presentation.Model.Empresas
     {
         public EmpresasViewModel()
-            : base()
+            : base(new presentation.Query.Empresa())
         {
-            Load(new presentation.Query.Empresa());
         }
     }
 }

@@ -16,8 +16,9 @@ namespace library.Impl.Domain.Query
             }
         }
 
-        public AbstractQueryLogic()
+        public AbstractQueryLogic(S data)
         {
+            Data = data;
         }
     }
 }

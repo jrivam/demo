@@ -28,13 +28,18 @@ namespace library.Impl.Data
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, 
-                           null, new object[] { x }, 
+                           BindingFlags.OptionalParamBinding,
+                           null, new object[] { x },
                            CultureInfo.CurrentCulture)));
             }
         }
 
+        public ListData(ListEntity<T> entities)
+        {
+            Entities = entities;
+        }
         public ListData()
+            : this(new ListEntity<T>())
         {
         }
 

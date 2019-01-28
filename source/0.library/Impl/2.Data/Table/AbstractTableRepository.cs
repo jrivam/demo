@@ -15,8 +15,11 @@ namespace library.Impl.Data.Table
 
         public virtual Description Description { get; protected set; }
 
-        public AbstractTableRepository(string name, string reference)
+        public AbstractTableRepository(T entity,
+            string name, string reference)
         {
+            Entity = entity;
+
             Description = new Description(name, reference);
         }
 

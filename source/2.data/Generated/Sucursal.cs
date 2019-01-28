@@ -29,13 +29,12 @@ namespace data.Model
             }
         }
 
-        public Sucursal(IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository,
-            entities.Model.Sucursal entity)
-            : base(repository, 
+        public Sucursal(entities.Model.Sucursal entity,
+            IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository)
+            : base(entity, 
+                  repository, 
                   typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
-            Entity = entity;
-
             Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
             Columns.Add(new TableColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
             Columns.Add(new TableColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
@@ -48,8 +47,8 @@ namespace data.Model
             IReaderEntity<entities.Model.Sucursal> reader,
             IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
             entities.Model.Sucursal entity)
-            : this(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings),
-                  entity)
+            : this(entity,
+                  new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings,
@@ -161,14 +160,14 @@ namespace data.Model
 
     public partial class Sucursales : ListData<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public Sucursales()
-            : base()
+        public Sucursales(ListEntity<entities.Model.Sucursal> entities)
+            : base(entities)
         {
         }
-        public Sucursales(ListEntity<entities.Model.Sucursal> entities)
-            : this()
+        public Sucursales()
+            : this(new ListEntity<entities.Model.Sucursal>())
         {
-            Entities = entities;
+
         }
     }
 }

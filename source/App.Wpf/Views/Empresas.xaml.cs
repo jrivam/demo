@@ -29,8 +29,12 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaSave, "EmpresaSave");
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
 
-            Messenger.Default.Register<presentation.Model.Empresa>(this, EmpresaAdd, "EmpresaAdd");
             Messenger.Default.Register<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>(this, EmpresaEdit, "EmpresaEdit");
+
+            Messenger.Default.Register<presentation.Model.Empresa>(this, EmpresasAdd, "EmpresasAdd");
+            Messenger.Default.Register<int>(this, EmpresasRefresh, "EmpresasRefresh");
+
+            EmpresasRefresh();
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -38,8 +42,10 @@ namespace WpfApp.Views
             Messenger.Default.Unregister(this, "EmpresaSave");
             Messenger.Default.Unregister(this, "EmpresaErase");
 
-            Messenger.Default.Unregister(this, "EmpresaAdd");
             Messenger.Default.Unregister(this, "EmpresaEdit");
+
+            Messenger.Default.Unregister(this, "EmpresasAdd");
+            Messenger.Default.Unregister(this, "EmpresasRefresh");
         }
 
         public virtual void EmpresaLoad((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
@@ -55,16 +61,6 @@ namespace WpfApp.Views
             ViewModel.CommandErase(message);
         }
 
-        public virtual void EmpresaAdd(presentation.Model.Empresa entity)
-        {
-            var view = new Views.Empresa();
-
-            view.ViewModel.Activo = true;
-
-            view.ShowDialog();
-
-            ViewModel.CommandAdd((presentation.Model.Empresa)view.ViewModel);
-        }
         public virtual void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
         {
             var view = new Views.Empresa();
@@ -77,6 +73,23 @@ namespace WpfApp.Views
                 ViewModel.Remove(message.oldvalue);
             else
                 ViewModel.CommandEdit((message.oldvalue, view.ViewModel));
+        }
+
+        public virtual void EmpresasAdd(presentation.Model.Empresa entity)
+        {
+            var view = new Views.Empresa();
+
+            view.ViewModel.Activo = true;
+
+            view.ShowDialog();
+
+            ViewModel.CommandAdd((presentation.Model.Empresa)view.ViewModel);
+        }
+        public virtual void EmpresasRefresh(int top = 0)
+        {
+            var refresh = ViewModel.Refresh(top);
+
+            ViewModel.CommandRefresh(refresh);
         }
     }
 }

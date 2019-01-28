@@ -12,8 +12,8 @@ namespace library.Impl.Domain.Table
     {
         protected readonly ILogicTable<T, U, V> _logic;
 
-        public AbstractTableLogicMethods(ILogicTable<T, U, V> logic)
-            : base()
+        public AbstractTableLogicMethods(U data, ILogicTable<T, U, V> logic)
+            : base(data)
         {
             _logic = logic;
         }

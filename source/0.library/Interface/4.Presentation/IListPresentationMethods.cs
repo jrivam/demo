@@ -20,7 +20,8 @@ namespace library.Interface.Presentation
         where R : IQueryLogicMethods<T, U, V>
         where Q : IQueryInteractiveMethods<T, U, V, W>
     {
-        Result Load(Q query, int maxdepth = 1, int top = 0);
+        (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Refresh(int top = 0);
+        (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Load(Q query, int maxdepth = 1, int top = 0);
         ListPresentation<S, R, Q, T, U, V, W> Load(IEnumerable<W> list);
     }
 }

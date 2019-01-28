@@ -1,5 +1,4 @@
-﻿using library.Interface.Data;
-using library.Interface.Data.Query;
+﻿using library.Interface.Data.Query;
 using library.Interface.Domain.Query;
 using library.Interface.Presentation;
 using library.Interface.Presentation.Query;
@@ -22,8 +21,9 @@ namespace library.Impl.Presentation.Query
             }
         }
 
-        public AbstractQueryInteractive()
+        public AbstractQueryInteractive(R domain)
         {
+            Domain = domain;
         }
     }
 }

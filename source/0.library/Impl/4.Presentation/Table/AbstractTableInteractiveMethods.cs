@@ -15,9 +15,9 @@ namespace library.Impl.Presentation.Table
     {
         protected readonly IInteractiveTable<T, U, V, W> _interactive;
 
-        public AbstractTableInteractiveMethods(IInteractiveTable<T, U, V, W> interactive,
+        public AbstractTableInteractiveMethods(V domain, IInteractiveTable<T, U, V, W> interactive,
             int maxdepth = 1)
-            : base(maxdepth)
+            : base(domain, maxdepth)
         {
             _interactive = interactive;
 

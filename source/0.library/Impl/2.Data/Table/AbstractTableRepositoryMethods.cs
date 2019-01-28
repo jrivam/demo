@@ -10,20 +10,20 @@ namespace library.Impl.Data.Table
     {
         protected readonly IRepositoryTable<T, U> _repository;
 
-        public AbstractTableRepositoryMethods(IRepositoryTable<T, U> repository,
+        public AbstractTableRepositoryMethods(T entity, IRepositoryTable<T, U> repository,
             string name, string reference)
-            : base(name, reference)
+            : base(entity, name, reference)
         {
             _repository = repository;
 
             InitDbCommands();
         }
-        public AbstractTableRepositoryMethods(IRepositoryTable<T, U> repository,
-            string name, string reference, T entity)
-            : this(repository, name, reference)
-        {
-            SetProperties(entity);
-        }
+        //public AbstractTableRepositoryMethods(T entity, IRepositoryTable<T, U> repository,
+        //    string name, string reference)
+        //    : this(entity, repository, name, reference)
+        //{
+        //    SetProperties(entity);
+        //}
 
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
