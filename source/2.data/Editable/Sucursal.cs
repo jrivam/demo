@@ -29,7 +29,7 @@ namespace data.Model
 
         public virtual data.Model.Empresas Empresas_Load(data.Query.Sucursal query = null)
         {
-            var _query = query ?? Query;
+            var _query = query ?? new data.Query.Sucursal();
 
             _query.Empresa().Activo = (true, WhereOperator.Equals);
 

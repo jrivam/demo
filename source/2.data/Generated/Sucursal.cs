@@ -21,14 +21,6 @@ namespace data.Model
 {
     public partial class Sucursal : AbstractTableRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public virtual data.Query.Sucursal Query
-        {
-            get
-            {
-                return new data.Query.Sucursal();
-            }
-        }
-
         public Sucursal(entities.Model.Sucursal entity,
             IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository)
             : base(entity, 
@@ -77,7 +69,7 @@ namespace data.Model
 
         public override (Result result, data.Model.Sucursal data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> query = null)
         {
-            var _query = (data.Query.Sucursal)query ?? Query;
+            var _query = (data.Query.Sucursal)query ?? new data.Query.Sucursal();
 
             _query.Id = (this.Id, WhereOperator.Equals);
 
@@ -129,7 +121,7 @@ namespace data.Model
             {
                 if (this.IdEmpresa != null)
                 {
-                    var _query = query ?? Query;
+                    var _query = query ?? new data.Query.Sucursal();
 
                     _query.Empresa().Id = (this.IdEmpresa, WhereOperator.Equals);
 
