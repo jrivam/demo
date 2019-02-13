@@ -99,6 +99,24 @@ namespace presentation.Model
                 }
             }
         }
+
+        protected presentation.Model.Empresas _empresas;
+        public virtual presentation.Model.Empresas Empresas
+        {
+            get
+            {
+                return _empresas ?? (Empresas = new presentation.Model.Empresas(Domain?.Empresas));
+            }
+            set
+            {
+                if (_empresas != value)
+                {
+                    _empresas = value;
+
+                    Domain.Empresas = (domain.Model.Empresas)new domain.Model.Empresas().Load(_empresas?.Domains);
+                }
+            }
+        }
     }
 
     public partial class Sucursales : ListPresentation<data.Query.Sucursal, domain.Query.Sucursal, presentation.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>

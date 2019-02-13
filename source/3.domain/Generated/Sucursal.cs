@@ -82,6 +82,24 @@ namespace domain.Model
                 }
             }
         }
+
+        protected domain.Model.Empresas _empresas;
+        public virtual domain.Model.Empresas Empresas
+        {
+            get
+            {
+                return _empresas ?? (Empresas = new domain.Model.Empresas(Data?.Empresas));
+            }
+            set
+            {
+                if (_empresas != value)
+                {
+                    _empresas = value;
+
+                    Data.Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_empresas?.Datas);
+                }
+            }
+        }
     }
 
     public partial class Sucursales : ListDomain<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
