@@ -67,7 +67,9 @@ namespace domain.Model
 
             if (savechildren.Success)
             {
-                savechildren.Append(_sucursales?.Save());
+                var saveall = _sucursales?.SaveAll();
+
+                savechildren.Append(saveall);
             }
 
             return savechildren;
@@ -80,9 +82,13 @@ namespace domain.Model
             {
                 if (erasechildren.Success)
                 {
-                    Data.Query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
+                    var query = new data.Query.Empresa();
+                    
+                    query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                    erasechildren.Append(Data.Query?.Sucursal()?.Delete().result);
+                    var delete = query?.Delete();
+
+                    erasechildren.Append(delete?.result);
                 }
             }
 
