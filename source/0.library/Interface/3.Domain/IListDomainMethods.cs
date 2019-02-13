@@ -19,7 +19,7 @@ namespace library.Interface.Domain
         (Result result, ListDomain<S, R, T, U, V> list) Load(R query, int maxdepth = 1, int top = 0);
         ListDomain<S, R, T, U, V> Load(IEnumerable<V> list);
 
-        Result Save();
-        Result Erase();
+        Result SaveAll();
+        Result EraseAll();
     }
 }

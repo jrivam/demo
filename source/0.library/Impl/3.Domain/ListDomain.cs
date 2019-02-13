@@ -63,32 +63,32 @@ namespace library.Impl.Domain
             return this;
         }
 
-        public virtual Result Save()
+        public virtual Result SaveAll()
         {
-            var save = new Result() { Success = true };
+            var result = new Result() { Success = true };
 
             foreach (var domain in this)
             {
-                save.Append(domain.Save().result);
+                result.Append(domain.Save().result);
 
-                if (!save.Success) break;
+                if (!result.Success) break;
             }
 
-            return save;
+            return result;
         }
 
-        public virtual Result Erase()
+        public virtual Result EraseAll()
         {
-            var erase = new Result() { Success = true };
+            var result = new Result() { Success = true };
 
             foreach (var domain in this)
             {
-                erase.Append(domain.Erase().result);
+                result.Append(domain.Erase().result);
 
-                if (!erase.Success) break;
+                if (!result.Success) break;
             }
 
-            return erase;
+            return result;
         }
     }
 }

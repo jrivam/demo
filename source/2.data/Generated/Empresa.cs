@@ -21,14 +21,6 @@ namespace data.Model
 {
     public partial class Empresa : AbstractTableRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
     {
-        public virtual data.Query.Empresa Query
-        {
-            get
-            {
-                return new data.Query.Empresa();
-            }
-        }
-
         public Empresa(entities.Model.Empresa entity,
             IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
             : base(entity, 
@@ -74,7 +66,7 @@ namespace data.Model
 
         public override (Result result, data.Model.Empresa data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> query = null)
         {
-            var _query = (data.Query.Empresa)query ?? Query;
+            var _query = (data.Query.Empresa)query ?? new data.Query.Empresa();
 
             _query.Id = (this.Id, WhereOperator.Equals);
 
@@ -107,7 +99,7 @@ namespace data.Model
             {
                 if (this.Id != null)
                 {
-                    var _query = query ?? Query;
+                    var _query = query ?? new data.Query.Empresa();
 
                     _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
 
