@@ -36,34 +36,31 @@ namespace data.Model
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
+            entities.Model.Sucursal entity,
             IReaderEntity<entities.Model.Sucursal> reader,
-            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper,
-            entities.Model.Sucursal entity)
+            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
             : this(entity,
                   new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
         public Sucursal(ConnectionStringSettings connectionstringsettings,
             entities.Model.Sucursal entity)
-            : this(connectionstringsettings, 
+            : this(connectionstringsettings,
+                  entity,
                   new entities.Reader.Sucursal(),
-                  new data.Mapper.Sucursal(),
+                  new data.Mapper.Sucursal())
+        {
+        }
+
+        public Sucursal(string appsettingsconnectionstringname, 
+            entities.Model.Sucursal entity)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]], 
                   entity)
         {
         }
-        public Sucursal(ConnectionStringSettings connectionstringsettings)
-            : this(connectionstringsettings, 
-                  new entities.Model.Sucursal())
-        {
-        }
-        public Sucursal(string appconnectionstringname, entities.Model.Sucursal entity)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]],
-                  entity)
-        {
-        }
-        public Sucursal(string appconnectionstringname)
-            : this(appconnectionstringname,
-                new entities.Model.Sucursal())
+
+        public Sucursal()
+            : this(new entities.Model.Sucursal())
         {
         }
 
@@ -148,6 +145,22 @@ namespace data.Model
                 }
             }
         }
+
+        protected data.Model.Empresas _empresas;
+        public virtual data.Model.Empresas Empresas
+        {
+            get
+            {
+                return _empresas ?? Empresas_Load();
+            }
+            set
+            {
+                if (_empresas != value)
+                {
+                    _empresas = value;
+                }
+            }
+        }
     }
 
     public partial class Sucursales : ListData<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
@@ -204,8 +217,9 @@ namespace data.Query
                   new data.Mapper.Sucursal())
         {
         }
-        public Sucursal(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+
+        public Sucursal(string appsettingsconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
 

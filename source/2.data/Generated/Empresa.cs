@@ -33,34 +33,31 @@ namespace data.Model
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
+            entities.Model.Empresa entity,
             IReaderEntity<entities.Model.Empresa> reader,
-            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper,
-            entities.Model.Empresa entity)
+            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
             : this(entity,
                   new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
         public Empresa(ConnectionStringSettings connectionstringsettings, 
             entities.Model.Empresa entity)
-            : this(connectionstringsettings, 
+            : this(connectionstringsettings,
+                  entity,
                   new entities.Reader.Empresa(),
-                  new data.Mapper.Empresa(),
-                  entity)
+                  new data.Mapper.Empresa())
         {
         }
-        public Empresa(ConnectionStringSettings connectionstringsettings)
-            : this(connectionstringsettings, 
-                  new entities.Model.Empresa())
+
+        public Empresa(string appsettingsconnectionstringname,
+            entities.Model.Empresa entity)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                entity)
         {
         }
-        public Empresa(string appconnectionstringname, entities.Model.Empresa entity)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]],
-                  entity)
-        {
-        }
-        public Empresa(string appconnectionstringname)
-            : this(appconnectionstringname,
-                new entities.Model.Empresa())
+
+        public Empresa()
+            : this(new entities.Model.Empresa())
         {
         }
 
@@ -166,8 +163,9 @@ namespace data.Query
                   new data.Mapper.Empresa())
         {
         }
-        public Empresa(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
+
+        public Empresa(string appsettingsconnectionstringname)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
 

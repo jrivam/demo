@@ -35,23 +35,25 @@ namespace presentation.Model
                     maxdepth)
         {
         }
-        public Empresa(data.Model.Empresa data,
-            int maxdepth = 1)
-            : this(new domain.Model.Empresa(data),
-                  maxdepth)
-        {
-        }
-        public Empresa(entities.Model.Empresa entity, 
-            int maxdepth = 1)
-            : this(new data.Model.Empresa(entity), 
-                  maxdepth)
-        {
-            SetProperties(entity, true);
-        }
+
         public Empresa(int maxdepth = 1)
             : this(new domain.Model.Empresa(),
                   maxdepth)
         {
+        }
+
+        public Empresa(data.Model.Empresa data,
+            int maxdepth = 1)
+            : this(new domain.Model.Empresa(data),
+                maxdepth)
+        {
+        }
+        public Empresa(entities.Model.Empresa entity,
+            int maxdepth = 1)
+            : this(new data.Model.Empresa(entity),
+                maxdepth)
+        {
+            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
