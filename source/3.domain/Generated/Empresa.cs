@@ -30,13 +30,16 @@ namespace domain.Model
                   new domain.Mapper.Empresa())
         {
         }
-        public Empresa(entities.Model.Empresa entity)
-            : this(new data.Model.Empresa(entity))
-        {
-        }
+
         public Empresa()
             : this(new data.Model.Empresa())
         {
+        }
+
+        public Empresa(entities.Model.Empresa entity)
+            : this(new data.Model.Empresa(entity))
+        {
+            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }

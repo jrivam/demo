@@ -6,17 +6,9 @@ namespace data.Model
 {
     public partial class Sucursal
     {
-        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
-
-        public Sucursal()
-            : this(_defaultappconnectionstringname)
-        {
-
-        }
         public Sucursal(entities.Model.Sucursal entity)
-            : this(_defaultappconnectionstringname, entity)
+            : this("test.connectionstring.name", entity)
         {
-
         }
 
         public override void InitDbCommands()
@@ -35,21 +27,6 @@ namespace data.Model
 
             return _empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_query?.Empresa()).list;
         }
-        protected data.Model.Empresas _empresas;
-        public virtual data.Model.Empresas Empresas
-        {
-            get
-            {
-                return _empresas ?? Empresas_Load();
-            }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-                }
-            }
-        }
     }
 }
 
@@ -57,10 +34,8 @@ namespace data.Query
 {
     public partial class Sucursal
     {
-        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
-
         public Sucursal()
-            : this(_defaultappconnectionstringname)
+            : this("test.connectionstring.name")
         {            
         }
     }

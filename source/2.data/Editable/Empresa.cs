@@ -6,17 +6,9 @@ namespace data.Model
 {
     public partial class Empresa
     {
-        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
-
-        public Empresa()
-            : this(_defaultappconnectionstringname)
-        {
-
-        }
         public Empresa(entities.Model.Empresa entity)
-            : this(_defaultappconnectionstringname, entity)
+            : this("test.connectionstring.name", entity)
         {
-
         }
 
         public override void InitDbCommands()
@@ -33,10 +25,8 @@ namespace data.Query
 {
     public partial class Empresa
     {
-        protected const string _defaultappconnectionstringname = "test.connectionstring.name";
-
         public Empresa()
-            : this(_defaultappconnectionstringname)
+            : this("test.connectionstring.name")
         {
         }
     }

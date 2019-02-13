@@ -36,22 +36,25 @@ namespace presentation.Model
                     maxdepth)
         {
         }
-        public Sucursal(data.Model.Sucursal data,
-            int maxdepth = 1)
-            : this(new domain.Model.Sucursal(data),
-                  maxdepth)
-        {
-        }
-        public Sucursal(entities.Model.Sucursal entity,
-          int maxdepth = 1)
-          : this(new data.Model.Sucursal(entity), 
-                maxdepth)
-        {
-        }
+
         public Sucursal(int maxdepth = 1)
             : this(new domain.Model.Sucursal(),
                   maxdepth)
         {
+        }
+
+        public Sucursal(data.Model.Sucursal data,
+            int maxdepth = 1)
+            : this(new domain.Model.Sucursal(data),
+                maxdepth)
+        {
+        }
+        public Sucursal(entities.Model.Sucursal entity,
+            int maxdepth = 1)
+            : this(new data.Model.Sucursal(entity),
+                maxdepth)
+        {
+            SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
