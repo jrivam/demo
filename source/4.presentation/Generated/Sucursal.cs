@@ -54,7 +54,7 @@ namespace presentation.Model
             : this(new data.Model.Sucursal(entity),
                 maxdepth)
         {
-            SetProperties(entity, true);
+            //SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
@@ -124,15 +124,23 @@ namespace presentation.Model
         public Sucursales(domain.Model.Sucursales domains,
             presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
             : base(domains, "Sucursales",
-                  query, maxdepth, top)
+                query, maxdepth, top)
+        {
+        }
+        public Sucursales(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
+            : base("Sucursales",
+                query, maxdepth, top)
         {
         }
 
-        public Sucursales(presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-            : this(new domain.Model.Sucursales(),
-                  query, maxdepth, top)
+        public Sucursales(domain.Model.Sucursales domains, int maxdepth = 1, int top = 0)
+            : this(domains,
+                new presentation.Query.Sucursal(), maxdepth, top)
         {
-
+        }
+        public Sucursales(int maxdepth = 1, int top = 0)
+            : this(new presentation.Query.Sucursal(), maxdepth, top)
+        {
         }
     }
 }
