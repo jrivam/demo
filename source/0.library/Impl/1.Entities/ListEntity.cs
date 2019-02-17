@@ -29,7 +29,12 @@ namespace library.Impl.Entities
             }
         }
 
+        public ListEntity(List<T> list)
+        {
+            list = List;
+        }
         public ListEntity()
+            : this(new List<T>())
         {
         }
 

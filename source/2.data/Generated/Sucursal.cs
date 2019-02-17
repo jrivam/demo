@@ -57,6 +57,7 @@ namespace data.Model
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]], 
                   entity)
         {
+            //SetProperties(entity, true);
         }
 
         public Sucursal()
@@ -276,10 +277,9 @@ namespace entities.Model
             : base()
         {
         }
-        public Sucursales(List<entities.Model.Sucursal> list)
-            : this()
+        public Sucursales(List<entities.Model.Sucursal> entities)
+            : base(entities)
         {
-            List = list;
         }
     }
 }

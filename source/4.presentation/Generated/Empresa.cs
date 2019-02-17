@@ -53,7 +53,7 @@ namespace presentation.Model
             : this(new data.Model.Empresa(entity),
                 maxdepth)
         {
-            SetProperties(entity, true);
+            //SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
@@ -89,15 +89,19 @@ namespace presentation.Model
                   query, maxdepth, top)
         {
         }
+        public Empresas(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
+            : base("Empresas",
+                  query, maxdepth, top)
+        {
+        }
 
         public Empresas(domain.Model.Empresas domains, int maxdepth = 1, int top = 0)
             : this(domains, 
                   new presentation.Query.Empresa(), maxdepth, top)
         {
         }
-        public Empresas(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
-            : this(new domain.Model.Empresas(),
-                  query, maxdepth, top)
+        public Empresas(int maxdepth = 1, int top = 0)
+            : this(new presentation.Query.Empresa(), maxdepth, top)
         {
         }
     }

@@ -39,7 +39,7 @@ namespace domain.Model
         public Empresa(entities.Model.Empresa entity)
             : this(new data.Model.Empresa(entity))
         {
-            SetProperties(entity, true);
+            //SetProperties(entity, true);
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
@@ -101,12 +101,12 @@ namespace domain.Model
 
     public partial class Empresas : ListDomain<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresas(data.Model.Empresas datas)
-            : base(datas)
+        public Empresas()
+            : base()
         {
         }
-        public Empresas()
-            : this(new data.Model.Empresas())
+        public Empresas(data.Model.Empresas datas)
+            : base(datas)
         {
         }
     }
