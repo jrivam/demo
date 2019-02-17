@@ -65,7 +65,7 @@ namespace presentation.Model
         {
             get
             {
-                return _sucursales ?? (Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales, new Query.Sucursal()));
+                return _sucursales ?? (Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales));
             }
             set
             {
