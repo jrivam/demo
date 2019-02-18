@@ -1,4 +1,5 @@
-﻿using library.Impl.Data.Sql;
+﻿using library.Impl;
+using library.Impl.Data.Sql;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Query;
 using library.Impl.Presentation.Raiser;
@@ -61,11 +62,25 @@ namespace presentation.Model
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
         protected presentation.Model.Sucursales _sucursales;
+        protected virtual presentation.Model.Sucursales Sucursales_Load(domain.Model.Sucursales domains)
+        {
+            Sucursales = new presentation.Model.Sucursales(domains);
+
+            return _sucursales;
+        }
+        public virtual (Result result, presentation.Model.Sucursales presentations) Sucursales_Refresh(int maxdepth = 1, int top = 0, presentation.Query.Empresa query = null)
+        {
+            var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
+
+            Sucursales_Load(refresh.domains);
+
+            return (refresh.result, _sucursales);
+        }
         public virtual presentation.Model.Sucursales Sucursales
         {
             get
             {
-                return _sucursales ?? (Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales));
+                return _sucursales ?? ((Domain?.Sucursales != null) ? Sucursales_Load(Domain?.Sucursales) : Sucursales_Refresh().presentations);
             }
             set
             {

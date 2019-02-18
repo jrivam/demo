@@ -52,7 +52,7 @@ namespace Web.Api.Controllers
                 {
                     if (load.domain != null)
                     {
-                        load.domain.Data.Sucursales_Load();
+                        load.domain.Sucursales_Refresh();
 
                         return Ok(load.domain?.Data?.Entity);
                     }

@@ -14,6 +14,24 @@ namespace library.Impl.Presentation.Table
         where V : ITableLogic<T, U>, new()
         where W : ITableInteractive<T, U, V>
     {
+        public virtual void OnStatusChange(string status)
+        {
+            _status = status;
+            PropertyChanged(this, new PropertyChangedEventArgs("Status"));
+        }
+
+        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+
+            if (Domain.Changed)
+            {
+                OnStatusChange("Editing");
+            }
+        }
+
         private string _status = string.Empty;
         public string Status
         {
@@ -23,16 +41,11 @@ namespace library.Impl.Presentation.Table
             }
             protected set
             {
-                _status = value;
-                OnPropertyChanged("Status");
+                if (_status != value)
+                {
+                    OnStatusChange(value);
+                }
             }
-        }
-
-        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public virtual V Domain { get; protected set; }
