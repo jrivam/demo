@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Interface.Data.Table;
+using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 
@@ -14,6 +15,6 @@ namespace library.Interface.Presentation.Table
         (Result result, W presentation) Load(W presentation, bool usedbcommand = false);
         (Result result, W presentation) LoadQuery(W presentation, int maxdepth = 1);
         (Result result, W presentation) Save(W presentation, bool useinsertdbcommand = false, bool useupdatedbcommand = false);
-        (Result result, W presentation) Erase(W presentation, bool usedbcommand = false);
+        (Result result, W presentation) Erase(W presentation, IQueryLogicMethods<T, U, V> query = null, bool usedbcommand = false);
     }
 }

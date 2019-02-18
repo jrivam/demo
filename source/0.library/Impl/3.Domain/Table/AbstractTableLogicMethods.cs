@@ -1,5 +1,6 @@
 ﻿using library.Impl.Entities;
 using library.Interface.Data.Table;
+using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 
@@ -38,9 +39,9 @@ namespace library.Impl.Domain.Table
 
             return save;
         }
-        public virtual (Result result, V domain) Erase(bool usedbcommand = false)
+        public virtual (Result result, V domain) Erase(IQueryLogicMethods<T, U, V> query = null, bool usedbcommand = false)
         {
-            (Result result, V domain) erasechildren = (EraseChildren(), default(V));
+            (Result result, V domain) erasechildren = (EraseChildren(query), default(V));
 
             if (erasechildren.result.Success)
             {
@@ -59,7 +60,7 @@ namespace library.Impl.Domain.Table
 
             return savechildren;
         }
-        protected virtual Result EraseChildren()
+        protected virtual Result EraseChildren(IQueryLogicMethods<T, U, V> query = null)
         {
             var erasechildren = new Result() { Success = true };
 

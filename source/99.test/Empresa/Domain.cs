@@ -1,6 +1,7 @@
 ﻿using library.Impl;
 using library.Impl.Data.Query;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Sql.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
@@ -65,15 +66,17 @@ namespace test.Empresa
             var mockBuilderQuery = new Moq.Mock<ISqlBuilderQuery>();
             var mockCommandBuilderQuery = new Moq.Mock<ISqlCommandBuilder>();
 
-            var query = new Moq.Mock<domain.Query.Empresa>(new data.Query.Empresa
+            var data = new data.Query.Empresa
                 (
                     new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
-                    (mockDatabaseQuery.mockCreator.Object, 
+                    (mockDatabaseQuery.mockCreator.Object,
                     new entities.Reader.Empresa(),
                     new data.Mapper.Empresa(),
                     mockDatabaseQuery.mockSyntaxSign.Object,
-                    mockCommandBuilderQuery.Object, mockBuilderQuery.Object))
-                 )
+                    mockCommandBuilderQuery.Object, mockBuilderQuery.Object)
+                );
+
+            var query = new Moq.Mock<domain.Query.Empresa>(data)
             { CallBase = true };
             query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal
                 (
@@ -87,9 +90,9 @@ namespace test.Empresa
 
             var erasecommand = Domain_Erase_NonDbCommand();
             //erasecommand.Protected().Setup<Result>("EraseChildren2", ItExpr.IsAny<domain.Query.Sucursal>()).Returns(new Result() { Success = true });
-            erasecommand.SetupGet(x => x.Query).Returns(query.Object);
+            //erasecommand.SetupGet(x => x.Query).Returns(query.Object);
 
-            var domainerase = erasecommand.Object.Erase();
+            var domainerase = erasecommand.Object.Erase(query.Object);
 
             Assert.IsTrue(domainerase.result.Success);
             Assert.IsTrue(domainerase.domain.Deleted);

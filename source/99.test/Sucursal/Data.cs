@@ -3,6 +3,7 @@ using library.Impl.Data.Sql;
 using library.Impl.Data.Table;
 using library.Interface.Data;
 using library.Interface.Data.Sql;
+using library.Interface.Data.Sql.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -91,15 +92,15 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, 
+            return new data.Model.Sucursal(new entities.Model.Sucursal()
+            {
+                Id = Entity.Id
+            },
+            new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object, 
                 new entities.Reader.Sucursal(),
                 new data.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object),
-                new entities.Model.Sucursal()
-                {
-                    Id = Entity.Id
-                });
+                mockCommandBuilder.Object, mockBuilderTable.Object));
         }
         public data.Model.Sucursal Data_Table_Select_NonDbCommand()
         {
@@ -154,18 +155,18 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+            return new data.Model.Sucursal(new entities.Model.Sucursal()
+            {
+                Nombre = Entity.Nombre,
+                Fecha = Entity.Fecha,
+                Activo = Entity.Activo,
+                IdEmpresa = Entity.IdEmpresa
+            },
+            new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
                 new entities.Reader.Sucursal(),
                 new data.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object),
-                new entities.Model.Sucursal()
-                {
-                    Nombre = Entity.Nombre,
-                    Fecha = Entity.Fecha,
-                    Activo = Entity.Activo,
-                    IdEmpresa = Entity.IdEmpresa
-                });
+                mockCommandBuilder.Object, mockBuilderTable.Object));
         }
         public data.Model.Sucursal Data_Table_Insert_NonDbCommand()
         {
@@ -220,19 +221,19 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+            return new data.Model.Sucursal(new entities.Model.Sucursal()
+            {
+                Id = Entity.Id,
+                Nombre = Entity.Nombre,
+                Fecha = Entity.Fecha,
+                Activo = Entity.Activo,
+                IdEmpresa = Entity.IdEmpresa,
+            },
+            new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
                 new entities.Reader.Sucursal(),
                 new data.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object),
-                new entities.Model.Sucursal()
-                {
-                    Id = Entity.Id,
-                    Nombre = Entity.Nombre,
-                    Fecha = Entity.Fecha,
-                    Activo = Entity.Activo,
-                    IdEmpresa = Entity.IdEmpresa,
-                });
+                mockCommandBuilder.Object, mockBuilderTable.Object));
         }
         public data.Query.Sucursal Data_Query_Update()
         {
@@ -303,19 +304,19 @@ namespace test.Sucursal
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
+            return new data.Model.Sucursal(new entities.Model.Sucursal()
+            {
+                Id = Entity.Id,
+                Nombre = Entity.Nombre,
+                Fecha = Entity.Fecha,
+                Activo = Entity.Activo,
+                IdEmpresa = Entity.IdEmpresa
+            },
+            new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(mockDatabase.mockCreator.Object,
                 new entities.Reader.Sucursal(),
                 new data.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object),
-                new entities.Model.Sucursal()
-                {
-                    Id = Entity.Id,
-                    Nombre = Entity.Nombre,
-                    Fecha = Entity.Fecha,
-                    Activo = Entity.Activo,
-                    IdEmpresa = Entity.IdEmpresa
-                });
+                mockCommandBuilder.Object, mockBuilderTable.Object));
         }
         public data.Query.Sucursal Data_Query_Delete()
         {

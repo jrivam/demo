@@ -77,21 +77,20 @@ namespace domain.Model
 
             return savechildren;
         }
-        protected override Result EraseChildren()
+        protected override Result EraseChildren(IQueryLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> query = null)
         {
-            var erasechildren = base.EraseChildren();
+            var erasechildren = base.EraseChildren(query);
 
             if (this.Id != null)
             {
                 if (erasechildren.Success)
                 {
-                    var query = new data.Query.Empresa();
-                    
-                    query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
+                    var _query = (domain.Query.Empresa)query ?? new domain.Query.Empresa();
 
-                    var delete = query?.Delete();
+                    _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
+                    var deletesucursales = _query?.Sucursal().Data.Delete();
 
-                    erasechildren.Append(delete?.result);
+                    erasechildren.Append(deletesucursales?.result);
                 }
             }
 

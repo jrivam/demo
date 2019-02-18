@@ -1,5 +1,6 @@
 ﻿using library.Impl.Entities;
 using library.Interface.Data.Table;
+using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation.Table;
@@ -66,10 +67,10 @@ namespace library.Impl.Presentation.Table
 
             return save;
         }
-        public virtual (Result result, W presentation) Erase(bool usedbcommand = false)
+        public virtual (Result result, W presentation) Erase(IQueryLogicMethods<T, U, V> query = null, bool usedbcommand = false)
         {
             Status = "Deleting";
-            var erase = _interactive.Erase(this as W, usedbcommand);
+            var erase = _interactive.Erase(this as W, query, usedbcommand);
             Status = erase.result.Message;
 
             return erase;
