@@ -25,7 +25,7 @@ namespace library.Impl.Entities.Repository
 
             try
             {
-                var enumeration = new List<T>();
+                var enumeration = default(IList<T>);
                 var iterator = (entities ?? new List<T>()).GetEnumerator();
 
                 command.Connection.Open();
@@ -38,6 +38,7 @@ namespace library.Impl.Entities.Repository
 
                         _reader.Read(entity, reader, new List<string>(), columnseparator, maxdepth, 0);
 
+                        enumeration = enumeration ?? new List<T>();
                         enumeration.Add(entity);
                     }
 
