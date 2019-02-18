@@ -10,6 +10,8 @@ namespace library.Interface.Presentation.Table
         where U : ITableRepository, ITableEntity<T>
         where V : ITableLogic<T, U>
     {
+        string Status { get; }
+
         V Domain { get; }
 
         ITableColumn this[string reference] { get; }

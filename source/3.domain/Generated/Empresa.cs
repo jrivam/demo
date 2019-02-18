@@ -47,11 +47,25 @@ namespace domain.Model
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
         protected domain.Model.Sucursales _sucursales;
+        protected  virtual domain.Model.Sucursales Sucursales_Load(data.Model.Sucursales datas)
+        {
+            Sucursales = new domain.Model.Sucursales(datas);
+
+            return _sucursales;
+        }
+        public virtual (Result result, domain.Model.Sucursales domains) Sucursales_Refresh(int maxdepth = 1, int top = 0, domain.Query.Empresa query = null)
+        {
+            var refresh = Data.Sucursales_Refresh(maxdepth, top, query?.Data);
+
+            Sucursales_Load(refresh.datas);
+
+            return (refresh.result, _sucursales);
+        }
         public virtual domain.Model.Sucursales Sucursales
         {
             get
             {
-                return _sucursales ?? (Sucursales = new domain.Model.Sucursales(Data?.Sucursales));
+                return _sucursales ?? ((Data?.Sucursales != null) ? Sucursales_Load(Data?.Sucursales) : Sucursales_Refresh().domains); 
             }
             set
             {
