@@ -1,5 +1,4 @@
 ﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation.Raiser;
@@ -60,9 +59,9 @@ namespace library.Impl.Presentation.Table
 
             return (save.result, presentation);
         }
-        public virtual (Result result, W presentation) Erase(W presentation, IQueryLogicMethods<T, U, V> query = null, bool usedbcommand = false)
+        public virtual (Result result, W presentation) Erase(W presentation, bool usedbcommand = false)
         {
-            var erase = presentation.Domain.Erase(query, usedbcommand);
+            var erase = presentation.Domain.Erase(usedbcommand);
 
             if (erase.result.Success)
             {

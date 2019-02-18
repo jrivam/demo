@@ -15,6 +15,6 @@ namespace library.Interface.Presentation.Table
         (Result result, W presentation) Load(bool usedbcommand = false);
         (Result result, W presentation) LoadQuery(int maxdepth = 1);
         (Result result, W presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false);
-        (Result result, W presentation) Erase(IQueryLogicMethods<T, U, V> query = null, bool usedbcommand = false);
+        (Result result, W presentation) Erase(bool usedbcommand = false);
     }
 }

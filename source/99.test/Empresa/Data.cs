@@ -98,24 +98,24 @@ namespace test.Empresa
         }
         public data.Model.Empresa Data_Table_Select_NonDbCommand()
         {
-            var dataselect = Data_Table_Select();
+            var data = Data_Table_Select();
 
-            return dataselect;
+            return data;
         }
         public data.Model.Empresa Data_Table_Select_DbCommand()
         {
-            var dataselect = Data_Table_Select();
+            var data = Data_Table_Select();
 
-            dataselect.SelectDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.SelectDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
 
-            return dataselect;
+            return data;
         }
         [TestMethod]
         public void Data_Table_Select_NonDbCommand_Success()
         {
-            var dataselect = Data_Table_Select_NonDbCommand();
+            var data = Data_Table_Select_NonDbCommand();
 
-            var select = dataselect.Select();
+            var select = data.Select();
 
             Assert.IsTrue(select.result.Success);
             Assert.AreEqual(Entity.Id, select.data.Id);
@@ -125,9 +125,9 @@ namespace test.Empresa
         [TestMethod]
         public void Data_Table_Select_DbCommand_Success()
         {
-            var dataselect = Data_Table_Select_DbCommand();
+            var data = Data_Table_Select_DbCommand();
 
-            var select = dataselect.Select();
+            var select = data.Select();
 
             Assert.IsTrue(select.result.Success);
             Assert.AreEqual(Entity.Id, select.data.Id);
@@ -158,24 +158,24 @@ namespace test.Empresa
         }
         public data.Model.Empresa Data_Table_Insert_NonDbCommand()
         {
-            var datainsert = Data_Table_Insert();
+            var data = Data_Table_Insert();
 
-            return datainsert;
+            return data;
         }
         public data.Model.Empresa Data_Table_Insert_DbCommand()
         {
-            var datainsert = Data_Table_Insert();
+            var data = Data_Table_Insert();
 
-            datainsert.InsertDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.InsertDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
 
-            return datainsert;
+            return data;
         }
         [TestMethod]
         public void Data_Table_Insert_NonDbCommand_Success()
         {
-            var datainsert = Data_Table_Insert_NonDbCommand();
+            var data = Data_Table_Insert_NonDbCommand();
 
-            var insert = datainsert.Insert();
+            var insert = data.Insert();
 
             Assert.IsTrue(insert.result.Success);
             Assert.AreEqual(Entity.Id, insert.data.Id);
@@ -185,9 +185,9 @@ namespace test.Empresa
         [TestMethod]
         public void Data_Table_Insert_DbCommand_Success()
         {
-            var datainsert = Data_Table_Insert_DbCommand();
+            var data = Data_Table_Insert_DbCommand();
 
-            var insert = datainsert.Insert();       
+            var insert = data.Insert();       
 
             Assert.IsTrue(insert.result.Success);
             Assert.AreEqual(Entity.Id, insert.data.Id);
@@ -219,24 +219,24 @@ namespace test.Empresa
         }
         public data.Model.Empresa Data_Table_Update_NonDbCommand()
         {
-            var dataupdate = Data_Table_Update();
+            var data = Data_Table_Update();
 
-            return dataupdate;
+            return data;
         }
         public data.Model.Empresa Data_Table_Update_DbCommand()
         {
-            var dataupdate = Data_Table_Update();
+            var data = Data_Table_Update();
 
-            dataupdate.UpdateDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.UpdateDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
 
-            return dataupdate;
+            return data;
         }
         [TestMethod]
         public void Data_Table_Update_NonDbCommand_Success()
         {
-            var dataupdate = Data_Table_Update_NonDbCommand();
+            var data = Data_Table_Update_NonDbCommand();
 
-            var update = dataupdate.Update();
+            var update = data.Update();
 
             Assert.IsTrue(update.result.Success);
             Assert.AreEqual(Entity.Id, update.data.Id);
@@ -246,9 +246,9 @@ namespace test.Empresa
         [TestMethod]
         public void Data_Table_Update_DbCommand_Success()
         {
-            var dataupdate = Data_Table_Update_DbCommand();
+            var data = Data_Table_Update_DbCommand();
 
-            var update = dataupdate.Update();
+            var update = data.Update();
 
             Assert.IsTrue(update.result.Success);
             Assert.AreEqual(Entity.Id, update.data.Id);
@@ -280,33 +280,33 @@ namespace test.Empresa
         }
         public data.Model.Empresa Data_Table_Delete_NonDbCommand()
         {
-            var datatabledelete = Data_Table_Delete();
+            var data = Data_Table_Delete();
 
-            return datatabledelete;
+            return data;
         }
         public data.Model.Empresa Data_Table_Delete_DbCommand()
         {
-            var datadelete = Data_Table_Delete();
+            var data = Data_Table_Delete();
 
-            datadelete.DeleteDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.DeleteDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
 
-            return datadelete;
+            return data;
         }
         [TestMethod]
         public void Data_Table_Delete_NonDbCommand_Success()
         {
-            var datadelete = Data_Table_Delete_NonDbCommand();
+            var data = Data_Table_Delete_NonDbCommand();
 
-            var delete = datadelete.Delete();
+            var delete = data.Delete();
 
             Assert.IsTrue(delete.result.Success);
         }
         [TestMethod]
         public void Data_Table_Delete_DbCommand_Success()
         {
-            var datadelete = Data_Table_Delete_DbCommand();
+            var data = Data_Table_Delete_DbCommand();
 
-            var delete = datadelete.Delete();
+            var delete = data.Delete();
 
             Assert.IsTrue(delete.result.Success);
         }
