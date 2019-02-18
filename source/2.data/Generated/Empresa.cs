@@ -54,6 +54,7 @@ namespace data.Model
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
                 entity)
         {
+            //SetProperties(entity, true);
         }
 
         public Empresa()
@@ -207,10 +208,9 @@ namespace entities.Model
             : base()
         {
         }
-        public Empresas(List<entities.Model.Empresa> list)
-            : this()
+        public Empresas(List<entities.Model.Empresa> entities)
+            : base(entities)
         {
-            List = list;
         }
     }
 }

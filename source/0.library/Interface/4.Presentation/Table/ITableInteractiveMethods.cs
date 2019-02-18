@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Interface.Data.Table;
+using library.Interface.Domain.Query;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 
