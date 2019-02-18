@@ -85,13 +85,9 @@ namespace domain.Model
             {
                 if (erasechildren.Success)
                 {
-                    var query = new data.Query.Empresa();
-                    
-                    query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
+                    var eraseall = Sucursales?.EraseAll();
 
-                    var delete = query?.Delete();
-
-                    erasechildren.Append(delete?.result);
+                    erasechildren.Append(eraseall);
                 }
             }
 
