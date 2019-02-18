@@ -47,7 +47,7 @@ namespace domain.Model
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
         protected domain.Model.Sucursales _sucursales;
-        protected  virtual domain.Model.Sucursales Sucursales_Load(data.Model.Sucursales datas)
+        protected virtual domain.Model.Sucursales Sucursales_Load(data.Model.Sucursales datas)
         {
             Sucursales = new domain.Model.Sucursales(datas);
 

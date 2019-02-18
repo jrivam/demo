@@ -1,8 +1,5 @@
 ﻿using library.Interface.Entities;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
 
 namespace library.Impl.Entities
 {
@@ -19,19 +16,13 @@ namespace library.Impl.Entities
             }
             set
             {
-                value?.ForEach(x => this?.Add((T)Activator.CreateInstance(typeof(T),
-                           BindingFlags.CreateInstance |
-                           BindingFlags.Public |
-                           BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding,
-                           null, new object[] { x },
-                           CultureInfo.CurrentCulture)));
+                value?.ForEach(x => this?.Add(x));
             }
         }
 
         public ListEntity(List<T> list)
         {
-            list = List;
+            List = list;
         }
         public ListEntity()
             : this(new List<T>())
