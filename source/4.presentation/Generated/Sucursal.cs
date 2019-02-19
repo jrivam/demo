@@ -143,6 +143,8 @@ namespace presentation.Model
                     _empresas = value;
 
                     Domain.Empresas = (domain.Model.Empresas)new domain.Model.Empresas().Load(_empresas?.Domains);
+
+                    OnPropertyChanged("Empresas");
                 }
             }
         }
