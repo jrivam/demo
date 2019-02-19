@@ -100,7 +100,7 @@ namespace data.Model
 
                 var load = new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top);
 
-                Sucursales_Load(new entities.Model.Sucursales(load.list?.Entities));
+                Sucursales = (data.Model.Sucursales)load.list;
 
                 return (load.result, _sucursales);
             }
