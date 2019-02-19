@@ -34,10 +34,12 @@ namespace WpfApp.Views
             Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
             Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
 
-            Messenger.Default.Register<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>(this, SucursalEdit, "SucursalEdit");
+            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalEdit, "SucursalEdit");
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
+
+            SucursalesRefresh();
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -72,26 +74,28 @@ namespace WpfApp.Views
         }
         public virtual void SucursalesRefresh(int top = 0)
         {
-            var refresh = ViewModel.Sucursales_Refresh();
+            var refresh = ViewModel.Sucursales_Refresh(top);
 
             ViewModel.Sucursales.CommandRefresh(refresh);
         }
 
-        public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
+        public virtual void SucursalEdit(presentation.Model.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
-            view.ViewModel = message.oldvalue;
+            view.ViewModel = entity;
+
+            var idempresa = entity.IdEmpresa;
 
             view.ShowDialog();
 
-            if (view.ViewModel.Domain.Deleted || message.oldvalue.IdEmpresa != message.newvalue.IdEmpresa)
+            if (view.ViewModel.Domain.Deleted || entity.IdEmpresa != idempresa)
             {
-                ViewModel.Sucursales.Remove(message.oldvalue);
+                ViewModel.Sucursales.Remove(entity);
             }
             else
             {
-                ViewModel.Sucursales.CommandEdit((message.oldvalue, view.ViewModel));
+                ViewModel.Sucursales.CommandEdit((entity, view.ViewModel));
             }
         }
         public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)

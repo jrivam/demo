@@ -29,7 +29,7 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaSave, "EmpresaSave");
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
 
-            Messenger.Default.Register<(presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue)>(this, EmpresaEdit, "EmpresaEdit");
+            Messenger.Default.Register<presentation.Model.Empresa>(this, EmpresaEdit, "EmpresaEdit");
 
             Messenger.Default.Register<presentation.Model.Empresa>(this, EmpresasAdd, "EmpresasAdd");
             Messenger.Default.Register<int>(this, EmpresasRefresh, "EmpresasRefresh");
@@ -61,18 +61,18 @@ namespace WpfApp.Views
             ViewModel.CommandErase(message);
         }
 
-        public virtual void EmpresaEdit((presentation.Model.Empresa oldvalue, presentation.Model.Empresa newvalue) message)
+        public virtual void EmpresaEdit(presentation.Model.Empresa entity)
         {
             var view = new Views.Empresa();
 
-            view.ViewModel = message.oldvalue;
+            view.ViewModel = entity;
 
             view.ShowDialog();
 
             if (view.ViewModel.Domain.Deleted)
-                ViewModel.Remove(message.oldvalue);
+                ViewModel.Remove(entity);
             else
-                ViewModel.CommandEdit((message.oldvalue, view.ViewModel));
+                ViewModel.CommandEdit((entity, view.ViewModel));
         }
 
         public virtual void EmpresasAdd(presentation.Model.Empresa entity)
