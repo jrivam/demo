@@ -36,7 +36,7 @@ namespace library.Impl.Presentation.Table
 
             EditCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(W oldvalue, W newvalue)>((this as W, this as W), $"{Domain.Data.Description.Reference}Edit");
+                Messenger.Default.Send<W>(this as W, $"{Domain.Data.Description.Reference}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
         }
 

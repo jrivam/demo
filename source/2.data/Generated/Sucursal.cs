@@ -5,8 +5,6 @@ using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Sql;
 using library.Impl.Data.Table;
-using library.Impl.Entities;
-using library.Impl.Entities.Reader;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
 using library.Interface.Data.Table;
@@ -15,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
-using System.Data;
 
 namespace data.Model
 {
@@ -109,32 +106,24 @@ namespace data.Model
             }
         }
 
-        public data.Model.Empresa Empresa_Load(data.Query.Sucursal query = null)
-        {
-            if (Entity?.Empresa != null)
-            {
-                Empresa = new data.Model.Empresa(Entity?.Empresa);
-            }
-            else
-            {
-                if (this.IdEmpresa != null)
-                {
-                    var _query = query ?? new data.Query.Sucursal();
-
-                    _query.Empresa().Id = (this.IdEmpresa, WhereOperator.Equals);
-
-                    Empresa = _query?.Empresa()?.SelectSingle().data;
-                }
-            }
-
-            return _empresa;
-        }
         protected data.Model.Empresa _empresa;
         public virtual data.Model.Empresa Empresa
         {
             get
             {
-                return _empresa ?? Empresa_Load();
+                if (_empresa == null)
+                {
+                    if (Entity?.Empresa != null)
+                    {
+                        Empresa = new data.Model.Empresa(Entity?.Empresa);
+                    }
+                    else
+                    {
+                        Empresa_Refresh();
+                    }
+                }
+
+                return _empresa;
             }
             set
             {
@@ -152,7 +141,7 @@ namespace data.Model
         {
             get
             {
-                return _empresas ?? Empresas_Load();
+                return _empresas ?? Empresas_Refresh().datas;
             }
             set
             {
@@ -166,14 +155,13 @@ namespace data.Model
 
     public partial class Sucursales : ListData<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
     {
-        public Sucursales(ListEntity<entities.Model.Sucursal> entities)
-            : base(entities)
+        public Sucursales()
+           : base()
         {
         }
-        public Sucursales()
-            : this(new ListEntity<entities.Model.Sucursal>())
+        public Sucursales(entities.Model.Sucursales entities)
+            : base(entities)
         {
-
         }
     }
 }
@@ -268,78 +256,6 @@ namespace data.Query
         }
     }
 }
-
-namespace entities.Model
-{
-    public partial class Sucursales : ListEntity<entities.Model.Sucursal>
-    {
-        public Sucursales()
-            : base()
-        {
-        }
-        public Sucursales(List<entities.Model.Sucursal> entities)
-            : base(entities)
-        {
-        }
-    }
-}
-
-namespace entities.Reader
-{
-    public partial class Sucursal : BaseReaderEntity<entities.Model.Sucursal>
-    {
-        public Sucursal()
-            : base()
-        {
-        }
-
-        public override entities.Model.Sucursal CreateInstance()
-        {
-            return base.CreateInstance();
-        }
-
-        public override entities.Model.Sucursal Clear(entities.Model.Sucursal entity, int maxdepth = 1, int depth = 0)
-        {
-            entity.Id = null;
-            entity.Nombre = null;
-            entity.Fecha = null;
-            entity.Activo = null;
-            entity.IdEmpresa = null;
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                entity.Empresa = null;
-            }
-
-            return entity;
-        }
-
-        public override entities.Model.Sucursal Read(entities.Model.Sucursal entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
-        {
-            prefixname.Add("Sucursal");
-
-            var prefix = string.Join(columnseparator, prefixname);
-            prefix += (prefix == string.Empty ? prefix : columnseparator);
-
-            entity.Id = reader[$"{prefix}Id"] as int?;
-            entity.Nombre = reader[$"{prefix}Nombre"] as string;
-            entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
-            entity.Activo = reader[$"{prefix}Activo"] as bool?;
-
-            entity.IdEmpresa = reader[$"{prefix}IdEmpresa"] as int?;
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                entity.Empresa = new entities.Reader.Empresa().Read(new entities.Model.Empresa(), reader, new List<string>(prefixname), columnseparator, maxdepth, depth);
-            }
-
-            return entity;
-        }
-    }
-}
-
 
 namespace data.Mapper
 {

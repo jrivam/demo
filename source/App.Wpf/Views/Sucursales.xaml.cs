@@ -30,7 +30,7 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalSave, "SucursalSave");
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
-            Messenger.Default.Register<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>(this, SucursalEdit, "SucursalEdit");
+            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalEdit, "SucursalEdit");
 
             Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
             Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
@@ -62,18 +62,18 @@ namespace WpfApp.Views
             ViewModel.CommandErase(message);
         }
 
-        public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
+        public virtual void SucursalEdit(presentation.Model.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
-            view.ViewModel = message.oldvalue;
+            view.ViewModel = entity;
 
             view.ShowDialog();
 
             if (view.ViewModel.Domain.Deleted)
-                ViewModel.Remove(message.oldvalue);
+                ViewModel.Remove(entity);
             else
-                ViewModel.CommandEdit((message.oldvalue, view.ViewModel));
+                ViewModel.CommandEdit((entity, view.ViewModel));
         }
 
         public virtual void SucursalesAdd(presentation.Model.Sucursal entity)

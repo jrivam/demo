@@ -62,17 +62,11 @@ namespace presentation.Model
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
         protected presentation.Model.Sucursales _sucursales;
-        protected virtual presentation.Model.Sucursales Sucursales_Load(domain.Model.Sucursales domains)
-        {
-            Sucursales = new presentation.Model.Sucursales(domains);
-
-            return _sucursales;
-        }
         public virtual (Result result, presentation.Model.Sucursales presentations) Sucursales_Refresh(int maxdepth = 1, int top = 0, presentation.Query.Empresa query = null)
         {
             var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
 
-            Sucursales_Load(refresh.domains);
+            Sucursales = new presentation.Model.Sucursales(refresh.domains);
 
             return (refresh.result, _sucursales);
         }
@@ -80,7 +74,19 @@ namespace presentation.Model
         {
             get
             {
-                return _sucursales ?? ((Domain?.Sucursales != null) ? Sucursales_Load(Domain?.Sucursales) : Sucursales_Refresh().presentations);
+                if (_sucursales == null)
+                {
+                    if (Domain?.Sucursales != null)
+                    {
+                        Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales);
+                    }
+                    else
+                    {
+                        Sucursales_Refresh();
+                    }
+                }
+
+                return _sucursales;
             }
             set
             {
@@ -88,8 +94,8 @@ namespace presentation.Model
                 {
                     _sucursales = value;
 
-                    Domain.Sucursales = _sucursales != null ? (domain.Model.Sucursales)new domain.Model.Sucursales().Load(_sucursales?.Domains) : null;
-
+                    Domain.Sucursales = (_sucursales != null) ? (domain.Model.Sucursales)new domain.Model.Sucursales().Load(_sucursales?.Domains) : null;
+ 
                     OnPropertyChanged("Sucursales");
                 }
             }
