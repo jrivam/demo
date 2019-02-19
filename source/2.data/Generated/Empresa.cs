@@ -5,16 +5,12 @@ using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
 using library.Impl.Data.Sql;
 using library.Impl.Data.Table;
-using library.Impl.Entities;
-using library.Impl.Entities.Reader;
 using library.Interface.Data.Mapper;
 using library.Interface.Data.Query;
 using library.Interface.Data.Table;
 using library.Interface.Entities.Reader;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
-using System.Data;
 using System.Linq;
 
 namespace data.Model
@@ -88,34 +84,23 @@ namespace data.Model
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
         protected data.Model.Sucursales _sucursales;
-        public virtual data.Model.Sucursales Sucursales_Load(entities.Model.Sucursales entities)
-        {
-            Sucursales = new data.Model.Sucursales(entities);
-
-            return _sucursales;
-        }
-        public virtual (Result result, data.Model.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, data.Query.Empresa query = null)
-        {
-            if (this.Id != null)
-            {
-                var _query = query ?? new data.Query.Empresa();
-
-                _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
-
-                var load = new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top);
-
-                Sucursales = (data.Model.Sucursales)load.list;
-
-                return (load.result, _sucursales);
-            }
-
-            return (new Result() { Success = false }, null);
-        }
         public virtual data.Model.Sucursales Sucursales
         {
             get
             {
-                return _sucursales ?? ((Entity?.Sucursales != null) ? Sucursales_Load(new entities.Model.Sucursales(Entity?.Sucursales?.ToList())) : Sucursales_Refresh().datas);
+                if (_sucursales == null)
+                {
+                    if (Entity?.Sucursales != null)
+                    {
+                        Sucursales = new data.Model.Sucursales(new entities.Model.Sucursales(Entity?.Sucursales?.ToList()));
+                    }
+                    else
+                    {
+                        Sucursales_Refresh();
+                    }
+                }
+
+                return _sucursales;
             }
             set
             {
@@ -131,12 +116,12 @@ namespace data.Model
 
     public partial class Empresas : ListData<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
     {
-        public Empresas(ListEntity<entities.Model.Empresa> entities)
-            : base(entities)
+        public Empresas()
+           : base()
         {
         }
-        public Empresas()
-            : this(new entities.Model.Empresas())
+        public Empresas(entities.Model.Empresas entities)
+            : base(entities)
         {
         }
     }
@@ -199,57 +184,6 @@ namespace data.Query
         public virtual data.Query.Sucursal Sucursal(data.Query.Sucursal query = null)
         {
             return _sucursal = query ?? _sucursal ?? new data.Query.Sucursal();
-        }
-    }
-}
-
-namespace entities.Model
-{
-    public partial class Empresas : ListEntity<entities.Model.Empresa>
-    {
-        public Empresas()
-            : base()
-        {
-        }
-        public Empresas(List<entities.Model.Empresa> entities)
-            : base(entities)
-        {
-        }
-    }
-}
-
-namespace entities.Reader
-{
-    public partial class Empresa : BaseReaderEntity<entities.Model.Empresa>
-    {
-        public Empresa()
-            : base()
-        {
-        }
-
-        public override entities.Model.Empresa Clear(entities.Model.Empresa entity, int maxdepth = 1, int depth = 0)
-        {
-            entity.Id = null;
-            entity.RazonSocial = null;
-            entity.Activo = null;
-
-            entity.Sucursales = null;
-
-            return entity;
-        }
-
-        public override entities.Model.Empresa Read(entities.Model.Empresa entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
-        {
-            prefixname.Add("Empresa");
-
-            var prefix = string.Join(columnseparator, prefixname);
-            prefix += (prefix == string.Empty ? prefix : columnseparator);
-
-            entity.Id = reader[$"{prefix}Id"] as int?;
-            entity.RazonSocial = reader[$"{prefix}RazonSocial"] as string;
-            entity.Activo = reader[$"{prefix}Activo"] as bool?;
-
-            return entity;
         }
     }
 }
