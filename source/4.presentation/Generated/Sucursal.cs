@@ -1,4 +1,5 @@
-﻿using library.Impl.Data.Sql;
+﻿using library.Impl;
+using library.Impl.Data.Sql;
 using library.Impl.Presentation;
 using library.Impl.Presentation.Query;
 using library.Impl.Presentation.Raiser;
@@ -81,11 +82,31 @@ namespace presentation.Model
         }
 
         protected presentation.Model.Empresa _empresa;
+        public virtual (Result result, presentation.Model.Empresa domain) Empresa_Refresh(int maxdepth = 1, presentation.Query.Sucursal query = null)
+        {
+            var refresh = Domain.Empresa_Refresh(maxdepth, query?.Domain);
+
+            Empresa = new presentation.Model.Empresa(refresh.domain);
+
+            return (refresh.result, _empresa);
+        }
         public virtual presentation.Model.Empresa Empresa
         {
             get
             {
-                return _empresa ?? (Empresa = new presentation.Model.Empresa(Domain?.Empresa));
+                if (_empresa == null)
+                {
+                    if (Domain?.Empresa != null)
+                    {
+                        Empresa = new presentation.Model.Empresa(Domain?.Empresa);
+                    }
+                    else
+                    {
+                        Empresa_Refresh();
+                    }
+                }
+
+                return _empresa;
             }
             set
             {
@@ -101,11 +122,19 @@ namespace presentation.Model
         }
 
         protected presentation.Model.Empresas _empresas;
+        public virtual (Result result, presentation.Model.Empresas presentation) Empresas_Refresh(int maxdepth = 1, int top = 0, presentation.Query.Sucursal query = null)
+        {
+            var refresh = Domain.Empresas_Refresh(maxdepth, top, query?.Domain);
+
+            Empresas = new presentation.Model.Empresas(refresh.domains);
+
+            return (refresh.result, _empresas);
+        }
         public virtual presentation.Model.Empresas Empresas
         {
             get
             {
-                return _empresas ?? (Empresas = new presentation.Model.Empresas(Domain?.Empresas));
+                return _empresas ?? Empresas_Refresh().presentation;
             }
             set
             {

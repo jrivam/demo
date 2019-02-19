@@ -1,4 +1,5 @@
-﻿using library.Impl.Data.Sql;
+﻿using library.Impl;
+using library.Impl.Data.Sql;
 using library.Impl.Domain;
 using library.Impl.Domain.Mapper;
 using library.Impl.Domain.Query;
@@ -66,11 +67,31 @@ namespace domain.Model
         }
 
         protected domain.Model.Empresa _empresa;
+        public virtual (Result result, domain.Model.Empresa domain) Empresa_Refresh(int maxdepth = 1, domain.Query.Sucursal query = null)
+        {
+            var refresh = Data.Empresa_Refresh(maxdepth, query?.Data);
+
+            Empresa = new domain.Model.Empresa(refresh.data);
+
+            return (refresh.result, _empresa);
+        }
         public virtual domain.Model.Empresa Empresa
         {
             get
             {
-                return _empresa ?? (Empresa = new domain.Model.Empresa(Data?.Empresa));
+                if (_empresa == null)
+                {
+                    if (Data?.Empresa != null)
+                    {
+                        Empresa = new domain.Model.Empresa(Data?.Empresa);
+                    }
+                    else
+                    {
+                        Empresa_Refresh();
+                    }
+                }
+
+                return _empresa;
             }
             set
             {
@@ -84,11 +105,19 @@ namespace domain.Model
         }
 
         protected domain.Model.Empresas _empresas;
+        public virtual (Result result, domain.Model.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, domain.Query.Sucursal query = null)
+        {
+            var refresh = Data.Empresas_Refresh(maxdepth, top, query?.Data);
+
+            Empresas = new domain.Model.Empresas(refresh.datas);
+
+            return (refresh.result, _empresas);
+        }
         public virtual domain.Model.Empresas Empresas
         {
             get
             {
-                return _empresas ?? (Empresas = new domain.Model.Empresas(Data?.Empresas));
+                return _empresas ?? Empresas_Refresh().domains;
             }
             set
             {

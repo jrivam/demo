@@ -106,32 +106,24 @@ namespace data.Model
             }
         }
 
-        public data.Model.Empresa Empresa_Load(data.Query.Sucursal query = null)
-        {
-            if (Entity?.Empresa != null)
-            {
-                Empresa = new data.Model.Empresa(Entity?.Empresa);
-            }
-            else
-            {
-                if (this.IdEmpresa != null)
-                {
-                    var _query = query ?? new data.Query.Sucursal();
-
-                    _query.Empresa().Id = (this.IdEmpresa, WhereOperator.Equals);
-
-                    Empresa = _query?.Empresa()?.SelectSingle().data;
-                }
-            }
-
-            return _empresa;
-        }
         protected data.Model.Empresa _empresa;
         public virtual data.Model.Empresa Empresa
         {
             get
             {
-                return _empresa ?? Empresa_Load();
+                if (_empresa == null)
+                {
+                    if (Entity?.Empresa != null)
+                    {
+                        Empresa = new data.Model.Empresa(Entity?.Empresa);
+                    }
+                    else
+                    {
+                        Empresa_Refresh();
+                    }
+                }
+
+                return _empresa;
             }
             set
             {
@@ -149,7 +141,7 @@ namespace data.Model
         {
             get
             {
-                return _empresas ?? Empresas_Load();
+                return _empresas ?? Empresas_Refresh().datas;
             }
             set
             {

@@ -89,7 +89,7 @@ namespace WpfApp.Views
 
             view.ShowDialog();
 
-            if (view.ViewModel.Domain.Deleted || entity.IdEmpresa != idempresa)
+            if (view.ViewModel.Domain.Deleted || (!view.ViewModel.Domain.Changed && entity.IdEmpresa != idempresa))
             {
                 ViewModel.Sucursales.Remove(entity);
             }

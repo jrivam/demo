@@ -84,34 +84,23 @@ namespace data.Model
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
         protected data.Model.Sucursales _sucursales;
-        protected virtual data.Model.Sucursales Sucursales_Load(entities.Model.Sucursales entities)
-        {
-            Sucursales = new data.Model.Sucursales(entities);
-
-            return _sucursales;
-        }
-        public virtual (Result result, data.Model.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, data.Query.Empresa query = null)
-        {
-            if (this.Id != null)
-            {
-                var _query = query ?? new data.Query.Empresa();
-
-                _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
-
-                var load = new data.Model.Sucursales().Load(_query?.Sucursal(), maxdepth, top);
-
-                Sucursales = (data.Model.Sucursales)load.list;
-
-                return (load.result, _sucursales);
-            }
-
-            return (new Result() { Success = false }, null);
-        }
         public virtual data.Model.Sucursales Sucursales
         {
             get
             {
-                return _sucursales ?? ((Entity?.Sucursales != null) ? Sucursales_Load(new entities.Model.Sucursales(Entity?.Sucursales?.ToList())) : Sucursales_Refresh().datas);
+                if (_sucursales == null)
+                {
+                    if (Entity?.Sucursales != null)
+                    {
+                        Sucursales = new data.Model.Sucursales(new entities.Model.Sucursales(Entity?.Sucursales?.ToList()));
+                    }
+                    else
+                    {
+                        Sucursales_Refresh();
+                    }
+                }
+
+                return _sucursales;
             }
             set
             {
