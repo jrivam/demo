@@ -31,7 +31,9 @@ namespace WpfApp.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalAdd, "SucursalAdd");
+            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
+            Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
+
             Messenger.Default.Register<(presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue)>(this, SucursalEdit, "SucursalEdit");
             Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
@@ -39,7 +41,9 @@ namespace WpfApp.Views
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Unregister(this, "SucursalAdd");
+            Messenger.Default.Unregister(this, "SucursalesAdd");
+            Messenger.Default.Unregister(this, "SucursalesRefresh");
+
             Messenger.Default.Unregister(this, "SucursalEdit");
             Messenger.Default.Unregister(this, "SucursalErase");
 
@@ -53,7 +57,7 @@ namespace WpfApp.Views
             this.Close();
         }
 
-        public virtual void SucursalAdd(presentation.Model.Sucursal entity)
+        public virtual void SucursalesAdd(presentation.Model.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -66,6 +70,13 @@ namespace WpfApp.Views
             if (view.ViewModel.IdEmpresa == ViewModel.Id)
                 ViewModel.Sucursales.CommandAdd((presentation.Model.Sucursal)view.ViewModel);
         }
+        public virtual void SucursalesRefresh(int top = 0)
+        {
+            var refresh = ViewModel.Sucursales_Refresh();
+
+            ViewModel.Sucursales.CommandRefresh(refresh);
+        }
+
         public virtual void SucursalEdit((presentation.Model.Sucursal oldvalue, presentation.Model.Sucursal newvalue) message)
         {
             var view = new Views.Sucursal();

@@ -113,7 +113,7 @@ namespace library.Impl.Data.Table
         {
             var executequery = ExecuteQuery(command, _syntaxsign.AliasSeparatorColumn, 1, data.Entity != null ? new List<T> { data.Entity } : default(List<T>));
 
-            if (executequery.result.Success && executequery.entities != null)
+            if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
                 //data = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
 

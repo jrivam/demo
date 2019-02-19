@@ -104,9 +104,10 @@ namespace library.Impl.Presentation
 
         public virtual (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Load(Q query, int maxdepth = 1, int top = 0)
         {
-            Status = "Loading";
+            Status = "Loading...";
             var list = query.List(maxdepth, top);
-            Status = list.result.Message;
+
+            Status = (list.result.Success) ? "Loaded." : list.result.Message;
 
             return (list.result, Load(list.presentations));
         }
@@ -135,6 +136,8 @@ namespace library.Impl.Presentation
                 if (message.operation.presentation?.Domain.Data.Entity.Id != null)
                     this.Remove(message.operation.presentation);
 
+            TotalRecords();
+
             return message.operation;
         }
 
@@ -152,20 +155,17 @@ namespace library.Impl.Presentation
         {
             if (presentation.Domain.Data.Entity?.Id != null)
                 this.Add(presentation);
+
+            TotalRecords();
         }
         public virtual void CommandRefresh((Result result, ListPresentation<S, R, Q, T, U, V, W> presentations) operation)
         {
-            if (operation.result.Success)
-            {
-                if (operation.presentations.Count == 0)
-                {
-                    Status = "No records found.";
-                }
-                else
-                {
-                    Status = $"Total records: {operation.presentations.Count}";
-                }
-            }
+            TotalRecords();
+        }
+
+        protected virtual void TotalRecords()
+        {
+            Status = (this.Count == 0) ? "No records found." : $"Total records: {this.Count}";
         }
     }
 }
