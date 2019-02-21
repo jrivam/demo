@@ -37,7 +37,6 @@ namespace data.Model
 
             return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, $"Sucursales_Refresh: Id in {this.Description.Name} cannot be null") } }, null);
         }
-
     }
 }
 
