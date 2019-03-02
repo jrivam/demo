@@ -21,12 +21,6 @@ namespace library.Interface.Data.Query
             SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
             int maxdepth = 1, 
             U data = default(U));
-        
-        (Result result, U data) 
-            SelectSingle
-            (IDbCommand command, 
-            int maxdepth = 1, 
-            U data = default(U));
 
         (Result result, IEnumerable<U> datas) 
             SelectMultiple
@@ -40,12 +34,6 @@ namespace library.Interface.Data.Query
             int maxdepth = 1,
             IListData<T, U> datas = null);
 
-        (Result result, IEnumerable<U> datas) 
-            SelectMultiple
-            (IDbCommand command, 
-            int maxdepth = 1,
-            IListData<T, U> datas = null);
-
         (Result result, int rows)
             Update
             (IQueryRepository query,
@@ -56,10 +44,6 @@ namespace library.Interface.Data.Query
             Update
             (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null);
 
-        (Result result, int rows) 
-            Update
-            (IDbCommand command);
-
         (Result result, int rows)
             Delete
             (IQueryRepository query,
@@ -67,9 +51,5 @@ namespace library.Interface.Data.Query
         
         (Result result, int rows) 
             Delete(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null);
-
-        (Result result, int rows) 
-            Delete
-            (IDbCommand command);
     }
 }

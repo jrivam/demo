@@ -37,11 +37,6 @@ namespace presentation.Model
         {
         }
 
-        public Empresa(int maxdepth = 1)
-            : this(new domain.Model.Empresa(),
-                  maxdepth)
-        {
-        }
 
         public Empresa(data.Model.Empresa data,
             int maxdepth = 1)
@@ -54,7 +49,12 @@ namespace presentation.Model
             : this(new data.Model.Empresa(entity),
                 maxdepth)
         {
-            //SetProperties(entity, true);
+        }
+
+        public Empresa(int maxdepth = 1)
+            : this(new entities.Model.Empresa(),
+                  maxdepth)
+        {
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
@@ -145,6 +145,7 @@ namespace presentation.Query
                   new InteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
         {
         }
+
         public Empresa(domain.Query.Empresa domain)
             : this(domain,
                   new presentation.Raiser.Empresa())

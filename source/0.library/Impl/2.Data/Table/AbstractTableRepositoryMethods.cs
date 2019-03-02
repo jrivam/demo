@@ -18,12 +18,6 @@ namespace library.Impl.Data.Table
 
             InitDbCommands();
         }
-        //public AbstractTableRepositoryMethods(T entity, IRepositoryTable<T, U> repository,
-        //    string name, string reference)
-        //    : this(entity, repository, name, reference)
-        //{
-        //    SetProperties(entity);
-        //}
 
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {

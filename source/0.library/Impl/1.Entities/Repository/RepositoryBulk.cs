@@ -21,6 +21,7 @@ namespace library.Impl.Entities.Repository
             : this(new SqlCreator(appconnectionstringsettings))
         {
         }
+
         public RepositoryBulk(string appconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {

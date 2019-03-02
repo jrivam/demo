@@ -8,6 +8,7 @@ using library.Interface.Data.Sql.Builder;
 using library.Interface.Data.Table;
 using library.Interface.Entities;
 using library.Interface.Entities.Reader;
+using library.Interface.Entities.Repository;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,52 +17,58 @@ using System.Linq;
 
 namespace library.Impl.Data.Table
 {
-    public class RepositoryTable<T, U> : Repository<T>, IRepositoryTable<T, U> 
+    public class RepositoryTable<T, U> : IRepositoryTable<T, U> 
         where T : IEntity
         where U : ITableRepository, ITableEntity<T>
     {
+        protected readonly ISqlBuilderTable _builder;
+
+        protected readonly IRepository<T> _repository;
+        protected readonly IRepositoryBulk _repositorybulk;
+
         protected readonly IMapperRepository<T, U> _mapper;
         protected readonly ISqlSyntaxSign _syntaxsign;
         protected readonly ISqlCommandBuilder _commandbuilder;
-        protected readonly ISqlBuilderTable _builder;
 
-        public RepositoryTable(ISqlCreator creator, IReaderEntity<T> reader,
-            IMapperRepository<T, U> mapper,
-            ISqlSyntaxSign syntaxsign,
-            ISqlCommandBuilder commandbuilder, ISqlBuilderTable builder)
-            : base(creator, reader)
+        public RepositoryTable(ISqlBuilderTable builder,
+            IRepository<T> repository, IRepositoryBulk repositorybulk,
+            IMapperRepository<T, U> mapper, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
         {
+            _builder = builder;
+
+            _repository = repository;
+            _repositorybulk = repositorybulk;
+
             _mapper = mapper;
             _syntaxsign = syntaxsign;
-            _builder = builder;
             _commandbuilder = commandbuilder;
         }
 
-        public RepositoryTable(ISqlCreator creator, IReaderEntity<T> reader,
-            IMapperRepository<T, U> mapper, 
-            ISqlSyntaxSign syntaxsign,
-            ISqlCommandBuilder commandbuilder)
-            : this(creator, reader,
-                  mapper,
-                  syntaxsign,
-                  commandbuilder,
-                  new SqlBuilderTable(syntaxsign))
+        public RepositoryTable(IRepository<T> repository, IRepositoryBulk repositorybulk,
+            IMapperRepository<T, U> mapper, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
+            : this(new SqlBuilderTable(syntaxsign),
+                  repository, repositorybulk,
+                  mapper, syntaxsign, commandbuilder)
         {
         }
-        public RepositoryTable(IReaderEntity<T> reader, 
-            IMapperRepository<T, U> mapper, 
+        public RepositoryTable(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
+            ISqlCreator creator, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
+            : this(new Repository<T>(creator, reader), new RepositoryBulk(creator),
+                  mapper, syntaxsign, commandbuilder)
+        {
+        }
+        public RepositoryTable(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
             ConnectionStringSettings connectionstringsettings)
-            : this(new SqlCreator(connectionstringsettings), reader,
-                  mapper,
+            : this(reader, mapper,
+                  new SqlCreator(connectionstringsettings),
                   SqlSyntaxSignFactory.Create(connectionstringsettings),
                   SqlCommandBuilderFactory.Create(connectionstringsettings))
         {
         }
-        public RepositoryTable(IReaderEntity<T> reader, 
-            IMapperRepository<T, U> mapper, 
+
+        public RepositoryTable(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
             string appconnectionstringname)
-            : this(reader,
-                  mapper, 
+            : this(reader, mapper,
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
@@ -101,22 +108,14 @@ namespace library.Impl.Data.Table
 
             foreach (var p in _builder.GetParameters(tablecolumns.Where(c => c.column.IsPrimaryKey).ToList(), dbcommand.parameters)) ;
 
-            var command = _creator.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
-
-            return Select(data, command);
+            return Select(data, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            return Select(data, _creator.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, U data) Select(U data, IDbCommand command)
-        {
-            var executequery = ExecuteQuery(command, _syntaxsign.AliasSeparatorColumn, 1, data.Entity != null ? new List<T> { data.Entity } : default(List<T>));
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, 1, data.Entity != null ? new List<T> { data.Entity } : default(List<T>));
 
             if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
-                //data = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
-
                 _mapper.Clear(data, 1, 0);
                 _mapper.Map(data, 1, 0);
 
@@ -124,6 +123,7 @@ namespace library.Impl.Data.Table
             }
 
             return (executequery.result, default(U));
+
         }
 
         public virtual (Result result, U data) Insert(U data, bool usedbcommand = false)
@@ -162,17 +162,11 @@ namespace library.Impl.Data.Table
 
             foreach (var p in _builder.GetParameters(tablecolumns.Where(c => !c.column.IsIdentity).ToList(), dbcommand.parameters)) ;
 
-            var command = _creator.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
-
-            return Insert(data, command);
+            return Insert(data, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            return Insert(data, _creator.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, U data) Insert(U data, IDbCommand command)
-        {
-            var executescalar = ExecuteScalar(command);
+            var executescalar = _repositorybulk.ExecuteScalar(commandtext, commandtype, parameters);
 
             if (executescalar.result.Success)
             {
@@ -218,17 +212,11 @@ namespace library.Impl.Data.Table
 
             foreach (var p in _builder.GetParameters(tablecolumns.ToList(), dbcommand.parameters)) ;
 
-            var command = _creator.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
-
-            return Update(data, command);
+            return Update(data, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            return Update(data, _creator.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, U data) Update(U data, IDbCommand command)
-        {
-            var executenonquery = ExecuteNonQuery(command);
+            var executenonquery = _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
 
             if (executenonquery.result.Success)
             {
@@ -269,17 +257,11 @@ namespace library.Impl.Data.Table
 
             foreach (var p in _builder.GetParameters(tablecolumns.Where(c => c.column.IsPrimaryKey).ToList(), dbcommand.parameters)) ;
 
-            var command = _creator.GetCommand(dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
-
-            return Delete(data, command);
+            return Delete(data, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            return Delete(data, _creator.GetCommand(commandtext, commandtype, parameters));
-        }
-        public virtual (Result result, U data) Delete(U data, IDbCommand command)
-        {
-            var executenonquery = ExecuteNonQuery(command);
+            var executenonquery = _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
 
             if (executenonquery.result.Success)
             {

@@ -8,7 +8,7 @@ namespace data.Model
     public partial class Sucursal
     {
         public Sucursal(entities.Model.Sucursal entity)
-            : this("test.connectionstring.name", entity)
+            : this(entity, "test.connectionstring.name")
         {
         }
 
