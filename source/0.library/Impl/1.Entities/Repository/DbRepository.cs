@@ -1,5 +1,4 @@
-﻿using library.Interface.Data.Sql;
-using library.Interface.Entities;
+﻿using library.Interface.Entities;
 using library.Interface.Entities.Reader;
 using library.Interface.Entities.Repository;
 using System;
@@ -8,13 +7,12 @@ using System.Data;
 
 namespace library.Impl.Entities.Repository
 {
-    public class DbRepository<T> : RepositoryBulk, IDbRepository<T>
+    public class DbRepository<T> : IDbRepository<T>
         where T : IEntity
     {
         protected readonly IReaderEntity<T> _reader;
 
-        public DbRepository(ISqlCreator creator, IReaderEntity<T> reader)
-            : base(creator)
+        public DbRepository(IReaderEntity<T> reader)
         {
             _reader = reader;
         }

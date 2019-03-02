@@ -32,29 +32,19 @@ namespace data.Model
             Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
-        public Sucursal(ConnectionStringSettings connectionstringsettings,
-            entities.Model.Sucursal entity,
-            IReaderEntity<entities.Model.Sucursal> reader,
-            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
+        public Sucursal(entities.Model.Sucursal entity,
+            ConnectionStringSettings connectionstringsettings,
+            IReaderEntity<entities.Model.Sucursal> reader, IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
             : this(entity,
                   new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
-        public Sucursal(ConnectionStringSettings connectionstringsettings,
-            entities.Model.Sucursal entity)
-            : this(connectionstringsettings,
-                  entity,
-                  new entities.Reader.Sucursal(),
-                  new data.Mapper.Sucursal())
+        public Sucursal(entities.Model.Sucursal entity,
+            string appsettingsconnectionstringname)
+            : this(entity, 
+                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],                  
+                  new entities.Reader.Sucursal(), new data.Mapper.Sucursal())
         {
-        }
-
-        public Sucursal(string appsettingsconnectionstringname, 
-            entities.Model.Sucursal entity)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]], 
-                  entity)
-        {
-            //SetProperties(entity, true);
         }
 
         public Sucursal()
@@ -195,20 +185,14 @@ namespace data.Query
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<entities.Model.Sucursal> reader,
-            IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
+            IReaderEntity<entities.Model.Sucursal> reader, IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
             : this(new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
-        {
-        }
-        public Sucursal(ConnectionStringSettings connectionstringsettings)
-            : this(connectionstringsettings,
-                  new entities.Reader.Sucursal(),
-                  new data.Mapper.Sucursal())
         {
         }
 
         public Sucursal(string appsettingsconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  new entities.Reader.Sucursal(), new data.Mapper.Sucursal())
         {
         }
 

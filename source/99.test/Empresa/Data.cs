@@ -83,18 +83,18 @@ namespace test.Empresa
             mockDatabase.mockCommand.Setup(x => x.ExecuteReader())
                 .Returns(mockDataReader.Object);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new data.Model.Empresa(new entities.Model.Empresa()
             {
                 Id = Entity.Id
             },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(
                 new entities.Reader.Empresa(),
                 new data.Mapper.Empresa(),
+                mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object));
+                mockCommandBuilder.Object));
         }
         public data.Model.Empresa Data_Table_Select_NonDbCommand()
         {
@@ -150,11 +150,12 @@ namespace test.Empresa
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(
                 new entities.Reader.Empresa(),
                 new data.Mapper.Empresa(),
+                mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object));
+                mockCommandBuilder.Object));
         }
         public data.Model.Empresa Data_Table_Insert_NonDbCommand()
         {
@@ -202,7 +203,6 @@ namespace test.Empresa
             mockDatabase.mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new data.Model.Empresa(new entities.Model.Empresa()
@@ -211,11 +211,12 @@ namespace test.Empresa
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(
                 new entities.Reader.Empresa(),
                 new data.Mapper.Empresa(),
+                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object));
+                mockCommandBuilder.Object));
         }
         public data.Model.Empresa Data_Table_Update_NonDbCommand()
         {
@@ -263,7 +264,6 @@ namespace test.Empresa
             mockDatabase.mockCommand.Setup(x => x.ExecuteNonQuery())
                 .Returns(1);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new data.Model.Empresa(new entities.Model.Empresa()
@@ -272,11 +272,12 @@ namespace test.Empresa
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },
-            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(mockDatabase.mockCreator.Object,
+            new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(
                 new entities.Reader.Empresa(),
                 new data.Mapper.Empresa(),
+                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object, mockBuilderTable.Object));
+                mockCommandBuilder.Object));
         }
         public data.Model.Empresa Data_Table_Delete_NonDbCommand()
         {

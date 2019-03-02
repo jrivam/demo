@@ -38,12 +38,6 @@ namespace presentation.Model
         {
         }
 
-        public Sucursal(int maxdepth = 1)
-            : this(new domain.Model.Sucursal(),
-                  maxdepth)
-        {
-        }
-
         public Sucursal(data.Model.Sucursal data,
             int maxdepth = 1)
             : this(new domain.Model.Sucursal(data),
@@ -55,8 +49,14 @@ namespace presentation.Model
             : this(new data.Model.Sucursal(entity),
                 maxdepth)
         {
-            //SetProperties(entity, true);
         }
+
+        public Sucursal(int maxdepth = 1)
+            : this(new entities.Model.Sucursal(),
+                maxdepth)
+        {
+        }
+
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
@@ -193,6 +193,7 @@ namespace presentation.Query
                   new InteractiveQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>(mapper))
         {
         }
+
         public Sucursal(domain.Query.Sucursal domain)
             : this(domain,
                   new presentation.Raiser.Sucursal())

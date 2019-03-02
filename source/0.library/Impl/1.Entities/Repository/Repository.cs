@@ -12,16 +12,19 @@ namespace library.Impl.Entities.Repository
     public class Repository<T> : DbRepository<T>, IRepository<T> 
         where T : IEntity
     {
+        protected readonly ISqlCreator _creator;
 
         public Repository(ISqlCreator creator, IReaderEntity<T> reader)
-            : base(creator, reader)
+            : base(reader)
         {
+            _creator = creator;
         }
 
         public Repository(IReaderEntity<T> reader, ConnectionStringSettings connectionstringsettings)
             : this(new SqlCreator(connectionstringsettings), reader)
         {
         }
+
         public Repository(IReaderEntity<T> reader, string appconnectionstringname)
             : this(reader, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {

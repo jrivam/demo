@@ -28,29 +28,19 @@ namespace data.Model
             Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
-        public Empresa(ConnectionStringSettings connectionstringsettings,
-            entities.Model.Empresa entity,
-            IReaderEntity<entities.Model.Empresa> reader,
-            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
+        public Empresa(entities.Model.Empresa entity, 
+            ConnectionStringSettings connectionstringsettings, 
+            IReaderEntity<entities.Model.Empresa> reader, IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
             : this(entity,
                   new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
-        public Empresa(ConnectionStringSettings connectionstringsettings, 
-            entities.Model.Empresa entity)
-            : this(connectionstringsettings,
-                  entity,
-                  new entities.Reader.Empresa(),
-                  new data.Mapper.Empresa())
+        public Empresa(entities.Model.Empresa entity,
+            string appsettingsconnectionstringname)
+            : this(entity, 
+                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  new entities.Reader.Empresa(), new data.Mapper.Empresa())
         {
-        }
-
-        public Empresa(string appsettingsconnectionstringname,
-            entities.Model.Empresa entity)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                entity)
-        {
-            //SetProperties(entity, true);
         }
 
         public Empresa()
@@ -141,20 +131,14 @@ namespace data.Query
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<entities.Model.Empresa> reader,
-            IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
+            IReaderEntity<entities.Model.Empresa> reader, IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
             : this(new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
-        {
-        }
-        public Empresa(ConnectionStringSettings connectionstringsettings)
-            : this(connectionstringsettings,
-                  new entities.Reader.Empresa(),
-                  new data.Mapper.Empresa())
         {
         }
 
         public Empresa(string appsettingsconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  new entities.Reader.Empresa(), new data.Mapper.Empresa())
         {
         }
 

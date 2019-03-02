@@ -8,7 +8,7 @@ namespace data.Model
     public partial class Empresa
     {
         public Empresa(entities.Model.Empresa entity)
-            : this("test.connectionstring.name", entity)
+            : this(entity, "test.connectionstring.name")
         {
         }
 

@@ -32,15 +32,13 @@ namespace domain.Model
         {
         }
 
-        public Sucursal()
-            : this(new data.Model.Sucursal())
-        {
-        }
-
         public Sucursal(entities.Model.Sucursal entity)
             : this(new data.Model.Sucursal(entity))
         {
-            //SetProperties(entity, true);
+        }
+        public Sucursal()
+            : this(new entities.Model.Sucursal())
+        {
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
@@ -161,6 +159,7 @@ namespace domain.Query
                   new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
         {
         }
+
         public Sucursal(data.Query.Sucursal data)
             : this(data, new domain.Mapper.Sucursal())
         {

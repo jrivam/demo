@@ -31,15 +31,13 @@ namespace domain.Model
         {
         }
 
-        public Empresa()
-            : this(new data.Model.Empresa())
-        {
-        }
-
         public Empresa(entities.Model.Empresa entity)
             : this(new data.Model.Empresa(entity))
         {
-            //SetProperties(entity, true);
+        }
+        public Empresa()
+            : this(new entities.Model.Empresa())
+        {
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
@@ -145,6 +143,7 @@ namespace domain.Query
                   new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
         {
         }
+
         public Empresa(data.Query.Empresa data)
             : this(data, new domain.Mapper.Empresa())
         {
