@@ -33,8 +33,12 @@ namespace library.Impl.Data.Mapper
         {
             return data;
         }
-
         public virtual U Map(U data, int maxdepth = 1, int depth = 0)
+        {
+            return data;
+        }
+
+        public virtual U Extra(U data, int maxdepth = 1, int depth = 0)
         {
             return data;
         }

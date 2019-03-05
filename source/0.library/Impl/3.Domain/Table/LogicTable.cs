@@ -28,6 +28,9 @@ namespace library.Impl.Domain.Table
                 if (select.result.Success && select.data != null)
                 {
                     _mapper.Clear(domain, 1, 0);
+                    _mapper.Load(domain, 1, 0);
+
+                    _mapper.Extra(domain, 1, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;
@@ -38,7 +41,7 @@ namespace library.Impl.Domain.Table
                 return (select.result, default(V));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, $"Load: Id in {domain.Data.Description.Name} cannot be null") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Load", $"Id in {domain.Data.Description.Name} cannot be null") } }, domain);
         }
         public virtual (Result result, V domain) LoadQuery(V domain, int maxdepth = 1)
         {
@@ -49,6 +52,9 @@ namespace library.Impl.Domain.Table
                 if (selectquery.result.Success && selectquery.data != null)
                 {
                     _mapper.Clear(domain, maxdepth, 0);
+                    _mapper.Load(domain, maxdepth, 0);
+
+                    _mapper.Extra(domain, maxdepth, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;
@@ -59,24 +65,33 @@ namespace library.Impl.Domain.Table
                 return (selectquery.result, default(V));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, $"LoadQuery: Id in {domain.Data.Description.Name} cannot be null") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "LoadQuery", $"Id in {domain.Data.Description.Name} cannot be null") } }, domain);
         }
 
         public virtual (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             if (domain.Changed)
             {
-                var updateinsert = (domain.Data.Entity.Id != null ? domain.Data.Update(useupdatedbcommand) : domain.Data.Insert(useinsertdbcommand));
+                var checkisunique = domain.Data.CheckIsUnique();
 
-                if (updateinsert.result.Success)
+                if (checkisunique.isunique)
                 {
-                    domain.Changed = false;
-                }
+                    var updateinsert = (domain.Data.Entity.Id != null ? domain.Data.Update(useupdatedbcommand) : domain.Data.Insert(useinsertdbcommand));
 
-                return (updateinsert.result, domain);
+                    if (updateinsert.result.Success)
+                    {
+                        domain.Changed = false;
+                    }
+
+                    return (updateinsert.result, domain);
+                }
+                else
+                {
+                    return (checkisunique.result, domain); 
+                }
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, $"Save: no changes to persist in {domain.Data.Description.Name} with Id {domain.Data.Entity.Id}") } }, domain);
+            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Save", $"No changes to persist in {domain.Data.Description.Name} with Id {domain.Data.Entity.Id}") } }, domain);
         }
         public virtual (Result result, V domain) Erase(V domain, bool usedbcommand = false)
         {
@@ -94,10 +109,10 @@ namespace library.Impl.Domain.Table
                     return (delete.result, domain);
                 }
 
-                return (new Result() { Success = true, Messages = new List<(ResultCategory, string)>() { (ResultCategory.Information, $"Erase: {domain.Data.Description.Name} with Id {domain.Data.Entity.Id} already deleted") } }, domain);
+                return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Erase", $"{domain.Data.Description.Name} with Id {domain.Data.Entity.Id} already deleted") } }, domain);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, $"Erase: Id in {domain.Data.Description.Name} cannot be null") } }, domain);
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Erase", $"Id in {domain.Data.Description.Name} cannot be null") } }, domain);
         }
     }
 }

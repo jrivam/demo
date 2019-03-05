@@ -2,7 +2,13 @@
 {
     public partial class Empresa
     {
-        //public virtual string Direccion { get; set; }
+        public virtual string Descripcion
+        {
+            get
+            {
+                return $"{Ruc} - {RazonSocial}";
+            }
+        }
     }
 }
 
@@ -17,11 +23,9 @@ namespace domain.Mapper
 {
     public partial class Empresa
     {
-        public virtual domain.Model.Empresa Load(domain.Model.Empresa entity)
+        public override domain.Model.Empresa Load(domain.Model.Empresa domain, int maxdepth = 1, int depth = 0)
         {
-            //entity.Direccion = "mi direccion empresa";
-
-            return entity;
+            return domain;
         }
     }
 }

@@ -23,7 +23,8 @@ namespace data.Model
                   repository, 
                   typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
-            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
+            Columns.Add(new TableColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc", isunique: true));
             Columns.Add(new TableColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
             Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
@@ -70,6 +71,7 @@ namespace data.Model
                 }
             }
         }
+        public virtual string Ruc { get { return Entity?.Ruc; } set { if (Entity?.Ruc != value) { this["Ruc"].Value = Entity.Ruc = value; } } }
         public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { this["RazonSocial"].Value = Entity.RazonSocial = value; } } }
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
 
@@ -126,6 +128,7 @@ namespace data.Query
                   typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
             Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc"));
             Columns.Add(new QueryColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
             Columns.Add(new QueryColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
@@ -147,6 +150,13 @@ namespace data.Query
             set
             {
                 this["Id"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Ruc
+        {
+            set
+            {
+                this["Ruc"].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) RazonSocial
@@ -184,6 +194,7 @@ namespace data.Mapper
         public override data.Model.Empresa Clear(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].DbValue = null;
+            data["Ruc"].DbValue = null;
             data["RazonSocial"].DbValue = null;
             data["Activo"].DbValue = null;
 
@@ -192,6 +203,7 @@ namespace data.Mapper
         public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].DbValue = data.Entity.Id;
+            data["Ruc"].DbValue = data.Entity.Ruc;
             data["RazonSocial"].DbValue = data.Entity.RazonSocial;
             data["Activo"].DbValue = data.Entity.Activo;
 

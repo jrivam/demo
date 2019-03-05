@@ -3,6 +3,8 @@ using library.Interface.Data.Table;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation.Table;
+using System;
+using System.Linq;
 using System.ComponentModel;
 
 namespace library.Impl.Presentation.Table
@@ -46,7 +48,7 @@ namespace library.Impl.Presentation.Table
             Status = "Loading...";
             var load = _interactive.Load(this as W, usedbcommand);
 
-            Status = (load.result.Success) ? "Loaded." : load.result.Message;
+            Status = (load.result.Success) ? string.Empty : String.Join("/", load.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty); ;
 
             return load;
         }
@@ -55,7 +57,7 @@ namespace library.Impl.Presentation.Table
             Status = "Loading...";
             var loadquery = _interactive.LoadQuery(this as W, maxdepth);
 
-            Status = (loadquery.result.Success) ? "Loaded." : loadquery.result.Message;
+            Status = (loadquery.result.Success) ? string.Empty : String.Join("/", loadquery.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return loadquery;
         }
@@ -65,7 +67,7 @@ namespace library.Impl.Presentation.Table
             Status = "Saving...";
             var save = _interactive.Save(this as W, useinsertdbcommand, useupdatedbcommand);
 
-            Status = (save.result.Success) ? "Saved." : save.result.Message;
+            Status = (save.result.Success) ? string.Empty : String.Join("/", save.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return save;
         }
@@ -74,7 +76,7 @@ namespace library.Impl.Presentation.Table
             Status = "Deleting...";
             var erase = _interactive.Erase(this as W, usedbcommand);
 
-            Status = (erase.result.Success) ? "Deleted." : erase.result.Message;
+            Status = (erase.result.Success) ? string.Empty : String.Join("/", erase.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return erase;
         }

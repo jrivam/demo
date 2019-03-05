@@ -16,14 +16,18 @@ namespace library.Impl.Data.Table
         {
             _repository = repository;
 
-            InitDbCommands();
+            Init();
         }
 
+        public abstract (Result result, U data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>));
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
             return _repository.Select(this as U, usedbcommand);
         }
-        public abstract (Result result, U data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>));
+        public virtual (Result result, U data, bool isunique) CheckIsUnique(IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>))
+        {
+            return (new Result() { Success = true }, null, true);
+        }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
         {

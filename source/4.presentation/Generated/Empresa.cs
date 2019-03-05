@@ -37,7 +37,6 @@ namespace presentation.Model
         {
         }
 
-
         public Empresa(data.Model.Empresa data,
             int maxdepth = 1)
             : this(new domain.Model.Empresa(data),
@@ -50,7 +49,6 @@ namespace presentation.Model
                 maxdepth)
         {
         }
-
         public Empresa(int maxdepth = 1)
             : this(new entities.Model.Empresa(),
                   maxdepth)
@@ -58,6 +56,7 @@ namespace presentation.Model
         }
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
+        public virtual string Ruc { get { return Domain?.Ruc; } set { if (Domain?.Ruc != value) { Domain.Ruc = value; OnPropertyChanged("Ruc"); } } }
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
@@ -161,6 +160,13 @@ namespace presentation.Query
             set
             {
                 Domain.Id = (value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Ruc
+        {
+            set
+            {
+                Domain.Ruc = (value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) RazonSocial

@@ -15,6 +15,8 @@ namespace entities.Model
         [Column("id")]
         [Key]
         public virtual int? Id { get; set; }
+        [Column("ruc")]
+        public virtual string Ruc { get; set; }
         [Column("razon_social")]
         public virtual string RazonSocial { get; set; }
         [Column("activo")]
@@ -48,6 +50,7 @@ namespace entities.Reader
         public override entities.Model.Empresa Clear(entities.Model.Empresa entity, int maxdepth = 1, int depth = 0)
         {
             entity.Id = null;
+            entity.Ruc = null;
             entity.RazonSocial = null;
             entity.Activo = null;
 
@@ -64,6 +67,7 @@ namespace entities.Reader
             prefix += (prefix == string.Empty ? prefix : columnseparator);
 
             entity.Id = reader[$"{prefix}Id"] as int?;
+            entity.Ruc = reader[$"{prefix}Ruc"] as string;
             entity.RazonSocial = reader[$"{prefix}RazonSocial"] as string;
             entity.Activo = reader[$"{prefix}Activo"] as bool?;
 

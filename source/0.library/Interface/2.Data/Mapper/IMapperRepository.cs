@@ -11,5 +11,7 @@ namespace library.Interface.Data.Mapper
 
         U Clear(U data, int maxdepth = 1, int depth = 0);
         U Map(U data, int maxdepth = 1, int depth = 0);
+
+        U Extra(U data, int maxdepth = 1, int depth = 0);
     }
 }

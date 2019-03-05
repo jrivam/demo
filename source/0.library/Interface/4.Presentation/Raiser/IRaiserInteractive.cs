@@ -12,7 +12,10 @@ namespace library.Interface.Presentation.Raiser
         where W : ITableInteractive<T, U, V>
     {
         W CreateInstance(V domain, int maxdepth);
+
         W Clear(W presentation, int maxdepth = 1, int depth = 0);
         W Raise(W presentation, int maxdepth = 1, int depth = 0);
+
+        W Extra(W presentation, int maxdepth = 1, int depth = 0);
     }
 }

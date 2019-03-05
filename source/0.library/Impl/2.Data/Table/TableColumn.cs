@@ -18,6 +18,7 @@ namespace library.Impl.Data.Table
 
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
+        public virtual bool IsUnique { get; }
 
         public virtual object Value { get; set; }
 
@@ -39,15 +40,20 @@ namespace library.Impl.Data.Table
         {
             Description = new Description(name, reference);
         }
-        public TableColumn(string name, string reference, bool isprimarykey)
+        public TableColumn(string name, string reference, bool isprimarykey = false)
             : this(name, reference)
         {
             IsPrimaryKey = isprimarykey;
         }
-        public TableColumn(string name, string reference, bool isprimarykey, bool isidentity)
+        public TableColumn(string name, string reference, bool isprimarykey = false, bool isidentity = false)
             : this(name, reference, isprimarykey)
         {
             IsIdentity = isidentity;
+        }
+        public TableColumn(string name, string reference, bool isprimarykey = false, bool isidentity = false, bool isunique = false)
+            : this(name, reference, isprimarykey, isidentity)
+        {
+            IsUnique = isunique;
         }
     }
 }

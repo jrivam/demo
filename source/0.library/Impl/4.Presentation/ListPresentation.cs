@@ -107,7 +107,7 @@ namespace library.Impl.Presentation
             Status = "Loading...";
             var list = query.List(maxdepth, top);
 
-            Status = (list.result.Success) ? "Loaded." : list.result.Message;
+            Status = (list.result.Success) ? string.Empty : String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty); ;
 
             return (list.result, Load(list.presentations));
         }

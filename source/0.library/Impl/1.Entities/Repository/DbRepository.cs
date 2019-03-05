@@ -49,7 +49,7 @@ namespace library.Impl.Entities.Repository
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, "ExecuteQuery", $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
             }
         } 
     }

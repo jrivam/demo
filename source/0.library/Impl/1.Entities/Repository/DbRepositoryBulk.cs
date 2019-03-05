@@ -27,7 +27,7 @@ namespace library.Impl.Entities.Repository
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, -1);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, "ExecuteNonQuery", $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, -1);
             }
         }
         public virtual (Result result, object scalar) ExecuteScalar(IDbCommand command)
@@ -46,7 +46,7 @@ namespace library.Impl.Entities.Repository
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Exception, $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, "ExecuteScalar", $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
             }
         }
     }

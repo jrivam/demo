@@ -42,6 +42,7 @@
       <HintPath>..\packages\Npgsql.3.2.7\lib\net451\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -92,6 +93,7 @@
     <Compile Include="Impl\2.Data\Query\AbstractQueryRepository.cs" />
     <Compile Include="Impl\2.Data\Table\AbstractTableRepository.cs" />
     <Compile Include="Impl\2.Data\Query\RepositoryQuery.cs" />
+    <Compile Include="Impl\4.Presentation\ConverterHelper.cs" />
     <Compile Include="Interface\1.Entities\IListEntityMethods.cs" />
     <Compile Include="Impl\2.Data\Table\RepositoryTable.cs" />
     <Compile Include="Impl\2.Data\Definition\Description.cs" />

@@ -3,8 +3,11 @@ using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation;
 using library.Interface.Presentation.Table;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Linq;
+using System;
 
 namespace library.Impl.Presentation.Table
 {
@@ -45,6 +48,22 @@ namespace library.Impl.Presentation.Table
                 {
                     OnStatusChange(value);
                 }
+            }
+        }
+
+        private Dictionary<string, string> _validations = new Dictionary<string, string>();
+        public Dictionary<string, string> Validations
+        {
+            get
+            {
+                return _validations;
+            }
+        }
+        public string Validation
+        {
+            get
+            {
+                return String.Join("/", Validations.Select(x => x.Value).ToArray<string>()).Replace(Environment.NewLine, string.Empty);
             }
         }
 

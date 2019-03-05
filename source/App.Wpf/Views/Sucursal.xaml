@@ -5,25 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Sucursal" Height="284" Width="325" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Sucursal" Height="307" Width="639" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.DataContext>
         <viewmodels:SucursalViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary Source="../Styles.xaml" />
+    </Window.Resources>
+    
     <Grid>
-        <TextBox x:Name="txtNombre" Text="{Binding Nombre, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,108,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtNombre" Text="{Binding Nombre, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,139,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
         <Label x:Name="lblId" Content="Id" HorizontalAlignment="Left" Margin="67,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.688,0.587"/>
         <Label x:Name="txtId" Content="{Binding Id}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" />
-        <Label x:Name="lblNombre" Content="Nombre" HorizontalAlignment="Left" Margin="31,104,0,0" VerticalAlignment="Top" Width="56"/>
-        <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,173,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblNombre" Content="Nombre" HorizontalAlignment="Left" Margin="31,135,0,0" VerticalAlignment="Top" Width="56"/>
+        <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,208,0,0" VerticalAlignment="Top"/>
 
         <Button x:Name="btnCargar" Content="Cargar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding LoadCommand}"/>
         <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}"/>
         <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}"/>
-        <DatePicker x:Name="dpFecha" IsTodayHighlighted="True" SelectedDate="{Binding Fecha, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,142,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblFecha" Content="Fecha" HorizontalAlignment="Left" Margin="43,140,0,0" VerticalAlignment="Top" Width="44" RenderTransformOrigin="0.48,1.858"/>
-        <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="RazonSocial"  Margin="92,76,10,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="dpFecha" IsTodayHighlighted="True" SelectedDate="{Binding Fecha, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,175,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblFecha" Content="Fecha" HorizontalAlignment="Left" Margin="43,173,0,0" VerticalAlignment="Top" Width="44" RenderTransformOrigin="0.48,1.858"/>
+        <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="Domain.Descripcion"  Margin="92,76,10,0" VerticalAlignment="Top"/>
 
         <Label x:Name="lblEmpresa" Content="Empresa" HorizontalAlignment="Left" Margin="31,73,0,0" VerticalAlignment="Top" Width="56"/>
         <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
@@ -31,5 +36,8 @@
                 <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
             </StatusBarItem>
         </StatusBar>
+        <Label x:Name="lblCodigo" Content="Codigo" HorizontalAlignment="Left" Margin="31,104,0,0" VerticalAlignment="Top" Width="56"/>
+        <TextBox x:Name="txtCodigo" Text="{Binding CodigoX, UpdateSourceTrigger=LostFocus}" Height="22" Margin="92,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="102"/>
+        <Label x:Name="lblValidateCodigo" Content="{Binding Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateCodigo, UpdateSourceTrigger=PropertyChanged}" Margin="199,103,10,0" VerticalAlignment="Top"  Height="26" FontWeight="Bold" Foreground="Red"/>
     </Grid>
 </Window>

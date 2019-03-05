@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:WpfApp.Views"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Sucursales" Height="324" Width="456" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Sucursales" Height="324" Width="654" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
     <Window.DataContext>
         <viewmodels:SucursalesViewModel/>
     </Window.DataContext>
@@ -26,6 +26,23 @@
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Codigo">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblCodigo" Content="{Binding Codigo}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBox x:Name="txtCodigo" Text="{Binding CodigoX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Nombre">
@@ -49,13 +66,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Label x:Name="lblEmpresa" Content="{Binding Empresa.RazonSocial}"/>
+                                <Label x:Name="lblEmpresa" Content="{Binding Empresa.Domain.Descripcion}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="RazonSocial"/>
+                            <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="Domain.Descripcion"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -100,6 +117,26 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
+                <DataGridTemplateColumn Header="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblStatus" Content="{Binding Status}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Validation">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblValidation" Content="{Binding Validation}" FontWeight="Bold" Foreground="Red"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>

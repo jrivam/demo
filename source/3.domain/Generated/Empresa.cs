@@ -41,6 +41,7 @@ namespace domain.Model
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
+        public virtual string Ruc { get { return Data?.Ruc; } set { if (Data?.Ruc != value) { Data.Ruc = value; Changed = true; } } }
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
@@ -158,6 +159,13 @@ namespace domain.Query
             set
             {
                 Data.Id = (value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Ruc
+        {
+            set
+            {
+                Data.Ruc = (value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) RazonSocial

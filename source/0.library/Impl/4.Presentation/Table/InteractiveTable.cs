@@ -29,6 +29,8 @@ namespace library.Impl.Presentation.Table
                 _raiser.Clear(presentation, 1, 0);
                 _raiser.Raise(presentation, 1, 0);
 
+                _raiser.Extra(presentation, 1, 0);
+
                 return (load.result, presentation);
             }
 
@@ -42,6 +44,8 @@ namespace library.Impl.Presentation.Table
             {
                 _raiser.Clear(presentation, maxdepth, 0);
                 _raiser.Raise(presentation, maxdepth, 0);
+
+                _raiser.Extra(presentation, maxdepth, 0);
 
                 return (loadquery.result, presentation);
             }

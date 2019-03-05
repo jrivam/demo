@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:WpfApp.Views"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Empresas" Height="339" Width="465" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Empresas" Height="339" Width="704" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.DataContext>
         <viewmodels:EmpresasViewModel/>
@@ -33,6 +33,23 @@
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Ruc">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblRuc" Content="{Binding Ruc}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBox x:Name="txtRuc" Text="{Binding RucX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
                 <!--<DataGridTextColumn Header="Razon Social" Binding="{Binding RazonSocial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
@@ -80,6 +97,26 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
+                <DataGridTemplateColumn Header="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblStatus" Content="{Binding Status}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Validation">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblValidation" Content="{Binding Validation}" FontWeight="Bold" Foreground="Red"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="btnRefreshEmpresas" Content="Refrescar" Command="{Binding RefreshCommand}" CommandParameter="{Binding}" Margin="0,10,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="163"/>

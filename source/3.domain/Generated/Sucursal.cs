@@ -42,6 +42,7 @@ namespace domain.Model
         }
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
+        public virtual string Codigo { get { return Data?.Codigo; } set { if (Data?.Codigo != value) { Data.Codigo = value; Changed = true; } } }
         public virtual string Nombre { get { return Data?.Nombre; } set { if (Data?.Nombre != value) { Data.Nombre = value; Changed = true; } } }
         public virtual DateTime? Fecha { get { return Data?.Fecha; } set { if (Data?.Fecha != value) { Data.Fecha = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
@@ -174,6 +175,13 @@ namespace domain.Query
             set
             {
                 Data.Id = (value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Codigo
+        {
+            set
+            {
+                Data.Codigo = (value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Nombre

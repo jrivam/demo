@@ -15,11 +15,6 @@ namespace library.Impl.Presentation.Raiser
         where V : ITableLogic<T, U>
         where W : ITableInteractive<T, U, V>
     {
-        public virtual W Clear(W presentation, int maxdepth = 1, int depth = 0)
-        {
-            return presentation;
-        }
-
         public W CreateInstance(V domain, int maxdepth)
         {
             return (W)Activator.CreateInstance(typeof(W),
@@ -31,6 +26,10 @@ namespace library.Impl.Presentation.Raiser
                                     CultureInfo.CurrentCulture);
         }
 
+        public virtual W Clear(W presentation, int maxdepth = 1, int depth = 0)
+        {
+            return presentation;
+        }
         public virtual W Raise(W presentation, int maxdepth = 1, int depth = 0)
         {
             foreach (var column in presentation.Domain.Data.Columns)
@@ -38,6 +37,11 @@ namespace library.Impl.Presentation.Raiser
                 presentation.OnPropertyChanged(column.Description.Reference);
             }
 
+            return presentation;
+        }
+
+        public virtual W Extra(W presentation, int maxdepth = 1, int depth = 0)
+        {
             return presentation;
         }
     }

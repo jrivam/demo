@@ -2,7 +2,13 @@
 {
     public partial class Sucursal
     {
-        //public virtual string Direccion { get; set; }
+        public virtual string Descripcion
+        {
+            get
+            {
+                return $"{Codigo} - {Nombre}";
+            }
+        }
     }
 }
 
@@ -17,11 +23,9 @@ namespace domain.Mapper
 {
     public partial class Sucursal
     {
-        public virtual domain.Model.Sucursal Load(domain.Model.Sucursal entity)
+        public override domain.Model.Sucursal Load(domain.Model.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
-            //entity.Direccion = "mi direccion sucursal";
-
-            return entity;
+            return domain;
         }
     }
 }
