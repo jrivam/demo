@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace library.Impl
@@ -7,15 +6,7 @@ namespace library.Impl
     public class Result
     {
         public bool Success { get; set; }
-        public IList<(ResultCategory category, string message)> Messages { get; set; } = new List<(ResultCategory, string)>() { };
-
-        public string Message
-        {
-            get
-            {
-                return String.Join("/", Messages.ToArray()).Replace(Environment.NewLine, string.Empty);
-            }
-        }
+        public IList<(ResultCategory category, string name, string message)> Messages { get; set; } = new List<(ResultCategory, string, string)>() { };
 
         public Result()
         {
@@ -25,12 +16,12 @@ namespace library.Impl
         {
             Append(result);
         }
-        public Result(IList<(ResultCategory category, string message)> messages)
+        public Result(IList<(ResultCategory category, string name, string message)> messages)
            : this()
         {
             messages?.ToList()?.ForEach(x => Messages.Add(x));
         }
-        public Result(Result result, IList<(ResultCategory category, string message)> messages)
+        public Result(Result result, IList<(ResultCategory category, string name, string message)> messages)
             : this(result)
         {
             messages?.ToList()?.ForEach(x => Messages.Add(x));
@@ -41,7 +32,7 @@ namespace library.Impl
             if (result != null)
             {
                 Success = Success && result.Success;
-                ((List<(ResultCategory, string)>)Messages).AddRange(result.Messages);
+                ((List<(ResultCategory, string, string)>)Messages).AddRange(result.Messages);
             }
 
             return this;

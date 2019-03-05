@@ -31,5 +31,14 @@ namespace library.Impl.Domain.Mapper
         {
             return domain;
         }
+        public virtual V Load(V domain, int maxdepth = 1, int depth = 0)
+        {
+            return domain;
+        }
+
+        public virtual V Extra(V domain, int maxdepth = 1, int depth = 0)
+        {
+            return domain;
+        }
     }
 }

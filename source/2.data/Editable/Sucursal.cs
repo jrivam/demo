@@ -1,5 +1,6 @@
 ﻿using library.Impl;
 using library.Impl.Data.Sql;
+using library.Interface.Data.Query;
 using System.Collections.Generic;
 using System.Data;
 
@@ -12,12 +13,37 @@ namespace data.Model
         {
         }
 
-        public override void InitDbCommands()
+        public override void Init()
         {
             SelectDbCommand = (false, ("gsp_sucursal_select", CommandType.StoredProcedure, new List<SqlParameter>()));
             InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<SqlParameter>()));
             UpdateDbCommand = (false, ("gsp_sucursal_update", CommandType.StoredProcedure, new List<SqlParameter>()));
             DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
+        }
+
+        public override (Result result, data.Model.Sucursal data, bool isunique) CheckIsUnique(IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> query = default(IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>))
+        {
+            if (this.Codigo != null)
+            {
+                var _query = (data.Query.Sucursal)query ?? new data.Query.Sucursal();
+
+                if (this.Id != null)
+                {
+                    _query.Id = (this.Id, WhereOperator.NotEquals);
+                }
+                _query.Codigo = (this.Codigo, WhereOperator.Equals);
+
+                var selectsingle = _query.SelectSingle(1, new data.Model.Sucursal());
+
+                if (selectsingle.data != null)
+                {
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo {this.Codigo} already exists in Id: {selectsingle.data?.Id}") } }, selectsingle.data, selectsingle.data == null);
+                }
+
+                return (new Result() { Success = true }, null, true);
+            }
+
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo cannot be null") } }, null, false);
         }
 
         public virtual (Result result, data.Model.Empresa data) Empresa_Refresh(int maxdepth = 1, data.Query.Sucursal query = null)
@@ -35,7 +61,7 @@ namespace data.Model
                 return (selectsingle?.result, _empresa);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, $"Empresa_Refresh: IdEmpresa in {this.Description.Name} cannot be null") } }, null);
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
 
         public virtual (Result result, data.Model.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, data.Query.Sucursal query = null)

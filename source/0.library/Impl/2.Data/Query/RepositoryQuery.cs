@@ -108,6 +108,8 @@ namespace library.Impl.Data.Query
                 _mapper.Clear(data, 1, 0);
                 _mapper.Map(data, 1, 0);
 
+                _mapper.Extra(data, 1, 0);
+
                 return (executequery.result, data);
             }
 

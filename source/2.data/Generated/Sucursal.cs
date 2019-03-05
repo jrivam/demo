@@ -24,7 +24,8 @@ namespace data.Model
                   repository, 
                   typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
-            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", true, true));
+            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
+            Columns.Add(new TableColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo", isunique: true));
             Columns.Add(new TableColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
             Columns.Add(new TableColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
             Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
@@ -75,6 +76,7 @@ namespace data.Model
                 }
             }
         }
+        public virtual string Codigo { get { return Entity?.Codigo; } set { if (Entity?.Codigo != value) { this["Codigo"].Value = Entity.Codigo = value; } } }
         public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { this["Nombre"].Value = Entity.Nombre = value; } } }
         public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { this["Fecha"].Value = Entity.Fecha = value; } } }
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
@@ -177,6 +179,7 @@ namespace data.Query
                   typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
             Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo"));
             Columns.Add(new QueryColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
             Columns.Add(new QueryColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
             Columns.Add(new QueryColumn<bool?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
@@ -201,6 +204,13 @@ namespace data.Query
             set
             {
                 this["Id"].Where(value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Codigo
+        {
+            set
+            {
+                this["Codigo"].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Nombre
@@ -253,6 +263,7 @@ namespace data.Mapper
         public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].DbValue = null;
+            data["Codigo"].DbValue = null;
             data["Nombre"].DbValue = null;
             data["Activo"].DbValue = null;
             data["Fecha"].DbValue = null;
@@ -264,6 +275,7 @@ namespace data.Mapper
         public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].DbValue = data.Entity.Id;
+            data["Codigo"].DbValue = data.Entity.Codigo;
             data["Nombre"].DbValue = data.Entity.Nombre;
             data["Activo"].DbValue = data.Entity.Activo;
             data["Fecha"].DbValue = data.Entity.Fecha;

@@ -50,15 +50,14 @@ namespace presentation.Model
                 maxdepth)
         {
         }
-
         public Sucursal(int maxdepth = 1)
             : this(new entities.Model.Sucursal(),
                 maxdepth)
         {
         }
 
-
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
+        public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged("Codigo"); } } }
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
         public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { Domain.Fecha = value; OnPropertyChanged("Fecha"); } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
@@ -209,6 +208,13 @@ namespace presentation.Query
             set
             {
                 Domain.Id = (value.value, value.sign);
+            }
+        }
+        public virtual (string value, WhereOperator? sign) Codigo
+        {
+            set
+            {
+                Domain.Codigo = (value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Nombre

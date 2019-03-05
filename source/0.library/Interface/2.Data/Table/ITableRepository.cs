@@ -18,6 +18,6 @@ namespace library.Interface.Data.Table
         IList<ITableColumn> Columns { get; }
         ITableColumn this[string reference] { get; }
 
-        void InitDbCommands();
+        void Init();
     }
 }

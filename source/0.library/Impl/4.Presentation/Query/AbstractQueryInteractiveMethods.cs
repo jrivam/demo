@@ -5,7 +5,9 @@ using library.Interface.Domain.Table;
 using library.Interface.Entities;
 using library.Interface.Presentation.Query;
 using library.Interface.Presentation.Table;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace library.Impl.Presentation.Query
 {
@@ -30,7 +32,7 @@ namespace library.Impl.Presentation.Query
         {
             Status = "Loading";
             var retrieve = _interactive.Retrieve(Domain, maxdepth, presentation);
-            Status = retrieve.result.Message;
+            Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return retrieve;
         }
@@ -38,7 +40,7 @@ namespace library.Impl.Presentation.Query
         {
             Status = "Loading";
             var list = _interactive.List(Domain, maxdepth, top, presentations);
-            Status = list.result.Message;
+            Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return list;
         }

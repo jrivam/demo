@@ -89,7 +89,7 @@ namespace library.Impl.Data.Table
                     return Select(data, data.SelectDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No SelectDbCommand defined.") } }, data);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Select", "No SelectDbCommand defined.") } }, data);
             }
 
             var parameters = new List<SqlParameter>();
@@ -119,6 +119,8 @@ namespace library.Impl.Data.Table
                 _mapper.Clear(data, 1, 0);
                 _mapper.Map(data, 1, 0);
 
+                _mapper.Extra(data, 1, 0);
+
                 return (executequery.result, data);
             }
 
@@ -135,7 +137,7 @@ namespace library.Impl.Data.Table
                     return Insert(data, data.InsertDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No InsertDbCommand defined.") } }, data);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Insert", "No InsertDbCommand defined.") } }, data);
             }
 
             var parameters = new List<SqlParameter>();
@@ -176,7 +178,7 @@ namespace library.Impl.Data.Table
                 }
                 else
                 {
-                    executescalar.result.Messages.Add((ResultCategory.Information, "Insert: no rows affected"));
+                    executescalar.result.Messages.Add((ResultCategory.Information, "Insert", "No rows affected."));
                 }
             }
 
@@ -192,7 +194,7 @@ namespace library.Impl.Data.Table
                     return Update(data, data.UpdateDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No UpdateDbCommand defined.") } }, data);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Update", "No UpdateDbCommand defined.") } }, data);
             }
 
             var parameters = new List<SqlParameter>();
@@ -222,7 +224,7 @@ namespace library.Impl.Data.Table
             {
                 if (executenonquery.rows <= 0)
                 {
-                    executenonquery.result.Messages.Add((ResultCategory.Information, "Update: no rows affected"));
+                    executenonquery.result.Messages.Add((ResultCategory.Information, "Update", "No rows affected"));
                 }
             }
 
@@ -238,7 +240,7 @@ namespace library.Impl.Data.Table
                     return Delete(data, data.DeleteDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string)>() { (ResultCategory.Error, "No DeleteDbCommand defined.") } }, data);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Delete", "No DeleteDbCommand defined.") } }, data);
             }
 
             var parameters = new List<SqlParameter>();
@@ -267,7 +269,7 @@ namespace library.Impl.Data.Table
             {
                 if (executenonquery.rows <= 0)
                 {
-                    executenonquery.result.Messages.Add((ResultCategory.Information, "Delete: no rows affected"));
+                    executenonquery.result.Messages.Add((ResultCategory.Information, "Delete", "No rows affected"));
                 }
             }
 

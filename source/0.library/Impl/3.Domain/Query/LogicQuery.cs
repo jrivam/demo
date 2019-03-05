@@ -31,6 +31,8 @@ namespace library.Impl.Domain.Query
 
                 _mapper.Clear(domain, maxdepth, 0);
 
+                _mapper.Extra(domain, maxdepth, 0);
+
                 domain.Changed = false;
                 domain.Deleted = false;
             }
@@ -50,6 +52,8 @@ namespace library.Impl.Domain.Query
                     var domain = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(data);
 
                     _mapper.Clear(domain, maxdepth, 0);
+
+                    _mapper.Extra(domain, maxdepth, 0);
 
                     domain.Changed = false;
                     domain.Deleted = false;

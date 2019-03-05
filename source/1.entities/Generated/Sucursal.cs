@@ -16,6 +16,8 @@ namespace entities.Model
         [Column("id")]
         [Key]
         public virtual int? Id { get; set; }
+        [Column("codigo")]
+        public virtual string Codigo { get; set; }
         [Column("nombre")]
         public virtual string Nombre { get; set; }
         [Column("fecha")]
@@ -59,6 +61,7 @@ namespace entities.Reader
         public override entities.Model.Sucursal Clear(entities.Model.Sucursal entity, int maxdepth = 1, int depth = 0)
         {
             entity.Id = null;
+            entity.Codigo = null;
             entity.Nombre = null;
             entity.Fecha = null;
             entity.Activo = null;
@@ -81,6 +84,7 @@ namespace entities.Reader
             prefix += (prefix == string.Empty ? prefix : columnseparator);
 
             entity.Id = reader[$"{prefix}Id"] as int?;
+            entity.Codigo = reader[$"{prefix}Codigo"] as string;
             entity.Nombre = reader[$"{prefix}Nombre"] as string;
             entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
             entity.Activo = reader[$"{prefix}Activo"] as bool?;

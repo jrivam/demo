@@ -1,6 +1,7 @@
 ﻿using library.Interface.Data.Table;
 using library.Interface.Domain.Table;
 using library.Interface.Entities;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace library.Interface.Presentation.Table
@@ -11,6 +12,9 @@ namespace library.Interface.Presentation.Table
         where V : ITableLogic<T, U>
     {
         string Status { get; }
+
+        Dictionary<string, string> Validations { get; }
+        string Validation { get; }
 
         V Domain { get; }
 

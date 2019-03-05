@@ -10,6 +10,10 @@ namespace library.Interface.Domain.Mapper
         where V : ITableLogic<T, U>
     {
         V CreateInstance(U data);
+
         V Clear(V domain, int maxdepth = 1, int depth = 0);
+        V Load(V domain, int maxdepth = 1, int depth = 0);
+
+        V Extra(V domain, int maxdepth = 1, int depth = 0);
     }
 }

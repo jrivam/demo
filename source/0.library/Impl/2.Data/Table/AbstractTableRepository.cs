@@ -29,7 +29,7 @@ namespace library.Impl.Data.Table
         public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
         public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
 
-        public virtual void InitDbCommands()
+        public virtual void Init()
         {
         }
 
