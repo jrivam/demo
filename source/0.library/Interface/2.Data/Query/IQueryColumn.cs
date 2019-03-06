@@ -1,16 +1,10 @@
-﻿using library.Impl.Data.Definition;
-using library.Impl.Data.Sql;
-using System;
+﻿using library.Impl.Data.Sql;
 using System.Collections.Generic;
 
 namespace library.Interface.Data.Query
 {
-    public interface IQueryColumn
+    public interface IQueryColumn : IColumn
     {
-        Type Type { get; }
-
-        Description Description { get; }
-
         IList<(object value, WhereOperator? sign)> Wheres { get; set; }
 
         void Where((object value, WhereOperator? sign) condition);
