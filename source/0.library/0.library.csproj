@@ -80,6 +80,9 @@
     <Compile Include="Impl\1.Entities\Repository\DbRepositoryBulk.cs" />
     <Compile Include="Impl\2.Data\Helper.cs" />
     <Compile Include="Impl\1.Entities\Repository\RepositoryBulk.cs" />
+    <Compile Include="Impl\2.Data\Column.cs" />
+    <Compile Include="Interface\2.Data\IColumn.cs" />
+    <Compile Include="Impl\2.Data\ListColumns.cs" />
     <Compile Include="Impl\2.Data\Sql\Builder\SqlBuilderTable.cs" />
     <Compile Include="Impl\2.Data\Sql\Builder\SqlBuilderQuery.cs" />
     <Compile Include="Impl\2.Data\Sql\Factory\SqlCommandBuilderFactory.cs" />
