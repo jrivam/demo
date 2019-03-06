@@ -1,21 +1,9 @@
-﻿using library.Impl.Data.Definition;
-using library.Interface.Data.Table;
-using System;
+﻿using library.Interface.Data.Table;
 
 namespace library.Impl.Data.Table
 {
-    public class TableColumn<A> : ITableColumn
+    public class TableColumn<A> : Column<A>, ITableColumn
     {
-        public virtual Type Type
-        {
-            get
-            {
-                return typeof(A);
-            }
-        }
-
-        public virtual Description Description { get; }
-
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
         public virtual bool IsUnique { get; }
@@ -37,8 +25,8 @@ namespace library.Impl.Data.Table
         }
 
         public TableColumn(string name, string reference)
+            : base(name, reference)
         {
-            Description = new Description(name, reference);
         }
         public TableColumn(string name, string reference, bool isprimarykey = false)
             : this(name, reference)

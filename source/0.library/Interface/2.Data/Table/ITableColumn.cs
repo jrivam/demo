@@ -1,14 +1,7 @@
-﻿using library.Impl.Data.Definition;
-using System;
-
-namespace library.Interface.Data.Table
+﻿namespace library.Interface.Data.Table
 {
-    public interface ITableColumn
+    public interface ITableColumn : IColumn
     {
-        Type Type { get; }
-
-        Description Description { get; }
-
         bool IsPrimaryKey { get; }
         bool IsIdentity { get; }
         bool IsUnique { get; }
