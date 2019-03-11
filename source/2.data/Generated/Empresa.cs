@@ -65,15 +65,15 @@ namespace data.Model
             {
                 if (Entity?.Id != value)
                 {
-                    this["Id"].Value = Entity.Id = value;
+                    Columns["Id"].Value = Entity.Id = value;
 
                     _sucursales?.ForEach(x => x.IdEmpresa = value);
                 }
             }
         }
-        public virtual string Ruc { get { return Entity?.Ruc; } set { if (Entity?.Ruc != value) { this["Ruc"].Value = Entity.Ruc = value; } } }
-        public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { this["RazonSocial"].Value = Entity.RazonSocial = value; } } }
-        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
+        public virtual string Ruc { get { return Entity?.Ruc; } set { if (Entity?.Ruc != value) { Columns["Ruc"].Value = Entity.Ruc = value; } } }
+        public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { Columns["RazonSocial"].Value = Entity.RazonSocial = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns["Activo"].Value = Entity.Activo = value; } } }
 
         protected data.Model.Sucursales _sucursales;
         public virtual data.Model.Sucursales Sucursales
@@ -149,28 +149,28 @@ namespace data.Query
         {
             set
             {
-                this["Id"].Where(value.value, value.sign);
+                Columns["Id"].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Ruc
         {
             set
             {
-                this["Ruc"].Where(value.value, value.sign);
+                Columns["Ruc"].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) RazonSocial
         {
             set
             {
-                this["RazonSocial"].Where(value.value, value.sign);
+                Columns["RazonSocial"].Where(value.value, value.sign);
             }
         }
         public virtual (bool? value, WhereOperator? sign) Activo
         {
             set
             {
-                this["Activo"].Where(value.value, value.sign);
+                Columns["Activo"].Where(value.value, value.sign);
             }
         }
 

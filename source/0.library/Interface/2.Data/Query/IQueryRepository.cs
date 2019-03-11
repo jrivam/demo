@@ -1,4 +1,5 @@
-﻿using library.Impl.Data.Definition;
+﻿using library.Impl.Data;
+using library.Impl.Data.Definition;
 using library.Impl.Data.Sql;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace library.Interface.Data.Query
 
         IList<(IQueryColumn column, OrderDirection flow)> Orders { get; }
 
-        IList<IQueryColumn> Columns { get; }
+        ListColumns<IQueryColumn> Columns { get; }
         IQueryColumn this[string reference] { get; }
 
         void ClearWhere();

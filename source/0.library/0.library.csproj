@@ -143,6 +143,7 @@
     <Compile Include="Interface\1.Entities\Repository\IDbRepository.cs" />
     <Compile Include="Interface\1.Entities\Repository\IDbRepositoryBulk.cs" />
     <Compile Include="Interface\1.Entities\Repository\IRepositoryBulk.cs" />
+    <Compile Include="Interface\2.Data\IListColumns.cs" />
     <Compile Include="Interface\2.Data\Sql\ISqlCommandBuilder.cs" />
     <Compile Include="Interface\2.Data\IListDataMethods.cs" />
     <Compile Include="Interface\2.Data\Table\ITableEntity.cs" />

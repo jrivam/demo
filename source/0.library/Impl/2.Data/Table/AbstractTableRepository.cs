@@ -4,7 +4,6 @@ using library.Interface.Data.Table;
 using library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace library.Impl.Data.Table
 {
@@ -37,9 +36,9 @@ namespace library.Impl.Data.Table
         {
             get
             {
-                return Columns.SingleOrDefault(x => x.Description.Reference.ToLower() == reference.ToLower());
+                return Columns[reference];
             }
         }
-        public virtual IList<ITableColumn> Columns { get; } = new List<ITableColumn>();
+        public virtual ListColumns<ITableColumn> Columns { get; set; } = new ListColumns<ITableColumn>();
     }
 }

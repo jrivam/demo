@@ -2,7 +2,6 @@
 using library.Impl.Data.Sql;
 using library.Interface.Data.Query;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace library.Impl.Data.Query
 {
@@ -26,10 +25,10 @@ namespace library.Impl.Data.Query
         {
             get
             {
-                return Columns.SingleOrDefault(x => x.Description.Reference.ToLower() == reference.ToLower());
+                return Columns[reference];
             }
         }
-        public virtual IList<IQueryColumn> Columns { get; } = new List<IQueryColumn>();
+        public virtual ListColumns<IQueryColumn> Columns { get; set; } = new ListColumns<IQueryColumn>();
 
         public void ClearWhere()
         {

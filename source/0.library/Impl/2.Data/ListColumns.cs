@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace library.Impl.Data
 {
-    public class ListColumns<T> : List<T>
+    public class ListColumns<T> : List<T>, IListColumns<T>
         where T : IColumn
     {
         public virtual T this[string reference]

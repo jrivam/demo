@@ -72,14 +72,14 @@ namespace data.Model
             {
                 if (Entity?.Id != value)
                 {
-                    this["Id"].Value = Entity.Id = value;
+                    Columns["Id"].Value = Entity.Id = value;
                 }
             }
         }
-        public virtual string Codigo { get { return Entity?.Codigo; } set { if (Entity?.Codigo != value) { this["Codigo"].Value = Entity.Codigo = value; } } }
-        public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { this["Nombre"].Value = Entity.Nombre = value; } } }
-        public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { this["Fecha"].Value = Entity.Fecha = value; } } }
-        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { this["Activo"].Value = Entity.Activo = value; } } }
+        public virtual string Codigo { get { return Entity?.Codigo; } set { if (Entity?.Codigo != value) { Columns["Codigo"].Value = Entity.Codigo = value; } } }
+        public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { Columns["Nombre"].Value = Entity.Nombre = value; } } }
+        public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { Columns["Fecha"].Value = Entity.Fecha = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns["Activo"].Value = Entity.Activo = value; } } }
 
         public virtual int? IdEmpresa
         {
@@ -91,7 +91,7 @@ namespace data.Model
             {
                 if (Entity?.IdEmpresa != value)
                 {
-                    this["IdEmpresa"].Value = Entity.IdEmpresa = value;
+                    Columns["IdEmpresa"].Value = Entity.IdEmpresa = value;
 
                     Empresa = null;
                 }
@@ -168,7 +168,7 @@ namespace data.Query
 
             if (_empresa != null || depth < maxdepth || maxdepth == 0)
             {
-                joins.Add((this, this["IdEmpresa"], Empresa(), Empresa()["Id"]));
+                joins.Add((this, Columns["IdEmpresa"], Empresa(), Empresa()["Id"]));
             }
 
             return joins;
@@ -203,35 +203,35 @@ namespace data.Query
         {
             set
             {
-                this["Id"].Where(value.value, value.sign);
+                Columns["Id"].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Codigo
         {
             set
             {
-                this["Codigo"].Where(value.value, value.sign);
+                Columns["Codigo"].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Nombre
         {
             set
             {
-                this["Nombre"].Where(value.value, value.sign);
+                Columns["Nombre"].Where(value.value, value.sign);
             }
         }
         public virtual (DateTime? value, WhereOperator? sign) Fecha
         {
             set
             {
-                this["Fecha"].Where(value.value, value.sign);
+                Columns["Fecha"].Where(value.value, value.sign);
             }
         }
         public virtual (bool? value, WhereOperator? sign) Activo
         {
             set
             {
-                this["Activo"].Where(value.value, value.sign);
+                Columns["Activo"].Where(value.value, value.sign);
             }
         }
 
@@ -239,7 +239,7 @@ namespace data.Query
         {
             set
             {
-                this["IdEmpresa"].Where(value.value, value.sign);
+                Columns["IdEmpresa"].Where(value.value, value.sign);
             }
         }
 
