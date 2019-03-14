@@ -46,6 +46,7 @@ namespace library.Impl.Presentation.Table
         public virtual (Result result, W presentation) Load(bool usedbcommand = false)
         {
             Status = "Loading...";
+
             var load = _interactive.Load(this as W, usedbcommand);
 
             Status = (load.result.Success) ? string.Empty : String.Join("/", load.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty); ;
@@ -55,6 +56,7 @@ namespace library.Impl.Presentation.Table
         public virtual (Result result, W presentation) LoadQuery(int maxdepth = 1)
         {
             Status = "Loading...";
+
             var loadquery = _interactive.LoadQuery(this as W, maxdepth);
 
             Status = (loadquery.result.Success) ? string.Empty : String.Join("/", loadquery.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
@@ -65,6 +67,7 @@ namespace library.Impl.Presentation.Table
         public virtual (Result result, W presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             Status = "Saving...";
+
             var save = _interactive.Save(this as W, useinsertdbcommand, useupdatedbcommand);
 
             Status = (save.result.Success) ? string.Empty : String.Join("/", save.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
@@ -74,6 +77,7 @@ namespace library.Impl.Presentation.Table
         public virtual (Result result, W presentation) Erase(bool usedbcommand = false)
         {
             Status = "Deleting...";
+
             var erase = _interactive.Erase(this as W, usedbcommand);
 
             Status = (erase.result.Success) ? string.Empty : String.Join("/", erase.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);

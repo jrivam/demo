@@ -15,24 +15,21 @@ namespace library.Interface.Data.Query
         (Result result, U data) 
             SelectSingle
             (IQueryRepository query, 
-            int maxdepth = 1, U data = default(U));
+            int maxdepth = 1);
 
         (Result result, U data) 
             SelectSingle(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1, 
-            U data = default(U));
+            int maxdepth = 1);
 
         (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (IQueryRepository query,
-            int maxdepth = 1, int top = 0,
-            IListData<T, U> datas = null);
+            int maxdepth = 1, int top = 0);
 
         (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1,
-            IListData<T, U> datas = null);
+            int maxdepth = 1);
 
         (Result result, int rows)
             Update

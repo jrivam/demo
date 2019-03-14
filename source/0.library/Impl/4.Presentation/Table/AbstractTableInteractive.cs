@@ -51,14 +51,7 @@ namespace library.Impl.Presentation.Table
             }
         }
 
-        private Dictionary<string, string> _validations = new Dictionary<string, string>();
-        public Dictionary<string, string> Validations
-        {
-            get
-            {
-                return _validations;
-            }
-        }
+        public Dictionary<string, string> Validations { get; } = new Dictionary<string, string>();
         public string Validation
         {
             get
@@ -67,7 +60,7 @@ namespace library.Impl.Presentation.Table
             }
         }
 
-        public virtual V Domain { get; protected set; }
+        public virtual V Domain { get; set; }
 
         public virtual ITableColumn this[string reference]
         {

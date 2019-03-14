@@ -78,8 +78,7 @@ namespace library.Impl.Data.Query
         public virtual (Result result, U data) 
             SelectSingle
             (IQueryRepository query,
-            int maxdepth = 1, 
-            U data = default(U))
+            int maxdepth = 1)
         {
             var parameters = new List<SqlParameter>();
 
@@ -90,27 +89,26 @@ namespace library.Impl.Data.Query
                 _builder.GetFrom(queryjoins, query.Description.Name),
                 _builder.GetWhere(querycolumns, parameters), 1);
 
-            return SelectSingle(select, CommandType.Text, parameters, maxdepth, data);
+            return SelectSingle(select, CommandType.Text, parameters, maxdepth);
         }
 
         public virtual (Result result, U data) 
             SelectSingle
             (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1, U 
-            data = default(U))
+            int maxdepth = 1)
         {
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, data != null && data.Entity != null ? new List<T> { data.Entity } : default(List<T>));
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth);
 
             if (executequery.result.Success && executequery.entities != null)
             {
-                data = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
+                var instance = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
 
-                _mapper.Clear(data, 1, 0);
-                _mapper.Map(data, 1, 0);
+                _mapper.Clear(instance, 1, 0);
+                _mapper.Map(instance, 1, 0);
 
-                _mapper.Extra(data, 1, 0);
+                _mapper.Extra(instance, 1, 0);
 
-                return (executequery.result, data);
+                return (executequery.result, instance);
             }
 
             return (executequery.result, default(U));
@@ -119,8 +117,7 @@ namespace library.Impl.Data.Query
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (IQueryRepository query,
-            int maxdepth = 1, int top = 0,
-            IListData<T, U> datas = null)
+            int maxdepth = 1, int top = 0)
         {
             var parameters = new List<SqlParameter>();
 
@@ -131,30 +128,29 @@ namespace library.Impl.Data.Query
                 _builder.GetFrom(queryjoins, query.Description.Name),
                 _builder.GetWhere(querycolumns, parameters), top);
 
-            return SelectMultiple(select, CommandType.Text, parameters, maxdepth, datas);
+            return SelectMultiple(select, CommandType.Text, parameters, maxdepth);
         }
 
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (string commandtext,  CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1,
-            IListData<T, U> datas = null)
+            int maxdepth = 1)
         {
             var enumeration = new List<U>();
-            var iterator = (datas ?? new ListData<S, T, U>()).GetEnumerator();
+            var iterator = new ListData<S, T, U>().GetEnumerator();
 
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, datas?.Entities);
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth);
 
             if (executequery.result.Success && executequery.entities != null)
             {
                 foreach (var entity in executequery.entities)
                 {
-                    var data = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(entity);
+                    var instance = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(entity);
 
-                    _mapper.Clear(data, maxdepth, 0);
-                    _mapper.Map(data, maxdepth, 0);
+                    _mapper.Clear(instance, maxdepth, 0);
+                    _mapper.Map(instance, maxdepth, 0);
 
-                    enumeration.Add(data);
+                    enumeration.Add(instance);
                 }
 
                 return (executequery.result, enumeration);
@@ -214,6 +210,5 @@ namespace library.Impl.Data.Query
         {
             return _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
         }
-
     }
 }

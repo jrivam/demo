@@ -32,9 +32,6 @@ namespace library.Impl.Domain.Table
 
                     _mapper.Extra(domain, 1, 0);
 
-                    domain.Changed = false;
-                    domain.Deleted = false;
-
                     return (select.result, domain);
                 }
 
@@ -56,9 +53,6 @@ namespace library.Impl.Domain.Table
 
                     _mapper.Extra(domain, maxdepth, 0);
 
-                    domain.Changed = false;
-                    domain.Deleted = false;
-
                     return (selectquery.result, domain);
                 }
 
@@ -78,11 +72,6 @@ namespace library.Impl.Domain.Table
                 {
                     var updateinsert = (domain.Data.Entity.Id != null ? domain.Data.Update(useupdatedbcommand) : domain.Data.Insert(useinsertdbcommand));
 
-                    if (updateinsert.result.Success)
-                    {
-                        domain.Changed = false;
-                    }
-
                     return (updateinsert.result, domain);
                 }
                 else
@@ -100,11 +89,6 @@ namespace library.Impl.Domain.Table
                 if (!domain.Deleted)
                 {
                     var delete = domain.Data.Delete(usedbcommand);
-
-                    if (delete.result.Success)
-                    {
-                        domain.Deleted = true;
-                    }
 
                     return (delete.result, domain);
                 }

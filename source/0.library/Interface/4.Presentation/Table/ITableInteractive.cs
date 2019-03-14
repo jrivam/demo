@@ -16,7 +16,7 @@ namespace library.Interface.Presentation.Table
         Dictionary<string, string> Validations { get; }
         string Validation { get; }
 
-        V Domain { get; }
+        V Domain { get; set; }
 
         ITableColumn this[string reference] { get; }
 

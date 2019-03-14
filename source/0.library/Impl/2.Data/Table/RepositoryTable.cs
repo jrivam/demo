@@ -112,20 +112,21 @@ namespace library.Impl.Data.Table
         }
         public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, 1, data.Entity != null ? new List<T> { data.Entity } : default(List<T>));
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, 1, new List<T> { data.Entity });
 
             if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
-                _mapper.Clear(data, 1, 0);
-                _mapper.Map(data, 1, 0);
+                var instance = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
 
-                _mapper.Extra(data, 1, 0);
+                _mapper.Clear(instance, 1, 0);
+                _mapper.Map(instance, 1, 0);
 
-                return (executequery.result, data);
+                _mapper.Extra(instance, 1, 0);
+
+                return (executequery.result, instance);
             }
 
             return (executequery.result, default(U));
-
         }
 
         public virtual (Result result, U data) Insert(U data, bool usedbcommand = false)
@@ -175,6 +176,10 @@ namespace library.Impl.Data.Table
                 if (executescalar.scalar != null)
                 {
                     data.Entity.Id = Convert.ToInt32(executescalar.scalar);
+
+                    var instance = _mapper.CreateInstance(data.Entity);
+
+                    return (executescalar.result, instance);
                 }
                 else
                 {
@@ -182,7 +187,7 @@ namespace library.Impl.Data.Table
                 }
             }
 
-            return (executescalar.result, data);
+            return (executescalar.result, default(U));
         }
 
         public virtual (Result result, U data) Update(U data, bool usedbcommand = false)
@@ -222,13 +227,19 @@ namespace library.Impl.Data.Table
 
             if (executenonquery.result.Success)
             {
-                if (executenonquery.rows <= 0)
+                if (executenonquery.rows > 0)
+                {
+                    var instance = _mapper.CreateInstance(data.Entity);
+
+                    return (executenonquery.result, instance);
+                }
+                else
                 {
                     executenonquery.result.Messages.Add((ResultCategory.Information, "Update", "No rows affected"));
                 }
             }
 
-            return (executenonquery.result, data);
+            return (executenonquery.result, default(U));
         }
 
         public virtual (Result result, U data) Delete(U data, bool usedbcommand = false)
@@ -267,13 +278,19 @@ namespace library.Impl.Data.Table
 
             if (executenonquery.result.Success)
             {
-                if (executenonquery.rows <= 0)
+                if (executenonquery.rows > 0)
+                {
+                    var instance = _mapper.CreateInstance(data.Entity);
+
+                    return (executenonquery.result, instance);
+                }
+                else
                 {
                     executenonquery.result.Messages.Add((ResultCategory.Information, "Delete", "No rows affected"));
                 }
             }
 
-            return (executenonquery.result, data);
+            return (executenonquery.result, default(U));
         }
     }
 }

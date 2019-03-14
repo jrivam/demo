@@ -21,11 +21,11 @@ namespace data.Model
             DeleteDbCommand = (false, ("gsp_empresa_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
 
-        public override (Result result, data.Model.Empresa data, bool isunique) CheckIsUnique(IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> query = default(IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>))
+        public override IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> QueryUnique
         {
-            if (this.Ruc != null)
+            get
             {
-                var _query = (data.Query.Empresa)query ?? new data.Query.Empresa();
+                var _query = new data.Query.Empresa();
 
                 if (this.Id != null)
                 {
@@ -33,11 +33,20 @@ namespace data.Model
                 }
                 _query.Ruc = (this.Ruc, WhereOperator.Equals);
 
-                var selectsingle = _query.SelectSingle(1, new data.Model.Empresa());
+                return _query;
+            }
+        }
+        public override (Result result, data.Model.Empresa data, bool isunique) CheckIsUnique()
+        {
+            if (this.Ruc != null)
+            {
+                var checkisunique = base.CheckIsUnique();
 
-                if (selectsingle.data != null)
+                if (!checkisunique.isunique)
                 {
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc {this.Ruc} already exists in Id: {selectsingle.data?.Id}") } }, selectsingle.data, selectsingle.data == null);
+                    checkisunique.result.Append(new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc {this.Ruc} already exists in Id: {checkisunique.data?.Id}") } });
+
+                    return checkisunique;
                 }
 
                 return (new Result() { Success = true }, null, true);

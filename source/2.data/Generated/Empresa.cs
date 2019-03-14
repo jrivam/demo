@@ -1,5 +1,4 @@
 ﻿using library.Extension;
-using library.Impl;
 using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
@@ -19,8 +18,8 @@ namespace data.Model
     {
         public Empresa(entities.Model.Empresa entity,
             IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
-            : base(entity, 
-                  repository, 
+            : base(entity,
+                  repository,
                   typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
             Columns.Add(new TableColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
@@ -29,8 +28,8 @@ namespace data.Model
             Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
-        public Empresa(entities.Model.Empresa entity, 
-            ConnectionStringSettings connectionstringsettings, 
+        public Empresa(entities.Model.Empresa entity,
+            ConnectionStringSettings connectionstringsettings,
             IReaderEntity<entities.Model.Empresa> reader, IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
             : this(entity,
                   new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
@@ -38,7 +37,7 @@ namespace data.Model
         }
         public Empresa(entities.Model.Empresa entity,
             string appsettingsconnectionstringname)
-            : this(entity, 
+            : this(entity,
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
                   new entities.Reader.Empresa(), new data.Mapper.Empresa())
         {
@@ -49,13 +48,16 @@ namespace data.Model
         {
         }
 
-        public override (Result result, data.Model.Empresa data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> query = null)
+        public override IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> QuerySelect
         {
-            var _query = (data.Query.Empresa)query ?? new data.Query.Empresa();
+            get
+            {
+                var _query = new data.Query.Empresa();
 
-            _query.Id = (this.Id, WhereOperator.Equals);
+                _query.Id = (this.Id, WhereOperator.Equals);
 
-            return _query.SelectSingle(maxdepth, this);
+                return _query;
+            }
         }
 
         public virtual int? Id

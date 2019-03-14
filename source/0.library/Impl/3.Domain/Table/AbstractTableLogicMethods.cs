@@ -22,19 +22,30 @@ namespace library.Impl.Domain.Table
         {
             var load = _logic.Load(this as V, usedbcommand);
 
+            this.Changed = false;
+            this.Deleted = false;
+
             return load;
         }
         public virtual (Result result, V domain) LoadQuery(int maxdepth = 1)
         {
             var load = _logic.LoadQuery(this as V, maxdepth);
 
+            this.Changed = false;
+            this.Deleted = false;
+
             return load;
         }
         public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            (Result result, V domain) save = _logic.Save(this as V, useinsertdbcommand, useupdatedbcommand);
+            var save = _logic.Save(this as V, useinsertdbcommand, useupdatedbcommand);
 
             save.result.Append(SaveChildren());
+
+            if (save.result.Success)
+            {
+                this.Changed = false;
+            }
 
             return save;
         }
@@ -46,8 +57,12 @@ namespace library.Impl.Domain.Table
             {
                 var erase = _logic.Erase(this as V, usedbcommand);
 
-                erasechildren.domain = erase.domain;
                 erasechildren.result.Append(erase.result);
+
+                if (erase.result.Success)
+                {
+                    this.Deleted = true;
+                }
             }
 
             return erasechildren;

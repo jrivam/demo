@@ -1,10 +1,7 @@
 ﻿using library.Impl;
-using library.Impl.Data.Query;
 using library.Interface.Data.Sql;
 using library.Interface.Data.Sql.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using Moq.Protected;
 
 namespace test.Empresa
 {
@@ -113,6 +110,7 @@ namespace test.Empresa
         {
             var domain = Domain_Save_NonDbCommand_Insert();
 
+            domain.Ruc = "RUC";
             domain.RazonSocial += "1";
             domain.Activo = false;
 

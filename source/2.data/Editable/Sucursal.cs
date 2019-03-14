@@ -21,11 +21,11 @@ namespace data.Model
             DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
 
-        public override (Result result, data.Model.Sucursal data, bool isunique) CheckIsUnique(IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> query = default(IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>))
+        public override IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> QueryUnique
         {
-            if (this.Codigo != null)
+            get
             {
-                var _query = (data.Query.Sucursal)query ?? new data.Query.Sucursal();
+                var _query = new data.Query.Sucursal();
 
                 if (this.Id != null)
                 {
@@ -33,11 +33,20 @@ namespace data.Model
                 }
                 _query.Codigo = (this.Codigo, WhereOperator.Equals);
 
-                var selectsingle = _query.SelectSingle(1, new data.Model.Sucursal());
+                return _query;
+            }
+        }
+        public override (Result result, data.Model.Sucursal data, bool isunique) CheckIsUnique()
+        {
+            if (this.Codigo != null)
+            {
+                var checkisunique = base.CheckIsUnique();
 
-                if (selectsingle.data != null)
+                if (!checkisunique.isunique)
                 {
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo {this.Codigo} already exists in Id: {selectsingle.data?.Id}") } }, selectsingle.data, selectsingle.data == null);
+                    checkisunique.result.Append(new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo {this.Codigo} already exists in Id: {checkisunique.data?.Id}") } });
+
+                    return checkisunique;
                 }
 
                 return (new Result() { Success = true }, null, true);
@@ -63,7 +72,6 @@ namespace data.Model
 
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
-
         public virtual (Result result, data.Model.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, data.Query.Sucursal query = null)
         {
             var _query = query ?? new data.Query.Sucursal();

@@ -1,5 +1,4 @@
 ﻿using library.Extension;
-using library.Impl;
 using library.Impl.Data;
 using library.Impl.Data.Mapper;
 using library.Impl.Data.Query;
@@ -53,13 +52,16 @@ namespace data.Model
         {
         }
 
-        public override (Result result, data.Model.Sucursal data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> query = null)
+        public override IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> QuerySelect
         {
-            var _query = (data.Query.Sucursal)query ?? new data.Query.Sucursal();
+            get
+            {
+                var _query = new data.Query.Sucursal();
 
-            _query.Id = (this.Id, WhereOperator.Equals);
+                _query.Id = (this.Id, WhereOperator.Equals);
 
-            return _query.SelectSingle(maxdepth, this);
+                return _query;
+            }
         }
 
         public virtual int? Id

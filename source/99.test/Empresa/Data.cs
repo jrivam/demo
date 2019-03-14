@@ -1,6 +1,7 @@
 ﻿using library.Impl.Data.Sql;
 using library.Impl.Data.Table;
 using library.Interface.Data;
+using library.Interface.Data.Query;
 using library.Interface.Data.Sql;
 using library.Interface.Data.Sql.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,6 +36,17 @@ namespace test.Empresa
 
         }
 
+
+        private void AssertEqualFields(entities.Model.Empresa entity, data.Model.Empresa data, bool assertid = false)
+        {
+            if(assertid)
+            {
+                Assert.AreEqual(Entity.Id, data.Id);
+            }
+            Assert.AreEqual(entity.Ruc, data.Ruc);
+            Assert.AreEqual(entity.RazonSocial, data.RazonSocial);
+            Assert.AreEqual(entity.Activo, data.Activo);
+        }
         public (Mock<IDbCommand> mockCommand, Mock<ISqlSyntaxSign> mockSyntaxSign, Mock<ISqlCreator> mockCreator) 
             GetDatabaseMock()
         {
@@ -118,9 +130,7 @@ namespace test.Empresa
             var select = data.Select();
 
             Assert.IsTrue(select.result.Success);
-            Assert.AreEqual(Entity.Id, select.data.Id);
-            Assert.AreEqual(Entity.RazonSocial, select.data.RazonSocial);
-            Assert.AreEqual(Entity.Activo, select.data.Activo);
+            AssertEqualFields(Entity, select.data, true);
         }
         [TestMethod]
         public void Data_Table_Select_DbCommand_Success()
@@ -130,9 +140,7 @@ namespace test.Empresa
             var select = data.Select();
 
             Assert.IsTrue(select.result.Success);
-            Assert.AreEqual(Entity.Id, select.data.Id);
-            Assert.AreEqual(Entity.RazonSocial, select.data.RazonSocial);
-            Assert.AreEqual(Entity.Activo, select.data.Activo);
+            AssertEqualFields(Entity, select.data, true);
         }
 
         public data.Model.Empresa Data_Table_Insert()
@@ -145,9 +153,10 @@ namespace test.Empresa
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new entities.Model.Empresa()
+            var data = new data.Model.Empresa(new entities.Model.Empresa()
             {
                 RazonSocial = Entity.RazonSocial,
+                Ruc = Entity.Ruc,                
                 Activo = Entity.Activo
             },
             new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(
@@ -156,6 +165,11 @@ namespace test.Empresa
                 mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
+
+            var mockQueryRepositoryMethods = new Moq.Mock<IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>>();
+            mockQueryRepositoryMethods.Setup(x => x.SelectSingle(1)).Returns(null);
+
+            return data;
         }
         public data.Model.Empresa Data_Table_Insert_NonDbCommand()
         {
@@ -179,9 +193,7 @@ namespace test.Empresa
             var insert = data.Insert();
 
             Assert.IsTrue(insert.result.Success);
-            Assert.AreEqual(Entity.Id, insert.data.Id);
-            Assert.AreEqual(Entity.RazonSocial, insert.data.RazonSocial);
-            Assert.AreEqual(Entity.Activo, insert.data.Activo);
+            AssertEqualFields(Entity, insert.data, true);
         }
         [TestMethod]
         public void Data_Table_Insert_DbCommand_Success()
@@ -191,9 +203,7 @@ namespace test.Empresa
             var insert = data.Insert();       
 
             Assert.IsTrue(insert.result.Success);
-            Assert.AreEqual(Entity.Id, insert.data.Id);
-            Assert.AreEqual(Entity.RazonSocial, insert.data.RazonSocial);
-            Assert.AreEqual(Entity.Activo, insert.data.Activo);
+            AssertEqualFields(Entity, insert.data, true);
         }
 
         public data.Model.Empresa Data_Table_Update()
@@ -208,6 +218,7 @@ namespace test.Empresa
             return new data.Model.Empresa(new entities.Model.Empresa()
             {
                 Id = Entity.Id,
+                Ruc = Entity.Ruc,
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },
@@ -240,9 +251,7 @@ namespace test.Empresa
             var update = data.Update();
 
             Assert.IsTrue(update.result.Success);
-            Assert.AreEqual(Entity.Id, update.data.Id);
-            Assert.AreEqual(Entity.RazonSocial, update.data.RazonSocial);
-            Assert.AreEqual(Entity.Activo, update.data.Activo);
+            AssertEqualFields(Entity, update.data, true);
         }
         [TestMethod]
         public void Data_Table_Update_DbCommand_Success()
@@ -252,9 +261,7 @@ namespace test.Empresa
             var update = data.Update();
 
             Assert.IsTrue(update.result.Success);
-            Assert.AreEqual(Entity.Id, update.data.Id);
-            Assert.AreEqual(Entity.RazonSocial, update.data.RazonSocial);
-            Assert.AreEqual(Entity.Activo, update.data.Activo);
+            AssertEqualFields(Entity, update.data, true);
         }
 
         public data.Model.Empresa Data_Table_Delete()
@@ -269,6 +276,7 @@ namespace test.Empresa
             return new data.Model.Empresa(new entities.Model.Empresa()
             {
                 Id = Entity.Id,
+                Ruc = Entity.Ruc,
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },

@@ -7,7 +7,7 @@ namespace library.Interface.Domain.Table
         where T: IEntity
         where U : ITableRepository, ITableEntity<T>
     {
-        U Data { get; }
+        U Data { get; set; }
 
         ITableColumn this[string reference] { get; }
 

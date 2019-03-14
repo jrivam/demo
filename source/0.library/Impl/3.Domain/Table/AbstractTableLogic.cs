@@ -8,7 +8,7 @@ namespace library.Impl.Domain.Table
         where T : IEntity
         where U : ITableRepository, ITableEntity<T>, ITableRepositoryMethods<T, U>, new()
     {
-        public virtual U Data { get; protected set; }
+        public virtual U Data { get; set; }
 
         public virtual ITableColumn this[string reference]
         {

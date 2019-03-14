@@ -19,27 +19,55 @@ namespace library.Impl.Data.Table
             Init();
         }
 
-        public abstract (Result result, U data) SelectQuery(int maxdepth = 1, IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>));
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
-            return _repository.Select(this as U, usedbcommand);
+            var selectsingle = _repository.Select(this as U, usedbcommand);
+            this.Entity = selectsingle.data.Entity;
+            this.Columns = selectsingle.data.Columns;
+
+            return selectsingle;
         }
-        public virtual (Result result, U data, bool isunique) CheckIsUnique(IQueryRepositoryMethods<T, U> query = default(IQueryRepositoryMethods<T, U>))
+
+        public abstract IQueryRepositoryMethods<T, U> QuerySelect { get; }
+        public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
         {
-            return (new Result() { Success = true }, null, true);
+            var selectsingle =  QuerySelect.SelectSingle(maxdepth);
+            this.Entity = selectsingle.data.Entity;
+            this.Columns = selectsingle.data.Columns;
+
+            return selectsingle;
+        }
+
+        public abstract IQueryRepositoryMethods<T, U> QueryUnique { get; }
+        public virtual (Result result, U data, bool isunique) CheckIsUnique()
+        {
+            var selectsingle = QueryUnique.SelectSingle(1);
+
+            return (selectsingle.result, selectsingle.data, selectsingle.data == null);
         }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
         {
-            return _repository.Insert(this as U, usedbcommand);
+            var insert = _repository.Insert(this as U, usedbcommand);
+            this.Columns["Id"].Value = this.Entity.Id = insert.data.Entity.Id;
+
+            Select(usedbcommand);
+
+            return insert;
         }
         public virtual (Result result, U data) Update(bool usedbcommand = false)
         {
-            return _repository.Update(this as U, usedbcommand);
+            var update = _repository.Update(this as U, usedbcommand);
+
+            Select(usedbcommand);
+
+            return update;
         }
         public virtual (Result result, U data) Delete(bool usedbcommand = false)
         {
-            return _repository.Delete(this as U, usedbcommand);
+            var delete = _repository.Delete(this as U, usedbcommand);
+
+            return delete;
         }
 
         public U SetProperties(T entity, bool nulls = false)
