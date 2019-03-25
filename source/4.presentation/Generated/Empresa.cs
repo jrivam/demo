@@ -1,19 +1,19 @@
-﻿using library.Impl;
-using library.Impl.Data.Sql;
-using library.Impl.Presentation;
-using library.Impl.Presentation.Query;
-using library.Impl.Presentation.Raiser;
-using library.Impl.Presentation.Table;
-using library.Interface.Presentation.Query;
-using library.Interface.Presentation.Raiser;
-using library.Interface.Presentation.Table;
+﻿using Library.Impl;
+using Library.Impl.Data.Sql;
+using Library.Impl.Presentation;
+using Library.Impl.Presentation.Query;
+using Library.Impl.Presentation.Raiser;
+using Library.Impl.Presentation.Table;
+using Library.Interface.Presentation.Query;
+using Library.Interface.Presentation.Raiser;
+using Library.Interface.Presentation.Table;
 
 namespace presentation.Model
 {
-    public partial class Empresa : AbstractTableInteractiveMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresa(domain.Model.Empresa domain,
-            IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
+            IInteractiveTable<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
             int maxdepth = 1)
             : base(domain, 
                   interactive, 
@@ -22,10 +22,10 @@ namespace presentation.Model
         }
 
         public Empresa(domain.Model.Empresa domain,
-            IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
+            IRaiserInteractive<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
              int maxdepth = 1)
             : this(domain,
-                  new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
+                  new InteractiveTable<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
                   maxdepth)
         {
         }
@@ -43,14 +43,14 @@ namespace presentation.Model
                 maxdepth)
         {
         }
-        public Empresa(entities.Model.Empresa entity,
+        public Empresa(Entities.Table.Empresa entity,
             int maxdepth = 1)
             : this(new data.Model.Empresa(entity),
                 maxdepth)
         {
         }
         public Empresa(int maxdepth = 1)
-            : this(new entities.Model.Empresa(),
+            : this(new Entities.Table.Empresa(),
                   maxdepth)
         {
         }
@@ -101,7 +101,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Empresas : ListPresentation<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresas : ListPresentation<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresas(domain.Model.Empresas domains,
             presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
@@ -129,19 +129,19 @@ namespace presentation.Model
 
 namespace presentation.Query
 {
-    public partial class Empresa : AbstractQueryInteractiveMethods<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : AbstractQueryModel<domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresa(domain.Query.Empresa domain,
-            IInteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
+            IInteractiveQuery<domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
             : base(domain,
                   interactive)
         {
         }
 
         public Empresa(domain.Query.Empresa domain,
-            IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper)
+            IRaiserInteractive<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper)
             : this(domain,
-                  new InteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
+                  new InteractiveQuery<domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
         {
         }
 
@@ -194,7 +194,7 @@ namespace presentation.Query
 
 namespace presentation.Raiser
 {
-    public partial class Empresa : BaseRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : BaseRaiserInteractive<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public override presentation.Model.Empresa Clear(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
         {

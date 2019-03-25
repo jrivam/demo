@@ -17,6 +17,8 @@ namespace presentation.Model
 
                 var checkisunique = Domain.Data.CheckIsUnique();
                 ValidateCodigo = String.Join("/", checkisunique.result.Messages.Select(x => x.message).ToArray()).Replace(Environment.NewLine, string.Empty);
+
+                OnPropertyChanged("CodigoX");
             }
         }
         public string ValidateCodigo

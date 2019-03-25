@@ -1,13 +1,15 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
+﻿using Library.Interface.Data.Table;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation.Table;
 
-namespace library.Interface.Presentation
+namespace Library.Interface.Presentation
 {
-    public interface IInteractive<T, U, V> 
+    public interface IInteractive<T, U, V, W>
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
     {
     }
 }

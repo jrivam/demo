@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:helper="clr-namespace:library.Impl.Presentation;assembly=library"                    
+                    xmlns:helper="clr-namespace:Library.Impl.Presentation;assembly=library"                    
                     xmlns:local="clr-namespace:WpfApp">
     <helper:DictionaryItemConverter x:Key="converterhelper"/>
     <Style x:Key="DataGridCellVerticalCenter" TargetType="{x:Type DataGridCell}">

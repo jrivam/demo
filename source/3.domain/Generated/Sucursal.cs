@@ -1,29 +1,29 @@
-﻿using library.Impl;
-using library.Impl.Data.Sql;
-using library.Impl.Domain;
-using library.Impl.Domain.Mapper;
-using library.Impl.Domain.Query;
-using library.Impl.Domain.Table;
-using library.Interface.Domain.Mapper;
-using library.Interface.Domain.Query;
-using library.Interface.Domain.Table;
+﻿using Library.Impl;
+using Library.Impl.Data.Sql;
+using Library.Impl.Domain;
+using Library.Impl.Domain.Mapper;
+using Library.Impl.Domain.Query;
+using Library.Impl.Domain.Table;
+using Library.Interface.Domain.Mapper;
+using Library.Interface.Domain.Query;
+using Library.Interface.Domain.Table;
 using System;
 
 namespace domain.Model
 {
-    public partial class Sucursal : AbstractTableLogicMethods<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractTableDomain<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public Sucursal(data.Model.Sucursal data,
-            ILogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+            ILogicTable<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
             : base(data, 
                   logic)
         {
         }
 
         public Sucursal(data.Model.Sucursal data,
-            IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
+            IMapperLogic<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
             : this(data,
-                  new LogicTable<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+                  new LogicTable<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
         {
         }
         public Sucursal(data.Model.Sucursal data)
@@ -32,12 +32,12 @@ namespace domain.Model
         {
         }
 
-        public Sucursal(entities.Model.Sucursal entity)
+        public Sucursal(Entities.Table.Sucursal entity)
             : this(new data.Model.Sucursal(entity))
         {
         }
         public Sucursal()
-            : this(new entities.Model.Sucursal())
+            : this(new Entities.Table.Sucursal())
         {
         }
 
@@ -130,7 +130,7 @@ namespace domain.Model
         }
     }
 
-    public partial class Sucursales : ListDomain<data.Query.Sucursal, domain.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursales : ListDomain<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public Sucursales()
            : base()
@@ -145,19 +145,19 @@ namespace domain.Model
 
 namespace domain.Query
 {
-    public partial class Sucursal : AbstractQueryLogicMethods<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryDomain<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public Sucursal(data.Query.Sucursal data,
-            ILogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+            ILogicQuery<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
             : base(data, 
                   logic)
         {
         }
 
         public Sucursal(data.Query.Sucursal data,
-            IMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
+            IMapperLogic<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
             : this(data,
-                  new LogicQuery<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+                  new LogicQuery<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
         {
         }
 
@@ -223,7 +223,7 @@ namespace domain.Query
 
 namespace domain.Mapper
 {
-    public partial class Sucursal : BaseMapperLogic<entities.Model.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : BaseMapperLogic<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
         public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain, int maxdepth = 1, int depth = 0)
         {

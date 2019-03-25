@@ -1,6 +1,6 @@
-﻿using library.Impl;
-using library.Interface.Data.Sql;
-using library.Interface.Data.Sql.Builder;
+﻿using Library.Impl;
+using Library.Interface.Data.Sql;
+using Library.Interface.Data.Sql.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace test.Empresa
@@ -65,9 +65,9 @@ namespace test.Empresa
 
             //var data = new data.Query.Empresa
             //    (
-            //        new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+            //        new RepositoryQuery<data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa>
             //        (mockDatabaseQuery.mockCreator.Object,
-            //        new entities.Reader.Empresa(),
+            //        new Entities.Reader.Empresa(),
             //        new data.Mapper.Empresa(),
             //        mockDatabaseQuery.mockSyntaxSign.Object,
             //        mockCommandBuilderQuery.Object, mockBuilderQuery.Object)
@@ -77,9 +77,9 @@ namespace test.Empresa
             //{ CallBase = true };
             //query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal
             //    (
-            //        new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+            //        new RepositoryQuery<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal>
             //        (mockDatabaseQuery.mockCreator.Object,
-            //        new entities.Reader.Sucursal(),
+            //        new Entities.Reader.Sucursal(),
             //        new data.Mapper.Sucursal(),
             //        mockDatabaseQuery.mockSyntaxSign.Object,
             //        mockCommandBuilderQuery.Object, mockBuilderQuery.Object))

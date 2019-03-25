@@ -1,62 +1,66 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Query;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation.Query;
-using library.Interface.Presentation.Raiser;
-using library.Interface.Presentation.Table;
+﻿using Library.Interface.Data.Query;
+using Library.Interface.Data.Table;
+using Library.Interface.Domain.Query;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation.Query;
+using Library.Interface.Presentation.Raiser;
+using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 
-namespace library.Impl.Presentation.Query
+namespace Library.Impl.Presentation.Query
 {
-    public class InteractiveQuery<T, U, V, W> : Interactive<T, U, V>, IInteractiveQuery<T, U, V, W> 
+    public class InteractiveQuery<R, S, T, U, V, W> : Interactive<T, U, V, W>, IInteractiveQuery<R, S, T, U, V, W> 
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>
-        where W : ITableInteractive<T, U, V>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
+        where S : IQueryData<T, U>
+        where R : IQueryDomain<S, T, U, V>
     {
-        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
-
         public InteractiveQuery(IRaiserInteractive<T, U, V, W> raiser)
-            : base()
+            : base(raiser)
         {
-            _raiser = raiser;
         }
 
-        public virtual (Result result, W presentation) Retrieve(IQueryLogicMethods<T, U, V> querylogic, int maxdepth = 1, W presentation = default(W))
+        public virtual (Result result, W presentation) Retrieve(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, W presentation = default(W))
         {
-            var retrieve = querylogic.Retrieve(maxdepth);
+            var retrieve = query.Domain.Retrieve(maxdepth, presentation.Domain);
 
             if (retrieve.result.Success && retrieve.domain != null)
             {
-                presentation = _raiser.CreateInstance(retrieve.domain, maxdepth);
+                var instance = _raiser.CreateInstance(retrieve.domain, maxdepth);
 
-                _raiser.Clear(presentation, maxdepth, 0);
-                _raiser.Raise(presentation, maxdepth, 0);
+                _raiser.Clear(instance, maxdepth, 0);
+                _raiser.Raise(instance, maxdepth, 0);
+
+                return (retrieve.result, presentation);
             }
 
-            return (retrieve.result, presentation);
+            return (retrieve.result, default(W));
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(IQueryLogicMethods<T, U, V> querylogic, int maxdepth = 1, int top = 0, IList<W> presentations = null)
+        public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IList<W> presentations = null)
         {
             var enumeration = new List<W>();
             var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
-            var list = querylogic.List(maxdepth, top);
+            var list = query.Domain.List(maxdepth, top);
             if (list.result.Success && list.domains != null)
             {
                 foreach (var domain in list.domains)
                 {
-                    var presentation = iterator.MoveNext() ? iterator.Current : _raiser.CreateInstance(domain, maxdepth);
+                    var instance = iterator.MoveNext() ? iterator.Current : _raiser.CreateInstance(domain, maxdepth);
 
-                    _raiser.Clear(presentation, maxdepth, 0);
-                    _raiser.Raise(presentation, maxdepth, 0);
+                    _raiser.Clear(instance, maxdepth, 0);
+                    _raiser.Raise(instance, maxdepth, 0);
 
-                    enumeration.Add(presentation);
+                    enumeration.Add(instance);
                 }
+
+                return (list.result, enumeration);
             }
 
-            return (list.result, enumeration);
+            return (list.result, default(IList<W>));
         }
     }
 }

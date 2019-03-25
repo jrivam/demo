@@ -1,5 +1,5 @@
-﻿using library.Impl;
-using library.Impl.Presentation;
+﻿using Library.Impl;
+using Library.Impl.Presentation;
 using System;
 using System.Windows;
 

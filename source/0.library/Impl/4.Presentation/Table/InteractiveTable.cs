@@ -1,78 +1,87 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation.Raiser;
-using library.Interface.Presentation.Table;
+﻿using Library.Interface.Data.Table;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation.Raiser;
+using Library.Interface.Presentation.Table;
 
-namespace library.Impl.Presentation.Table
+namespace Library.Impl.Presentation.Table
 {
-    public class InteractiveTable<T, U, V, W> : Interactive<T, U, V>, IInteractiveTable<T, U, V, W> 
+    public class InteractiveTable<T, U, V, W> : Interactive<T, U, V, W>, IInteractiveTable<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
-        where W : ITableInteractive<T, U, V>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
     {
-        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
-
         public InteractiveTable(IRaiserInteractive<T, U, V, W> raiser)
-            : base()
+            : base(raiser)
         {
-            _raiser = raiser;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, bool usedbcommand = false)
+        public virtual (Result result, W presentation) Load(W table, bool usedbcommand = false)
         {
-            var load = presentation.Domain.Load(usedbcommand);
+            var load = table.Domain.Load(usedbcommand);
 
             if (load.result.Success && load.domain != null)
             {
-                _raiser.Clear(presentation, 1, 0);
-                _raiser.Raise(presentation, 1, 0);
+                //var presentation = _raiser.CreateInstance(load.domain, 1);
 
-                _raiser.Extra(presentation, 1, 0);
+                _raiser.Clear(table, 1, 0);
+                _raiser.Raise(table, 1, 0);
 
-                return (load.result, presentation);
+                _raiser.Extra(table, 1, 0);
+
+                return (load.result, table);
             }
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W presentation) LoadQuery(W presentation, int maxdepth = 1)
+        public virtual (Result result, W presentation) LoadQuery(W table, int maxdepth = 1)
         {
-            var loadquery = presentation.Domain.LoadQuery(maxdepth);
+            var loadquery = table.Domain.LoadQuery(maxdepth);
 
             if (loadquery.result.Success && loadquery.domain != null)
             {
-                _raiser.Clear(presentation, maxdepth, 0);
-                _raiser.Raise(presentation, maxdepth, 0);
+                //var presentation = _raiser.CreateInstance(loadquery.domain, 1);
 
-                _raiser.Extra(presentation, maxdepth, 0);
+                _raiser.Clear(table, maxdepth, 0);
+                _raiser.Raise(table, maxdepth, 0);
 
-                return (loadquery.result, presentation);
+                _raiser.Extra(table, maxdepth, 0);
+
+                return (loadquery.result, table);
             }
 
             return (loadquery.result, default(W));
         }
-        public virtual (Result result, W presentation) Save(W presentation, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W presentation) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = presentation.Domain.Save(useinsertdbcommand, useupdatedbcommand);
+            var save = table.Domain.Save(useinsertdbcommand, useupdatedbcommand);
 
             if (save.result.Success)
             {
-                _raiser.Raise(presentation);
+                //var presentation = _raiser.CreateInstance(save.domain, 1);
+
+                _raiser.Raise(table);
+
+                return (save.result, table);
             }
 
-            return (save.result, presentation);
+            return (save.result, default(W));
         }
-        public virtual (Result result, W presentation) Erase(W presentation, bool usedbcommand = false)
+        public virtual (Result result, W presentation) Erase(W table, bool usedbcommand = false)
         {
-            var erase = presentation.Domain.Erase(usedbcommand);
+            var erase = table.Domain.Erase(usedbcommand);
 
             if (erase.result.Success)
             {
-                _raiser.Raise(presentation);
+                //var presentation = _raiser.CreateInstance(erase.domain, 1);
+
+                _raiser.Raise(table);
+
+                return (erase.result, table);
             }
 
-            return (erase.result, presentation);
+            return (erase.result, default(W));
         }
     }
 }

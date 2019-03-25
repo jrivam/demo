@@ -1,13 +1,13 @@
-﻿using library.Extension;
-using library.Impl.Data;
-using library.Impl.Data.Mapper;
-using library.Impl.Data.Query;
-using library.Impl.Data.Sql;
-using library.Impl.Data.Table;
-using library.Interface.Data.Mapper;
-using library.Interface.Data.Query;
-using library.Interface.Data.Table;
-using library.Interface.Entities.Reader;
+﻿using Library.Extension;
+using Library.Impl.Data;
+using Library.Impl.Data.Mapper;
+using Library.Impl.Data.Query;
+using Library.Impl.Data.Sql;
+using Library.Impl.Data.Table;
+using Library.Interface.Data.Mapper;
+using Library.Interface.Data.Query;
+using Library.Interface.Data.Table;
+using Library.Interface.Entities.Reader;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,44 +15,44 @@ using System.Configuration;
 
 namespace data.Model
 {
-    public partial class Sucursal : AbstractTableRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, data.Model.Sucursal>
     {
-        public Sucursal(entities.Model.Sucursal entity,
-            IRepositoryTable<entities.Model.Sucursal, data.Model.Sucursal> repository)
+        public Sucursal(Entities.Table.Sucursal entity,
+            IRepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal> repository)
             : base(entity, 
                   repository, 
-                  typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
-            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
-            Columns.Add(new TableColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo", isunique: true));
-            Columns.Add(new TableColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new TableColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo", isunique: true));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new ColumnTable<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
 
-            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
-        public Sucursal(entities.Model.Sucursal entity,
+        public Sucursal(Entities.Table.Sucursal entity,
             ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<entities.Model.Sucursal> reader, IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
+            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, data.Model.Sucursal> mapper)
             : this(entity,
-                  new RepositoryTable<entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
+                  new RepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
-        public Sucursal(entities.Model.Sucursal entity,
+        public Sucursal(Entities.Table.Sucursal entity,
             string appsettingsconnectionstringname)
             : this(entity, 
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],                  
-                  new entities.Reader.Sucursal(), new data.Mapper.Sucursal())
+                  new Entities.Reader.Sucursal(), new data.Mapper.Sucursal())
         {
         }
 
         public Sucursal()
-            : this(new entities.Model.Sucursal())
+            : this(new Entities.Table.Sucursal())
         {
         }
 
-        public override IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> QuerySelect
+        public override IQueryData<Entities.Table.Sucursal, data.Model.Sucursal> QuerySelect
         {
             get
             {
@@ -147,13 +147,13 @@ namespace data.Model
         }
     }
 
-    public partial class Sucursales : ListData<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursales : ListData<Entities.Table.Sucursal, data.Model.Sucursal>
     {
         public Sucursales()
            : base()
         {
         }
-        public Sucursales(entities.Model.Sucursales entities)
+        public Sucursales(Entities.Table.Sucursales entities)
             : base(entities)
         {
         }
@@ -162,42 +162,42 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Sucursal : AbstractQueryRepositoryMethods<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryData<Entities.Table.Sucursal, data.Model.Sucursal>
     {
-        public override IList<(IQueryRepository internaltable, IQueryColumn internalkey, IQueryRepository externaltable, IQueryColumn externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
+        public override IList<(IColumnQuery internalkey, IColumnQuery externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
         {
-            var joins = new List<(IQueryRepository internaltable, IQueryColumn internalkey, IQueryRepository externaltable, IQueryColumn externalkey)>();
+            var joins = new List<(IColumnQuery internalkey, IColumnQuery externalkey)>();
 
             if (_empresa != null || depth < maxdepth || maxdepth == 0)
             {
-                joins.Add((this, Columns["IdEmpresa"], Empresa(), Empresa()["Id"]));
+                joins.Add((Columns["IdEmpresa"], Empresa()["Id"]));
             }
 
             return joins;
         }
 
-        public Sucursal(IRepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal> repository)
+        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, data.Model.Sucursal> repository)
             : base(repository, 
-                  typeof(entities.Model.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
-            Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
-            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo"));
-            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new QueryColumn<DateTime?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new QueryColumn<bool?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo"));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
+            Columns.Add(new ColumnQuery<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
+            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
 
-            Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<entities.Model.Sucursal> reader, IMapperRepository<entities.Model.Sucursal, data.Model.Sucursal> mapper)
-            : this(new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
+            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, data.Model.Sucursal> mapper)
+            : this(new RepositoryQuery<Entities.Table.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
 
         public Sucursal(string appsettingsconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new entities.Reader.Sucursal(), new data.Mapper.Sucursal())
+                  new Entities.Reader.Sucursal(), new data.Mapper.Sucursal())
         {
         }
 
@@ -255,7 +255,7 @@ namespace data.Query
 
 namespace data.Mapper
 {
-    public partial class Sucursal : BaseMapperRepository<entities.Model.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : BaseMapperRepository<Entities.Table.Sucursal, data.Model.Sucursal>
     {
         public Sucursal()
             : base()

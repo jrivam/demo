@@ -1,54 +1,54 @@
-﻿using library.Extension;
-using library.Impl.Data;
-using library.Impl.Data.Mapper;
-using library.Impl.Data.Query;
-using library.Impl.Data.Sql;
-using library.Impl.Data.Table;
-using library.Interface.Data.Mapper;
-using library.Interface.Data.Query;
-using library.Interface.Data.Table;
-using library.Interface.Entities.Reader;
+﻿using Library.Extension;
+using Library.Impl.Data;
+using Library.Impl.Data.Mapper;
+using Library.Impl.Data.Query;
+using Library.Impl.Data.Sql;
+using Library.Impl.Data.Table;
+using Library.Interface.Data.Mapper;
+using Library.Interface.Data.Query;
+using Library.Interface.Data.Table;
+using Library.Interface.Entities.Reader;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Linq;
 
 namespace data.Model
 {
-    public partial class Empresa : AbstractTableRepositoryMethods<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractTableData<Entities.Table.Empresa, data.Model.Empresa>
     {
-        public Empresa(entities.Model.Empresa entity,
-            IRepositoryTable<entities.Model.Empresa, data.Model.Empresa> repository)
+        public Empresa(Entities.Table.Empresa entity,
+            IRepositoryTable<Entities.Table.Empresa, data.Model.Empresa> repository)
             : base(entity,
                   repository,
-                  typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
+                  typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
-            Columns.Add(new TableColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
-            Columns.Add(new TableColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc", isunique: true));
-            Columns.Add(new TableColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new TableColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc", isunique: true));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
-        public Empresa(entities.Model.Empresa entity,
+        public Empresa(Entities.Table.Empresa entity,
             ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<entities.Model.Empresa> reader, IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
+            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, data.Model.Empresa> mapper)
             : this(entity,
-                  new RepositoryTable<entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
+                  new RepositoryTable<Entities.Table.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
-        public Empresa(entities.Model.Empresa entity,
+        public Empresa(Entities.Table.Empresa entity,
             string appsettingsconnectionstringname)
             : this(entity,
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new entities.Reader.Empresa(), new data.Mapper.Empresa())
+                  new Entities.Reader.Empresa(), new data.Mapper.Empresa())
         {
         }
 
         public Empresa()
-            : this(new entities.Model.Empresa())
+            : this(new Entities.Table.Empresa())
         {
         }
 
-        public override IQueryRepositoryMethods<entities.Model.Empresa, data.Model.Empresa> QuerySelect
+        public override IQueryData<Entities.Table.Empresa, data.Model.Empresa> QuerySelect
         {
             get
             {
@@ -86,7 +86,7 @@ namespace data.Model
                 {
                     if (Entity?.Sucursales != null)
                     {
-                        Sucursales = new data.Model.Sucursales(new entities.Model.Sucursales(Entity?.Sucursales?.ToList()));
+                        Sucursales = new data.Model.Sucursales(new Entities.Table.Sucursales(Entity?.Sucursales?.ToList()));
                     }
                     else
                     {
@@ -108,13 +108,13 @@ namespace data.Model
         }
     }
 
-    public partial class Empresas : ListData<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresas : ListData<Entities.Table.Empresa, data.Model.Empresa>
     {
         public Empresas()
            : base()
         {
         }
-        public Empresas(entities.Model.Empresas entities)
+        public Empresas(Entities.Table.Empresas entities)
             : base(entities)
         {
         }
@@ -123,27 +123,27 @@ namespace data.Model
 
 namespace data.Query
 {
-    public partial class Empresa : AbstractQueryRepositoryMethods<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, data.Model.Empresa>
     {
-        public Empresa(IRepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa> repository)
+        public Empresa(IRepositoryQuery<Entities.Table.Empresa, data.Model.Empresa> repository)
             : base(repository, 
-                  typeof(entities.Model.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
+                  typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
-            Columns.Add(new QueryColumn<int?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
-            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc"));
-            Columns.Add(new QueryColumn<string>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new QueryColumn<bool?>(typeof(entities.Model.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc"));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
+            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<entities.Model.Empresa> reader, IMapperRepository<entities.Model.Empresa, data.Model.Empresa> mapper)
-            : this(new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
+            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, data.Model.Empresa> mapper)
+            : this(new RepositoryQuery<Entities.Table.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
 
         public Empresa(string appsettingsconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new entities.Reader.Empresa(), new data.Mapper.Empresa())
+                  new Entities.Reader.Empresa(), new data.Mapper.Empresa())
         {
         }
 
@@ -186,7 +186,7 @@ namespace data.Query
 
 namespace data.Mapper
 {
-    public partial class Empresa : BaseMapperRepository<entities.Model.Empresa, data.Model.Empresa>
+    public partial class Empresa : BaseMapperRepository<Entities.Table.Empresa, data.Model.Empresa>
     {
         public Empresa()
             : base()

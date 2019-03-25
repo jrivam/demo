@@ -1,17 +1,23 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation;
+﻿using Library.Interface.Data.Table;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation;
+using Library.Interface.Presentation.Raiser;
+using Library.Interface.Presentation.Table;
 
-namespace library.Impl.Presentation
+namespace Library.Impl.Presentation
 {
-    public class Interactive<T, U, V> : IInteractive<T, U, V> 
+    public class Interactive<T, U, V, W> : IInteractive<T, U, V, W>
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
     {
-        public Interactive()
+        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
+
+        public Interactive(IRaiserInteractive<T, U, V, W> raiser)
         {
+            _raiser = raiser;
         }
     }
 }

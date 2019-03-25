@@ -1,4 +1,4 @@
-﻿namespace library.Interface.Presentation
+﻿namespace Library.Interface.Presentation
 {
     public interface IStatus
     {

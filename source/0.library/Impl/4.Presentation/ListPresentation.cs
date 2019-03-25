@@ -1,12 +1,12 @@
-﻿using library.Impl.Domain;
-using library.Interface.Data.Query;
-using library.Interface.Data.Table;
-using library.Interface.Domain.Query;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation;
-using library.Interface.Presentation.Query;
-using library.Interface.Presentation.Table;
+﻿using Library.Impl.Domain;
+using Library.Interface.Data.Query;
+using Library.Interface.Data.Table;
+using Library.Interface.Domain.Query;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation;
+using Library.Interface.Presentation.Query;
+using Library.Interface.Presentation.Table;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,22 +16,22 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 
-namespace library.Impl.Presentation
+namespace Library.Impl.Presentation
 {
-    public class ListPresentation<S, R, Q, T, U, V, W> : ObservableCollection<W>, IListPresentationMethods<S, R, Q, T, U, V, W>, IListPresentation<S, R, T, U, V, W>, INotifyPropertyChanged, IStatus
+    public class ListPresentation<Q, R, S, T, U, V, W> : ObservableCollection<W>, IListPresentation<Q, R, S, T, U, V, W>, INotifyPropertyChanged, IStatus
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
-        where W : class, ITableInteractive<T, U, V>, ITableInteractiveMethods<T, U, V, W>
-        where S : IQueryRepositoryMethods<T, U>
-        where R : IQueryLogicMethods<T, U, V>
-        where Q : IQueryInteractiveMethods<T, U, V, W>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : class, ITableModel<T, U, V, W>
+        where S : IQueryData<T, U>
+        where R : IQueryDomain<S, T, U, V>
+        where Q : IQueryModel<R, S, T, U, V, W>
     {
-        public virtual ListDomain<S, R, T, U, V> Domains
+        public virtual ListDomain<T, U, V> Domains
         {
             get
             {
-                return new ListDomain<S, R, T, U, V>().Load(this?.Select(x => x.Domain));
+                return new ListDomain<T, U, V>().Load(this?.Select(x => x.Domain));
             }
             set
             {
@@ -67,7 +67,7 @@ namespace library.Impl.Presentation
         public virtual ICommand AddCommand { get; set; }
         public virtual ICommand RefreshCommand { get; set; }
 
-        public ListPresentation(ListDomain<S, R, T, U, V> domains, 
+        public ListPresentation(ListDomain<T, U, V> domains, 
             string name, 
             Q query, int maxdepth = 1, int top = 0)
         {
@@ -88,21 +88,21 @@ namespace library.Impl.Presentation
             }, delegate (object parameter) { return true; });
         }
         public ListPresentation(string name,
-                    Q query, int maxdepth = 1, int top = 0)
-            : this(new ListDomain<S, R, T, U, V>(), 
+            Q query, int maxdepth = 1, int top = 0)
+            : this(new ListDomain<T, U, V>(), 
                   name, 
                   query, maxdepth, top)
         {
         }
 
-        public virtual (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Refresh(int top = 0)
+        public virtual (Result result, ListPresentation<Q, R, S, T, U, V, W> list) Refresh(int top = 0)
         {
             this.ClearItems();
 
-            return Load(_query, _maxdepth, top);
+            return LoadQuery(_query, _maxdepth, top);
         }
 
-        public virtual (Result result, ListPresentation<S, R, Q, T, U, V, W> list) Load(Q query, int maxdepth = 1, int top = 0)
+        public virtual (Result result, ListPresentation<Q, R, S, T, U, V, W> list) LoadQuery(Q query, int maxdepth = 1, int top = 0)
         {
             Status = "Loading...";
             var list = query.List(maxdepth, top);
@@ -111,7 +111,8 @@ namespace library.Impl.Presentation
 
             return (list.result, Load(list.presentations));
         }
-        public virtual ListPresentation<S, R, Q, T, U, V, W> Load(IEnumerable<W> list)
+
+        public virtual ListPresentation<Q, R, S, T, U, V, W> Load(IEnumerable<W> list)
         {
             if (list != null)
             {
@@ -134,7 +135,7 @@ namespace library.Impl.Presentation
         {
             if (message.operation.result.Success)
                 if (message.operation.presentation?.Domain.Data.Entity.Id != null)
-                    this.Remove(message.operation.presentation);
+                    this.Remove(this.FirstOrDefault(x => x.Domain.Data.Entity.Id == message.operation.presentation?.Domain.Data.Entity.Id));
 
             TotalRecords();
 
@@ -158,7 +159,7 @@ namespace library.Impl.Presentation
 
             TotalRecords();
         }
-        public virtual void CommandRefresh((Result result, ListPresentation<S, R, Q, T, U, V, W> presentations) operation)
+        public virtual void CommandRefresh((Result result, ListPresentation<Q, R, S, T, U, V, W> presentations) operation)
         {
             TotalRecords();
         }

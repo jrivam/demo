@@ -1,12 +1,12 @@
-﻿using library.Impl.Entities;
-using library.Impl.Entities.Reader;
-using library.Interface.Entities;
+﻿using Library.Impl.Entities;
+using Library.Impl.Entities.Reader;
+using Library.Interface.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
-namespace entities.Model
+namespace Entities.Table
 {
     [MetadataType(typeof(EmpresaMetadata))]
     [Table("empresa")]
@@ -22,32 +22,32 @@ namespace entities.Model
         [Column("activo")]
         public virtual bool? Activo { get; set; }
 
-        public virtual ICollection<entities.Model.Sucursal> Sucursales { get; set; }
+        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; set; }
     }
 
-    public partial class Empresas : ListEntity<entities.Model.Empresa>
+    public partial class Empresas : ListEntity<Entities.Table.Empresa>
     {
         public Empresas()
             : base()
         {
         }
-        public Empresas(List<entities.Model.Empresa> entities)
+        public Empresas(List<Entities.Table.Empresa> entities)
             : base(entities)
         {
         }
     }
 }
 
-namespace entities.Reader
+namespace Entities.Reader
 {
-    public partial class Empresa : BaseReaderEntity<entities.Model.Empresa>
+    public partial class Empresa : BaseReaderEntity<Entities.Table.Empresa>
     {
         public Empresa()
             : base()
         {
         }
 
-        public override entities.Model.Empresa Clear(entities.Model.Empresa entity, int maxdepth = 1, int depth = 0)
+        public override Entities.Table.Empresa Clear(Entities.Table.Empresa entity, int maxdepth = 1, int depth = 0)
         {
             entity.Id = null;
             entity.Ruc = null;
@@ -59,7 +59,7 @@ namespace entities.Reader
             return entity;
         }
 
-        public override entities.Model.Empresa Read(entities.Model.Empresa entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
+        public override Entities.Table.Empresa Read(Entities.Table.Empresa entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
         {
             prefixname.Add("Empresa");
 

@@ -1,15 +1,15 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation.Table;
+﻿using Library.Interface.Data.Table;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation.Table;
 
-namespace library.Interface.Presentation.Raiser
+namespace Library.Interface.Presentation.Raiser
 {
     public interface IRaiserInteractive<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>
-        where W : ITableInteractive<T, U, V>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
     {
         W CreateInstance(V domain, int maxdepth);
 

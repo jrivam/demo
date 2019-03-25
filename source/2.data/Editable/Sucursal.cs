@@ -1,6 +1,6 @@
-﻿using library.Impl;
-using library.Impl.Data.Sql;
-using library.Interface.Data.Query;
+﻿using Library.Impl;
+using Library.Impl.Data.Sql;
+using Library.Interface.Data.Query;
 using System.Collections.Generic;
 using System.Data;
 
@@ -8,7 +8,7 @@ namespace data.Model
 {
     public partial class Sucursal
     {
-        public Sucursal(entities.Model.Sucursal entity)
+        public Sucursal(Entities.Table.Sucursal entity)
             : this(entity, "test.connectionstring.name")
         {
         }
@@ -21,7 +21,7 @@ namespace data.Model
             DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
 
-        public override IQueryRepositoryMethods<entities.Model.Sucursal, data.Model.Sucursal> QueryUnique
+        public override IQueryData<Entities.Table.Sucursal, data.Model.Sucursal> QueryUnique
         {
             get
             {
@@ -78,7 +78,7 @@ namespace data.Model
 
             _query.Empresa().Activo = (true, WhereOperator.Equals);
 
-            var load = new data.Model.Empresas().Load(_query?.Empresa(), maxdepth, top);
+            var load = new data.Model.Empresas().LoadQuery(_query?.Empresa(), maxdepth, top);
 
             Empresas = (data.Model.Empresas)load.list;
 

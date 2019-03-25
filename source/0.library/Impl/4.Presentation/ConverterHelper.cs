@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace library.Impl.Presentation
+namespace Library.Impl.Presentation
 {
     [ValueConversion(typeof(Dictionary<string, string>), typeof(string))]
     public class DictionaryItemConverter : IValueConverter

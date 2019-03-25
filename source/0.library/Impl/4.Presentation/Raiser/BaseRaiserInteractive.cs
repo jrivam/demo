@@ -1,19 +1,19 @@
 ﻿using System;
-using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation.Raiser;
-using library.Interface.Presentation.Table;
+using Library.Interface.Data.Table;
+using Library.Interface.Domain.Table;
+using Library.Interface.Entities;
+using Library.Interface.Presentation.Raiser;
+using Library.Interface.Presentation.Table;
 using System.Reflection;
 using System.Globalization;
 
-namespace library.Impl.Presentation.Raiser
+namespace Library.Impl.Presentation.Raiser
 {
     public class BaseRaiserInteractive<T, U, V, W> : IRaiserInteractive<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>
-        where W : ITableInteractive<T, U, V>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
     {
         public W CreateInstance(V domain, int maxdepth)
         {

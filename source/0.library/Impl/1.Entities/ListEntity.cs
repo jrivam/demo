@@ -1,9 +1,9 @@
-﻿using library.Interface.Entities;
+﻿using Library.Interface.Entities;
 using System.Collections.Generic;
 
-namespace library.Impl.Entities
+namespace Library.Impl.Entities
 {
-    public class ListEntity<T> : List<T>, IListEntity<T>, IListEntityMethods<T>
+    public class ListEntity<T> : List<T>, IListEntity<T>
         where T : IEntity
     {
         public virtual List<T> List

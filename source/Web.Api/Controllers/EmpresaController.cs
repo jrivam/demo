@@ -1,4 +1,4 @@
-﻿using library.Impl.Data.Sql;
+﻿using Library.Impl.Data.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -69,7 +69,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody]entities.Model.Empresa entity)
+        public IHttpActionResult Create([FromBody]Entities.Table.Empresa entity)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Web.Api.Controllers
                         {
                             scope.Complete();
 
-                            return Created<entities.Model.Empresa>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
+                            return Created<Entities.Table.Empresa>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
                         return InternalServerError();
@@ -98,7 +98,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Update(int id, [FromBody]entities.Model.Empresa entity)
+        public IHttpActionResult Update(int id, [FromBody]Entities.Table.Empresa entity)
         {
             try
             {

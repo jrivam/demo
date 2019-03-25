@@ -1,12 +1,12 @@
-﻿using library.Interface.Entities;
-using library.Interface.Entities.Reader;
+﻿using Library.Interface.Entities;
+using Library.Interface.Entities.Reader;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
 
-namespace library.Impl.Entities.Reader
+namespace Library.Impl.Entities.Reader
 {
     public class BaseReaderEntity<T> : IReaderEntity<T> 
         where T : IEntity

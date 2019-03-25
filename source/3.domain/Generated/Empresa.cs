@@ -1,28 +1,28 @@
-﻿using library.Impl;
-using library.Impl.Data.Sql;
-using library.Impl.Domain;
-using library.Impl.Domain.Mapper;
-using library.Impl.Domain.Query;
-using library.Impl.Domain.Table;
-using library.Interface.Domain.Mapper;
-using library.Interface.Domain.Query;
-using library.Interface.Domain.Table;
+﻿using Library.Impl;
+using Library.Impl.Data.Sql;
+using Library.Impl.Domain;
+using Library.Impl.Domain.Mapper;
+using Library.Impl.Domain.Query;
+using Library.Impl.Domain.Table;
+using Library.Interface.Domain.Mapper;
+using Library.Interface.Domain.Query;
+using Library.Interface.Domain.Table;
 
 namespace domain.Model
 {
-    public partial class Empresa : AbstractTableLogicMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractTableDomain<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public Empresa(data.Model.Empresa data,
-            ILogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+            ILogicTable<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
             : base(data, 
                   logic)
         {
         }
 
         public Empresa(data.Model.Empresa data,
-            IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
+            IMapperLogic<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
             : this(data,
-                  new LogicTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
+                  new LogicTable<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
         {
         }
         public Empresa(data.Model.Empresa data)
@@ -31,12 +31,12 @@ namespace domain.Model
         {
         }
 
-        public Empresa(entities.Model.Empresa entity)
+        public Empresa(Entities.Table.Empresa entity)
             : this(new data.Model.Empresa(entity))
         {
         }
         public Empresa()
-            : this(new entities.Model.Empresa())
+            : this(new Entities.Table.Empresa())
         {
         }
 
@@ -114,7 +114,7 @@ namespace domain.Model
         }
     }
 
-    public partial class Empresas : ListDomain<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresas : ListDomain<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public Empresas()
             : base()
@@ -129,19 +129,19 @@ namespace domain.Model
 
 namespace domain.Query
 {
-    public partial class Empresa : AbstractQueryLogicMethods<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : AbstractQueryDomain<data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public Empresa(data.Query.Empresa data,
-            ILogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
+            ILogicQuery<data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa> logic)
             : base(data, 
                   logic)
         {
         }
 
         public Empresa(data.Query.Empresa data,
-            IMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
+            IMapperLogic<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa> mapper)
             : this(data, 
-                  new LogicQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
+                  new LogicQuery<data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>(mapper))
         {
         }
 
@@ -193,7 +193,7 @@ namespace domain.Query
 
 namespace domain.Mapper
 {
-    public partial class Empresa : BaseMapperLogic<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa>
+    public partial class Empresa : BaseMapperLogic<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
         public override domain.Model.Empresa Clear(domain.Model.Empresa domain, int maxdepth = 1, int depth = 0)
         {
