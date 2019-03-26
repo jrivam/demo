@@ -84,7 +84,7 @@ namespace Library.Impl.Domain.Table
 
         public V SetProperties(T entity, bool nulls = false)
         {
-            return Helper.SetProperties<T, V>(entity, this as V, nulls);
+            return Entities.Helper.SetProperties<T, V>(entity, this as V, nulls);
         }
     }
 }

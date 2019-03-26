@@ -52,7 +52,7 @@ namespace data.Model
                 return (new Result() { Success = true }, null, true);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo cannot be null") } }, null, false);
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo cannot be empty") } }, null, false);
         }
 
         public virtual (Result result, data.Model.Empresa data) Empresa_Refresh(int maxdepth = 1, data.Query.Sucursal query = null)

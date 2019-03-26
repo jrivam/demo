@@ -98,7 +98,7 @@ namespace Library.Impl.Data.Table
         }
         public virtual (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, 1, new List<T> { table.Entity });
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, 1);
 
             if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
