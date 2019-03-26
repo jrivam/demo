@@ -1,8 +1,7 @@
 ﻿using Library.Impl.Data.Sql;
 using Library.Impl.Data.Table;
-using Library.Interface.Data;
+using Library.Interface.Data.Database;
 using Library.Interface.Data.Query;
-using Library.Interface.Data.Sql;
 using Library.Interface.Data.Sql.Builder;
 using Library.Interface.Data.Sql.Database;
 using Library.Interface.Data.Sql.Providers;

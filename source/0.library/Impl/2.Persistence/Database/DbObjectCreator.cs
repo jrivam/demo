@@ -1,4 +1,4 @@
-﻿using Library.Interface.Data;
+﻿using Library.Interface.Data.Database;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
