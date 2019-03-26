@@ -135,6 +135,8 @@ namespace Library.Impl.Data.Query
                     _mapper.Clear(instance, maxdepth, 0);
                     _mapper.Map(instance, maxdepth, 0);
 
+                    _mapper.Extra(instance, maxdepth, 0);
+
                     enumeration.Add(instance);
                 }
 

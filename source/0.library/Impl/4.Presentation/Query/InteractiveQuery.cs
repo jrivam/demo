@@ -34,6 +34,8 @@ namespace Library.Impl.Presentation.Query
                 _raiser.Clear(instance, maxdepth, 0);
                 _raiser.Raise(instance, maxdepth, 0);
 
+                _raiser.Extra(instance, maxdepth, 0);
+
                 return (retrieve.result, presentation);
             }
 
@@ -53,6 +55,8 @@ namespace Library.Impl.Presentation.Query
 
                     _raiser.Clear(instance, maxdepth, 0);
                     _raiser.Raise(instance, maxdepth, 0);
+
+                    _raiser.Extra(instance, maxdepth, 0);
 
                     enumeration.Add(instance);
                 }
