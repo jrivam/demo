@@ -38,7 +38,7 @@ namespace data.Model
         }
         public override (Result result, data.Model.Sucursal data, bool isunique) CheckIsUnique()
         {
-            if (this.Codigo != null)
+            if (!string.IsNullOrWhiteSpace(this.Codigo))
             {
                 var checkisunique = base.CheckIsUnique();
 

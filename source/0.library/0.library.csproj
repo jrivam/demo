@@ -82,6 +82,7 @@
     <Compile Include="Impl\2.Persistence\Column.cs" />
     <Compile Include="Impl\2.Persistence\Repository.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlRepositoryBulk.cs" />
+    <Compile Include="Impl\4.Presentation\Table\AbstractTableModel.cs" />
     <Compile Include="Interface\2.Persistence\IColumn.cs" />
     <Compile Include="Impl\2.Persistence\ListColumns.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Builder\SqlBuilderTable.cs" />
@@ -119,7 +120,6 @@
     <Compile Include="Impl\2.Persistence\Sql\WhereOperator.cs" />
     <Compile Include="Impl\3.Business\Logic.cs" />
     <Compile Include="Impl\2.Persistence\Mapper\BaseMapperRepository.cs" />
-    <Compile Include="Impl\4.Presentation\Table\AbstractTableModel.cs" />
     <Compile Include="Impl\4.Presentation\ListPresentation.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryModel.cs" />
     <Compile Include="Impl\4.Presentation\CommandAction.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Impl\ResultCategory.cs" />
     <Compile Include="Interface\1.Entities\IEntity.cs" />
     <Compile Include="Interface\1.Entities\IListEntity.cs" />
-    <Compile Include="Interface\1.Entities\Reader\IReader.cs" />
+    <Compile Include="Interface\1.Entities\Reader\IReaderEntity.cs" />
     <Compile Include="Interface\2.Persistence\Database\IDbRepository.cs" />
     <Compile Include="Interface\2.Persistence\Database\IDbRepositoryBulk.cs" />
     <Compile Include="Interface\2.Persistence\IRepository.cs" />

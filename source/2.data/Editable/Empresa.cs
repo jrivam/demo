@@ -38,7 +38,7 @@ namespace data.Model
         }
         public override (Result result, data.Model.Empresa data, bool isunique) CheckIsUnique()
         {
-            if (this.Ruc != null)
+            if (!string.IsNullOrWhiteSpace(this.Ruc))
             {
                 var checkisunique = base.CheckIsUnique();
 
