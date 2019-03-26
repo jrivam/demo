@@ -1,6 +1,6 @@
 ﻿using Library.Impl.Data.Sql;
 
-namespace Library.Interface.Data.Sql
+namespace Library.Interface.Data.Sql.Builder
 {
     public interface ISqlSyntaxSign
     {

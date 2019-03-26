@@ -1,7 +1,7 @@
 ﻿using Library.Impl.Data.Sql.Providers.MySql;
 using Library.Impl.Data.Sql.Providers.PostgreSql;
 using Library.Impl.Data.Sql.Providers.SqlServer;
-using Library.Interface.Data.Sql;
+using Library.Interface.Data.Sql.Providers;
 using System;
 using System.Configuration;
 

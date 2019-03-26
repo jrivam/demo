@@ -4,7 +4,7 @@ using Library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Sql
+namespace Library.Interface.Data.Sql.Repository
 {
     public interface ISqlRepository<T>
         where T : IEntity

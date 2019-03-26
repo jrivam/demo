@@ -1,6 +1,8 @@
 ﻿using library.Interface.Data;
 using Library.Interface.Data.Mapper;
-using Library.Interface.Data.Sql;
+using Library.Interface.Data.Sql.Builder;
+using Library.Interface.Data.Sql.Providers;
+using Library.Interface.Data.Sql.Repository;
 using Library.Interface.Data.Table;
 using Library.Interface.Entities;
 

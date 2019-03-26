@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Sql
+namespace Library.Interface.Data.Sql.Database
 {
     public interface ISqlCreator
     {

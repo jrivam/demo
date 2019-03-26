@@ -3,7 +3,7 @@ using Library.Impl.Data.Sql;
 using System;
 using System.Collections.Generic;
 
-namespace Library.Interface.Data.Sql
+namespace Library.Interface.Data.Sql.Builder
 {
     public interface ISqlBuilder
     {

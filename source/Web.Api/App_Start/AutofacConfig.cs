@@ -53,11 +53,11 @@ namespace Web.Api.App_Start
                    .As(typeof(Library.Interface.Data.Sql.Builder.ISqlBuilderQuery))
                    .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(Library.Impl.Data.Sql.SqlRepository<>))
-                   .As(typeof(Library.Interface.Data.Sql.ISqlRepository<>))
+            builder.RegisterGeneric(typeof(Library.Impl.Data.Sql.Repository.SqlRepository<>))
+                   .As(typeof(Library.Interface.Data.Sql.Repository.ISqlRepository<>))
                    .InstancePerRequest();
-            builder.RegisterType(typeof(Library.Impl.Data.Sql.SqlRepositoryBulk))
-                   .As(typeof(Library.Interface.Data.Sql.ISqlRepositoryBulk))
+            builder.RegisterType(typeof(Library.Impl.Data.Sql.Repository.SqlRepositoryBulk))
+                   .As(typeof(Library.Interface.Data.Sql.Repository.ISqlRepositoryBulk))
                    .InstancePerRequest();
 
             builder.RegisterGeneric(typeof(Library.Impl.Data.Database.DbRepository<>))

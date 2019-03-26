@@ -1,4 +1,4 @@
-﻿namespace Library.Interface.Data.Sql
+﻿namespace Library.Interface.Data.Sql.Providers
 {
     public interface ISqlCommandBuilder
     {

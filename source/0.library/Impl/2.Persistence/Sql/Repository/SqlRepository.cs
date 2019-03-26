@@ -1,12 +1,13 @@
 ﻿using Library.Impl.Data.Database;
-using Library.Interface.Data.Sql;
+using Library.Interface.Data.Sql.Database;
+using Library.Interface.Data.Sql.Repository;
 using Library.Interface.Entities;
 using Library.Interface.Entities.Reader;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 
-namespace Library.Impl.Data.Sql
+namespace Library.Impl.Data.Sql.Repository
 {
     public class SqlRepository<T> : DbRepository<T>, ISqlRepository<T> 
         where T : IEntity

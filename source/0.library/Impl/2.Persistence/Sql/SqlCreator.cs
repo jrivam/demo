@@ -1,6 +1,6 @@
 ﻿using Library.Impl.Data.Database;
 using Library.Interface.Data;
-using Library.Interface.Data.Sql;
+using Library.Interface.Data.Sql.Database;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

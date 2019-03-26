@@ -1,4 +1,4 @@
-﻿using Library.Interface.Data.Sql;
+﻿using Library.Interface.Data.Sql.Providers;
 using System;
 
 namespace Library.Impl.Data.Sql.Providers.SqlServer
