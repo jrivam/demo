@@ -195,19 +195,19 @@ namespace data.Mapper
 
         public override data.Model.Empresa Clear(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data["Id"].DbValue = null;
-            data["Ruc"].DbValue = null;
-            data["RazonSocial"].DbValue = null;
-            data["Activo"].DbValue = null;
+            data["Id"].Value = data["Id"].DbValue = null;
+            data["Ruc"].Value = data["Ruc"].DbValue = null;
+            data["RazonSocial"].Value = data["RazonSocial"].DbValue = null;
+            data["Activo"].Value = data["Activo"].DbValue = null;
 
             return data;
         }
         public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data["Id"].DbValue = data.Entity.Id;
-            data["Ruc"].DbValue = data.Entity.Ruc;
-            data["RazonSocial"].DbValue = data.Entity.RazonSocial;
-            data["Activo"].DbValue = data.Entity.Activo;
+            data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
+            data["Ruc"].Value = data["Ruc"].DbValue = data.Entity.Ruc;
+            data["RazonSocial"].Value = data["RazonSocial"].DbValue = data.Entity.RazonSocial;
+            data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
 
             return data;
         }

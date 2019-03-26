@@ -6,6 +6,8 @@ using Library.Interface.Entities;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Library.Impl.Presentation.Query
@@ -25,6 +27,8 @@ namespace Library.Impl.Presentation.Query
 
         public virtual (Result result, W presentation) Retrieve(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, W presentation = default(W))
         {
+            query.Status = "Loading...";
+
             var retrieve = query.Domain.Retrieve(maxdepth, presentation.Domain);
 
             if (retrieve.result.Success && retrieve.domain != null)
@@ -36,13 +40,19 @@ namespace Library.Impl.Presentation.Query
 
                 _raiser.Extra(instance, maxdepth, 0);
 
+                query.Status = string.Empty;
+
                 return (retrieve.result, presentation);
             }
+
+            query.Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (retrieve.result, default(W));
         }
         public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IList<W> presentations = null)
         {
+            query.Status = "Loading...";
+
             var enumeration = new List<W>();
             var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
@@ -56,13 +66,17 @@ namespace Library.Impl.Presentation.Query
                     _raiser.Clear(instance, maxdepth, 0);
                     _raiser.Raise(instance, maxdepth, 0);
 
-                    _raiser.Extra(instance, maxdepth, 0);
+                    //_raiser.Extra(instance, maxdepth, 0);
 
                     enumeration.Add(instance);
                 }
 
+                query.Status = string.Empty;
+
                 return (list.result, enumeration);
             }
+
+            query.Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (list.result, default(IList<W>));
         }

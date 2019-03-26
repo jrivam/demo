@@ -15,5 +15,6 @@ namespace Library.Interface.Presentation.Query
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>
     {
+        string Status { get; set; }
     }
 }

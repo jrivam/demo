@@ -99,8 +99,6 @@ namespace Library.Impl.Data.Table
 
             if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
-                //var instance = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
-
                 table.Entity = executequery.entities.FirstOrDefault();
 
                 _mapper.Clear(table, 1, 0);
@@ -158,7 +156,7 @@ namespace Library.Impl.Data.Table
                 {
                     table.Entity.Id = Convert.ToInt32(executescalar.scalar);
 
-                    //var instance = _mapper.CreateInstance(table.Entity);
+                    _mapper.Map(table, 1, 0);
 
                     return (executescalar.result, table);
                 }
@@ -206,7 +204,7 @@ namespace Library.Impl.Data.Table
             {
                 if (executenonquery.rows > 0)
                 {
-                    //var instance = _mapper.CreateInstance(table.Entity);
+                    _mapper.Map(table, 1, 0);
 
                     return (executenonquery.result, table);
                 }
@@ -253,8 +251,6 @@ namespace Library.Impl.Data.Table
             {
                 if (executenonquery.rows > 0)
                 {
-                    //var instance = _mapper.CreateInstance(table.Entity);
-
                     return (executenonquery.result, table);
                 }
                 else

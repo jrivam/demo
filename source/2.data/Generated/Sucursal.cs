@@ -264,24 +264,24 @@ namespace data.Mapper
 
         public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data["Id"].DbValue = null;
-            data["Codigo"].DbValue = null;
-            data["Nombre"].DbValue = null;
-            data["Activo"].DbValue = null;
-            data["Fecha"].DbValue = null;
-            data["IdEmpresa"].DbValue = null;
+            data["Id"].Value = data["Id"].DbValue = null;
+            data["Codigo"].Value = data["Codigo"].DbValue = null;
+            data["Nombre"].Value = data["Nombre"].DbValue = null;
+            data["Activo"].Value = data["Activo"].DbValue = null;
+            data["Fecha"].Value = data["Fecha"].DbValue = null;
+            data["Fecha"].Value = data["Fecha"].DbValue = null;
 
             return data;
         }
 
         public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data["Id"].DbValue = data.Entity.Id;
-            data["Codigo"].DbValue = data.Entity.Codigo;
-            data["Nombre"].DbValue = data.Entity.Nombre;
-            data["Activo"].DbValue = data.Entity.Activo;
-            data["Fecha"].DbValue = data.Entity.Fecha;
-            data["IdEmpresa"].DbValue = data.Entity.IdEmpresa;
+            data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
+            data["Codigo"].Value = data["Codigo"].DbValue = data.Entity.Codigo;
+            data["Nombre"].Value = data["Nombre"].DbValue = data.Entity.Nombre;
+            data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
+            data["Fecha"].Value = data["Fecha"].DbValue = data.Entity.Fecha;
+            data["IdEmpresa"].Value = data["IdEmpresa"].DbValue = data.Entity.IdEmpresa;
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)

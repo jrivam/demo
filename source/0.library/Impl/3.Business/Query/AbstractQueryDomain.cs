@@ -34,11 +34,15 @@ namespace Library.Impl.Domain.Query
 
         public virtual (Result result, V domain) Retrieve(int maxdepth = 1, V domain = default(V))
         {
-            return _logic.Retrieve(this, maxdepth, domain);
+            var retrieve = _logic.Retrieve(this, maxdepth, domain);
+
+            return retrieve;
         }
         public virtual (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IList<V> domains = null)
         {
-            return _logic.List(this, maxdepth, top, domains);
+            var list = _logic.List(this, maxdepth, top, domains);
+
+            return list;
         }
     }
 }

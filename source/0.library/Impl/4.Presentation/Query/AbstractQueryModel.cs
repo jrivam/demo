@@ -19,7 +19,7 @@ namespace Library.Impl.Presentation.Query
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>, new()
     {
-        public string Status { get; protected set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
 
         public virtual R Domain { get; protected set; }
 
@@ -43,17 +43,17 @@ namespace Library.Impl.Presentation.Query
 
         public virtual (Result result, W presentation) Retrieve(int maxdepth = 1, W presentation = default(W))
         {
-            Status = "Loading";
+            //Status = "Loading";
             var retrieve = _interactive.Retrieve(this, maxdepth, presentation);
-            Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            //Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return retrieve;
         }
         public virtual (Result result, IEnumerable<W> presentations) List(int maxdepth = 1, int top = 0, IList<W> presentations = null)
         {
-            Status = "Loading";
+            //Status = "Loading";
             var list = _interactive.List(this, maxdepth, top, presentations);
-            Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            //Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return list;
         }

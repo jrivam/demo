@@ -11,7 +11,7 @@ namespace Library.Interface.Presentation.Table
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        string Status { get; }
+        string Status { get; set; }
 
         Dictionary<string, string> Validations { get; }
         string Validation { get; }

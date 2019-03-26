@@ -52,9 +52,6 @@ namespace Library.Impl.Data.Table
         {
             var selectsingle = _repository.Select(this as U, usedbcommand);
 
-            this.Entity = selectsingle.data.Entity;
-            this.Columns = selectsingle.data.Columns;
-
             return selectsingle;
         }
 
@@ -62,9 +59,6 @@ namespace Library.Impl.Data.Table
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
         {
             var selectsingle =  QuerySelect.SelectSingle(maxdepth);
-
-            this.Entity = selectsingle.data.Entity;
-            this.Columns = selectsingle.data.Columns;
 
             return selectsingle;
         }
@@ -80,17 +74,12 @@ namespace Library.Impl.Data.Table
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
         {
             var insert = _repository.Insert(this as U, usedbcommand);
-            this.Columns["Id"].Value = this.Entity.Id = insert.data.Entity.Id;
-
-            Select(usedbcommand);
 
             return insert;
         }
         public virtual (Result result, U data) Update(bool usedbcommand = false)
         {
             var update = _repository.Update(this as U, usedbcommand);
-
-            Select(usedbcommand);
 
             return update;
         }

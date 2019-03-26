@@ -24,12 +24,15 @@ namespace Library.Impl.Domain.Table
 
                 if (select.result.Success && select.data != null)
                 {
-                    //var instance = _mapper.CreateInstance(select.data);
+                    table.Data = select.data;
 
                     _mapper.Clear(table, 1, 0);
                     _mapper.Load(table, 1, 0);
 
                     _mapper.Extra(table, 1, 0);
+
+                    table.Changed = false;
+                    table.Deleted = false;
 
                     return (select.result, table);
                 }
@@ -47,12 +50,15 @@ namespace Library.Impl.Domain.Table
 
                 if (selectquery.result.Success && selectquery.data != null)
                 {
-                    //var instance = _mapper.CreateInstance(selectquery.data);
+                    table.Data = selectquery.data;
 
                     _mapper.Clear(table, maxdepth, 0);
                     _mapper.Load(table, maxdepth, 0);
 
                     _mapper.Extra(table, maxdepth, 0);
+
+                    table.Changed = false;
+                    table.Deleted = false;
 
                     return (selectquery.result, table);
                 }
@@ -73,7 +79,10 @@ namespace Library.Impl.Domain.Table
                 {
                     var updateinsert = (table.Data.Entity.Id != null ? table.Data.Update(useupdatedbcommand) : table.Data.Insert(useinsertdbcommand));
 
-                    //var instance = _mapper.CreateInstance(updateinsert.data);
+                    if (updateinsert.result.Success)
+                    {
+                        table.Changed = false;
+                    }
 
                     return (updateinsert.result, table);
                 }
@@ -93,7 +102,10 @@ namespace Library.Impl.Domain.Table
                 {
                     var delete = table.Data.Delete(usedbcommand);
 
-                    //var instance = _mapper.CreateInstance(delete.data);
+                    if (delete.result.Success)
+                    {
+                        table.Deleted = true;
+                    }
 
                     return (delete.result, table);
                 }
