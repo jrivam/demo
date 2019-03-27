@@ -1,9 +1,9 @@
-﻿using Library.Impl.Data.Sql;
-using Library.Interface.Data.Query;
+﻿using Library.Impl.Persistence.Sql;
+using Library.Interface.Persistence.Query;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Impl.Data.Query
+namespace Library.Impl.Persistence.Query
 {
     public class ColumnQuery<A> : Column<A>, IColumnQuery
     {

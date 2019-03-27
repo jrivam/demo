@@ -1,6 +1,6 @@
-﻿using Library.Impl.Data;
+﻿using Library.Impl.Persistence;
 
-namespace Library.Interface.Data
+namespace Library.Interface.Persistence
 {
     public interface IDescription
     {

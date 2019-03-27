@@ -1,23 +1,23 @@
 ﻿using Library.Extension;
-using Library.Impl.Data;
-using Library.Impl.Data.Mapper;
-using Library.Impl.Data.Query;
-using Library.Impl.Data.Sql;
-using Library.Impl.Data.Table;
-using Library.Interface.Data.Mapper;
-using Library.Interface.Data.Query;
-using Library.Interface.Data.Table;
+using Library.Impl.Persistence;
+using Library.Impl.Persistence.Mapper;
+using Library.Impl.Persistence.Query;
+using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Table;
 using Library.Interface.Entities.Reader;
+using Library.Interface.Persistence.Mapper;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Linq;
 
-namespace data.Model
+namespace Persistence.Table
 {
-    public partial class Empresa : AbstractTableData<Entities.Table.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresa(Entities.Table.Empresa entity,
-            IRepositoryTable<Entities.Table.Empresa, data.Model.Empresa> repository)
+            IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
             : base(entity,
                   repository,
                   typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
@@ -30,16 +30,16 @@ namespace data.Model
 
         public Empresa(Entities.Table.Empresa entity,
             ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, data.Model.Empresa> mapper)
+            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
             : this(entity,
-                  new RepositoryTable<Entities.Table.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
+                  new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
         public Empresa(Entities.Table.Empresa entity,
             string appsettingsconnectionstringname)
             : this(entity,
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Entities.Reader.Empresa(), new data.Mapper.Empresa())
+                  new Entities.Reader.Empresa(), new Persistence.Mapper.Empresa())
         {
         }
 
@@ -48,11 +48,11 @@ namespace data.Model
         {
         }
 
-        public override IQueryData<Entities.Table.Empresa, data.Model.Empresa> QuerySelect
+        public override IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> QuerySelect
         {
             get
             {
-                var _query = new data.Query.Empresa();
+                var _query = new Persistence.Query.Empresa();
 
                 _query.Id = (this.Id, WhereOperator.Equals);
 
@@ -77,8 +77,8 @@ namespace data.Model
         public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { Columns["RazonSocial"].Value = Entity.RazonSocial = value; } } }
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns["Activo"].Value = Entity.Activo = value; } } }
 
-        protected data.Model.Sucursales _sucursales;
-        public virtual data.Model.Sucursales Sucursales
+        protected Persistence.Table.Sucursales _sucursales;
+        public virtual Persistence.Table.Sucursales Sucursales
         {
             get
             {
@@ -86,7 +86,7 @@ namespace data.Model
                 {
                     if (Entity?.Sucursales != null)
                     {
-                        Sucursales = new data.Model.Sucursales(new Entities.Table.Sucursales(Entity?.Sucursales?.ToList()));
+                        Sucursales = new Persistence.Table.Sucursales(new Entities.Table.Sucursales(Entity?.Sucursales?.ToList()));
                     }
                     else
                     {
@@ -108,7 +108,7 @@ namespace data.Model
         }
     }
 
-    public partial class Empresas : ListData<Entities.Table.Empresa, data.Model.Empresa>
+    public partial class Empresas : ListData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresas(Entities.Table.Empresas entities)
             : base(entities)
@@ -121,11 +121,11 @@ namespace data.Model
     }
 }
 
-namespace data.Query
+namespace Persistence.Query
 {
-    public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, data.Model.Empresa>
+    public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryQuery<Entities.Table.Empresa, data.Model.Empresa> repository)
+        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
             : base(repository, 
                   typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
@@ -136,14 +136,14 @@ namespace data.Query
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, data.Model.Empresa> mapper)
-            : this(new RepositoryQuery<Entities.Table.Empresa, data.Model.Empresa>(reader, mapper, connectionstringsettings))
+            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
+            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
 
         public Empresa(string appsettingsconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Entities.Reader.Empresa(), new data.Mapper.Empresa())
+                  new Entities.Reader.Empresa(), new Persistence.Mapper.Empresa())
         {
         }
 
@@ -176,24 +176,24 @@ namespace data.Query
             }
         }
 
-        protected data.Query.Sucursal _sucursal;
-        public virtual data.Query.Sucursal Sucursal(data.Query.Sucursal query = null)
+        protected Persistence.Query.Sucursal _sucursal;
+        public virtual Persistence.Query.Sucursal Sucursal(Persistence.Query.Sucursal query = null)
         {
-            return _sucursal = query ?? _sucursal ?? new data.Query.Sucursal();
+            return _sucursal = query ?? _sucursal ?? new Persistence.Query.Sucursal();
         }
     }
 }
 
-namespace data.Mapper
+namespace Persistence.Mapper
 {
-    public partial class Empresa : BaseMapperRepository<Entities.Table.Empresa, data.Model.Empresa>
+    public partial class Empresa : BaseMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresa()
             : base()
         {
         }
 
-        public override data.Model.Empresa Clear(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
+        public override Persistence.Table.Empresa Clear(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].Value = data["Id"].DbValue = null;
             data["Ruc"].Value = data["Ruc"].DbValue = null;
@@ -202,7 +202,7 @@ namespace data.Mapper
 
             return data;
         }
-        public override data.Model.Empresa Map(data.Model.Empresa data, int maxdepth = 1, int depth = 0)
+        public override Persistence.Table.Empresa Map(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
             data["Ruc"].Value = data["Ruc"].DbValue = data.Entity.Ruc;

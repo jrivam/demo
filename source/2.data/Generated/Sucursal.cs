@@ -1,24 +1,24 @@
 ﻿using Library.Extension;
-using Library.Impl.Data;
-using Library.Impl.Data.Mapper;
-using Library.Impl.Data.Query;
-using Library.Impl.Data.Sql;
-using Library.Impl.Data.Table;
-using Library.Interface.Data.Mapper;
-using Library.Interface.Data.Query;
-using Library.Interface.Data.Table;
+using Library.Impl.Persistence;
+using Library.Impl.Persistence.Mapper;
+using Library.Impl.Persistence.Query;
+using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Table;
 using Library.Interface.Entities.Reader;
+using Library.Interface.Persistence.Mapper;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 
-namespace data.Model
+namespace Persistence.Table
 {
-    public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public Sucursal(Entities.Table.Sucursal entity,
-            IRepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal> repository)
+            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
             : base(entity, 
                   repository, 
                   typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
@@ -34,16 +34,16 @@ namespace data.Model
 
         public Sucursal(Entities.Table.Sucursal entity,
             ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, data.Model.Sucursal> mapper)
+            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
             : this(entity,
-                  new RepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
+                  new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
         public Sucursal(Entities.Table.Sucursal entity,
             string appsettingsconnectionstringname)
             : this(entity, 
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],                  
-                  new Entities.Reader.Sucursal(), new data.Mapper.Sucursal())
+                  new Entities.Reader.Sucursal(), new Persistence.Mapper.Sucursal())
         {
         }
 
@@ -52,11 +52,11 @@ namespace data.Model
         {
         }
 
-        public override IQueryData<Entities.Table.Sucursal, data.Model.Sucursal> QuerySelect
+        public override IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> QuerySelect
         {
             get
             {
-                var _query = new data.Query.Sucursal();
+                var _query = new Persistence.Query.Sucursal();
 
                 _query.Id = (this.Id, WhereOperator.Equals);
 
@@ -100,8 +100,8 @@ namespace data.Model
             }
         }
 
-        protected data.Model.Empresa _empresa;
-        public virtual data.Model.Empresa Empresa
+        protected Persistence.Table.Empresa _empresa;
+        public virtual Persistence.Table.Empresa Empresa
         {
             get
             {
@@ -109,7 +109,7 @@ namespace data.Model
                 {
                     if (Entity?.Empresa != null)
                     {
-                        Empresa = new data.Model.Empresa(Entity?.Empresa);
+                        Empresa = new Persistence.Table.Empresa(Entity?.Empresa);
                     }
                     else
                     {
@@ -130,8 +130,8 @@ namespace data.Model
             }
         }
 
-        protected data.Model.Empresas _empresas;
-        public virtual data.Model.Empresas Empresas
+        protected Persistence.Table.Empresas _empresas;
+        public virtual Persistence.Table.Empresas Empresas
         {
             get
             {
@@ -147,7 +147,7 @@ namespace data.Model
         }
     }
 
-    public partial class Sucursales : ListData<Entities.Table.Sucursal, data.Model.Sucursal>
+    public partial class Sucursales : ListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public Sucursales(Entities.Table.Sucursales entities)
             : base(entities)
@@ -160,9 +160,9 @@ namespace data.Model
     }
 }
 
-namespace data.Query
+namespace Persistence.Query
 {
-    public partial class Sucursal : AbstractQueryData<Entities.Table.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public override IList<(IColumnQuery internalkey, IColumnQuery externalkey)> GetJoins(int maxdepth = 1, int depth = 0)
         {
@@ -176,7 +176,7 @@ namespace data.Query
             return joins;
         }
 
-        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, data.Model.Sucursal> repository)
+        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
             : base(repository, 
                   typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
@@ -190,14 +190,14 @@ namespace data.Query
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, data.Model.Sucursal> mapper)
-            : this(new RepositoryQuery<Entities.Table.Sucursal, data.Model.Sucursal>(reader, mapper, connectionstringsettings))
+            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
+            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
 
         public Sucursal(string appsettingsconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Entities.Reader.Sucursal(), new data.Mapper.Sucursal())
+                  new Entities.Reader.Sucursal(), new Persistence.Mapper.Sucursal())
         {
         }
 
@@ -245,24 +245,24 @@ namespace data.Query
             }
         }
 
-        protected data.Query.Empresa _empresa;
-        public virtual data.Query.Empresa Empresa(data.Query.Empresa query = null)
+        protected Persistence.Query.Empresa _empresa;
+        public virtual Persistence.Query.Empresa Empresa(Persistence.Query.Empresa query = null)
         {
-            return _empresa = query ?? _empresa ?? new data.Query.Empresa();
+            return _empresa = query ?? _empresa ?? new Persistence.Query.Empresa();
         }
     }
 }
 
-namespace data.Mapper
+namespace Persistence.Mapper
 {
-    public partial class Sucursal : BaseMapperRepository<Entities.Table.Sucursal, data.Model.Sucursal>
+    public partial class Sucursal : BaseMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public Sucursal()
             : base()
         {
         }
 
-        public override data.Model.Sucursal Clear(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
+        public override Persistence.Table.Sucursal Clear(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].Value = data["Id"].DbValue = null;
             data["Codigo"].Value = data["Codigo"].DbValue = null;
@@ -274,7 +274,7 @@ namespace data.Mapper
             return data;
         }
 
-        public override data.Model.Sucursal Map(data.Model.Sucursal data, int maxdepth = 1, int depth = 0)
+        public override Persistence.Table.Sucursal Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
             data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
             data["Codigo"].Value = data["Codigo"].DbValue = data.Entity.Codigo;
@@ -286,7 +286,7 @@ namespace data.Mapper
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                data.Empresa = new data.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
+                data.Empresa = new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
             }
 
             return data;

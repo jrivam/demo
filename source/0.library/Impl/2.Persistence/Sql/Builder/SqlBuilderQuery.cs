@@ -1,10 +1,10 @@
-﻿using Library.Interface.Data.Query;
-using Library.Interface.Data.Sql.Builder;
+﻿using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Impl.Data.Sql.Builder
+namespace Library.Impl.Persistence.Sql.Builder
 {
     public class SqlBuilderQuery : AbstractSqlBuilder, ISqlBuilderQuery
     {

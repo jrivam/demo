@@ -1,10 +1,10 @@
 ﻿using Library.Impl;
-using Library.Impl.Data.Sql;
-using Library.Interface.Data.Query;
+using Library.Impl.Persistence.Sql;
+using Library.Interface.Persistence.Query;
 using System.Collections.Generic;
 using System.Data;
 
-namespace data.Model
+namespace Persistence.Table
 {
     public partial class Empresa
     {
@@ -21,11 +21,11 @@ namespace data.Model
             DeleteDbCommand = (false, ("gsp_empresa_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
 
-        public override IQueryData<Entities.Table.Empresa, data.Model.Empresa> QueryUnique
+        public override IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> QueryUnique
         {
             get
             {
-                var _query = new data.Query.Empresa();
+                var _query = new Persistence.Query.Empresa();
 
                 if (this.Id != null)
                 {
@@ -36,7 +36,7 @@ namespace data.Model
                 return _query;
             }
         }
-        public override (Result result, data.Model.Empresa data, bool isunique) CheckIsUnique()
+        public override (Result result, Persistence.Table.Empresa data, bool isunique) CheckIsUnique()
         {
             if (!string.IsNullOrWhiteSpace(this.Ruc))
             {
@@ -55,17 +55,17 @@ namespace data.Model
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc cannot be empty") } }, null, false);
         }
 
-        public virtual (Result result, data.Model.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, data.Query.Sucursal query = null)
+        public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal query = null)
         {
             if (this.Id != null)
             {
-                var _query = query ?? new data.Query.Sucursal();
+                var _query = query ?? new Persistence.Query.Sucursal();
 
                 _query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
                 var selectmultiple = _query.SelectMultiple(maxdepth, top);
 
-                Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(selectmultiple.datas);
+                Sucursales = (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(selectmultiple.datas);
 
                 return (selectmultiple.result, _sucursales);
             }
@@ -75,7 +75,7 @@ namespace data.Model
     }
 }
 
-namespace data.Query
+namespace Persistence.Query
 {
     public partial class Empresa
     {

@@ -1,4 +1,4 @@
-﻿namespace Library.Interface.Data.Query
+﻿namespace Library.Interface.Persistence.Query
 {
     public interface IBuilderQueryData : IQueryDataColumns, IQueryDataJoins, IQueryDataSorts
     {

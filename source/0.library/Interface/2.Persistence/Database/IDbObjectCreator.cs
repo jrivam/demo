@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 
-namespace Library.Interface.Data.Database
+namespace Library.Interface.Persistence.Database
 {
     public interface IDbObjectCreator
     {

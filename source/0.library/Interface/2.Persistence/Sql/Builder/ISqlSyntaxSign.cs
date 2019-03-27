@@ -1,6 +1,6 @@
-﻿using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 
-namespace Library.Interface.Data.Sql.Builder
+namespace Library.Interface.Persistence.Sql.Builder
 {
     public interface ISqlSyntaxSign
     {

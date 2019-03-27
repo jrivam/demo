@@ -1,6 +1,6 @@
 ﻿using Library.Impl.Entities;
-using Library.Interface.Data;
-using Library.Interface.Data.Table;
+using Library.Interface.Persistence;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Library.Impl.Data
+namespace Library.Impl.Persistence
 {
     public class ListData<T, U> : List<U>, IListData<T, U>
         where T : IEntity

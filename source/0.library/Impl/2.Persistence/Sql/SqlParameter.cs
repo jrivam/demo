@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace Library.Impl.Data.Sql
+namespace Library.Impl.Persistence.Sql
 {
     public class SqlParameter
     {

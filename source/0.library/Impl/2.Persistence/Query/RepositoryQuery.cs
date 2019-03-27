@@ -1,17 +1,17 @@
 ﻿using library.Impl.Data;
-using Library.Impl.Data.Sql;
-using Library.Impl.Data.Sql.Builder;
-using Library.Impl.Data.Sql.Factory;
-using Library.Impl.Data.Sql.Repository;
+using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Sql.Builder;
+using Library.Impl.Persistence.Sql.Factory;
+using Library.Impl.Persistence.Sql.Repository;
 using Library.Impl.Entities;
-using Library.Interface.Data;
-using Library.Interface.Data.Mapper;
-using Library.Interface.Data.Query;
-using Library.Interface.Data.Sql.Builder;
-using Library.Interface.Data.Sql.Database;
-using Library.Interface.Data.Sql.Providers;
-using Library.Interface.Data.Sql.Repository;
-using Library.Interface.Data.Table;
+using Library.Interface.Persistence;
+using Library.Interface.Persistence.Mapper;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Sql.Database;
+using Library.Interface.Persistence.Sql.Providers;
+using Library.Interface.Persistence.Sql.Repository;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Entities;
 using Library.Interface.Entities.Reader;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 
-namespace Library.Impl.Data.Query
+namespace Library.Impl.Persistence.Query
 {
     public class RepositoryQuery<T, U> : Repository<T, U>, IRepositoryQuery<T, U> 
         where T : IEntity

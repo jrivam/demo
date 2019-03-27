@@ -1,10 +1,10 @@
 ﻿using Library.Impl;
-using Library.Interface.Data.Table;
-using Library.Interface.Domain.Table;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 
-namespace Library.Interface.Domain.Query
+namespace Library.Interface.Business.Query
 {
     public interface IQueryDomainMethods<T, U, V>
         where T : IEntity

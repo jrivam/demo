@@ -1,11 +1,10 @@
 ﻿using Library.Impl;
-using Library.Impl.Data.Sql;
-using Library.Interface.Data.Query;
+using Library.Impl.Persistence.Sql;
+using Library.Interface.Persistence.Query;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
-namespace data.Model
+namespace Persistence.Table
 {
     public partial class Sucursal
     {
@@ -22,11 +21,11 @@ namespace data.Model
             DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
         }
 
-        public override IQueryData<Entities.Table.Sucursal, data.Model.Sucursal> QueryUnique
+        public override IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> QueryUnique
         {
             get
             {
-                var _query = new data.Query.Sucursal();
+                var _query = new Persistence.Query.Sucursal();
 
                 if (this.Id != null)
                 {
@@ -37,7 +36,7 @@ namespace data.Model
                 return _query;
             }
         }
-        public override (Result result, data.Model.Sucursal data, bool isunique) CheckIsUnique()
+        public override (Result result, Persistence.Table.Sucursal data, bool isunique) CheckIsUnique()
         {
             if (!string.IsNullOrWhiteSpace(this.Codigo))
             {
@@ -56,11 +55,11 @@ namespace data.Model
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo cannot be empty") } }, null, false);
         }
 
-        public virtual (Result result, data.Model.Empresa data) Empresa_Refresh(int maxdepth = 1, data.Query.Sucursal query = null)
+        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Sucursal query = null)
         {
             if (this.IdEmpresa != null)
             {
-                var _query = query ?? new data.Query.Sucursal();
+                var _query = query ?? new Persistence.Query.Sucursal();
 
                 _query.Empresa().Id = (this.IdEmpresa, WhereOperator.Equals);
 
@@ -73,22 +72,22 @@ namespace data.Model
 
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
-        public virtual (Result result, data.Model.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, data.Query.Empresa query = null)
+        public virtual (Result result, Persistence.Table.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Empresa query = null)
         {
-            var _query = query ?? new data.Query.Empresa();
+            var _query = query ?? new Persistence.Query.Empresa();
 
             _query.Activo = (true, WhereOperator.Equals);
 
             var selectmultiple = _query.SelectMultiple(maxdepth, top);
 
-            Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(selectmultiple.datas);
+            Empresas = (Persistence.Table.Empresas)new Persistence.Table.Empresas().Load(selectmultiple.datas);
 
             return (selectmultiple.result, _empresas);
         }
     }
 }
 
-namespace data.Query
+namespace Persistence.Query
 {
     public partial class Sucursal
     {

@@ -1,8 +1,8 @@
-﻿using Library.Interface.Data;
+﻿using Library.Interface.Persistence;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Impl.Data
+namespace Library.Impl.Persistence
 {
     public class ListColumns<T> : List<T>, IListColumns<T>
         where T : IColumn

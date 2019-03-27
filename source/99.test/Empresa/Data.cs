@@ -1,10 +1,10 @@
-﻿using Library.Impl.Data.Sql;
-using Library.Impl.Data.Table;
-using Library.Interface.Data.Database;
-using Library.Interface.Data.Query;
-using Library.Interface.Data.Sql.Builder;
-using Library.Interface.Data.Sql.Database;
-using Library.Interface.Data.Sql.Providers;
+﻿using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Table;
+using Library.Interface.Persistence.Database;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Sql.Database;
+using Library.Interface.Persistence.Sql.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace test.Empresa
         }
 
 
-        private void AssertEqualFields(Entities.Table.Empresa entity, data.Model.Empresa data, bool assertid = false)
+        private void AssertEqualFields(Entities.Table.Empresa entity, Persistence.Table.Empresa data, bool assertid = false)
         {
             if(assertid)
             {
@@ -82,7 +82,7 @@ namespace test.Empresa
             return (mockCommand, mockSyntaxSign, mockCreator);
         }
 
-        public data.Model.Empresa Data_Table_Select()
+        public Persistence.Table.Empresa Data_Table_Select()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -98,24 +98,24 @@ namespace test.Empresa
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new Entities.Table.Empresa()
+            return new Persistence.Table.Empresa(new Entities.Table.Empresa()
             {
                 Id = Entity.Id
             },
-            new RepositoryTable<Entities.Table.Empresa, data.Model.Empresa>(
+            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(),
-                new data.Mapper.Empresa(),
+                new Persistence.Mapper.Empresa(),
                 mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Model.Empresa Data_Table_Select_NonDbCommand()
+        public Persistence.Table.Empresa Data_Table_Select_NonDbCommand()
         {
             var data = Data_Table_Select();
 
             return data;
         }
-        public data.Model.Empresa Data_Table_Select_DbCommand()
+        public Persistence.Table.Empresa Data_Table_Select_DbCommand()
         {
             var data = Data_Table_Select();
 
@@ -144,7 +144,7 @@ namespace test.Empresa
             AssertEqualFields(Entity, select.data, true);
         }
 
-        public data.Model.Empresa Data_Table_Insert()
+        public Persistence.Table.Empresa Data_Table_Insert()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -154,31 +154,31 @@ namespace test.Empresa
             var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            var data = new data.Model.Empresa(new Entities.Table.Empresa()
+            var data = new Persistence.Table.Empresa(new Entities.Table.Empresa()
             {
                 RazonSocial = Entity.RazonSocial,
                 Ruc = Entity.Ruc,                
                 Activo = Entity.Activo
             },
-            new RepositoryTable<Entities.Table.Empresa, data.Model.Empresa>(
+            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(),
-                new data.Mapper.Empresa(),
+                new Persistence.Mapper.Empresa(),
                 mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
 
-            var mockQueryRepositoryMethods = new Moq.Mock<IQueryDataMethods<Entities.Table.Empresa, data.Model.Empresa>>();
+            var mockQueryRepositoryMethods = new Moq.Mock<IQueryDataMethods<Entities.Table.Empresa, Persistence.Table.Empresa>>();
             mockQueryRepositoryMethods.Setup(x => x.SelectSingle(1)).Returns(null);
 
             return data;
         }
-        public data.Model.Empresa Data_Table_Insert_NonDbCommand()
+        public Persistence.Table.Empresa Data_Table_Insert_NonDbCommand()
         {
             var data = Data_Table_Insert();
 
             return data;
         }
-        public data.Model.Empresa Data_Table_Insert_DbCommand()
+        public Persistence.Table.Empresa Data_Table_Insert_DbCommand()
         {
             var data = Data_Table_Insert();
 
@@ -207,7 +207,7 @@ namespace test.Empresa
             AssertEqualFields(Entity, insert.data, true);
         }
 
-        public data.Model.Empresa Data_Table_Update()
+        public Persistence.Table.Empresa Data_Table_Update()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -216,27 +216,27 @@ namespace test.Empresa
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new Entities.Table.Empresa()
+            return new Persistence.Table.Empresa(new Entities.Table.Empresa()
             {
                 Id = Entity.Id,
                 Ruc = Entity.Ruc,
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },
-            new RepositoryTable<Entities.Table.Empresa, data.Model.Empresa>(
+            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(),
-                new data.Mapper.Empresa(),
+                new Persistence.Mapper.Empresa(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Model.Empresa Data_Table_Update_NonDbCommand()
+        public Persistence.Table.Empresa Data_Table_Update_NonDbCommand()
         {
             var data = Data_Table_Update();
 
             return data;
         }
-        public data.Model.Empresa Data_Table_Update_DbCommand()
+        public Persistence.Table.Empresa Data_Table_Update_DbCommand()
         {
             var data = Data_Table_Update();
 
@@ -265,7 +265,7 @@ namespace test.Empresa
             AssertEqualFields(Entity, update.data, true);
         }
 
-        public data.Model.Empresa Data_Table_Delete()
+        public Persistence.Table.Empresa Data_Table_Delete()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -274,27 +274,27 @@ namespace test.Empresa
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Empresa(new Entities.Table.Empresa()
+            return new Persistence.Table.Empresa(new Entities.Table.Empresa()
             {
                 Id = Entity.Id,
                 Ruc = Entity.Ruc,
                 RazonSocial = Entity.RazonSocial,
                 Activo = Entity.Activo
             },
-            new RepositoryTable<Entities.Table.Empresa, data.Model.Empresa>(
+            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(),
-                new data.Mapper.Empresa(),
+                new Persistence.Mapper.Empresa(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Model.Empresa Data_Table_Delete_NonDbCommand()
+        public Persistence.Table.Empresa Data_Table_Delete_NonDbCommand()
         {
             var data = Data_Table_Delete();
 
             return data;
         }
-        public data.Model.Empresa Data_Table_Delete_DbCommand()
+        public Persistence.Table.Empresa Data_Table_Delete_DbCommand()
         {
             var data = Data_Table_Delete();
 

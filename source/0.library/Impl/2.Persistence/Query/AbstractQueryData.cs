@@ -1,11 +1,11 @@
-﻿using Library.Impl.Data.Sql;
-using Library.Interface.Data;
-using Library.Interface.Data.Query;
-using Library.Interface.Data.Table;
+﻿using Library.Impl.Persistence.Sql;
+using Library.Interface.Persistence;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Entities;
 using System.Collections.Generic;
 
-namespace Library.Impl.Data.Query
+namespace Library.Impl.Persistence.Query
 {
     public abstract class AbstractQueryData<T, U> : IQueryData<T, U>
         where T : IEntity, new()

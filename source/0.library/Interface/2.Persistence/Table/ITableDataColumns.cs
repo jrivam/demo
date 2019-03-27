@@ -1,6 +1,6 @@
-﻿using Library.Impl.Data;
+﻿using Library.Impl.Persistence;
 
-namespace Library.Interface.Data.Table
+namespace Library.Interface.Persistence.Table
 {
     public interface ITableDataColumns : IDescription
     {

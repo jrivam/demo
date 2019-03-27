@@ -1,8 +1,8 @@
-﻿using Library.Impl.Data.Sql;
-using Library.Interface.Data.Query;
+﻿using Library.Impl.Persistence.Sql;
+using Library.Interface.Persistence.Query;
 using System.Collections.Generic;
 
-namespace Library.Interface.Data.Sql.Builder
+namespace Library.Interface.Persistence.Sql.Builder
 {
     public interface ISqlBuilderQuery : ISqlBuilder
     {

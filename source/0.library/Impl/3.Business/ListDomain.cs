@@ -1,8 +1,8 @@
-﻿using Library.Impl.Data;
-using Library.Interface.Data;
-using Library.Interface.Data.Table;
-using Library.Interface.Domain;
-using Library.Interface.Domain.Table;
+﻿using Library.Impl.Persistence;
+using Library.Interface.Persistence;
+using Library.Interface.Persistence.Table;
+using Library.Interface.Business;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 ﻿namespace WpfApp.ViewModels
 {
-    public class SucursalViewModel : presentation.Model.Sucursal
+    public class SucursalViewModel : Presentation.Table.Sucursal
     {
         public SucursalViewModel()
             : base()

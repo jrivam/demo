@@ -1,4 +1,4 @@
-﻿namespace Library.Impl.Data
+﻿namespace Library.Impl.Persistence
 {
     public class Description
     {

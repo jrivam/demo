@@ -1,4 +1,4 @@
-﻿namespace domain.Model
+﻿namespace Business.Table
 {
     public partial class Empresa
     {
@@ -12,18 +12,18 @@
     }
 }
 
-namespace domain.Query
+namespace Business.Query
 {
     public partial class Empresa
     {
     }
 }
 
-namespace domain.Mapper
+namespace Business.Mapper
 {
     public partial class Empresa
     {
-        public override domain.Model.Empresa Load(domain.Model.Empresa domain, int maxdepth = 1, int depth = 0)
+        public override Business.Table.Empresa Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
         {
             return domain;
         }

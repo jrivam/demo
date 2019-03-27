@@ -1,6 +1,6 @@
-﻿using Library.Interface.Data.Table;
-using Library.Interface.Domain.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
 
 namespace Library.Interface.Presentation

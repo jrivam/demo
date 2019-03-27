@@ -1,39 +1,39 @@
 ﻿using Library.Impl;
-using Library.Impl.Data.Sql;
 using Library.Impl.Domain;
 using Library.Impl.Domain.Mapper;
 using Library.Impl.Domain.Query;
 using Library.Impl.Domain.Table;
-using Library.Interface.Domain.Mapper;
-using Library.Interface.Domain.Query;
-using Library.Interface.Domain.Table;
+using Library.Impl.Persistence.Sql;
+using Library.Interface.Business.Mapper;
+using Library.Interface.Business.Query;
+using Library.Interface.Business.Table;
 using System;
 
-namespace domain.Model
+namespace Business.Table
 {
-    public partial class Sucursal : AbstractTableDomain<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractTableDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursal(data.Model.Sucursal data,
-            ILogicTable<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(Persistence.Table.Sucursal data,
+            ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic)
             : base(data, 
                   logic)
         {
         }
 
-        public Sucursal(data.Model.Sucursal data,
-            IMapperLogic<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
+        public Sucursal(Persistence.Table.Sucursal data,
+            IMapperLogic<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> mapper)
             : this(data,
-                  new LogicTable<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+                  new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(mapper))
         {
         }
-        public Sucursal(data.Model.Sucursal data)
+        public Sucursal(Persistence.Table.Sucursal data)
             : this(data,
-                  new domain.Mapper.Sucursal())
+                  new Business.Mapper.Sucursal())
         {
         }
 
         public Sucursal(Entities.Table.Sucursal entity)
-            : this(new data.Model.Sucursal(entity))
+            : this(new Persistence.Table.Sucursal(entity))
         {
         }
         public Sucursal()
@@ -65,16 +65,16 @@ namespace domain.Model
             }
         }
 
-        protected domain.Model.Empresa _empresa;
-        public virtual (Result result, domain.Model.Empresa domain) Empresa_Refresh(int maxdepth = 1, domain.Query.Sucursal query = null)
+        protected Business.Table.Empresa _empresa;
+        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Sucursal query = null)
         {
             var refresh = Data.Empresa_Refresh(maxdepth, query?.Data);
 
-            Empresa = new domain.Model.Empresa(refresh.data);
+            Empresa = new Business.Table.Empresa(refresh.data);
 
             return (refresh.result, _empresa);
         }
-        public virtual domain.Model.Empresa Empresa
+        public virtual Business.Table.Empresa Empresa
         {
             get
             {
@@ -82,7 +82,7 @@ namespace domain.Model
                 {
                     if (Data?.Empresa != null)
                     {
-                        Empresa = new domain.Model.Empresa(Data?.Empresa);
+                        Empresa = new Business.Table.Empresa(Data?.Empresa);
                     }
                     else
                     {
@@ -103,16 +103,16 @@ namespace domain.Model
             }
         }
 
-        protected domain.Model.Empresas _empresas;
-        public virtual (Result result, domain.Model.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, domain.Query.Empresa query = null)
+        protected Business.Table.Empresas _empresas;
+        public virtual (Result result, Business.Table.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, Business.Query.Empresa query = null)
         {
             var refresh = Data.Empresas_Refresh(maxdepth, top, query?.Data);
 
-            Empresas = new domain.Model.Empresas(refresh.datas);
+            Empresas = new Business.Table.Empresas(refresh.datas);
 
             return (refresh.result, _empresas);
         }
-        public virtual domain.Model.Empresas Empresas
+        public virtual Business.Table.Empresas Empresas
         {
             get
             {
@@ -124,15 +124,15 @@ namespace domain.Model
                 {
                     _empresas = value;
 
-                    Data.Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(_empresas?.Datas);
+                    Data.Empresas = (Persistence.Table.Empresas)new Persistence.Table.Empresas().Load(_empresas?.Datas);
                 }
             }
         }
     }
 
-    public partial class Sucursales : ListDomain<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursales : ListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursales(data.Model.Sucursales datas)
+        public Sucursales(Persistence.Table.Sucursales datas)
             : base(datas)
         {
         }
@@ -143,30 +143,30 @@ namespace domain.Model
     }
 }
 
-namespace domain.Query
+namespace Business.Query
 {
-    public partial class Sucursal : AbstractQueryDomain<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : AbstractQueryDomain<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursal(data.Query.Sucursal data,
-            ILogicQuery<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> logic)
+        public Sucursal(Persistence.Query.Sucursal data,
+            ILogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic)
             : base(data, 
                   logic)
         {
         }
 
-        public Sucursal(data.Query.Sucursal data,
-            IMapperLogic<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal> mapper)
+        public Sucursal(Persistence.Query.Sucursal data,
+            IMapperLogic<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> mapper)
             : this(data,
-                  new LogicQuery<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>(mapper))
+                  new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(mapper))
         {
         }
 
-        public Sucursal(data.Query.Sucursal data)
-            : this(data, new domain.Mapper.Sucursal())
+        public Sucursal(Persistence.Query.Sucursal data)
+            : this(data, new Business.Mapper.Sucursal())
         {
         }
         public Sucursal()
-            : this(new data.Query.Sucursal())
+            : this(new Persistence.Query.Sucursal())
         {
         }
 
@@ -213,19 +213,19 @@ namespace domain.Query
             }
         }
 
-        protected domain.Query.Empresa _empresa;
-        public virtual domain.Query.Empresa Empresa(domain.Query.Empresa query = null)
+        protected Business.Query.Empresa _empresa;
+        public virtual Business.Query.Empresa Empresa(Business.Query.Empresa query = null)
         {
-            return _empresa = query ?? _empresa ?? new domain.Query.Empresa(Data?.Empresa());
+            return _empresa = query ?? _empresa ?? new Business.Query.Empresa(Data?.Empresa());
         }
     }
 }
 
-namespace domain.Mapper
+namespace Business.Mapper
 {
-    public partial class Sucursal : BaseMapperLogic<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
+    public partial class Sucursal : BaseMapperLogic<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public override domain.Model.Sucursal Clear(domain.Model.Sucursal domain, int maxdepth = 1, int depth = 0)
+        public override Business.Table.Sucursal Clear(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
             domain = base.Clear(domain, maxdepth, depth);
 

@@ -1,13 +1,13 @@
-﻿using Library.Impl.Data.Database;
-using Library.Interface.Data.Database;
-using Library.Interface.Data.Sql.Database;
+﻿using Library.Impl.Persistence.Database;
+using Library.Interface.Persistence.Database;
+using Library.Interface.Persistence.Sql.Database;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
 
-namespace Library.Impl.Data.Sql
+namespace Library.Impl.Persistence.Sql
 {
     public class SqlCreator : ISqlCreator
     {
@@ -27,7 +27,7 @@ namespace Library.Impl.Data.Sql
             var parameter = _dbcreator?.Parameter;
 
             parameter.ParameterName = name;
-            parameter.DbType = Data.Helper.TypeToDbType[type];
+            parameter.DbType = Persistence.Helper.TypeToDbType[type];
             parameter.Value = value ?? DBNull.Value;
             parameter.Direction = direction;
 

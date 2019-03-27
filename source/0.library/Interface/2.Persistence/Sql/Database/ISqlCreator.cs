@@ -1,9 +1,9 @@
-﻿using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Sql.Database
+namespace Library.Interface.Persistence.Sql.Database
 {
     public interface ISqlCreator
     {

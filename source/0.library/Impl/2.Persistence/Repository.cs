@@ -1,10 +1,10 @@
-﻿using library.Interface.Data;
-using Library.Interface.Data.Mapper;
-using Library.Interface.Data.Sql.Builder;
-using Library.Interface.Data.Sql.Providers;
-using Library.Interface.Data.Sql.Repository;
-using Library.Interface.Data.Table;
+﻿using library.Interface.Persistence;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Mapper;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Sql.Providers;
+using Library.Interface.Persistence.Sql.Repository;
+using Library.Interface.Persistence.Table;
 
 namespace library.Impl.Data
 {

@@ -1,9 +1,9 @@
-﻿using Library.Impl.Data;
-using Library.Interface.Data.Table;
+﻿using Library.Impl.Persistence;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Entities;
 using System.Collections.Generic;
 
-namespace Library.Interface.Data
+namespace Library.Interface.Persistence
 {
     public interface IListData<T, U> : IList<U>
         where T : IEntity

@@ -1,9 +1,9 @@
-﻿using Library.Interface.Data.Database;
+﻿using Library.Interface.Persistence.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Impl.Data.Database
+namespace Library.Impl.Persistence.Database
 {
     public class DbRepositoryBulk : IDbRepositoryBulk
     {

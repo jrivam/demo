@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace presentation.Model
+namespace Presentation.Table
 {
     public partial class Empresa
     {
@@ -43,18 +43,18 @@ namespace presentation.Model
     }
 }
 
-namespace presentation.Query
+namespace Presentation.Query
 {
     public partial class Empresa
     {
     }
 }
 
-namespace presentation.Raiser
+namespace Presentation.Raiser
 {
     public partial class Empresa
     {
-        public override Model.Empresa Extra(Model.Empresa presentation, int maxdepth = 1, int depth = 0)
+        public override Table.Empresa Extra(Table.Empresa presentation, int maxdepth = 1, int depth = 0)
         {
             presentation.RucX = presentation.Ruc;
 

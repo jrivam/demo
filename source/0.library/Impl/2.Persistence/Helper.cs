@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Impl.Data
+namespace Library.Impl.Persistence
 {
     public class Helper
     {

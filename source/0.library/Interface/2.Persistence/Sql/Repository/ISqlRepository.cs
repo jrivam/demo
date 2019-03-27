@@ -1,10 +1,10 @@
 ﻿using Library.Impl;
-using Library.Impl.Data.Sql;
+using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Sql.Repository
+namespace Library.Interface.Persistence.Sql.Repository
 {
     public interface ISqlRepository<T>
         where T : IEntity

@@ -1,11 +1,11 @@
-﻿using Library.Impl.Data.Sql.Providers.MySql;
-using Library.Impl.Data.Sql.Providers.PostgreSql;
-using Library.Impl.Data.Sql.Providers.SqlServer;
-using Library.Interface.Data.Sql.Providers;
+﻿using Library.Impl.Persistence.Sql.Providers.MySql;
+using Library.Impl.Persistence.Sql.Providers.PostgreSql;
+using Library.Impl.Persistence.Sql.Providers.SqlServer;
+using Library.Interface.Persistence.Sql.Providers;
 using System;
 using System.Configuration;
 
-namespace Library.Impl.Data.Sql.Factory
+namespace Library.Impl.Persistence.Sql.Factory
 {
     public static class SqlCommandBuilderFactory
     {

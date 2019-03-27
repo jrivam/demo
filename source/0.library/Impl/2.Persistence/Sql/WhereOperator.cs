@@ -1,4 +1,4 @@
-﻿namespace Library.Impl.Data.Sql
+﻿namespace Library.Impl.Persistence.Sql
 {
     public enum WhereOperator
     {

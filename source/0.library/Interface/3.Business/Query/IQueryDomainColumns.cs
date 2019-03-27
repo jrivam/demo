@@ -1,6 +1,6 @@
-﻿using Library.Interface.Data.Query;
+﻿using Library.Interface.Persistence.Query;
 
-namespace Library.Interface.Domain.Query
+namespace Library.Interface.Business.Query
 {
     public interface IQueryDomainColumns
     {

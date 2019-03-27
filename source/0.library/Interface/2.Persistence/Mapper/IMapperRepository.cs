@@ -1,7 +1,7 @@
-﻿using Library.Interface.Data.Table;
-using Library.Interface.Entities;
+﻿using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 
-namespace Library.Interface.Data.Mapper
+namespace Library.Interface.Persistence.Mapper
 {
     public interface IMapperRepository<T, U> 
         where T : IEntity

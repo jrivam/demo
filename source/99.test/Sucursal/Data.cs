@@ -1,10 +1,10 @@
-﻿using Library.Impl.Data.Query;
-using Library.Impl.Data.Sql;
-using Library.Impl.Data.Table;
-using Library.Interface.Data.Database;
-using Library.Interface.Data.Sql.Builder;
-using Library.Interface.Data.Sql.Database;
-using Library.Interface.Data.Sql.Providers;
+﻿using Library.Impl.Persistence.Query;
+using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Table;
+using Library.Interface.Persistence.Database;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Sql.Database;
+using Library.Interface.Persistence.Sql.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -74,7 +74,7 @@ namespace test.Sucursal
             return (mockCommand, mockSyntaxSign, mockCreator);
         }
 
-        public data.Model.Sucursal Data_Table_Select()
+        public Persistence.Table.Sucursal Data_Table_Select()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -92,24 +92,24 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new Entities.Table.Sucursal()
+            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
             {
                 Id = Entity.Id
             },
-            new RepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal>(
+            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(),
-                new data.Mapper.Sucursal(),
+                new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Model.Sucursal Data_Table_Select_NonDbCommand()
+        public Persistence.Table.Sucursal Data_Table_Select_NonDbCommand()
         {
             var dataselect = Data_Table_Select();
 
             return dataselect;
         }
-        public data.Model.Sucursal Data_Table_Select_DbCommand()
+        public Persistence.Table.Sucursal Data_Table_Select_DbCommand()
         {
             var dataselect = Data_Table_Select();
 
@@ -146,7 +146,7 @@ namespace test.Sucursal
             Assert.AreEqual(Entity.IdEmpresa, select.data.IdEmpresa);
         }
 
-        public data.Model.Sucursal Data_Table_Insert()
+        public Persistence.Table.Sucursal Data_Table_Insert()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -155,27 +155,27 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new Entities.Table.Sucursal()
+            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
             {
                 Nombre = Entity.Nombre,
                 Fecha = Entity.Fecha,
                 Activo = Entity.Activo,
                 IdEmpresa = Entity.IdEmpresa
             },
-            new RepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal>(
+            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(),
-                new data.Mapper.Sucursal(),
+                new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Model.Sucursal Data_Table_Insert_NonDbCommand()
+        public Persistence.Table.Sucursal Data_Table_Insert_NonDbCommand()
         {
             var datainsert = Data_Table_Insert();
 
             return datainsert;
         }
-        public data.Model.Sucursal Data_Table_Insert_DbCommand()
+        public Persistence.Table.Sucursal Data_Table_Insert_DbCommand()
         {
             var datainsert = Data_Table_Insert();
 
@@ -212,7 +212,7 @@ namespace test.Sucursal
             Assert.AreEqual(Entity.IdEmpresa, insert.data.IdEmpresa);
         }
 
-        public data.Model.Sucursal Data_Table_Update()
+        public Persistence.Table.Sucursal Data_Table_Update()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -221,7 +221,7 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new Entities.Table.Sucursal()
+            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
             {
                 Id = Entity.Id,
                 Nombre = Entity.Nombre,
@@ -229,14 +229,14 @@ namespace test.Sucursal
                 Activo = Entity.Activo,
                 IdEmpresa = Entity.IdEmpresa,
             },
-            new RepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal>(
+            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(),
-                new data.Mapper.Sucursal(),
+                new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Query.Sucursal Data_Query_Update()
+        public Persistence.Query.Sucursal Data_Query_Update()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -245,20 +245,20 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, data.Model.Sucursal>(
+            return new Persistence.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(),
-                new data.Mapper.Sucursal(),
+                new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Model.Sucursal Data_Table_Update_NonDbCommand()
+        public Persistence.Table.Sucursal Data_Table_Update_NonDbCommand()
         {
             var dataupdate = Data_Table_Update();
 
             return dataupdate;
         }
-        public data.Model.Sucursal Data_Table_Update_DbCommand()
+        public Persistence.Table.Sucursal Data_Table_Update_DbCommand()
         {
             var dataupdate = Data_Table_Update();
 
@@ -295,7 +295,7 @@ namespace test.Sucursal
             Assert.AreEqual(Entity.IdEmpresa, update.data.IdEmpresa);
         }
 
-        public data.Model.Sucursal Data_Table_Delete()
+        public Persistence.Table.Sucursal Data_Table_Delete()
         {
             var mockDatabase = GetDatabaseMock();
 
@@ -304,7 +304,7 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new data.Model.Sucursal(new Entities.Table.Sucursal()
+            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
             {
                 Id = Entity.Id,
                 Nombre = Entity.Nombre,
@@ -312,14 +312,14 @@ namespace test.Sucursal
                 Activo = Entity.Activo,
                 IdEmpresa = Entity.IdEmpresa
             },
-            new RepositoryTable<Entities.Table.Sucursal, data.Model.Sucursal>(
+            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(),
-                new data.Mapper.Sucursal(),
+                new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object));
         }
-        public data.Query.Sucursal Data_Query_Delete()
+        public Persistence.Query.Sucursal Data_Query_Delete()
         {
             var mockRepository = GetDatabaseMock();
 
@@ -328,15 +328,15 @@ namespace test.Sucursal
 
             var mockBuilderQuery = new Moq.Mock<ISqlBuilderQuery>();
 
-            return new data.Query.Sucursal();
+            return new Persistence.Query.Sucursal();
         }
-        public data.Model.Sucursal Data_Table_Delete_NonDbCommand()
+        public Persistence.Table.Sucursal Data_Table_Delete_NonDbCommand()
         {
             var datadelete = Data_Table_Delete();
 
             return datadelete;
         }
-        public data.Model.Sucursal Data_Table_Delete_DbCommand()
+        public Persistence.Table.Sucursal Data_Table_Delete_DbCommand()
         {
             var datadelete = Data_Table_Delete();
 

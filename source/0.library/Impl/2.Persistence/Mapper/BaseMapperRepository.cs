@@ -1,11 +1,11 @@
-﻿using Library.Interface.Data.Mapper;
-using Library.Interface.Data.Table;
+﻿using Library.Interface.Persistence.Mapper;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Entities;
 using System;
 using System.Globalization;
 using System.Reflection;
 
-namespace Library.Impl.Data.Mapper
+namespace Library.Impl.Persistence.Mapper
 {
     public class BaseMapperRepository<T, U> : IMapperRepository<T, U> 
         where T : IEntity

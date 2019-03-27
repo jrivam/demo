@@ -1,4 +1,4 @@
-﻿namespace Library.Interface.Data
+﻿namespace Library.Interface.Persistence
 {
     public interface IListColumns<T>
     {

@@ -1,6 +1,6 @@
 ﻿using Library.Interface.Entities;
 
-namespace Library.Interface.Data.Table
+namespace Library.Interface.Persistence.Table
 {
     public interface ITableData<T, U> : IBuilderTableData, IEntityTable<T>, ITableDataMethods<T, U>
         where T : IEntity

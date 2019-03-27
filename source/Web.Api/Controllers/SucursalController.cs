@@ -1,4 +1,4 @@
-﻿using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -15,7 +15,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var query = new domain.Query.Sucursal();
+                var query = new Business.Query.Sucursal();
 
                 if (nombre != null)
                     query.Nombre = (nombre, WhereOperator.Like);
@@ -27,7 +27,7 @@ namespace Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new domain.Model.Sucursales().Load(list.domains)?.Datas?.Entities?.List);
+                    return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities?.List);
                 }
 
                 return InternalServerError();
@@ -49,7 +49,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Sucursal() { Id = id }.Load();
+                var load = new Business.Table.Sucursal() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
@@ -77,7 +77,7 @@ namespace Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new domain.Model.Sucursal(entity).Save();
+                        var save = new Business.Table.Sucursal(entity).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();
@@ -104,7 +104,7 @@ namespace Web.Api.Controllers
             {
                 if (entity != null)
                 {
-                    var load = new domain.Model.Sucursal() { Id = id }.Load();
+                    var load = new Business.Table.Sucursal() { Id = id }.Load();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -144,7 +144,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Sucursal() { Id = id }.Load();
+                var load = new Business.Table.Sucursal() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)

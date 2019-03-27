@@ -1,7 +1,7 @@
 ﻿using System;
-using Library.Interface.Data.Table;
-using Library.Interface.Domain.Mapper;
-using Library.Interface.Domain.Table;
+using Library.Interface.Persistence.Table;
+using Library.Interface.Business.Mapper;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using System.Globalization;
 using System.Reflection;

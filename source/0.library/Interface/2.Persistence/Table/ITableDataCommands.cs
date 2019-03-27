@@ -1,8 +1,8 @@
-﻿using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Table
+namespace Library.Interface.Persistence.Table
 {
     public interface ITableDataCommands
     {

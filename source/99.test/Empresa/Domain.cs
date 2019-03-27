@@ -1,6 +1,6 @@
 ﻿using Library.Impl;
-using Library.Interface.Data.Sql.Builder;
-using Library.Interface.Data.Sql.Providers;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Sql.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace test.Empresa
@@ -25,11 +25,11 @@ namespace test.Empresa
 
         }
 
-        public domain.Model.Empresa Domain_Load_NonDbCommand()
+        public Business.Table.Empresa Domain_Load_NonDbCommand()
         {
             var data = Data.Data_Table_Select_NonDbCommand();
 
-            return new domain.Model.Empresa(data)
+            return new Business.Table.Empresa(data)
             {
             };
         }
@@ -44,11 +44,11 @@ namespace test.Empresa
             Assert.AreEqual(Data.Entity.Activo, load.domain.Activo);
         }
 
-        public Moq.Mock<domain.Model.Empresa> Domain_Erase_NonDbCommand()
+        public Moq.Mock<Business.Table.Empresa> Domain_Erase_NonDbCommand()
         {
             var data = Data.Data_Table_Delete_NonDbCommand();
 
-            return new Moq.Mock<domain.Model.Empresa>(data)
+            return new Moq.Mock<Business.Table.Empresa>(data)
             {
                 CallBase = true
             };
@@ -97,11 +97,11 @@ namespace test.Empresa
             Assert.IsTrue(erase.domain.Deleted);
         }
 
-        public domain.Model.Empresa Domain_Save_NonDbCommand_Insert()
+        public Business.Table.Empresa Domain_Save_NonDbCommand_Insert()
         {
             var data = Data.Data_Table_Insert_NonDbCommand();
 
-            return new domain.Model.Empresa(data)
+            return new Business.Table.Empresa(data)
             {
             };
         }
@@ -123,11 +123,11 @@ namespace test.Empresa
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
 
-        public domain.Model.Empresa Domain_Save_NonDbCommand_Update()
+        public Business.Table.Empresa Domain_Save_NonDbCommand_Update()
         {
             var data = Data.Data_Table_Update_NonDbCommand();
 
-            return new domain.Model.Empresa(data)
+            return new Business.Table.Empresa(data)
             {
             };
         }

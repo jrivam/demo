@@ -3,7 +3,7 @@ using Library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Database
+namespace Library.Interface.Persistence.Database
 {
     public interface IDbRepository<T>
         where T : IEntity

@@ -1,7 +1,7 @@
-﻿using Library.Interface.Data.Sql.Providers;
+﻿using Library.Interface.Persistence.Sql.Providers;
 using System;
 
-namespace Library.Impl.Data.Sql.Providers.PostgreSql
+namespace Library.Impl.Persistence.Sql.Providers.PostgreSql
 {
     public class PostgreSqlCommandBuilder : ISqlCommandBuilder
     {

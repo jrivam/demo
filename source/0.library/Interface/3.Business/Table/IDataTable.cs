@@ -1,7 +1,7 @@
-﻿using Library.Interface.Data.Table;
-using Library.Interface.Entities;
+﻿using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 
-namespace Library.Interface.Domain.Table
+namespace Library.Interface.Business.Table
 {
     public interface IDataTable<T, U> 
         where T: IEntity

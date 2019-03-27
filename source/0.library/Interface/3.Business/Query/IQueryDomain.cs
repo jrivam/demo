@@ -1,9 +1,9 @@
-﻿using Library.Interface.Data.Query;
-using Library.Interface.Data.Table;
-using Library.Interface.Domain.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 
-namespace Library.Interface.Domain.Query
+namespace Library.Interface.Business.Query
 {
     public interface IQueryDomain<S, T, U, V> : IBuilderQueryDomain, IDataQuery<S, T, U>, IQueryDomainMethods<T, U, V>
         where T : IEntity

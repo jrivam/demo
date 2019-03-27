@@ -1,7 +1,7 @@
 ﻿using Library.Impl;
 using System.Data;
 
-namespace Library.Interface.Data.Database
+namespace Library.Interface.Persistence.Database
 {
     public interface IDbRepositoryBulk
     {

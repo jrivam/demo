@@ -1,4 +1,4 @@
-﻿using Library.Interface.Data.Table;
+﻿using Library.Interface.Persistence.Table;
 
 namespace Library.Interface.Presentation.Table
 {

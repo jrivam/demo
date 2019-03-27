@@ -1,8 +1,8 @@
 ﻿using Library.Impl;
-using Library.Interface.Data.Query;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Query;
 
-namespace Library.Interface.Data.Table
+namespace Library.Interface.Persistence.Table
 {
     public interface ITableDataMethods<T, U>
         where T : IEntity

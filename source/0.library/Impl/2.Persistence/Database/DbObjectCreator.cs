@@ -1,9 +1,9 @@
-﻿using Library.Interface.Data.Database;
+﻿using Library.Interface.Persistence.Database;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
 
-namespace Library.Impl.Data.Database
+namespace Library.Impl.Persistence.Database
 {
     public class DbObjectCreator : IDbObjectCreator
     {

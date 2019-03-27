@@ -1,4 +1,4 @@
-﻿using Library.Interface.Data.Query;
+﻿using Library.Interface.Persistence.Query;
 
 namespace Library.Interface.Presentation.Query
 {

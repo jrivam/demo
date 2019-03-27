@@ -1,4 +1,4 @@
-﻿using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -15,7 +15,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var query = new domain.Query.Empresa();
+                var query = new Business.Query.Empresa();
 
                 if (razonsocial != null)
                     query.RazonSocial = (razonsocial, WhereOperator.Like);
@@ -25,7 +25,7 @@ namespace Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new domain.Model.Empresas().Load(list.domains)?.Datas?.Entities?.List);
+                    return Ok(new Business.Table.Empresas().Load(list.domains)?.Datas?.Entities?.List);
                 }
 
                 return InternalServerError();
@@ -47,7 +47,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Empresa() { Id = id }.Load();
+                var load = new Business.Table.Empresa() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
@@ -77,7 +77,7 @@ namespace Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new domain.Model.Empresa(entity).Save();
+                        var save = new Business.Table.Empresa(entity).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();
@@ -104,7 +104,7 @@ namespace Web.Api.Controllers
             {
                 if (entity != null)
                 {
-                    var load = new domain.Model.Empresa() { Id = id }.Load();
+                    var load = new Business.Table.Empresa() { Id = id }.Load();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -144,7 +144,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Empresa() { Id = id }.Load();
+                var load = new Business.Table.Empresa() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)

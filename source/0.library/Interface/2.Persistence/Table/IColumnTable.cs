@@ -1,4 +1,4 @@
-﻿namespace Library.Interface.Data.Table
+﻿namespace Library.Interface.Persistence.Table
 {
     public interface IColumnTable : IColumn
     {

@@ -1,7 +1,7 @@
-﻿using Library.Interface.Data;
+﻿using Library.Interface.Persistence;
 using System;
 
-namespace Library.Impl.Data
+namespace Library.Impl.Persistence
 {
     public class Column<A> : IColumn
     {

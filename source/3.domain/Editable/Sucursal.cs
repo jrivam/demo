@@ -1,4 +1,4 @@
-﻿namespace domain.Model
+﻿namespace Business.Table
 {
     public partial class Sucursal
     {
@@ -12,18 +12,18 @@
     }
 }
 
-namespace domain.Query
+namespace Business.Query
 {
     public partial class Sucursal
     {
     }
 }
 
-namespace domain.Mapper
+namespace Business.Mapper
 {
     public partial class Sucursal
     {
-        public override domain.Model.Sucursal Load(domain.Model.Sucursal domain, int maxdepth = 1, int depth = 0)
+        public override Business.Table.Sucursal Load(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
             return domain;
         }

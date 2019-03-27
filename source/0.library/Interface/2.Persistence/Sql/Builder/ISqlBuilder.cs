@@ -1,9 +1,9 @@
-﻿using Library.Impl.Data;
-using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence;
+using Library.Impl.Persistence.Sql;
 using System;
 using System.Collections.Generic;
 
-namespace Library.Interface.Data.Sql.Builder
+namespace Library.Interface.Persistence.Sql.Builder
 {
     public interface ISqlBuilder
     {

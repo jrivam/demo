@@ -1,9 +1,9 @@
 ﻿namespace WpfApp.ViewModels
 {
-    public class EmpresasViewModel : presentation.Model.EmpresasQuery
+    public class EmpresasViewModel : Presentation.Table.EmpresasQuery
     {
         public EmpresasViewModel()
-            : base(new presentation.Query.Empresa())
+            : base(new Presentation.Query.Empresa())
         {
         }
     }

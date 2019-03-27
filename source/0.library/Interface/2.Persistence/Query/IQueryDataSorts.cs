@@ -1,7 +1,7 @@
-﻿using Library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System.Collections.Generic;
 
-namespace Library.Interface.Data.Query
+namespace Library.Interface.Persistence.Query
 {
     public interface IQueryDataSorts
     {

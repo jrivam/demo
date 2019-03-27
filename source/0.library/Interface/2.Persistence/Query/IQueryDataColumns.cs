@@ -1,6 +1,6 @@
-﻿using Library.Impl.Data;
+﻿using Library.Impl.Persistence;
 
-namespace Library.Interface.Data.Query
+namespace Library.Interface.Persistence.Query
 {
     public interface IQueryDataColumns : IDescription
     {

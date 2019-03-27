@@ -1,6 +1,6 @@
 ﻿using System;
-using Library.Interface.Data.Table;
-using Library.Interface.Domain.Table;
+using Library.Interface.Persistence.Table;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;

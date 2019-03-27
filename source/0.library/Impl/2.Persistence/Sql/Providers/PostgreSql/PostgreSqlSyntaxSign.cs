@@ -1,8 +1,8 @@
-﻿using Library.Impl.Data.Sql.Builder;
+﻿using Library.Impl.Persistence.Sql.Builder;
 using System;
 using System.Configuration;
 
-namespace Library.Impl.Data.Sql.Providers.PostgreSql
+namespace Library.Impl.Persistence.Sql.Providers.PostgreSql
 {
     public class PostgreSqlSyntaxSign : AbstractSqlSyntaxSign
     {

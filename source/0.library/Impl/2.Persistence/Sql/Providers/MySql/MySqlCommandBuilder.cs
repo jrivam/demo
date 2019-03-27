@@ -1,7 +1,7 @@
-﻿using Library.Interface.Data.Sql.Providers;
+﻿using Library.Interface.Persistence.Sql.Providers;
 using System;
 
-namespace Library.Impl.Data.Sql.Providers.MySql
+namespace Library.Impl.Persistence.Sql.Providers.MySql
 {
     public class MySqlCommandBuilder : ISqlCommandBuilder
     {

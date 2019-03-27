@@ -1,11 +1,11 @@
-﻿using Library.Interface.Data.Sql;
-using Library.Interface.Data.Sql.Builder;
-using Library.Interface.Data.Table;
+﻿using Library.Interface.Persistence.Sql;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Impl.Data.Sql.Builder
+namespace Library.Impl.Persistence.Sql.Builder
 {
     public class SqlBuilderTable : AbstractSqlBuilder, ISqlBuilderTable
     {

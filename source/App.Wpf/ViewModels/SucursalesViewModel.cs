@@ -1,9 +1,9 @@
 ﻿namespace WpfApp.ViewModels
 {
-    public class SucursalesViewModel : presentation.Model.SucursalesQuery
+    public class SucursalesViewModel : Presentation.Table.SucursalesQuery
     {
         public SucursalesViewModel()
-            : base(new presentation.Query.Sucursal(), 2)
+            : base(new Presentation.Query.Sucursal(), 2)
         {
         }
     }

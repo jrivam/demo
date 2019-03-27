@@ -1,4 +1,4 @@
-﻿namespace Library.Interface.Domain.Query
+﻿namespace Library.Interface.Business.Query
 {
     public interface IBuilderQueryDomain : IQueryDomainColumns
     {

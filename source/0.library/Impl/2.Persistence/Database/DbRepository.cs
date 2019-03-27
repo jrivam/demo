@@ -1,11 +1,11 @@
-﻿using Library.Interface.Data.Database;
+﻿using Library.Interface.Persistence.Database;
 using Library.Interface.Entities;
 using Library.Interface.Entities.Reader;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Impl.Data.Database
+namespace Library.Impl.Persistence.Database
 {
     public class DbRepository<T> : IDbRepository<T>
         where T : IEntity

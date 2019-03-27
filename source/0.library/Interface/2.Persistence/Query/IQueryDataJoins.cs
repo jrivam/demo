@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Library.Interface.Data.Query
+namespace Library.Interface.Persistence.Query
 {
     public interface IQueryDataJoins
     {

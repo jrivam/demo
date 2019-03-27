@@ -1,6 +1,6 @@
-﻿using Library.Interface.Data.Table;
+﻿using Library.Interface.Persistence.Table;
 
-namespace Library.Impl.Data.Table
+namespace Library.Impl.Persistence.Table
 {
     public class ColumnTable<A> : Column<A>, IColumnTable
     {

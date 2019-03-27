@@ -1,11 +1,11 @@
 ﻿using Library.Impl;
-using Library.Impl.Data.Sql;
-using Library.Interface.Data.Table;
+using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Library.Interface.Data.Query
+namespace Library.Interface.Persistence.Query
 {
     public interface IRepositoryQuery<T, U>
         where T : IEntity
