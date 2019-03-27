@@ -149,7 +149,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Sucursales : ListPresentation<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class Sucursales : ListModel<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public Sucursales(domain.Model.Sucursales domains)
             : base(domains, "Sucursales")
@@ -161,7 +161,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class SucursalesQuery : ListPresentationQuery<presentation.Query.Sucursal, domain.Query.Sucursal, data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
+    public partial class SucursalesQuery : ListModelQuery<presentation.Query.Sucursal, domain.Query.Sucursal, data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal, presentation.Model.Sucursal>
     {
         public SucursalesQuery(domain.Model.Sucursales domains,
             presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)

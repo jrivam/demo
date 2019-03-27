@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Library.Impl.Presentation
 {
-    public class ListPresentationQuery<Q, R, S, T, U, V, W> : ListPresentation<T, U, V, W>, IListPresentationRefresh<T, U, V, W>, INotifyPropertyChanged, IStatus
+    public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelRefresh<T, U, V, W>, INotifyPropertyChanged, IStatus
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -27,7 +27,7 @@ namespace Library.Impl.Presentation
 
         public virtual ICommand RefreshCommand { get; protected set; }
 
-        public ListPresentationQuery(IListDomain<T, U, V> domains, 
+        public ListModelQuery(IListDomain<T, U, V> domains, 
             string name, 
             Q query, int maxdepth = 1, int top = 0)
             : base(domains, name)
@@ -40,7 +40,7 @@ namespace Library.Impl.Presentation
                 Messenger.Default.Send<int>(top, $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
         }
-        public ListPresentationQuery(string name,
+        public ListModelQuery(string name,
             Q query, int maxdepth = 1, int top = 0)
             : this(new ListDomain<T, U, V>(), 
                   name, 
@@ -48,7 +48,7 @@ namespace Library.Impl.Presentation
         {
         }
 
-        public virtual (Result result, IListPresentation<T, U, V, W> list) Refresh(int top = 0)
+        public virtual (Result result, IListModel<T, U, V, W> list) Refresh(int top = 0)
         {
             this.ClearItems();
 
@@ -59,7 +59,7 @@ namespace Library.Impl.Presentation
             return (list.result, load);
         }
 
-        public virtual void CommandRefresh((Result result, IListPresentation<T, U, V, W> presentations) operation)
+        public virtual void CommandRefresh((Result result, IListModel<T, U, V, W> presentations) operation)
         {
             TotalRecords();
         }

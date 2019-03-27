@@ -1,20 +1,25 @@
-﻿using Library.Impl;
-using Library.Interface.Data.Table;
+﻿using Library.Interface.Data.Table;
+using Library.Interface.Domain;
 using Library.Interface.Domain.Table;
 using Library.Interface.Entities;
 using Library.Interface.Presentation.Table;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace Library.Interface.Presentation
 {
-    public interface IListPresentationRefresh<T, U, V, W> : IListPresentation<T, U, V, W>
+    public interface IListModel<T, U, V, W> : IList<W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
     {
-        ICommand RefreshCommand { get; }
+        IListDomain<T, U, V> Domains { get; set; }
 
-        (Result result, IListPresentation<T, U, V, W> list) Refresh(int top = 0);
+        string Name { get; }
+
+        ICommand AddCommand { get; }
+
+        IListModel<T, U, V, W> Load(IEnumerable<W> list);
     }
 }

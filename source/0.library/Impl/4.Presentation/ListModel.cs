@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace Library.Impl.Presentation
 {
-    public class ListPresentation<T, U, V, W> : ObservableCollection<W>, IListPresentation<T, U, V, W>, INotifyPropertyChanged, IStatus
+    public class ListModel<T, U, V, W> : ObservableCollection<W>, IListModel<T, U, V, W>, INotifyPropertyChanged, IStatus
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -58,7 +58,7 @@ namespace Library.Impl.Presentation
 
         public virtual ICommand AddCommand { get; protected set; }
 
-        public ListPresentation(IListDomain<T, U, V> domains, 
+        public ListModel(IListDomain<T, U, V> domains, 
             string name)
         {
             Domains = domains;
@@ -70,13 +70,13 @@ namespace Library.Impl.Presentation
                 Messenger.Default.Send<W>(null, $"{Name}Add");
             }, delegate (object parameter) { return this != null; });
         }
-        public ListPresentation(string name)
+        public ListModel(string name)
             : this(new ListDomain<T, U, V>(),
                   name)
         {
         }
 
-        public virtual IListPresentation<T, U, V, W> Load(IEnumerable<W> list)
+        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list)
         {
             if (list != null)
             {

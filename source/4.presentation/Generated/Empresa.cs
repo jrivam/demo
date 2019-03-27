@@ -101,7 +101,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class Empresas : ListPresentation<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresas : ListModel<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresas(domain.Model.Empresas domains)
             : base(domains, "Empresas")
@@ -113,7 +113,7 @@ namespace presentation.Model
         }
     }
 
-    public partial class EmpresasQuery : ListPresentationQuery<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class EmpresasQuery : ListModelQuery<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public EmpresasQuery(domain.Model.Empresas domains,
             presentation.Query.Empresa query, int maxdepth = 1, int top = 0)

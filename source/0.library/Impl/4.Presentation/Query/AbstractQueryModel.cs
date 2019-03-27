@@ -47,7 +47,7 @@ namespace Library.Impl.Presentation.Query
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(int maxdepth = 1, int top = 0, IListPresentation<T, U, V, W> presentations = null)
+        public virtual (Result result, IEnumerable<W> presentations) List(int maxdepth = 1, int top = 0, IListModel<T, U, V, W> presentations = null)
         {
             var list = _interactive.List(this, maxdepth, top, presentations);
 

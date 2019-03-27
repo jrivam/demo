@@ -52,7 +52,7 @@ namespace Library.Impl.Presentation.Query
 
             return (retrieve.result, default(W));
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IListPresentation<T, U, V, W> presentations = null)
+        public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IListModel<T, U, V, W> presentations = null)
         {
             query.Status = "Loading...";
 
