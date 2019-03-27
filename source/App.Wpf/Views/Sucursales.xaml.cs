@@ -7,11 +7,11 @@ namespace WpfApp.Views
 {
     public partial class Sucursales : Window
     {
-        public presentation.Model.Sucursales ViewModel
+        public presentation.Model.SucursalesQuery ViewModel
         {
             get
             {
-                return (presentation.Model.Sucursales)DataContext;
+                return (presentation.Model.SucursalesQuery)DataContext;
             }
             set
             {

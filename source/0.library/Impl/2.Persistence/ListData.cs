@@ -1,6 +1,5 @@
 ﻿using Library.Impl.Entities;
 using Library.Interface.Data;
-using Library.Interface.Data.Query;
 using Library.Interface.Data.Table;
 using Library.Interface.Entities;
 using System;
@@ -15,7 +14,7 @@ namespace Library.Impl.Data
         where T : IEntity
         where U : ITableData<T, U>
     {
-        public virtual ListEntity<T> Entities
+        public virtual IListEntity<T> Entities
         {
             get
             {
@@ -23,7 +22,7 @@ namespace Library.Impl.Data
             }
             set
             {
-                value?.ForEach(x => this?.Add((U)Activator.CreateInstance(typeof(U),
+                value?.ToList().ForEach(x => this?.Add((U)Activator.CreateInstance(typeof(U),
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
@@ -33,7 +32,7 @@ namespace Library.Impl.Data
             }
         }
 
-        public ListData(ListEntity<T> entities)
+        public ListData(IListEntity<T> entities)
         {
             Entities = entities;
         }
@@ -42,13 +41,6 @@ namespace Library.Impl.Data
         {
         }
 
-        public virtual (Result result, ListData<T, U> list) LoadQuery<S>(S query, int maxdepth = 1, int top = 0)
-            where S : IQueryData<T, U>
-        {
-            var list = query.SelectMultiple(maxdepth, top);
-
-            return (list.result, Load(list.datas));
-        }
         public virtual ListData<T, U> Load(IEnumerable<U> list)
         {
             if (list != null)

@@ -1,8 +1,7 @@
 ﻿using Library.Impl.Data;
-using Library.Interface.Data.Query;
+using Library.Interface.Data;
 using Library.Interface.Data.Table;
 using Library.Interface.Domain;
-using Library.Interface.Domain.Query;
 using Library.Interface.Domain.Table;
 using Library.Interface.Entities;
 using System;
@@ -18,7 +17,7 @@ namespace Library.Impl.Domain
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        public virtual ListData<T, U> Datas
+        public virtual IListData<T, U> Datas
         {
             get
             {
@@ -26,7 +25,7 @@ namespace Library.Impl.Domain
             }
             set
             {
-                value?.ForEach(x => this?.Add((V)Activator.CreateInstance(typeof(V),
+                value?.ToList().ForEach(x => this?.Add((V)Activator.CreateInstance(typeof(V),
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
@@ -36,7 +35,7 @@ namespace Library.Impl.Domain
             }
         }
 
-        public ListDomain(ListData<T, U> datas)
+        public ListDomain(IListData<T, U> datas)
         {
             Datas = datas;
         }
@@ -45,16 +44,7 @@ namespace Library.Impl.Domain
         {
         }
 
-        public virtual (Result result, ListDomain<T, U, V> list) LoadQuery<R, S>(R query, int maxdepth = 1, int top = 0)
-            where S : IQueryData<T, U>
-            where R : IQueryDomain<S, T, U, V>
-        {
-            var list = query.List(maxdepth, top);
-
-            return (list.result, Load(list.domains));
-        }
-
-        public virtual ListDomain<T, U, V> Load(IEnumerable<V> list)
+        public virtual IListDomain<T, U, V> Load(IEnumerable<V> list)
         {
             if (list != null)
             {
@@ -77,7 +67,6 @@ namespace Library.Impl.Domain
 
             return result;
         }
-
         public virtual Result EraseAll()
         {
             var result = new Result() { Success = true };

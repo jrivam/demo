@@ -6,11 +6,11 @@ namespace WpfApp.Views
 {
     public partial class Empresas : Window
     {
-        public presentation.Model.Empresas ViewModel
+        public presentation.Model.EmpresasQuery ViewModel
         {
             get
             {
-                return (presentation.Model.Empresas)DataContext;
+                return (presentation.Model.EmpresasQuery)DataContext;
             }
             set
             {

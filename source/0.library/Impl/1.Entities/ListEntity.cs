@@ -1,12 +1,13 @@
 ﻿using Library.Interface.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Library.Impl.Entities
 {
     public class ListEntity<T> : List<T>, IListEntity<T>
         where T : IEntity
     {
-        public virtual List<T> List
+        public virtual IList<T> List
         {
             get
             {
@@ -16,11 +17,11 @@ namespace Library.Impl.Entities
             }
             set
             {
-                value?.ForEach(x => this?.Add(x));
+                value?.ToList().ForEach(x => this?.Add(x));
             }
         }
 
-        public ListEntity(List<T> list)
+        public ListEntity(IList<T> list)
         {
             List = list;
         }
@@ -29,7 +30,7 @@ namespace Library.Impl.Entities
         {
         }
 
-        public virtual ListEntity<T> Load(IEnumerable<T> list)
+        public virtual IListEntity<T> Load(IEnumerable<T> list)
         {
             if (list != null)
             {

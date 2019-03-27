@@ -104,7 +104,7 @@ namespace domain.Model
         }
 
         protected domain.Model.Empresas _empresas;
-        public virtual (Result result, domain.Model.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, domain.Query.Sucursal query = null)
+        public virtual (Result result, domain.Model.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, domain.Query.Empresa query = null)
         {
             var refresh = Data.Empresas_Refresh(maxdepth, top, query?.Data);
 
@@ -132,12 +132,12 @@ namespace domain.Model
 
     public partial class Sucursales : ListDomain<Entities.Table.Sucursal, data.Model.Sucursal, domain.Model.Sucursal>
     {
-        public Sucursales()
-           : base()
-        {
-        }
         public Sucursales(data.Model.Sucursales datas)
             : base(datas)
+        {
+        }
+        public Sucursales()
+            : base()
         {
         }
     }

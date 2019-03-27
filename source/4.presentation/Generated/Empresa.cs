@@ -60,16 +60,16 @@ namespace presentation.Model
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
-        protected presentation.Model.Sucursales _sucursales;
-        public virtual (Result result, presentation.Model.Sucursales presentations) Sucursales_Refresh(int maxdepth = 1, int top = 0, presentation.Query.Empresa query = null)
+        protected presentation.Model.SucursalesQuery _sucursales;
+        public virtual (Result result, presentation.Model.SucursalesQuery presentations) Sucursales_Refresh(int maxdepth = 1, int top = 0, presentation.Query.Sucursal query = null)
         {
             var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
 
-            Sucursales = new presentation.Model.Sucursales(refresh.domains);
+            Sucursales = new presentation.Model.SucursalesQuery(refresh.domains);
 
             return (refresh.result, _sucursales);
         }
-        public virtual presentation.Model.Sucursales Sucursales
+        public virtual presentation.Model.SucursalesQuery Sucursales
         {
             get
             {
@@ -77,7 +77,7 @@ namespace presentation.Model
                 {
                     if (Domain?.Sucursales != null)
                     {
-                        Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales);
+                        Sucursales = new presentation.Model.SucursalesQuery(Domain?.Sucursales);
                     }
                     else
                     {
@@ -101,26 +101,38 @@ namespace presentation.Model
         }
     }
 
-    public partial class Empresas : ListPresentation<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresas : ListPresentation<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
-        public Empresas(domain.Model.Empresas domains,
+        public Empresas(domain.Model.Empresas domains)
+            : base(domains, "Empresas")
+        {
+        }
+        public Empresas()
+            : base("Empresas")
+        {
+        }
+    }
+
+    public partial class EmpresasQuery : ListPresentationQuery<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    {
+        public EmpresasQuery(domain.Model.Empresas domains,
             presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
             : base(domains, "Empresas",
                   query, maxdepth, top)
         {
         }
-        public Empresas(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
+        public EmpresasQuery(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
             : base("Empresas",
                   query, maxdepth, top)
         {
         }
 
-        public Empresas(domain.Model.Empresas domains, int maxdepth = 1, int top = 0)
+        public EmpresasQuery(domain.Model.Empresas domains, int maxdepth = 1, int top = 0)
             : this(domains, 
                   new presentation.Query.Empresa(), maxdepth, top)
         {
         }
-        public Empresas(int maxdepth = 1, int top = 0)
+        public EmpresasQuery(int maxdepth = 1, int top = 0)
             : this(new presentation.Query.Empresa(), maxdepth, top)
         {
         }
@@ -129,7 +141,7 @@ namespace presentation.Model
 
 namespace presentation.Query
 {
-    public partial class Empresa : AbstractQueryModel<domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : AbstractQueryModel<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
     {
         public Empresa(domain.Query.Empresa domain,
             IInteractiveQuery<domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
@@ -141,7 +153,7 @@ namespace presentation.Query
         public Empresa(domain.Query.Empresa domain,
             IRaiserInteractive<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper)
             : this(domain,
-                  new InteractiveQuery<domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
+                  new InteractiveQuery<presentation.Query.Empresa, domain.Query.Empresa, data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
         {
         }
 

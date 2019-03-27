@@ -1,5 +1,6 @@
 ﻿using Library.Interface.Data.Query;
 using Library.Interface.Data.Table;
+using Library.Interface.Domain;
 using Library.Interface.Domain.Query;
 using Library.Interface.Domain.Table;
 using Library.Interface.Entities;
@@ -38,7 +39,7 @@ namespace Library.Impl.Domain.Query
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IList<V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
         {
             var list = _logic.List(this, maxdepth, top, domains);
 

@@ -55,19 +55,19 @@ namespace data.Model
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc cannot be empty") } }, null, false);
         }
 
-        public virtual (Result result, data.Model.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, data.Query.Empresa query = null)
+        public virtual (Result result, data.Model.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, data.Query.Sucursal query = null)
         {
             if (this.Id != null)
             {
-                var _query = query ?? new data.Query.Empresa();
+                var _query = query ?? new data.Query.Sucursal();
 
-                _query.Sucursal().IdEmpresa = (this.Id, WhereOperator.Equals);
+                _query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                var load = new data.Model.Sucursales().LoadQuery(_query?.Sucursal(), maxdepth, top);
+                var selectmultiple = _query.SelectMultiple(maxdepth, top);
 
-                Sucursales = (data.Model.Sucursales)load.list;
+                Sucursales = (data.Model.Sucursales)new data.Model.Sucursales().Load(selectmultiple.datas);
 
-                return (load.result, _sucursales);
+                return (selectmultiple.result, _sucursales);
             }
 
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Sucursales_Refresh", $"Id in {this?.Description?.Name} cannot be null") } }, null);

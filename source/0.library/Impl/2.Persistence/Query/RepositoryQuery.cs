@@ -3,6 +3,8 @@ using Library.Impl.Data.Sql;
 using Library.Impl.Data.Sql.Builder;
 using Library.Impl.Data.Sql.Factory;
 using Library.Impl.Data.Sql.Repository;
+using Library.Impl.Entities;
+using Library.Interface.Data;
 using Library.Interface.Data.Mapper;
 using Library.Interface.Data.Query;
 using Library.Interface.Data.Sql.Builder;
@@ -66,7 +68,7 @@ namespace Library.Impl.Data.Query
         public virtual (Result result, U data) 
             SelectSingle
             (IQueryData<T, U> query,
-            int maxdepth = 1)
+            int maxdepth = 1, U data = default(U))
         {
             var parameters = new List<SqlParameter>();
 
@@ -77,15 +79,15 @@ namespace Library.Impl.Data.Query
                 _builder.GetFrom(queryjoins, query.Description.Name),
                 _builder.GetWhere(querycolumns, parameters), 1);
 
-            return SelectSingle(select, CommandType.Text, parameters, maxdepth);
+            return SelectSingle(select, CommandType.Text, parameters, maxdepth, data);
         }
 
         public virtual (Result result, U data) 
             SelectSingle
             (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1)
+            int maxdepth = 1, U data = default(U))
         {
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth);
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, (data != null ? new ListEntity<T>() { data.Entity } : null));
 
             if (executequery.result.Success && executequery.entities != null)
             {
@@ -105,7 +107,7 @@ namespace Library.Impl.Data.Query
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (IQueryData<T, U> query,
-            int maxdepth = 1, int top = 0)
+            int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
         {
             var parameters = new List<SqlParameter>();
 
@@ -116,24 +118,23 @@ namespace Library.Impl.Data.Query
                 _builder.GetFrom(queryjoins, query.Description.Name),
                 _builder.GetWhere(querycolumns, parameters), top);
 
-            return SelectMultiple(select, CommandType.Text, parameters, maxdepth);
+            return SelectMultiple(select, CommandType.Text, parameters, maxdepth, datas);
         }
 
         public virtual (Result result, IEnumerable<U> datas) 
             SelectMultiple
             (string commandtext,  CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1)
+            int maxdepth = 1, IListData<T,U> datas = null)
         {
             var enumeration = new List<U>();
-            var iterator = new ListData<T, U>().GetEnumerator();
 
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth);
+            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new ListEntity<T>()));
 
             if (executequery.result.Success && executequery.entities != null)
             {
                 foreach (var entity in executequery.entities)
                 {
-                    var instance = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(entity);
+                    var instance = _mapper.CreateInstance(entity);
 
                     _mapper.Clear(instance, maxdepth, 0);
                     _mapper.Map(instance, maxdepth, 0);

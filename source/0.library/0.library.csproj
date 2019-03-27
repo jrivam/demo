@@ -82,6 +82,7 @@
     <Compile Include="Impl\2.Persistence\Column.cs" />
     <Compile Include="Impl\2.Persistence\Repository.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Repository\SqlRepositoryBulk.cs" />
+    <Compile Include="Impl\4.Presentation\ListPresentationQuery.cs" />
     <Compile Include="Impl\4.Presentation\Table\AbstractTableModel.cs" />
     <Compile Include="Interface\2.Persistence\IColumn.cs" />
     <Compile Include="Impl\2.Persistence\ListColumns.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Interface\3.Business\Table\ILogicTable.cs" />
     <Compile Include="Interface\3.Business\Query\ILogicQuery.cs" />
     <Compile Include="Interface\3.Business\Query\IQueryDomainMethods.cs" />
+    <Compile Include="Interface\4.Presentation\IListPresentationRefresh.cs" />
     <Compile Include="Interface\4.Presentation\IListPresentation.cs" />
     <Compile Include="Interface\4.Presentation\IStatus.cs" />
     <Compile Include="Interface\4.Presentation\Query\IBuilderQueryModel.cs" />

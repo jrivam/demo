@@ -110,12 +110,12 @@ namespace data.Model
 
     public partial class Empresas : ListData<Entities.Table.Empresa, data.Model.Empresa>
     {
-        public Empresas()
-           : base()
-        {
-        }
         public Empresas(Entities.Table.Empresas entities)
             : base(entities)
+        {
+        }
+        public Empresas()
+       : base()
         {
         }
     }

@@ -46,7 +46,7 @@ namespace domain.Model
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
         protected domain.Model.Sucursales _sucursales;
-        public virtual (Result result, domain.Model.Sucursales domains) Sucursales_Refresh(int maxdepth = 1, int top = 0, domain.Query.Empresa query = null)
+        public virtual (Result result, domain.Model.Sucursales domains) Sucursales_Refresh(int maxdepth = 1, int top = 0, domain.Query.Sucursal query = null)
         {
             var refresh = Data.Sucursales_Refresh(maxdepth, top, query?.Data);
 
@@ -116,12 +116,12 @@ namespace domain.Model
 
     public partial class Empresas : ListDomain<Entities.Table.Empresa, data.Model.Empresa, domain.Model.Empresa>
     {
-        public Empresas()
-            : base()
-        {
-        }
         public Empresas(data.Model.Empresas datas)
             : base(datas)
+        {
+        }
+        public Empresas()
+            : base()
         {
         }
     }

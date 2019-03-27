@@ -1,4 +1,5 @@
 ﻿using Library.Impl.Data.Sql;
+using Library.Interface.Data;
 using Library.Interface.Data.Query;
 using Library.Interface.Data.Table;
 using Library.Interface.Entities;
@@ -43,15 +44,15 @@ namespace Library.Impl.Data.Query
             _repository = repository;
         }
 
-        public virtual (Result result, U data) SelectSingle(int maxdepth = 1)
+        public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))
         {
-            var selectsingle = _repository.SelectSingle(this, maxdepth);
+            var selectsingle = _repository.SelectSingle(this, maxdepth, data);
 
             return selectsingle;
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
         {
-            var selectmultiple = _repository.SelectMultiple(this, maxdepth, top);
+            var selectmultiple = _repository.SelectMultiple(this, maxdepth, top, datas);
 
             return selectmultiple;
         }

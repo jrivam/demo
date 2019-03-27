@@ -3,6 +3,7 @@ using Library.Impl.Data.Sql;
 using Library.Interface.Data.Query;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace data.Model
 {
@@ -72,17 +73,17 @@ namespace data.Model
 
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
-        public virtual (Result result, data.Model.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, data.Query.Sucursal query = null)
+        public virtual (Result result, data.Model.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, data.Query.Empresa query = null)
         {
-            var _query = query ?? new data.Query.Sucursal();
+            var _query = query ?? new data.Query.Empresa();
 
-            _query.Empresa().Activo = (true, WhereOperator.Equals);
+            _query.Activo = (true, WhereOperator.Equals);
 
-            var load = new data.Model.Empresas().LoadQuery(_query?.Empresa(), maxdepth, top);
+            var selectmultiple = _query.SelectMultiple(maxdepth, top);
 
-            Empresas = (data.Model.Empresas)load.list;
+            Empresas = (data.Model.Empresas)new data.Model.Empresas().Load(selectmultiple.datas);
 
-            return (load.result, _empresas);
+            return (selectmultiple.result, _empresas);
         }
     }
 }

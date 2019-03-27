@@ -91,7 +91,7 @@ namespace Web.Api.App_Start
             builder.RegisterGeneric(typeof(Library.Impl.Presentation.Table.InteractiveTable<,,,>))
                    .As(typeof(Library.Interface.Presentation.Table.IInteractiveTable<,,,>))
                    .InstancePerRequest();
-            builder.RegisterGeneric(typeof(Library.Impl.Presentation.Query.InteractiveQuery<,,,,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Presentation.Query.InteractiveQuery<,,,,,,>))
                    .As(typeof(Library.Interface.Presentation.Query.IInteractiveQuery<,,,,,>))
                    .InstancePerRequest();
 

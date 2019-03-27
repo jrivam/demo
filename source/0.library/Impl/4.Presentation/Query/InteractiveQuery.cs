@@ -1,24 +1,27 @@
-﻿using Library.Interface.Data.Query;
+﻿using Library.Impl.Domain;
+using Library.Interface.Data.Query;
 using Library.Interface.Data.Table;
 using Library.Interface.Domain.Query;
 using Library.Interface.Domain.Table;
 using Library.Interface.Entities;
+using Library.Interface.Presentation;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Library.Impl.Presentation.Query
 {
-    public class InteractiveQuery<R, S, T, U, V, W> : Interactive<T, U, V, W>, IInteractiveQuery<R, S, T, U, V, W> 
+    public class InteractiveQuery<Q, R, S, T, U, V, W> : Interactive<T, U, V, W>, IInteractiveQuery<R, S, T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
-        where W : ITableModel<T, U, V, W>
+        where W : class, ITableModel<T, U, V, W>
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>
+        where Q : IQueryModel<R, S, T, U, V, W>
     {
         public InteractiveQuery(IRaiserInteractive<T, U, V, W> raiser)
             : base(raiser)
@@ -29,7 +32,7 @@ namespace Library.Impl.Presentation.Query
         {
             query.Status = "Loading...";
 
-            var retrieve = query.Domain.Retrieve(maxdepth, presentation.Domain);
+            var retrieve = query.Domain.Retrieve(maxdepth, (presentation != null ? presentation.Domain : default(V)));
 
             if (retrieve.result.Success && retrieve.domain != null)
             {
@@ -49,19 +52,18 @@ namespace Library.Impl.Presentation.Query
 
             return (retrieve.result, default(W));
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IList<W> presentations = null)
+        public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IListPresentation<T, U, V, W> presentations = null)
         {
             query.Status = "Loading...";
 
             var enumeration = new List<W>();
-            var iterator = (presentations ?? new List<W>()).GetEnumerator();
 
-            var list = query.Domain.List(maxdepth, top);
+            var list = query.Domain.List(maxdepth, top, (presentations?.Domains != null ? presentations?.Domains : new ListDomain<T, U, V>()));
             if (list.result.Success && list.domains != null)
             {
                 foreach (var domain in list.domains)
                 {
-                    var instance = iterator.MoveNext() ? iterator.Current : _raiser.CreateInstance(domain, maxdepth);
+                    var instance = _raiser.CreateInstance(domain, maxdepth);
 
                     _raiser.Clear(instance, maxdepth, 0);
                     _raiser.Raise(instance, maxdepth, 0);

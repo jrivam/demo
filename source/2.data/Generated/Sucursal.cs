@@ -149,12 +149,12 @@ namespace data.Model
 
     public partial class Sucursales : ListData<Entities.Table.Sucursal, data.Model.Sucursal>
     {
-        public Sucursales()
-           : base()
-        {
-        }
         public Sucursales(Entities.Table.Sucursales entities)
             : base(entities)
+        {
+        }
+        public Sucursales()
+           : base()
         {
         }
     }

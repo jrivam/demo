@@ -1,5 +1,7 @@
-﻿using Library.Interface.Data.Query;
+﻿using Library.Impl.Data;
+using Library.Interface.Data.Query;
 using Library.Interface.Data.Table;
+using Library.Interface.Domain;
 using Library.Interface.Domain.Mapper;
 using Library.Interface.Domain.Query;
 using Library.Interface.Domain.Table;
@@ -21,7 +23,7 @@ namespace Library.Impl.Domain.Query
 
         public virtual (Result result, V domain) Retrieve(IQueryDomain<S, T, U, V> query, int maxdepth = 1, V domain = default(V))
         {
-            var selectsingle = query.Data.SelectSingle(maxdepth);
+            var selectsingle = query.Data.SelectSingle(maxdepth, (domain != null ? domain.Data : default(U)));
 
             if (selectsingle.result.Success && selectsingle.data != null)
             {
@@ -39,17 +41,16 @@ namespace Library.Impl.Domain.Query
 
             return (selectsingle.result, default(V));
         }
-        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<S, T, U, V> query, int maxdepth = 1, int top = 0, IList<V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<S, T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
         {
             var enumeration = new List<V>();
-            var iterator = (domains ?? new List<V>()).GetEnumerator();
 
-            var selectmultiple = query.Data.SelectMultiple(maxdepth, top);
+            var selectmultiple = query.Data.SelectMultiple(maxdepth, top, (domains?.Datas != null ? domains?.Datas : new ListData<T, U>()));
             if (selectmultiple.result.Success && selectmultiple.datas != null)
             {
                 foreach (var data in selectmultiple.datas)
                 {
-                    var instance = iterator.MoveNext() ? iterator.Current : _mapper.CreateInstance(data);
+                    var instance = _mapper.CreateInstance(data);
 
                     _mapper.Clear(instance, maxdepth, 0);
 
