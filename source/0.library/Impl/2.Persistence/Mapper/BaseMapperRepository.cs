@@ -1,6 +1,6 @@
-﻿using Library.Interface.Persistence.Mapper;
+﻿using Library.Interface.Entities;
+using Library.Interface.Persistence.Mapper;
 using Library.Interface.Persistence.Table;
-using Library.Interface.Entities;
 using System;
 using System.Globalization;
 using System.Reflection;

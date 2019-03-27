@@ -6,7 +6,7 @@ using Library.Interface.Persistence.Sql.Providers;
 using Library.Interface.Persistence.Sql.Repository;
 using Library.Interface.Persistence.Table;
 
-namespace library.Impl.Data
+namespace library.Impl.Persistence
 {
     public class Repository<T, U> : IRepository<T, U>
         where T : IEntity

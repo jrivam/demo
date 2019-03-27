@@ -1,7 +1,7 @@
 ﻿using Library.Impl.Persistence.Sql;
+using Library.Interface.Entities;
 using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
-using Library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
