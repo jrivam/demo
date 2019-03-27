@@ -16,8 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\0.library\0.library.csproj" />
     <ProjectReference Include="..\1.entities\1.entities.csproj" />
-    <ProjectReference Include="..\2.data\2.data.csproj" />
-    <ProjectReference Include="..\3.domain\3.domain.csproj" />
+    <ProjectReference Include="..\2.data\2.persistence.csproj" />
+    <ProjectReference Include="..\3.domain\3.business.csproj" />
   </ItemGroup>
 
 </Project>
