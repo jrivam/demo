@@ -1,11 +1,11 @@
 ﻿using Library.Impl.Persistence;
-using Library.Interface.Persistence.Query;
-using Library.Interface.Persistence.Table;
 using Library.Interface.Business;
 using Library.Interface.Business.Mapper;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 
 namespace Library.Impl.Domain.Query
@@ -45,7 +45,7 @@ namespace Library.Impl.Domain.Query
         {
             var enumeration = new List<V>();
 
-            var selectmultiple = query.Data.SelectMultiple(maxdepth, top, (domains?.Datas != null ? domains?.Datas : new ListData<T, U>()));
+            var selectmultiple = query.Data.Select(maxdepth, top, (domains?.Datas != null ? domains?.Datas : new ListData<T, U>()));
             if (selectmultiple.result.Success && selectmultiple.datas != null)
             {
                 foreach (var data in selectmultiple.datas)

@@ -17,8 +17,10 @@ namespace Persistence.Table
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresa(Entities.Table.Empresa entity,
+            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query,
             IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
             : base(entity,
+                  query,
                   repository,
                   typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
@@ -30,8 +32,10 @@ namespace Persistence.Table
 
         public Empresa(Entities.Table.Empresa entity,
             ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
+            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query,
+            IReader<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
             : this(entity,
+                  query,
                   new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(reader, mapper, connectionstringsettings))
         {
         }
@@ -39,6 +43,7 @@ namespace Persistence.Table
             string appsettingsconnectionstringname)
             : this(entity,
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  new Persistence.Query.Empresa(),
                   new Entities.Reader.Empresa(), new Persistence.Mapper.Empresa())
         {
         }
@@ -52,11 +57,11 @@ namespace Persistence.Table
         {
             get
             {
-                var _query = new Persistence.Query.Empresa();
+                var query = (Persistence.Query.Empresa)_query;
 
-                _query.Id = (this.Id, WhereOperator.Equals);
+                query.Id = (this.Id, WhereOperator.Equals);
 
-                return _query;
+                return query;
             }
         }
 
@@ -115,7 +120,7 @@ namespace Persistence.Table
         {
         }
         public Empresas()
-       : base()
+            : base()
         {
         }
     }
@@ -136,7 +141,7 @@ namespace Persistence.Query
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
+            IReader<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
             : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(reader, mapper, connectionstringsettings))
         {
         }

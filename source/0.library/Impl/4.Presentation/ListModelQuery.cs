@@ -1,10 +1,10 @@
 ﻿using Library.Impl.Domain;
-using Library.Interface.Persistence.Query;
-using Library.Interface.Persistence.Table;
 using Library.Interface.Business;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Table;
@@ -39,6 +39,8 @@ namespace Library.Impl.Presentation
             {
                 Messenger.Default.Send<int>(top, $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
+
+            TotalRecords();
         }
         public ListModelQuery(string name,
             Q query, int maxdepth = 1, int top = 0)
@@ -54,14 +56,14 @@ namespace Library.Impl.Presentation
 
             var list = _query.List(_maxdepth, top);
 
-            var load = Load(list.presentations);
+            var load = Load(list.presentations, _query.Status);
 
             return (list.result, load);
         }
 
         public virtual void CommandRefresh((Result result, IListModel<T, U, V, W> presentations) operation)
         {
-            TotalRecords();
+            //TotalRecords();
         }
     }
 }

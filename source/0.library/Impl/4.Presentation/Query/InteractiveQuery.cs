@@ -1,9 +1,9 @@
 ﻿using Library.Impl.Domain;
-using Library.Interface.Persistence.Query;
-using Library.Interface.Persistence.Table;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Raiser;
@@ -48,7 +48,7 @@ namespace Library.Impl.Presentation.Query
                 return (retrieve.result, presentation);
             }
 
-            query.Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            query.Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (retrieve.result, default(W));
         }
@@ -78,7 +78,7 @@ namespace Library.Impl.Presentation.Query
                 return (list.result, enumeration);
             }
 
-            query.Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            query.Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (list.result, default(IList<W>));
         }

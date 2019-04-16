@@ -21,44 +21,57 @@ using System.Linq;
 
 namespace Library.Impl.Persistence.Query
 {
-    public class RepositoryQuery<T, U> : Repository<T, U>, IRepositoryQuery<T, U> 
+    public class RepositoryQuery<T, U> : RepositoryMapper<T, U>, IRepositoryQuery<T, U> 
         where T : IEntity
         where U : ITableData<T, U>
     {
-        protected readonly ISqlBuilderQuery _builder;
+        protected readonly ISqlCommandBuilder _sqlcommandbuilder;
+        protected readonly ISqlBuilderQuery _sqlbuilder;
 
-        public RepositoryQuery(ISqlBuilderQuery builder,
-            ISqlRepository<T> repository, ISqlRepositoryBulk repositorybulk, 
-            IMapperRepository<T, U> mapper, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
-            : base(repository, repositorybulk,
-                  mapper, syntaxsign, commandbuilder)
+        public RepositoryQuery(ISqlSyntaxSign syntaxsign,
+            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+            IMapperRepository<T, U> mapper, 
+            ISqlCommandBuilder sqlcommandbuilder,
+            ISqlBuilderQuery sqlbuilder)
+            : base(syntaxsign,
+                  sqlrepository, sqlrepositorybulk,
+                  mapper)
         {
-            _builder = builder;
+            _sqlcommandbuilder = sqlcommandbuilder;
+            _sqlbuilder = sqlbuilder;
         }
 
-        public RepositoryQuery(ISqlRepository<T> repository, ISqlRepositoryBulk repositorybulk,
-            IMapperRepository<T, U> mapper, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
-            : this(new SqlBuilderQuery(syntaxsign),
-                  repository, repositorybulk,
-                  mapper, syntaxsign, commandbuilder)
+        public RepositoryQuery(ISqlSyntaxSign syntaxsign, 
+            IMapperRepository<T, U> mapper, 
+            ISqlCommandBuilder sqlcommandbuilder,
+            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
+            : this(syntaxsign,
+                  sqlrepository, sqlrepositorybulk,
+                  mapper, 
+                  sqlcommandbuilder,
+                  new SqlBuilderQuery(syntaxsign))
         {
         }
-        public RepositoryQuery(IReaderEntity<T> reader, IMapperRepository<T, U> mapper,
-            ISqlCreator creator, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
-            : this(new SqlRepository<T>(creator, reader), new SqlRepositoryBulk(creator),
-                  mapper, syntaxsign, commandbuilder)
+        public RepositoryQuery(IReader<T> reader, IMapperRepository<T, U> mapper,
+            ISqlSyntaxSign sqlsyntaxsign, 
+            ISqlCommandBuilder sqlcommandbuilder,
+            ISqlCreator sqlcreator)
+            : this(sqlsyntaxsign, 
+                  mapper, 
+                  sqlcommandbuilder,
+                  new SqlRepository<T>(sqlcreator, reader), new SqlRepositoryBulk(sqlcreator))
         {
         }
-        public RepositoryQuery(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
+        public RepositoryQuery(IReader<T> reader, IMapperRepository<T, U> mapper, 
             ConnectionStringSettings connectionstringsettings)
             : this(reader, mapper,
-                  new SqlCreator(connectionstringsettings),
                   SqlSyntaxSignFactory.Create(connectionstringsettings),
-                  SqlCommandBuilderFactory.Create(connectionstringsettings))
+                  SqlCommandBuilderFactory.Create(connectionstringsettings),
+                  new SqlCreator(connectionstringsettings))
         {
         }
 
-        public RepositoryQuery(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
+        public RepositoryQuery(IReader<T> reader, IMapperRepository<T, U> mapper, 
             string appconnectionstringname)
             : this(reader, mapper, 
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
@@ -70,77 +83,41 @@ namespace Library.Impl.Persistence.Query
             (IQueryData<T, U> query,
             int maxdepth = 1, U data = default(U))
         {
-            var parameters = new List<SqlParameter>();
+            var select = Select(query, maxdepth, 1, (data != null ? new ListData<T, U>() { data } : null));
 
-            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
-
-            var select = _commandbuilder.Select(_builder.GetSelectColumns(querycolumns),
-                _builder.GetFrom(queryjoins, query.Description.Name),
-                _builder.GetWhere(querycolumns, parameters), 1);
-
-            return SelectSingle(select, CommandType.Text, parameters, maxdepth, data);
+            return (select.result, select.datas != null ? select.datas.FirstOrDefault() : default(U));
         }
 
-        public virtual (Result result, U data) 
-            SelectSingle
-            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1, U data = default(U))
-        {
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, (data != null ? new ListEntity<T>() { data.Entity } : null));
-
-            if (executequery.result.Success && executequery.entities != null)
-            {
-                var instance = _mapper.CreateInstance(executequery.entities.FirstOrDefault());
-
-                _mapper.Clear(instance, 1, 0);
-                _mapper.Map(instance, 1, 0);
-
-                _mapper.Extra(instance, 1, 0);
-
-                return (executequery.result, instance);
-            }
-
-            return (executequery.result, default(U));
-        }
-
-        public virtual (Result result, IEnumerable<U> datas) 
-            SelectMultiple
+        public virtual (Result result, IEnumerable<U> datas)
+            Select
             (IQueryData<T, U> query,
             int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
         {
             var parameters = new List<SqlParameter>();
 
-            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+            var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
 
-            var select = _commandbuilder.Select(_builder.GetSelectColumns(querycolumns),
-                _builder.GetFrom(queryjoins, query.Description.Name),
-                _builder.GetWhere(querycolumns, parameters), top);
+            var selectcommand = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(querycolumns),
+                _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
+                _sqlbuilder.GetWhere(querycolumns, parameters), top);
 
-            return SelectMultiple(select, CommandType.Text, parameters, maxdepth, datas);
+            return Select(selectcommand, CommandType.Text, parameters, maxdepth, datas);
         }
 
-        public virtual (Result result, IEnumerable<U> datas) 
-            SelectMultiple
-            (string commandtext,  CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, 
-            int maxdepth = 1, IListData<T,U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas)
+            Select
+            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null,
+            int maxdepth = 1, IListData<T, U> datas = null)
         {
             var enumeration = new List<U>();
 
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new ListEntity<T>()));
+            var executequery = Select(commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new ListEntity<T>()));
 
-            if (executequery.result.Success && executequery.entities != null)
+            if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
-                foreach (var entity in executequery.entities)
+                foreach (var instance in MapEntities(executequery.entities, maxdepth))
                 {
-                    var instance = _mapper.CreateInstance(entity);
-
-                    _mapper.Clear(instance, maxdepth, 0);
-                    _mapper.Map(instance, maxdepth, 0);
-
-                    _mapper.Extra(instance, maxdepth, 0);
-
                     enumeration.Add(instance);
                 }
 
@@ -150,7 +127,6 @@ namespace Library.Impl.Persistence.Query
             return (executequery.result, default(IList<U>));
         }
 
-
         public virtual (Result result, int rows) 
             Update
             (IQueryData<T, U> query,
@@ -159,24 +135,16 @@ namespace Library.Impl.Persistence.Query
         {
             var parameters = new List<SqlParameter>();
 
-            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+            var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
 
-            var update = _commandbuilder.Update($"{query.Description.Name}",
-                _builder.GetFrom(queryjoins, query.Description.Name),
-                _builder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters, _syntaxsign.UpdateSetUseAlias),
-                _builder.GetWhere(querycolumns, parameters));
+            var updatecommand = _sqlcommandbuilder.Update($"{query.Description.Name}",
+                _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
+                _sqlbuilder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters, _sqlsyntaxsign.UpdateSetUseAlias),
+                _sqlbuilder.GetWhere(querycolumns, parameters));
 
-            return Update(update, CommandType.Text, parameters);
+            return Update(updatecommand, CommandType.Text, parameters);
         }
-
-        public virtual (Result result, int rows) 
-            Update
-            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
-        {
-            return _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
-        }
-
 
         public virtual (Result result, int rows) 
             Delete
@@ -185,21 +153,14 @@ namespace Library.Impl.Persistence.Query
         {
             var parameters = new List<SqlParameter>();
 
-            var querycolumns = _builder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _builder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+            var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
+            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
 
-            var delete = _commandbuilder.Delete($"{query.Description.Name}", 
-                _builder.GetFrom(queryjoins, query.Description.Name),
-                _builder.GetWhere(querycolumns, parameters));
+            var deletecommand = _sqlcommandbuilder.Delete($"{query.Description.Name}", 
+                _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
+                _sqlbuilder.GetWhere(querycolumns, parameters));
 
-            return Delete(delete, CommandType.Text, parameters);
-        }
-
-        public virtual (Result result, int rows) 
-            Delete
-            (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
-        {
-            return _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
+            return Delete(deletecommand, CommandType.Text, parameters);
         }
     }
 }

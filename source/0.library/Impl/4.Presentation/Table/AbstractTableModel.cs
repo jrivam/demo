@@ -1,12 +1,11 @@
-﻿using Library.Impl.Entities;
-using Library.Interface.Persistence.Table;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
 using System;
-using System.Linq;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace Library.Impl.Presentation.Table

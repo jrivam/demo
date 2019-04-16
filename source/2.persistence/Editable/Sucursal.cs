@@ -25,15 +25,15 @@ namespace Persistence.Table
         {
             get
             {
-                var _query = new Persistence.Query.Sucursal();
+                var query = (Persistence.Query.Sucursal)_query;
 
                 if (this.Id != null)
                 {
-                    _query.Id = (this.Id, WhereOperator.NotEquals);
+                    query.Id = (this.Id, WhereOperator.NotEquals);
                 }
-                _query.Codigo = (this.Codigo, WhereOperator.Equals);
+                query.Codigo = (this.Codigo, WhereOperator.Equals);
 
-                return _query;
+                return query;
             }
         }
         public override (Result result, Persistence.Table.Sucursal data, bool isunique) CheckIsUnique()
@@ -55,15 +55,15 @@ namespace Persistence.Table
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo cannot be empty") } }, null, false);
         }
 
-        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Sucursal query = null)
+        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Empresa queryempresa = null)
         {
             if (this.IdEmpresa != null)
             {
-                var _query = query ?? new Persistence.Query.Sucursal();
+                var query = queryempresa ?? new Persistence.Query.Empresa();
 
-                _query.Empresa().Id = (this.IdEmpresa, WhereOperator.Equals);
+                query.Id = (this.IdEmpresa, WhereOperator.Equals);
 
-                var selectsingle = _query?.Empresa()?.SelectSingle(maxdepth);
+                var selectsingle = query?.SelectSingle(maxdepth);
 
                 Empresa = selectsingle?.data;
 
@@ -72,13 +72,13 @@ namespace Persistence.Table
 
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
-        public virtual (Result result, Persistence.Table.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Empresa query = null)
+        public virtual (Result result, Persistence.Table.Empresas datas) Empresas_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Empresa queryempresa = null)
         {
-            var _query = query ?? new Persistence.Query.Empresa();
+            var query = queryempresa ?? new Persistence.Query.Empresa();
 
-            _query.Activo = (true, WhereOperator.Equals);
+            query.Activo = (true, WhereOperator.Equals);
 
-            var selectmultiple = _query.SelectMultiple(maxdepth, top);
+            var selectmultiple = query.Select(maxdepth, top);
 
             Empresas = (Persistence.Table.Empresas)new Persistence.Table.Empresas().Load(selectmultiple.datas);
 

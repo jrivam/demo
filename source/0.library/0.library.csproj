@@ -75,11 +75,12 @@
     <Compile Include="Extension\StringExtensions.cs" />
     <Compile Include="Impl\1.Entities\Helper.cs" />
     <Compile Include="Impl\1.Entities\ListEntity.cs" />
-    <Compile Include="Impl\1.Entities\Reader\BaseReaderEntity.cs" />
+    <Compile Include="Impl\1.Entities\Reader\BaseReader.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbRepository.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbRepositoryBulk.cs" />
     <Compile Include="Impl\2.Persistence\Helper.cs" />
     <Compile Include="Impl\2.Persistence\Column.cs" />
+    <Compile Include="Impl\2.Persistence\RepositoryMapper.cs" />
     <Compile Include="Impl\2.Persistence\Repository.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Repository\SqlRepositoryBulk.cs" />
     <Compile Include="Impl\4.Presentation\ListModelQuery.cs" />
@@ -134,7 +135,7 @@
     <Compile Include="Impl\ResultCategory.cs" />
     <Compile Include="Interface\1.Entities\IEntity.cs" />
     <Compile Include="Interface\1.Entities\IListEntity.cs" />
-    <Compile Include="Interface\1.Entities\Reader\IReaderEntity.cs" />
+    <Compile Include="Interface\1.Entities\Reader\IReader.cs" />
     <Compile Include="Interface\2.Persistence\Database\IDbRepository.cs" />
     <Compile Include="Interface\2.Persistence\Database\IDbRepositoryBulk.cs" />
     <Compile Include="Interface\2.Persistence\IRepository.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Interface\3.Business\Query\IQueryDomainMethods.cs" />
     <Compile Include="Interface\4.Presentation\IListModelRefresh.cs" />
     <Compile Include="Interface\4.Presentation\IListModel.cs" />
+    <Compile Include="Interface\4.Presentation\ITotal.cs" />
     <Compile Include="Interface\4.Presentation\IStatus.cs" />
     <Compile Include="Interface\4.Presentation\Query\IBuilderQueryModel.cs" />
     <Compile Include="Interface\4.Presentation\Query\IDomainQuery.cs" />

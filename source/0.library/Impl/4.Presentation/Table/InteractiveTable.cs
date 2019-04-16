@@ -1,6 +1,6 @@
-﻿using Library.Interface.Persistence.Table;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System;
@@ -39,7 +39,7 @@ namespace Library.Impl.Presentation.Table
                 return (load.result, table);
             }
 
-            table.Status = String.Join("/", load.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = String.Join("/", load.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (load.result, default(W));
         }
@@ -63,7 +63,7 @@ namespace Library.Impl.Presentation.Table
                 return (loadquery.result, table);
             }
 
-            table.Status = String.Join("/", loadquery.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = String.Join("/", loadquery.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (loadquery.result, default(W));
         }
@@ -82,7 +82,7 @@ namespace Library.Impl.Presentation.Table
                 return (save.result, table);
             }
 
-            table.Status = String.Join("/", save.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = String.Join("/", save.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (save.result, default(W));
         }
@@ -101,7 +101,7 @@ namespace Library.Impl.Presentation.Table
                 return (erase.result, table);
             }
 
-            table.Status = String.Join("/", erase.result.Messages.Where(x => x.category == ResultCategory.Error).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = String.Join("/", erase.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (erase.result, default(W));
         }

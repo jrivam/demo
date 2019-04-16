@@ -40,7 +40,7 @@ namespace Entities.Table
 
 namespace Entities.Reader
 {
-    public partial class Empresa : BaseReaderEntity<Entities.Table.Empresa>
+    public partial class Empresa : BaseReader<Entities.Table.Empresa>
     {
         public Empresa()
             : base()

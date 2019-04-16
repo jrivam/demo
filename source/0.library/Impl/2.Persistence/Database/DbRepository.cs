@@ -1,6 +1,5 @@
-﻿using Library.Interface.Persistence.Database;
-using Library.Interface.Entities;
-using Library.Interface.Entities.Reader;
+﻿using Library.Interface.Entities.Reader;
+using Library.Interface.Persistence.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,11 +7,10 @@ using System.Data;
 namespace Library.Impl.Persistence.Database
 {
     public class DbRepository<T> : IDbRepository<T>
-        where T : IEntity
     {
-        protected readonly IReaderEntity<T> _reader;
+        protected readonly IReader<T> _reader;
 
-        public DbRepository(IReaderEntity<T> reader)
+        public DbRepository(IReader<T> reader)
         {
             _reader = reader;
         }

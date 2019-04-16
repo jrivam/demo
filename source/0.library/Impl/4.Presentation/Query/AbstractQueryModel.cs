@@ -1,8 +1,8 @@
-﻿using Library.Interface.Persistence.Query;
-using Library.Interface.Persistence.Table;
-using Library.Interface.Business.Query;
+﻿using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Table;

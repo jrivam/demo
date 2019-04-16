@@ -3,8 +3,7 @@ using System.Data;
 
 namespace Library.Interface.Entities.Reader
 {
-    public interface IReaderEntity<T> 
-        where T : IEntity
+    public interface IReader<T>
     {
         T CreateInstance();
 

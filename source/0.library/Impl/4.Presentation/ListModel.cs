@@ -1,8 +1,8 @@
 ﻿using Library.Impl.Domain;
-using Library.Interface.Persistence.Table;
 using Library.Interface.Business;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation;
 using Library.Interface.Presentation.Table;
 using System;
@@ -54,6 +54,20 @@ namespace Library.Impl.Presentation
             }
         }
 
+        private string _total = string.Empty;
+        public string Total
+        {
+            get
+            {
+                return _total;
+            }
+            protected set
+            {
+                _total = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Total"));
+            }
+        }
+
         public virtual string Name { get; protected set; }
 
         public virtual ICommand AddCommand { get; protected set; }
@@ -76,13 +90,15 @@ namespace Library.Impl.Presentation
         {
         }
 
-        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list)
+        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list, string status = null)
         {
             if (list != null)
             {
                 foreach (var item in list)
                     this?.CommandAdd(item);
             }
+
+            Status = status;
 
             return this;
         }
@@ -114,6 +130,8 @@ namespace Library.Impl.Presentation
                 if (i >= 0)
                     this[i] = message.newvalue;
             }
+
+            TotalRecords();
         }
 
         public virtual void CommandAdd(W presentation)
@@ -126,7 +144,7 @@ namespace Library.Impl.Presentation
 
         protected virtual void TotalRecords()
         {
-            Status = (this.Count == 0) ? "No records found." : $"Total records: {this.Count}";
+            Total = $"{(this.Count == 0 ? "No records" : $"Total records: {this.Count}")}";
         }
     }
 }

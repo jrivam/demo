@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1.entities", "1.entities\1.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "99.test", "99.test\99.test.csproj", "{50CE807E-2ECF-4B47-A800-48A6EAC48789}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Core.Api", "Web.Core.Api\Web.Core.Api.csproj", "{169578DC-7025-4D84-8412-6AC457D41152}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2.persistence", "2.persistence\2.persistence.csproj", "{5C9F70FF-24C2-4630-B5B0-FE2731A06803}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.business", "3.business\3.business.csproj", "{175C8652-8E2E-4285-8BFB-94A430E8BC72}"
@@ -51,10 +49,6 @@ Global
 		{50CE807E-2ECF-4B47-A800-48A6EAC48789}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50CE807E-2ECF-4B47-A800-48A6EAC48789}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50CE807E-2ECF-4B47-A800-48A6EAC48789}.Release|Any CPU.Build.0 = Release|Any CPU
-		{169578DC-7025-4D84-8412-6AC457D41152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{169578DC-7025-4D84-8412-6AC457D41152}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{169578DC-7025-4D84-8412-6AC457D41152}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{169578DC-7025-4D84-8412-6AC457D41152}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C9F70FF-24C2-4630-B5B0-FE2731A06803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C9F70FF-24C2-4630-B5B0-FE2731A06803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C9F70FF-24C2-4630-B5B0-FE2731A06803}.Release|Any CPU.ActiveCfg = Release|Any CPU

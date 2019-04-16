@@ -1,8 +1,8 @@
-﻿using Library.Interface.Persistence.Table;
-using Library.Interface.Business;
+﻿using Library.Interface.Business;
 using Library.Interface.Business.Mapper;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 
 namespace Library.Impl.Domain
 {

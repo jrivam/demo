@@ -46,7 +46,7 @@ namespace Entities.Table
 
 namespace Entities.Reader
 {
-    public partial class Sucursal : BaseReaderEntity<Entities.Table.Sucursal>
+    public partial class Sucursal : BaseReader<Entities.Table.Sucursal>
     {
         public Sucursal()
             : base()

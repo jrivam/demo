@@ -1,8 +1,8 @@
 ﻿using Library.Impl.Persistence.Database;
-using Library.Interface.Persistence.Sql.Database;
-using Library.Interface.Persistence.Sql.Repository;
 using Library.Interface.Entities;
 using Library.Interface.Entities.Reader;
+using Library.Interface.Persistence.Sql.Database;
+using Library.Interface.Persistence.Sql.Repository;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -14,18 +14,18 @@ namespace Library.Impl.Persistence.Sql.Repository
     {
         protected readonly ISqlCreator _creator;
 
-        public SqlRepository(ISqlCreator creator, IReaderEntity<T> reader)
+        public SqlRepository(ISqlCreator creator, IReader<T> reader)
             : base(reader)
         {
             _creator = creator;
         }
 
-        public SqlRepository(IReaderEntity<T> reader, ConnectionStringSettings connectionstringsettings)
+        public SqlRepository(IReader<T> reader, ConnectionStringSettings connectionstringsettings)
             : this(new SqlCreator(connectionstringsettings), reader)
         {
         }
 
-        public SqlRepository(IReaderEntity<T> reader, string appconnectionstringname)
+        public SqlRepository(IReader<T> reader, string appconnectionstringname)
             : this(reader, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }

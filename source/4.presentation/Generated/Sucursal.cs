@@ -81,9 +81,9 @@ namespace Presentation.Table
         }
 
         protected Presentation.Table.Empresa _empresa;
-        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Sucursal query = null)
+        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Empresa queryempresa = null)
         {
-            var refresh = Domain.Empresa_Refresh(maxdepth, query?.Domain);
+            var refresh = Domain.Empresa_Refresh(maxdepth, queryempresa?.Domain);
 
             Empresa = new Presentation.Table.Empresa(refresh.domain);
 
@@ -121,9 +121,9 @@ namespace Presentation.Table
         }
 
         protected Presentation.Table.Empresas _empresas;
-        public virtual (Result result, Presentation.Table.Empresas presentation) Empresas_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Empresa query = null)
+        public virtual (Result result, Presentation.Table.Empresas presentation) Empresas_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Empresa queryempresa = null)
         {
-            var refresh = Domain.Empresas_Refresh(maxdepth, top, query?.Domain);
+            var refresh = Domain.Empresas_Refresh(maxdepth, top, queryempresa?.Domain);
 
             Empresas = new Presentation.Table.Empresas(refresh.domains);
 

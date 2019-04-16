@@ -30,8 +30,8 @@ namespace Web.Api.App_Start
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
 
-            builder.RegisterGeneric(typeof(BaseReaderEntity<>))
-                     .As(typeof(Library.Interface.Entities.Reader.IReaderEntity<>))
+            builder.RegisterGeneric(typeof(BaseReader<>))
+                     .As(typeof(Library.Interface.Entities.Reader.IReader<>))
                      .InstancePerRequest();
 
 

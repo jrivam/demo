@@ -1,9 +1,9 @@
 ﻿using Library.Impl.Persistence;
-using Library.Interface.Persistence;
-using Library.Interface.Persistence.Table;
 using Library.Interface.Business;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence;
+using Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

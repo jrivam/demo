@@ -25,15 +25,15 @@ namespace Persistence.Table
         {
             get
             {
-                var _query = new Persistence.Query.Empresa();
+                var query = (Persistence.Query.Empresa)_query;
 
                 if (this.Id != null)
                 {
-                    _query.Id = (this.Id, WhereOperator.NotEquals);
+                    query.Id = (this.Id, WhereOperator.NotEquals);
                 }
-                _query.Ruc = (this.Ruc, WhereOperator.Equals);
+                query.Ruc = (this.Ruc, WhereOperator.Equals);
 
-                return _query;
+                return query;
             }
         }
         public override (Result result, Persistence.Table.Empresa data, bool isunique) CheckIsUnique()
@@ -55,15 +55,15 @@ namespace Persistence.Table
             return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc cannot be empty") } }, null, false);
         }
 
-        public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal query = null)
+        public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal querysucursal = null)
         {
             if (this.Id != null)
             {
-                var _query = query ?? new Persistence.Query.Sucursal();
+                var query = querysucursal ?? new Persistence.Query.Sucursal();
 
-                _query.IdEmpresa = (this.Id, WhereOperator.Equals);
+                query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                var selectmultiple = _query.SelectMultiple(maxdepth, top);
+                var selectmultiple = query.Select(maxdepth, top);
 
                 Sucursales = (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(selectmultiple.datas);
 

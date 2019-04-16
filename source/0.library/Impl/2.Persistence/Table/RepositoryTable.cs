@@ -19,44 +19,57 @@ using System.Linq;
 
 namespace Library.Impl.Persistence.Table
 {
-    public class RepositoryTable<T, U> : Repository<T, U>, IRepositoryTable<T, U> 
+    public class RepositoryTable<T, U> : RepositoryMapper<T, U>, IRepositoryTable<T, U> 
         where T : IEntity
         where U : ITableData<T, U>
     {
-        protected readonly ISqlBuilderTable _builder;
+        protected readonly ISqlCommandBuilder _sqlcommandbuilder;
+        protected readonly ISqlBuilderTable _sqlbuilder;
 
-        public RepositoryTable(ISqlBuilderTable builder,
-            ISqlRepository<T> repository, ISqlRepositoryBulk repositorybulk,
-            IMapperRepository<T, U> mapper, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
-            : base(repository, repositorybulk,
-                  mapper, syntaxsign, commandbuilder)
+        public RepositoryTable(ISqlSyntaxSign sqlsyntaxsign, 
+            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+            IMapperRepository<T, U> mapper,
+            ISqlCommandBuilder sqlcommandbuilder,
+            ISqlBuilderTable sqlbuilder)
+            : base(sqlsyntaxsign, 
+                  sqlrepository, sqlrepositorybulk,
+                  mapper)
         {
-            _builder = builder;
+            _sqlcommandbuilder = sqlcommandbuilder;
+            _sqlbuilder = sqlbuilder;
         }
 
-        public RepositoryTable(ISqlRepository<T> repository, ISqlRepositoryBulk repositorybulk,
-            IMapperRepository<T, U> mapper, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
-            : this(new SqlBuilderTable(syntaxsign),
-                  repository, repositorybulk,
-                  mapper, syntaxsign, commandbuilder)
+        public RepositoryTable(ISqlSyntaxSign syntaxsign,
+            IMapperRepository<T, U> mapper, 
+            ISqlCommandBuilder sqlcommandbuilder,
+            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
+            : this(syntaxsign,
+                  sqlrepository, sqlrepositorybulk,
+                  mapper, 
+                  sqlcommandbuilder,
+                  new SqlBuilderTable(syntaxsign))
         {
         }
-        public RepositoryTable(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
-            ISqlCreator creator, ISqlSyntaxSign syntaxsign, ISqlCommandBuilder commandbuilder)
-            : this(new SqlRepository<T>(creator, reader), new SqlRepositoryBulk(creator),
-                  mapper, syntaxsign, commandbuilder)
+        public RepositoryTable(IReader<T> reader, IMapperRepository<T, U> mapper,            
+            ISqlSyntaxSign sqlsyntaxsign,             
+            ISqlCommandBuilder sqlcommandbuilder,
+            ISqlCreator sqlcreator)
+            : this(sqlsyntaxsign, 
+                  mapper, 
+                  sqlcommandbuilder,
+                  new SqlRepository<T>(sqlcreator, reader), new SqlRepositoryBulk(sqlcreator))
         {
         }
-        public RepositoryTable(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
+        public RepositoryTable(IReader<T> reader, IMapperRepository<T, U> mapper, 
             ConnectionStringSettings connectionstringsettings)
-            : this(reader, mapper,
-                  new SqlCreator(connectionstringsettings),
+            : this(reader, mapper,                  
                   SqlSyntaxSignFactory.Create(connectionstringsettings),
-                  SqlCommandBuilderFactory.Create(connectionstringsettings))
+                  SqlCommandBuilderFactory.Create(connectionstringsettings),
+                  new SqlCreator(connectionstringsettings))
         {
         }
 
-        public RepositoryTable(IReaderEntity<T> reader, IMapperRepository<T, U> mapper, 
+        public RepositoryTable(IReader<T> reader, IMapperRepository<T, U> mapper, 
             string appconnectionstringname)
             : this(reader, mapper,
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
@@ -84,30 +97,27 @@ namespace Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var select = _commandbuilder.Select(_builder.GetSelectColumns(table.Columns),
+            var selectcommand = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(table.Columns),
                 $"{table.Description.Name}",
-                _builder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
+                _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
 
-            return Select(table, select, CommandType.Text, parameters);
+            return Select(table, selectcommand, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Select(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
-            foreach (var p in _builder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
 
             return Select(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executequery = _repository.ExecuteQuery(_syntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, 1);
+            var executequery = Select(commandtext, commandtype, parameters, 1);
 
             if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
                 table.Entity = executequery.entities.FirstOrDefault();
 
-                _mapper.Clear(table, 1, 0);
-                _mapper.Map(table, 1, 0);
-
-                _mapper.Extra(table, 1, 0);
+                Map(table, 1);
 
                 return (executequery.result, table);
             }
@@ -136,37 +146,30 @@ namespace Library.Impl.Persistence.Table
                 output += $"{(string.IsNullOrWhiteSpace(output) ? " " : ", ")}";
             }
 
-            var insert = _commandbuilder.Insert($"{table.Description.Name}",
-                _builder.GetInsertColumns(table.Columns.Where(c => !c.IsIdentity).ToList()),
-                _builder.GetInsertValues(table.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
+            var insertcommand = _sqlcommandbuilder.Insert($"{table.Description.Name}",
+                _sqlbuilder.GetInsertColumns(table.Columns.Where(c => !c.IsIdentity).ToList()),
+                _sqlbuilder.GetInsertValues(table.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
                 output);
 
-            return Insert(table, insert, CommandType.Text, parameters);
+            return Insert(table, insertcommand, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Insert(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
-            foreach (var p in _builder.GetParameters(table.Columns.Where(c => !c.IsIdentity).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => !c.IsIdentity).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
 
             return Insert(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Insert(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executescalar = _repositorybulk.ExecuteScalar(commandtext, commandtype, parameters);
+            var executescalar = Insert(commandtext, commandtype, parameters);
 
-            if (executescalar.result.Success)
+            if (executescalar.result.Success && executescalar.scalar != null)
             {
-                if (executescalar.scalar != null)
-                {
-                    table.Entity.Id = Convert.ToInt32(executescalar.scalar);
+                table.Entity.Id = Convert.ToInt32(executescalar.scalar);
 
-                    _mapper.Map(table, 1, 0);
+                Map(table, 1);
 
-                    return (executescalar.result, table);
-                }
-                else
-                {
-                    executescalar.result.Messages.Add((ResultCategory.Information, "Insert", "No rows affected."));
-                }
+                return (executescalar.result, table);
             }
 
             return (executescalar.result, default(U));
@@ -186,35 +189,28 @@ namespace Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var update = _commandbuilder.Update($"{table.Description.Name}",
+            var updatecommand = _sqlcommandbuilder.Update($"{table.Description.Name}",
                 $"{table.Description.Name}",
-                _builder.GetUpdateSet(table.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters, _syntaxsign.UpdateSetUseAlias),
-                _builder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters, _syntaxsign.UpdateWhereUseAlias));
+                _sqlbuilder.GetUpdateSet(table.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters, _sqlsyntaxsign.UpdateSetUseAlias),
+                _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters, _sqlsyntaxsign.UpdateWhereUseAlias));
 
-            return Update(table, update, CommandType.Text, parameters);
+            return Update(table, updatecommand, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Update(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
-            foreach (var p in _builder.GetParameters(table.Columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
 
             return Update(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Update(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
+            var executenonquery = Update(commandtext, commandtype, parameters);
 
-            if (executenonquery.result.Success)
+            if (executenonquery.result.Success && executenonquery.rows > 0)
             {
-                if (executenonquery.rows > 0)
-                {
-                    _mapper.Map(table, 1, 0);
+                Map(table, 1);
 
-                    return (executenonquery.result, table);
-                }
-                else
-                {
-                    executenonquery.result.Messages.Add((ResultCategory.Information, "Update", "No rows affected"));
-                }
+                return (executenonquery.result, table);
             }
 
             return (executenonquery.result, default(U));
@@ -234,32 +230,25 @@ namespace Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var delete = _commandbuilder.Delete($"{table.Description.Name}",
+            var deletecommand = _sqlcommandbuilder.Delete($"{table.Description.Name}",
                 $"{table.Description.Name}",
-                _builder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
+                _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Delete(table, delete, CommandType.Text, parameters);
+            return Delete(table, deletecommand, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Delete(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
         {
-            foreach (var p in _builder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
 
             return Delete(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
         }
         public virtual (Result result, U data) Delete(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = _repositorybulk.ExecuteNonQuery(commandtext, commandtype, parameters);
+            var executenonquery = Delete(commandtext, commandtype, parameters);
 
-            if (executenonquery.result.Success)
+            if (executenonquery.result.Success && executenonquery.rows > 0)
             {
-                if (executenonquery.rows > 0)
-                {
-                    return (executenonquery.result, table);
-                }
-                else
-                {
-                    executenonquery.result.Messages.Add((ResultCategory.Information, "Delete", "No rows affected"));
-                }
+                return (executenonquery.result, table);
             }
 
             return (executenonquery.result, default(U));

@@ -66,9 +66,9 @@ namespace Business.Table
         }
 
         protected Business.Table.Empresa _empresa;
-        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Sucursal query = null)
+        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Empresa queryempresa = null)
         {
-            var refresh = Data.Empresa_Refresh(maxdepth, query?.Data);
+            var refresh = Data.Empresa_Refresh(maxdepth, queryempresa?.Data);
 
             Empresa = new Business.Table.Empresa(refresh.data);
 
@@ -104,9 +104,9 @@ namespace Business.Table
         }
 
         protected Business.Table.Empresas _empresas;
-        public virtual (Result result, Business.Table.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, Business.Query.Empresa query = null)
+        public virtual (Result result, Business.Table.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, Business.Query.Empresa queryempresa = null)
         {
-            var refresh = Data.Empresas_Refresh(maxdepth, top, query?.Data);
+            var refresh = Data.Empresas_Refresh(maxdepth, top, queryempresa?.Data);
 
             Empresas = new Business.Table.Empresas(refresh.datas);
 

@@ -50,11 +50,11 @@ namespace Library.Impl.Persistence.Query
 
             return selectsingle;
         }
-        public virtual (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
         {
-            var selectmultiple = _repository.SelectMultiple(this, maxdepth, top, datas);
+            var select = _repository.Select(this, maxdepth, top, datas);
 
-            return selectmultiple;
+            return select;
         }
 
         public virtual (Result result, int rows) Update(IList<IColumnTable> columns, int maxdepth = 1)

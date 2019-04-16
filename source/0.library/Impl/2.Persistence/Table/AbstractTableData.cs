@@ -34,31 +34,31 @@ namespace Library.Impl.Persistence.Table
         {
         }
 
+        protected readonly IQueryData<T, U> _query;
         protected readonly IRepositoryTable<T, U> _repository;
 
-        public AbstractTableData(T entity, IRepositoryTable<T, U> repository,
+        public AbstractTableData(T entity,
+            IQueryData<T, U> query,
+            IRepositoryTable<T, U> repository,
             string name, string reference)
         {
             Description = new Description(name, reference);
 
             Entity = entity;
 
+            _query = query;
             _repository = repository;
 
             Init();
         }
 
-        public virtual (Result result, U data) Select(bool usedbcommand = false)
-        {
-            var selectsingle = _repository.Select(this as U, usedbcommand);
-
-            return selectsingle;
-        }
-
         public abstract IQueryData<T, U> QuerySelect { get; }
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
         {
-            var selectsingle =  QuerySelect.SelectSingle(maxdepth);
+            _query.Clear();
+            var query = QuerySelect;
+
+            var selectsingle = query.SelectSingle(maxdepth);
 
             return selectsingle;
         }
@@ -66,9 +66,21 @@ namespace Library.Impl.Persistence.Table
         public abstract IQueryData<T, U> QueryUnique { get; }
         public virtual (Result result, U data, bool isunique) CheckIsUnique()
         {
-            var selectsingle = QueryUnique.SelectSingle(1);
+            _query.Clear();
+            var query = QueryUnique;
 
-            return (selectsingle.result, selectsingle.data, selectsingle.data == null);
+            var selectsingle = query.SelectSingle(1);
+
+            var isunique = (selectsingle.data == null);
+
+            return (selectsingle.result, selectsingle.data, isunique);
+        }
+
+        public virtual (Result result, U data) Select(bool usedbcommand = false)
+        {
+            var selectsingle = _repository.Select(this as U, usedbcommand);
+
+            return selectsingle;
         }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false)

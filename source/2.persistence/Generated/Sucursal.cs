@@ -18,8 +18,10 @@ namespace Persistence.Table
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public Sucursal(Entities.Table.Sucursal entity,
+            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query,
             IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
             : base(entity, 
+                  query,
                   repository, 
                   typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
@@ -34,15 +36,18 @@ namespace Persistence.Table
 
         public Sucursal(Entities.Table.Sucursal entity,
             ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
+            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query,
+            IReader<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
             : this(entity,
+                  query,
                   new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }
         public Sucursal(Entities.Table.Sucursal entity,
             string appsettingsconnectionstringname)
             : this(entity, 
-                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],                  
+                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  new Persistence.Query.Sucursal(),
                   new Entities.Reader.Sucursal(), new Persistence.Mapper.Sucursal())
         {
         }
@@ -56,11 +61,11 @@ namespace Persistence.Table
         {
             get
             {
-                var _query = new Persistence.Query.Sucursal();
+                var query = (Persistence.Query.Sucursal)_query;
 
-                _query.Id = (this.Id, WhereOperator.Equals);
+                query.Id = (this.Id, WhereOperator.Equals);
 
-                return _query;
+                return query;
             }
         }
 
@@ -190,7 +195,7 @@ namespace Persistence.Query
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
-            IReaderEntity<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
+            IReader<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
             : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(reader, mapper, connectionstringsettings))
         {
         }

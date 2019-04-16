@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="Empresa" Height="375" Width="547" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Empresa" Height="419" Width="667" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.DataContext>
         <viewmodels:EmpresaViewModel/>
@@ -40,7 +40,7 @@
         <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}" Height="20"/>
         <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}" Height="20"/>
 
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Sucursales}" Margin="0,199,0,30">
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Sucursales}" Margin="0,199,0,60">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -129,11 +129,16 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button  x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding Sucursales.AddCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
+        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" >
+            <StatusBarItem HorizontalAlignment="Left">
+                <TextBlock x:Name="lblTotal" Text="{Binding Sucursales.Total}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding Sucursales.RefreshCommand}" CommandParameter="{Binding}" Margin="0,172,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="129"/>
         <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
             <StatusBarItem HorizontalAlignment="Left">
                 <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
             </StatusBarItem>
         </StatusBar>
-        <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding Sucursales.RefreshCommand}" CommandParameter="{Binding}" Margin="0,172,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="129"/>
     </Grid>
 </Window>

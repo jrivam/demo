@@ -10,7 +10,7 @@ namespace Library.Interface.Persistence.Query
         where U : ITableData<T, U>
     {
         (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U));
-        (Result result, IEnumerable<U> datas) SelectMultiple(int maxdepth = 1, int top = 0, IListData<T, U> datas = null);
+        (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, IListData<T, U> datas = null);
 
         (Result result, int rows) Update(IList<IColumnTable> columns, int maxdepth = 1);
         (Result result, int rows) Delete(int maxdepth = 1);
