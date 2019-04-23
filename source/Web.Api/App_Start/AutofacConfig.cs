@@ -2,7 +2,7 @@
 using Autofac.Features.ResolveAnything;
 using Autofac.Integration.WebApi;
 using Library.Impl.Persistence.Mapper;
-using Library.Impl.Domain.Mapper;
+using Library.Impl.Domain.Loader;
 using Library.Impl.Entities.Reader;
 using Library.Impl.Presentation.Raiser;
 using System.Reflection;
@@ -35,8 +35,8 @@ namespace Web.Api.App_Start
                      .InstancePerRequest();
 
 
-            builder.RegisterGeneric(typeof(BaseMapperRepository<,>))
-                     .As(typeof(Library.Interface.Persistence.Mapper.IMapperRepository<,>))
+            builder.RegisterGeneric(typeof(BaseMapper<,>))
+                     .As(typeof(Library.Interface.Persistence.Mapper.IMapper<,>))
                      .InstancePerRequest();
 
             builder.RegisterGeneric(typeof(Library.Impl.Persistence.Table.RepositoryTable<,>))
@@ -68,8 +68,8 @@ namespace Web.Api.App_Start
                    .InstancePerRequest();
 
 
-            builder.RegisterGeneric(typeof(BaseMapperLogic<,,>))
-                     .As(typeof(Library.Interface.Business.Mapper.IMapperLogic<,,>))
+            builder.RegisterGeneric(typeof(BaseLoader<,,>))
+                     .As(typeof(Library.Interface.Business.Loader.ILoader<,,>))
                      .InstancePerRequest();
 
             builder.RegisterGeneric(typeof(Library.Impl.Domain.Table.LogicTable<,,>))
@@ -84,8 +84,8 @@ namespace Web.Api.App_Start
                  .InstancePerRequest();
 
 
-            builder.RegisterGeneric(typeof(BaseRaiserInteractive<,,,>))
-                     .As(typeof(Library.Interface.Presentation.Raiser.IRaiserInteractive<,,,>))
+            builder.RegisterGeneric(typeof(BaseRaiser<,,,>))
+                     .As(typeof(Library.Interface.Presentation.Raiser.IRaiser<,,,>))
                      .InstancePerRequest();
 
             builder.RegisterGeneric(typeof(Library.Impl.Presentation.Table.InteractiveTable<,,,>))

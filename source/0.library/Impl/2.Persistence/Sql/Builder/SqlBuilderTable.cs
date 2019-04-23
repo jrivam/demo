@@ -21,7 +21,7 @@ namespace Library.Impl.Persistence.Sql.Builder
 
             foreach (var c in columns)
             {
-                select += $"{(string.IsNullOrWhiteSpace(select) ? string.Empty : $",{Environment.NewLine}")}{c.Table.Description.Name}.{c.Description.Name} {_syntaxsign.AliasSeparatorColumnKeyword} {_syntaxsign.AliasEnclosureColumnOpen}{c.Table.Description.Reference}{_syntaxsign.AliasSeparatorColumn}{c.Description.Reference}{_syntaxsign.AliasEnclosureColumnClose}";
+                select += $"{(string.IsNullOrWhiteSpace(select) ? string.Empty : $",{Environment.NewLine}")}{c.Table.Description.Name}.{c.Description.Name} {_sqlsyntaxsign.AliasSeparatorColumnKeyword} {_sqlsyntaxsign.AliasEnclosureColumnOpen}{c.Table.Description.Reference}{_sqlsyntaxsign.AliasSeparatorColumn}{c.Description.Reference}{_sqlsyntaxsign.AliasEnclosureColumnClose}";
             }
             select = $"{(!string.IsNullOrWhiteSpace(select) ? $"{select}{Environment.NewLine}" : string.Empty)}";
 
@@ -30,13 +30,13 @@ namespace Library.Impl.Persistence.Sql.Builder
 
         public virtual string
             GetWhere
-            (IList<IColumnTable> columns, IList<SqlParameter> parameters, bool prefixtablename = true)
+            (IList<IColumnTable> columns, IList<SqlParameter> parameters)
         {
             var where = string.Empty;
 
             foreach (var p in GetParameters(columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters))
             {
-                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {(prefixtablename ? $"{p.view.Name}." : string.Empty)}{p.column.Name} {_syntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
+                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {(_sqlsyntaxsign.UpdateWhereUseAlias ? $"{p.view.Name}." : string.Empty)}{p.column.Name} {_sqlsyntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
             }
 
             return where;

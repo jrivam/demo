@@ -5,7 +5,6 @@ using Library.Impl.Presentation.Query;
 using Library.Impl.Presentation.Raiser;
 using Library.Impl.Presentation.Table;
 using Library.Interface.Presentation.Query;
-using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System;
 
@@ -23,17 +22,9 @@ namespace Presentation.Table
         }
 
         public Sucursal(Business.Table.Sucursal domain, 
-            IRaiserInteractive<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> raiser,             
-             int maxdepth = 1)
+            int maxdepth = 1)
             : this(domain, 
-                  new InteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>(raiser),                    
-                    maxdepth)
-        {
-        }
-        public Sucursal(Business.Table.Sucursal domain, 
-             int maxdepth = 1)
-            : this(domain, 
-                  new Presentation.Raiser.Sucursal(),                    
+                  new InteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>(new Presentation.Raiser.Sucursal()),                    
                     maxdepth)
         {
         }
@@ -198,18 +189,12 @@ namespace Presentation.Query
         {
         }
 
-        public Sucursal(Business.Query.Sucursal domain,
-            IRaiserInteractive<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> mapper)
+        public Sucursal(Business.Query.Sucursal domain)
             : this(domain,
-                  new InteractiveQuery<Presentation.Query.Sucursal, Business.Query.Sucursal, Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>(mapper))
+                  new InteractiveQuery<Presentation.Query.Sucursal, Business.Query.Sucursal, Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>(new Presentation.Raiser.Sucursal()))
         {
         }
 
-        public Sucursal(Business.Query.Sucursal domain)
-            : this(domain,
-                  new Presentation.Raiser.Sucursal())
-        {
-        }
         public Sucursal()
             : this(new Business.Query.Sucursal())
         {
@@ -268,17 +253,13 @@ namespace Presentation.Query
 
 namespace Presentation.Raiser
 {
-    public partial class Sucursal : BaseRaiserInteractive<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
+    public partial class Sucursal : BaseRaiser<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public override Presentation.Table.Sucursal Clear(Presentation.Table.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Sucursal Clear(Presentation.Table.Sucursal presentation)
         {
-            presentation = base.Clear(presentation, maxdepth, depth);
+            presentation = base.Clear(presentation);
 
-            depth++;
-            if (depth < maxdepth)
-            {
-                presentation.Empresa = null;
-            }
+            presentation.Empresa = null;
 
             return presentation;
         }

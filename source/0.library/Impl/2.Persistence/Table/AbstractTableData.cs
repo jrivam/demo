@@ -4,6 +4,7 @@ using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Library.Impl.Persistence.Table
 {
@@ -52,29 +53,65 @@ namespace Library.Impl.Persistence.Table
             Init();
         }
 
-        public abstract IQueryData<T, U> QuerySelect { get; }
-        public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
-        {
-            _query.Clear();
-            var query = QuerySelect;
-
-            var selectsingle = query.SelectSingle(maxdepth);
-
-            return selectsingle;
-        }
-
-        public abstract IQueryData<T, U> QueryUnique { get; }
         public virtual (Result result, U data, bool isunique) CheckIsUnique()
         {
             _query.Clear();
-            var query = QueryUnique;
 
-            var selectsingle = query.SelectSingle(1);
+            var primarykeycolumn = Columns.FirstOrDefault(x => x.IsPrimaryKey);
+            if (primarykeycolumn?.Value != null)
+            {
+                _query.Columns[primarykeycolumn.Description.Reference].Where(Columns[primarykeycolumn.Description.Reference].Value, WhereOperator.NotEquals);
+            }
 
-            var isunique = (selectsingle.data == null);
+            var uniquecolumn = Columns.FirstOrDefault(x => x.IsUnique);
+            if (uniquecolumn != null)
+            {
+                _query.Columns[uniquecolumn.Description.Reference].Where(Columns[uniquecolumn.Description.Reference].Value, WhereOperator.Equals);
+            }
 
-            return (selectsingle.result, selectsingle.data, isunique);
+            if (uniquecolumn != null)
+            {
+                if (uniquecolumn.Value == null)
+                {
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description?.Reference} cannot be null") } }, default(U), false);
+                }
+                if (uniquecolumn.Value is string && string.IsNullOrWhiteSpace(uniquecolumn.Value.ToString()))
+                {
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description?.Reference} cannot be empty") } }, default(U), false);
+                }
+
+                var selectsingle = _query.SelectSingle(1);
+
+                if (selectsingle.result.Success)
+                {
+                    if (selectsingle.data == null)
+                    {
+                        return (selectsingle.result, selectsingle.data, true);
+                    }
+
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } }, default(U), false);
+                }
+
+                return (selectsingle.result, default(U), false);
+            }
+
+            return (new Result() { Success = true }, default(U), true);
         }
+
+        public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
+        {
+            _query.Clear();
+
+            var primarykeycolumn = Columns.FirstOrDefault(x => x.IsPrimaryKey);
+            if (primarykeycolumn?.Value != null)
+            {
+                _query.Columns[primarykeycolumn.Description.Reference].Where(Columns[primarykeycolumn.Description.Reference].Value, WhereOperator.Equals);
+            }
+
+            var selectsingle = _query.SelectSingle(maxdepth);
+
+            return selectsingle;
+        }    
 
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {

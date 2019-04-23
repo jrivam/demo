@@ -1,6 +1,7 @@
 ﻿using Library.Impl.Entities;
 using Library.Impl.Entities.Reader;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -48,53 +49,46 @@ namespace Entities.Reader
 {
     public partial class Sucursal : BaseReader<Entities.Table.Sucursal>
     {
-        public Sucursal()
-            : base()
+        public Sucursal(ISqlSyntaxSign sqlsyntaxsign)
+            : base(sqlsyntaxsign)
         {
         }
 
-        public override Entities.Table.Sucursal CreateInstance()
+        public override Entities.Table.Sucursal Clear(Entities.Table.Sucursal entity)
         {
-            return base.CreateInstance();
-        }
+            //entity.Id = null;
+            //entity.Codigo = null;
+            //entity.Nombre = null;
+            //entity.Fecha = null;
+            //entity.Activo = null;
+            //entity.IdEmpresa = null;
 
-        public override Entities.Table.Sucursal Clear(Entities.Table.Sucursal entity, int maxdepth = 1, int depth = 0)
-        {
-            entity.Id = null;
-            entity.Codigo = null;
-            entity.Nombre = null;
-            entity.Fecha = null;
-            entity.Activo = null;
-            entity.IdEmpresa = null;
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                entity.Empresa = null;
-            }
+            base.Clear(entity);
 
             return entity;
         }
 
-        public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
+        public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            prefixname.Add("Sucursal");
+            //prefixname.Add("Sucursal");
 
-            var prefix = string.Join(columnseparator, prefixname);
-            prefix += (prefix == string.Empty ? prefix : columnseparator);
+            //var prefix = string.Join(_sqlsyntaxsign.AliasSeparatorColumn, prefixname);
+            //prefix += (prefix == string.Empty ? prefix : _sqlsyntaxsign.AliasSeparatorColumn);
 
-            entity.Id = reader[$"{prefix}Id"] as int?;
-            entity.Codigo = reader[$"{prefix}Codigo"] as string;
-            entity.Nombre = reader[$"{prefix}Nombre"] as string;
-            entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
-            entity.Activo = reader[$"{prefix}Activo"] as bool?;
+            //entity.Id = reader[$"{prefix}Id"] as int?;
+            //entity.Codigo = reader[$"{prefix}Codigo"] as string;
+            //entity.Nombre = reader[$"{prefix}Nombre"] as string;
+            //entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
+            //entity.Activo = reader[$"{prefix}Activo"] as bool?;
 
-            entity.IdEmpresa = reader[$"{prefix}IdEmpresa"] as int?;
+            //entity.IdEmpresa = reader[$"{prefix}IdEmpresa"] as int?;
+
+            base.Read(entity, reader, prefixname, maxdepth, depth);
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                entity.Empresa = new Entities.Reader.Empresa().Read(new Entities.Table.Empresa(), reader, new List<string>(prefixname), columnseparator, maxdepth, depth);
+                entity.Empresa = new Entities.Reader.Empresa(_sqlsyntaxsign).Read(new Entities.Table.Empresa(), reader, new List<string>(prefixname), maxdepth, depth);
             }
 
             return entity;

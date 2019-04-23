@@ -76,12 +76,12 @@ namespace Library.Impl.Persistence.Sql.Builder
             {
                 count++;
 
-                var parameter = GetParameter($"{_syntaxsign.ParameterPrefix}{string.Join(_syntaxsign.ParameterSeparator, columns.parameters)}{_syntaxsign.ParameterSeparator}{columns.column.Description.Reference}{count}", columns.column.Type, w.value, ParameterDirection.Input);
+                var parameter = GetParameter($"{_sqlsyntaxsign.ParameterPrefix}{string.Join(_sqlsyntaxsign.ParameterSeparator, columns.parameters)}{_sqlsyntaxsign.ParameterSeparator}{columns.column.Description.Reference}{count}", columns.column.Type, w.value, ParameterDirection.Input);
 
                 if ((w.sign & WhereOperator.LikeBegin) == WhereOperator.LikeBegin)
-                    parameter.Value = $"{_syntaxsign.WhereWildcardAny}{parameter.Value}";
+                    parameter.Value = $"{_sqlsyntaxsign.WhereWildcardAny}{parameter.Value}";
                 if ((w.sign & WhereOperator.LikeEnd) == WhereOperator.LikeEnd)
-                    parameter.Value = $"{parameter.Value}{_syntaxsign.WhereWildcardAny}";
+                    parameter.Value = $"{parameter.Value}{_sqlsyntaxsign.WhereWildcardAny}";
 
                 if (parameters.IndexOf(parameter) < 0)
                     parameters.Add(parameter);
@@ -95,17 +95,17 @@ namespace Library.Impl.Persistence.Sql.Builder
             (IList<(IBuilderQueryData internaltable, IList<string> internalalias, IBuilderQueryData externaltable, IList<string> externalalias, IList<(IColumnQuery internalkey, IColumnQuery externalkey)> joins)> joins, 
             string tablename)
         {
-            var from = $"{tablename} {_syntaxsign.AliasSeparatorTableKeyword} {_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
+            var from = $"{tablename} {_sqlsyntaxsign.AliasSeparatorTableKeyword} {_sqlsyntaxsign.AliasEnclosureTableOpen}{tablename}{_sqlsyntaxsign.AliasEnclosureTableClose}{Environment.NewLine}";
             foreach (var j in joins)
             {
-                var internalalias = string.Join(_syntaxsign.AliasSeparatorTable, j.internalalias);
-                var externalalias = string.Join(_syntaxsign.AliasSeparatorTable, j.externalalias);
+                var internalalias = string.Join(_sqlsyntaxsign.AliasSeparatorTable, j.internalalias);
+                var externalalias = string.Join(_sqlsyntaxsign.AliasSeparatorTable, j.externalalias);
                     
-                from += $"left join {j.externaltable.Description.Name} {_syntaxsign.AliasSeparatorTableKeyword} {_syntaxsign.AliasEnclosureTableOpen}{externalalias}{_syntaxsign.AliasEnclosureTableClose}{Environment.NewLine}on ";
+                from += $"left join {j.externaltable.Description.Name} {_sqlsyntaxsign.AliasSeparatorTableKeyword} {_sqlsyntaxsign.AliasEnclosureTableOpen}{externalalias}{_sqlsyntaxsign.AliasEnclosureTableClose}{Environment.NewLine}on ";
                 var joinons = string.Empty;
                 foreach (var on in j.joins)
                 {
-                    joinons += $"{(string.IsNullOrWhiteSpace(joinons) ? string.Empty : "and")} {_syntaxsign.AliasEnclosureTableOpen}{internalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.internalkey.Description.Name} = {_syntaxsign.AliasEnclosureTableOpen}{externalalias}{_syntaxsign.AliasEnclosureTableClose}.{on.externalkey.Description.Name}";
+                    joinons += $"{(string.IsNullOrWhiteSpace(joinons) ? string.Empty : "and")} {_sqlsyntaxsign.AliasEnclosureTableOpen}{internalalias}{_sqlsyntaxsign.AliasEnclosureTableClose}.{on.internalkey.Description.Name} = {_sqlsyntaxsign.AliasEnclosureTableOpen}{externalalias}{_sqlsyntaxsign.AliasEnclosureTableClose}.{on.externalkey.Description.Name}";
                 }
                 from += $"{joinons}{Environment.NewLine}";
             }
@@ -126,11 +126,11 @@ namespace Library.Impl.Persistence.Sql.Builder
                 {
                     where += $"{(string.IsNullOrWhiteSpace(where) ? "where " : "and ")} (";
 
-                    var columnname = $"{_syntaxsign.AliasEnclosureTableOpen}{string.Join(_syntaxsign.AliasSeparatorTable, c.tablenames)}{_syntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name}";
+                    var columnname = $"{_sqlsyntaxsign.AliasEnclosureTableOpen}{string.Join(_sqlsyntaxsign.AliasSeparatorTable, c.tablenames)}{_sqlsyntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name}";
 
                     foreach (var p in GetParameters(c, parameters))
                     {
-                        where += $"{(p.counter > 1 ? " or " : string.Empty)}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {_syntaxsign.GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
+                        where += $"{(p.counter > 1 ? " or " : string.Empty)}{((p.where.sign & WhereOperator.Not) == WhereOperator.Not ? "not " : "")}{columnname} {_sqlsyntaxsign.GetOperator(p.where.sign)} {p.parameter.Name}{(p.where.value == null ? $" or ({p.parameter.Name} is null and {columnname} is null)" : "")}";
                     }
 
                     where += $"){Environment.NewLine}";
@@ -149,9 +149,9 @@ namespace Library.Impl.Persistence.Sql.Builder
             var lasttable = string.Empty;
             foreach(var c in columns)
             {
-                var tablename = $"{string.Join(_syntaxsign.AliasSeparatorTable, c.tablenames)}";
+                var tablename = $"{string.Join(_sqlsyntaxsign.AliasSeparatorTable, c.tablenames)}";
 
-                select += $"{(string.IsNullOrWhiteSpace(select) ? string.Empty : $",{(lasttable == tablename ? " " : Environment.NewLine)}")}{_syntaxsign.AliasEnclosureTableOpen}{tablename}{_syntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name} {_syntaxsign.AliasSeparatorColumnKeyword} {_syntaxsign.AliasEnclosureColumnOpen}{string.Join(_syntaxsign.AliasSeparatorColumn, c.aliasnames)}{_syntaxsign.AliasSeparatorColumn}{c.column.Description.Reference}{_syntaxsign.AliasEnclosureColumnClose}";
+                select += $"{(string.IsNullOrWhiteSpace(select) ? string.Empty : $",{(lasttable == tablename ? " " : Environment.NewLine)}")}{_sqlsyntaxsign.AliasEnclosureTableOpen}{tablename}{_sqlsyntaxsign.AliasEnclosureTableClose}.{c.column.Description.Name} {_sqlsyntaxsign.AliasSeparatorColumnKeyword} {_sqlsyntaxsign.AliasEnclosureColumnOpen}{string.Join(_sqlsyntaxsign.AliasSeparatorColumn, c.aliasnames)}{_sqlsyntaxsign.AliasSeparatorColumn}{c.column.Description.Reference}{_sqlsyntaxsign.AliasEnclosureColumnClose}";
 
                 lasttable = tablename;
             };

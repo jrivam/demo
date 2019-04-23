@@ -35,6 +35,9 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hellosam.Net.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hellosam.net.collections.1.0.0\lib\net35-client\Hellosam.Net.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.10.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.10.6\lib\net452\MySql.Data.dll</HintPath>
     </Reference>
@@ -109,7 +112,7 @@
     <Compile Include="Impl\3.Business\Query\AbstractQueryDomain.cs" />
     <Compile Include="Impl\3.Business\Query\LogicQuery.cs" />
     <Compile Include="Impl\3.Business\Table\LogicTable.cs" />
-    <Compile Include="Impl\3.Business\Mapper\BaseMapperLogic.cs" />
+    <Compile Include="Impl\3.Business\Loader\BaseLoader.cs" />
     <Compile Include="Impl\2.Persistence\Query\ColumnQuery.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlParameter.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Builder\AbstractSqlSyntaxSign.cs" />
@@ -121,14 +124,14 @@
     <Compile Include="Impl\2.Persistence\Sql\OrderDirection.cs" />
     <Compile Include="Impl\2.Persistence\Sql\WhereOperator.cs" />
     <Compile Include="Impl\3.Business\Logic.cs" />
-    <Compile Include="Impl\2.Persistence\Mapper\BaseMapperRepository.cs" />
+    <Compile Include="Impl\2.Persistence\Mapper\BaseMapper.cs" />
     <Compile Include="Impl\4.Presentation\ListModel.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryModel.cs" />
     <Compile Include="Impl\4.Presentation\CommandAction.cs" />
     <Compile Include="Impl\4.Presentation\Table\InteractiveTable.cs" />
     <Compile Include="Impl\4.Presentation\Query\InteractiveQuery.cs" />
     <Compile Include="Impl\4.Presentation\Interactive.cs" />
-    <Compile Include="Impl\4.Presentation\Raiser\BaseRaiserInteractive.cs" />
+    <Compile Include="Impl\4.Presentation\Raiser\BaseRaiser.cs" />
     <Compile Include="Impl\4.Presentation\Messenger.cs" />
     <Compile Include="Impl\4.Presentation\RelayCommand.cs" />
     <Compile Include="Impl\Result.cs" />
@@ -172,6 +175,7 @@
     <Compile Include="Interface\3.Business\Table\ILogicTable.cs" />
     <Compile Include="Interface\3.Business\Query\ILogicQuery.cs" />
     <Compile Include="Interface\3.Business\Query\IQueryDomainMethods.cs" />
+    <Compile Include="Interface\4.Presentation\Table\ITableModelValidation.cs" />
     <Compile Include="Interface\4.Presentation\IListModelRefresh.cs" />
     <Compile Include="Interface\4.Presentation\IListModel.cs" />
     <Compile Include="Interface\4.Presentation\ITotal.cs" />
@@ -186,11 +190,11 @@
     <Compile Include="Interface\4.Presentation\Table\ITableModelMethods.cs" />
     <Compile Include="Interface\4.Presentation\Table\IInteractiveTable.cs" />
     <Compile Include="Interface\4.Presentation\Query\IInteractiveQuery.cs" />
-    <Compile Include="Interface\4.Presentation\Raiser\IRaiserInteractive.cs" />
-    <Compile Include="Interface\2.Persistence\Mapper\IMapperRepository.cs" />
+    <Compile Include="Interface\4.Presentation\Raiser\IRaiser.cs" />
+    <Compile Include="Interface\2.Persistence\Mapper\IMapper.cs" />
     <Compile Include="Interface\2.Persistence\Query\IQueryDataColumns.cs" />
     <Compile Include="Interface\2.Persistence\Query\IColumnQuery.cs" />
-    <Compile Include="Interface\3.Business\Mapper\IMapperLogic.cs" />
+    <Compile Include="Interface\3.Business\Loader\ILoader.cs" />
     <Compile Include="Interface\4.Presentation\Query\IQueryModelMethods.cs" />
     <Compile Include="Interface\4.Presentation\Query\IQueryModel.cs" />
     <Compile Include="Interface\3.Business\Query\IDataQuery.cs" />

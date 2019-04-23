@@ -11,22 +11,21 @@ namespace library.Impl.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
-        protected readonly IMapperRepository<T, U> _mapper;
+        protected readonly IMapper<T, U> _mapper;
 
-        public RepositoryMapper(ISqlSyntaxSign sqlsyntaxsign,
-            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
-            IMapperRepository<T, U> mapper)
-            : base(sqlsyntaxsign,
-                  sqlrepository, sqlrepositorybulk)
+        public RepositoryMapper(ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+            IMapper<T, U> mapper)
+            : base(sqlrepository, sqlrepositorybulk)
         {
             _mapper = mapper;
         }
 
         protected virtual U Map(U data, int maxdepth = 1)
         {
-            _mapper.Clear(data, maxdepth, 0);
+            _mapper.Clear(data);
+
             _mapper.Map(data, maxdepth, 0);
-            _mapper.Extra(data, maxdepth, 0);
+            _mapper.MapX(data, maxdepth, 0);
 
             return data;
         }

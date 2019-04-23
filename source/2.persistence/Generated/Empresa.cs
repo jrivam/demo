@@ -3,9 +3,8 @@ using Library.Impl.Persistence;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
 using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Sql.Factory;
 using Library.Impl.Persistence.Table;
-using Library.Interface.Entities.Reader;
-using Library.Interface.Persistence.Mapper;
 using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,38 +30,22 @@ namespace Persistence.Table
         }
 
         public Empresa(Entities.Table.Empresa entity,
-            ConnectionStringSettings connectionstringsettings,
-            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query,
-            IReader<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
+            ConnectionStringSettings connectionstringsettings)
             : this(entity,
-                  query,
-                  new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(reader, mapper, connectionstringsettings))
+                    new Persistence.Query.Empresa(),
+                    new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Empresa(), connectionstringsettings))
         {
         }
         public Empresa(Entities.Table.Empresa entity,
             string appsettingsconnectionstringname)
             : this(entity,
-                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Persistence.Query.Empresa(),
-                  new Entities.Reader.Empresa(), new Persistence.Mapper.Empresa())
+                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
 
         public Empresa()
             : this(new Entities.Table.Empresa())
         {
-        }
-
-        public override IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> QuerySelect
-        {
-            get
-            {
-                var query = (Persistence.Query.Empresa)_query;
-
-                query.Id = (this.Id, WhereOperator.Equals);
-
-                return query;
-            }
         }
 
         public virtual int? Id
@@ -140,15 +123,13 @@ namespace Persistence.Query
             Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
         }
 
-        public Empresa(ConnectionStringSettings connectionstringsettings,
-            IReader<Entities.Table.Empresa> reader, IMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa> mapper)
-            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(reader, mapper, connectionstringsettings))
+        public Empresa(ConnectionStringSettings connectionstringsettings)
+            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Empresa(), connectionstringsettings))
         {
         }
 
         public Empresa(string appsettingsconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Entities.Reader.Empresa(), new Persistence.Mapper.Empresa())
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
 
@@ -191,28 +172,32 @@ namespace Persistence.Query
 
 namespace Persistence.Mapper
 {
-    public partial class Empresa : BaseMapperRepository<Entities.Table.Empresa, Persistence.Table.Empresa>
+    public partial class Empresa : BaseMapper<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresa()
             : base()
         {
         }
 
-        public override Persistence.Table.Empresa Clear(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
+        public override Persistence.Table.Empresa Clear(Persistence.Table.Empresa data)
         {
-            data["Id"].Value = data["Id"].DbValue = null;
-            data["Ruc"].Value = data["Ruc"].DbValue = null;
-            data["RazonSocial"].Value = data["RazonSocial"].DbValue = null;
-            data["Activo"].Value = data["Activo"].DbValue = null;
+            //data["Id"].Value = data["Id"].DbValue = null;
+            //data["Ruc"].Value = data["Ruc"].DbValue = null;
+            //data["RazonSocial"].Value = data["RazonSocial"].DbValue = null;
+            //data["Activo"].Value = data["Activo"].DbValue = null;
+
+            base.Clear(data);
 
             return data;
         }
         public override Persistence.Table.Empresa Map(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
-            data["Ruc"].Value = data["Ruc"].DbValue = data.Entity.Ruc;
-            data["RazonSocial"].Value = data["RazonSocial"].DbValue = data.Entity.RazonSocial;
-            data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
+            //data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
+            //data["Ruc"].Value = data["Ruc"].DbValue = data.Entity.Ruc;
+            //data["RazonSocial"].Value = data["RazonSocial"].DbValue = data.Entity.RazonSocial;
+            //data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
+
+            base.Map(data, maxdepth, depth);
 
             return data;
         }

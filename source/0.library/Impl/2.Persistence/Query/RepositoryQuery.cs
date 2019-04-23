@@ -28,31 +28,28 @@ namespace Library.Impl.Persistence.Query
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderQuery _sqlbuilder;
 
-        public RepositoryQuery(ISqlSyntaxSign syntaxsign,
-            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
-            IMapperRepository<T, U> mapper, 
+        public RepositoryQuery(ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+            IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlBuilderQuery sqlbuilder)
-            : base(syntaxsign,
-                  sqlrepository, sqlrepositorybulk,
+            : base(sqlrepository, sqlrepositorybulk,
                   mapper)
         {
             _sqlcommandbuilder = sqlcommandbuilder;
             _sqlbuilder = sqlbuilder;
         }
 
-        public RepositoryQuery(ISqlSyntaxSign syntaxsign, 
-            IMapperRepository<T, U> mapper, 
+        public RepositoryQuery(ISqlSyntaxSign sqlsyntaxsign, 
+            IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
-            : this(syntaxsign,
-                  sqlrepository, sqlrepositorybulk,
+            : this(sqlrepository, sqlrepositorybulk,
                   mapper, 
                   sqlcommandbuilder,
-                  new SqlBuilderQuery(syntaxsign))
+                  new SqlBuilderQuery(sqlsyntaxsign))
         {
         }
-        public RepositoryQuery(IReader<T> reader, IMapperRepository<T, U> mapper,
+        public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper,
             ISqlSyntaxSign sqlsyntaxsign, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlCreator sqlcreator)
@@ -62,7 +59,7 @@ namespace Library.Impl.Persistence.Query
                   new SqlRepository<T>(sqlcreator, reader), new SqlRepositoryBulk(sqlcreator))
         {
         }
-        public RepositoryQuery(IReader<T> reader, IMapperRepository<T, U> mapper, 
+        public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper, 
             ConnectionStringSettings connectionstringsettings)
             : this(reader, mapper,
                   SqlSyntaxSignFactory.Create(connectionstringsettings),
@@ -71,7 +68,7 @@ namespace Library.Impl.Persistence.Query
         {
         }
 
-        public RepositoryQuery(IReader<T> reader, IMapperRepository<T, U> mapper, 
+        public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper, 
             string appconnectionstringname)
             : this(reader, mapper, 
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
@@ -140,7 +137,7 @@ namespace Library.Impl.Persistence.Query
 
             var updatecommand = _sqlcommandbuilder.Update($"{query.Description.Name}",
                 _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
-                _sqlbuilder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters, _sqlsyntaxsign.UpdateSetUseAlias),
+                _sqlbuilder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
             return Update(updatecommand, CommandType.Text, parameters);

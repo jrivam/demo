@@ -111,7 +111,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Label x:Name="lblValidation" Content="{Binding Validation}" FontWeight="Bold" Foreground="Red"/>
+                                <Label x:Name="lblValidation" Content="{Binding Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateRuc, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Foreground="Red"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

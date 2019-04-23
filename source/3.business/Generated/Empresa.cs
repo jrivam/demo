@@ -1,10 +1,10 @@
-﻿using Library.Impl;
+﻿using Business.Table;
+using Library.Impl;
 using Library.Impl.Domain;
-using Library.Impl.Domain.Mapper;
+using Library.Impl.Domain.Loader;
 using Library.Impl.Domain.Query;
 using Library.Impl.Domain.Table;
 using Library.Impl.Persistence.Sql;
-using Library.Interface.Business.Mapper;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 
@@ -19,15 +19,9 @@ namespace Business.Table
         {
         }
 
-        public Empresa(Persistence.Table.Empresa data,
-            IMapperLogic<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> mapper)
-            : this(data,
-                  new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(mapper))
-        {
-        }
         public Empresa(Persistence.Table.Empresa data)
             : this(data,
-                  new Business.Mapper.Empresa())
+                  new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
         {
         }
 
@@ -138,17 +132,12 @@ namespace Business.Query
         {
         }
 
-        public Empresa(Persistence.Query.Empresa data,
-            IMapperLogic<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> mapper)
+        public Empresa(Persistence.Query.Empresa data)
             : this(data, 
-                  new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(mapper))
+                  new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
         {
         }
 
-        public Empresa(Persistence.Query.Empresa data)
-            : this(data, new Business.Mapper.Empresa())
-        {
-        }
         public Empresa()
             : this(new Persistence.Query.Empresa())
         {
@@ -193,15 +182,19 @@ namespace Business.Query
 
 namespace Business.Mapper
 {
-    public partial class Empresa : BaseMapperLogic<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    public partial class Empresa : BaseLoader<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public override Business.Table.Empresa Clear(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
+        public override Business.Table.Empresa Clear(Business.Table.Empresa domain)
         {
-            domain = base.Clear(domain, maxdepth, depth);
+            domain = base.Clear(domain);
 
             domain.Sucursales = null;
 
             return domain;
+        }
+        public override Table.Empresa Load(Table.Empresa domain, int maxdepth = 1, int depth = 0)
+        {
+            return base.Load(domain, maxdepth, depth);
         }
     }
 }

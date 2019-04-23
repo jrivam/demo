@@ -23,7 +23,7 @@ namespace Library.Impl.Presentation.Query
         where R : IQueryDomain<S, T, U, V>
         where Q : IQueryModel<R, S, T, U, V, W>
     {
-        public InteractiveQuery(IRaiserInteractive<T, U, V, W> raiser)
+        public InteractiveQuery(IRaiser<T, U, V, W> raiser)
             : base(raiser)
         {
         }
@@ -38,10 +38,10 @@ namespace Library.Impl.Presentation.Query
             {
                 var instance = _raiser.CreateInstance(retrieve.domain, maxdepth);
 
-                _raiser.Clear(instance, maxdepth, 0);
-                _raiser.Raise(instance, maxdepth, 0);
+                _raiser.Clear(instance);
 
-                _raiser.Extra(instance, maxdepth, 0);
+                _raiser.Raise(instance, maxdepth, 0);
+                _raiser.RaiseX(instance, maxdepth, 0);
 
                 query.Status = string.Empty;
 
@@ -65,10 +65,10 @@ namespace Library.Impl.Presentation.Query
                 {
                     var instance = _raiser.CreateInstance(domain, maxdepth);
 
-                    _raiser.Clear(instance, maxdepth, 0);
-                    _raiser.Raise(instance, maxdepth, 0);
+                    _raiser.Clear(instance);
 
-                    //_raiser.Extra(instance, maxdepth, 0);
+                    _raiser.Raise(instance, maxdepth, 0);
+                    _raiser.RaiseX(instance, maxdepth, 0);
 
                     enumeration.Add(instance);
                 }

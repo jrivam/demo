@@ -14,7 +14,7 @@ namespace Library.Impl.Presentation.Table
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        public InteractiveTable(IRaiserInteractive<T, U, V, W> raiser)
+        public InteractiveTable(IRaiser<T, U, V, W> raiser)
             : base(raiser)
         {
         }
@@ -29,10 +29,10 @@ namespace Library.Impl.Presentation.Table
             {
                 table.Domain = load.domain;
 
-                _raiser.Clear(table, 1, 0);
-                _raiser.Raise(table, 1, 0);
+                _raiser.Clear(table);
 
-                _raiser.Extra(table, 1, 0);
+                _raiser.Raise(table, 1, 0);
+                _raiser.RaiseX(table, 1, 0);
 
                 table.Status = string.Empty;
 
@@ -53,10 +53,10 @@ namespace Library.Impl.Presentation.Table
             {
                 table.Domain = loadquery.domain;
 
-                _raiser.Clear(table, maxdepth, 0);
-                _raiser.Raise(table, maxdepth, 0);
+                _raiser.Clear(table);
 
-                _raiser.Extra(table, maxdepth, 0);
+                _raiser.Raise(table, maxdepth, 0);
+                _raiser.RaiseX(table, maxdepth, 0);
 
                 table.Status = string.Empty;
 
@@ -76,6 +76,7 @@ namespace Library.Impl.Presentation.Table
             if (save.result.Success)
             {
                 _raiser.Raise(table);
+                _raiser.RaiseX(table);
 
                 table.Status = string.Empty;
 
@@ -95,6 +96,7 @@ namespace Library.Impl.Presentation.Table
             if (erase.result.Success)
             {
                 _raiser.Raise(table);
+                _raiser.RaiseX(table);
 
                 table.Status = string.Empty;
 

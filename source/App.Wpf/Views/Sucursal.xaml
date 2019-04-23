@@ -20,6 +20,9 @@
 
         <Label x:Name="lblId" Content="Id" HorizontalAlignment="Left" Margin="67,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.688,0.587"/>
         <Label x:Name="txtId" Content="{Binding Id}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" />
+        <Label x:Name="lblCodigo" Content="Codigo" HorizontalAlignment="Left" Margin="31,104,0,0" VerticalAlignment="Top" Width="56"/>
+        <TextBox x:Name="txtCodigo" Text="{Binding CodigoX, UpdateSourceTrigger=LostFocus}" Height="22" Margin="92,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="102"/>
+        <Label x:Name="lblValidateCodigo" Content="{Binding Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateCodigo, UpdateSourceTrigger=PropertyChanged}" Margin="199,103,10,0" VerticalAlignment="Top"  Height="26" FontWeight="Bold" Foreground="Red"/>
         <Label x:Name="lblNombre" Content="Nombre" HorizontalAlignment="Left" Margin="31,135,0,0" VerticalAlignment="Top" Width="56"/>
         <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,208,0,0" VerticalAlignment="Top"/>
 
@@ -36,8 +39,5 @@
                 <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
             </StatusBarItem>
         </StatusBar>
-        <Label x:Name="lblCodigo" Content="Codigo" HorizontalAlignment="Left" Margin="31,104,0,0" VerticalAlignment="Top" Width="56"/>
-        <TextBox x:Name="txtCodigo" Text="{Binding CodigoX, UpdateSourceTrigger=LostFocus}" Height="22" Margin="92,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="102"/>
-        <Label x:Name="lblValidateCodigo" Content="{Binding Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateCodigo, UpdateSourceTrigger=PropertyChanged}" Margin="199,103,10,0" VerticalAlignment="Top"  Height="26" FontWeight="Bold" Foreground="Red"/>
     </Grid>
 </Window>

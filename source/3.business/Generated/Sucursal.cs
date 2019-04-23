@@ -1,10 +1,10 @@
-﻿using Library.Impl;
+﻿using Business.Table;
+using Library.Impl;
 using Library.Impl.Domain;
-using Library.Impl.Domain.Mapper;
+using Library.Impl.Domain.Loader;
 using Library.Impl.Domain.Query;
 using Library.Impl.Domain.Table;
 using Library.Impl.Persistence.Sql;
-using Library.Interface.Business.Mapper;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using System;
@@ -20,15 +20,9 @@ namespace Business.Table
         {
         }
 
-        public Sucursal(Persistence.Table.Sucursal data,
-            IMapperLogic<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> mapper)
-            : this(data,
-                  new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(mapper))
-        {
-        }
         public Sucursal(Persistence.Table.Sucursal data)
             : this(data,
-                  new Business.Mapper.Sucursal())
+                  new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
         {
         }
 
@@ -154,17 +148,12 @@ namespace Business.Query
         {
         }
 
-        public Sucursal(Persistence.Query.Sucursal data,
-            IMapperLogic<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> mapper)
+        public Sucursal(Persistence.Query.Sucursal data)
             : this(data,
-                  new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(mapper))
+                  new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
         {
         }
 
-        public Sucursal(Persistence.Query.Sucursal data)
-            : this(data, new Business.Mapper.Sucursal())
-        {
-        }
         public Sucursal()
             : this(new Persistence.Query.Sucursal())
         {
@@ -223,19 +212,19 @@ namespace Business.Query
 
 namespace Business.Mapper
 {
-    public partial class Sucursal : BaseMapperLogic<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
+    public partial class Sucursal : BaseLoader<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public override Business.Table.Sucursal Clear(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
+        public override Business.Table.Sucursal Clear(Business.Table.Sucursal domain)
         {
-            domain = base.Clear(domain, maxdepth, depth);
+            domain = base.Clear(domain);
 
-            depth++;
-            if (depth >= maxdepth)
-            {
-                domain.Empresa = null;
-            }
+            domain.Empresa = null;
 
             return domain;
+        }
+        public override Table.Sucursal Load(Table.Sucursal domain, int maxdepth = 1, int depth = 0)
+        {
+            return base.Load(domain, maxdepth, depth);
         }
     }
 }

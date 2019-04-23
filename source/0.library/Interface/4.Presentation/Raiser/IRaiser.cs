@@ -5,7 +5,7 @@ using Library.Interface.Presentation.Table;
 
 namespace Library.Interface.Presentation.Raiser
 {
-    public interface IRaiserInteractive<T, U, V, W> 
+    public interface IRaiser<T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -13,9 +13,9 @@ namespace Library.Interface.Presentation.Raiser
     {
         W CreateInstance(V domain, int maxdepth);
 
-        W Clear(W presentation, int maxdepth = 1, int depth = 0);
-        W Raise(W presentation, int maxdepth = 1, int depth = 0);
+        W Clear(W presentation);
 
-        W Extra(W presentation, int maxdepth = 1, int depth = 0);
+        W Raise(W presentation, int maxdepth = 1, int depth = 0);
+        W RaiseX(W presentation, int maxdepth = 1, int depth = 0);
     }
 }

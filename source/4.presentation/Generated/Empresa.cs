@@ -5,8 +5,8 @@ using Library.Impl.Presentation.Query;
 using Library.Impl.Presentation.Raiser;
 using Library.Impl.Presentation.Table;
 using Library.Interface.Presentation.Query;
-using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
+using Presentation.Table;
 
 namespace Presentation.Table
 {
@@ -22,18 +22,10 @@ namespace Presentation.Table
         }
 
         public Empresa(Business.Table.Empresa domain,
-            IRaiserInteractive<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> raiser,
              int maxdepth = 1)
             : this(domain,
-                  new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(raiser),
+                  new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()),
                   maxdepth)
-        {
-        }
-        public Empresa(Business.Table.Empresa domain, 
-             int maxdepth = 1)
-            : this(domain,
-                  new Presentation.Raiser.Empresa(),
-                    maxdepth)
         {
         }
 
@@ -150,18 +142,12 @@ namespace Presentation.Query
         {
         }
 
-        public Empresa(Business.Query.Empresa domain,
-            IRaiserInteractive<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> mapper)
+        public Empresa(Business.Query.Empresa domain)
             : this(domain,
-                  new InteractiveQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(mapper))
+                  new InteractiveQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()))
         {
         }
 
-        public Empresa(Business.Query.Empresa domain)
-            : this(domain,
-                  new Presentation.Raiser.Empresa())
-        {
-        }
         public Empresa()
             : this(new Business.Query.Empresa())
         {
@@ -206,15 +192,19 @@ namespace Presentation.Query
 
 namespace Presentation.Raiser
 {
-    public partial class Empresa : BaseRaiserInteractive<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
+    public partial class Empresa : BaseRaiser<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public override Presentation.Table.Empresa Clear(Presentation.Table.Empresa presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Empresa Clear(Presentation.Table.Empresa presentation)
         {
-            presentation = base.Clear(presentation, maxdepth, depth);
+            presentation = base.Clear(presentation);
 
             presentation.Sucursales = null;
 
             return presentation;
+        }
+        public override Table.Empresa Raise(Table.Empresa presentation, int maxdepth = 1, int depth = 0)
+        {
+            return base.Raise(presentation, maxdepth, depth);
         }
     }
 }

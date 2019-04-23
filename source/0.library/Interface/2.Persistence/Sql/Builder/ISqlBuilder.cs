@@ -13,6 +13,6 @@ namespace Library.Interface.Persistence.Sql.Builder
 
         string
             GetUpdateSet
-            (IList<(Description view, Description column, Type type, object value)> columns, IList<SqlParameter> parameters, bool prefixtablename = true);
+            (IList<(Description view, Description column, Type type, object value)> columns, IList<SqlParameter> parameters);
     }
 }

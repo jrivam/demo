@@ -1,6 +1,6 @@
 ﻿using Library.Impl.Persistence;
 using Library.Interface.Business;
-using Library.Interface.Business.Mapper;
+using Library.Interface.Business.Loader;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
@@ -16,7 +16,7 @@ namespace Library.Impl.Domain.Query
         where V : ITableDomain<T, U, V>
         where S : IQueryData<T, U>
     {
-        public LogicQuery(IMapperLogic<T, U, V> mapper)
+        public LogicQuery(ILoader<T, U, V> mapper)
             : base(mapper)
         {
         }
@@ -29,9 +29,10 @@ namespace Library.Impl.Domain.Query
             {
                 var instance = _mapper.CreateInstance(selectsingle.data);
 
-                _mapper.Clear(instance, maxdepth, 0);
+                _mapper.Clear(instance);
 
-                _mapper.Extra(instance, maxdepth, 0);
+                _mapper.Load(instance, maxdepth, 0);
+                _mapper.LoadX(instance, maxdepth, 0);
 
                 instance.Changed = false;
                 instance.Deleted = false;
@@ -52,9 +53,10 @@ namespace Library.Impl.Domain.Query
                 {
                     var instance = _mapper.CreateInstance(data);
 
-                    _mapper.Clear(instance, maxdepth, 0);
+                    _mapper.Clear(instance);
 
-                    _mapper.Extra(instance, maxdepth, 0);
+                    _mapper.Load(instance, maxdepth, 0);
+                    _mapper.LoadX(instance, maxdepth, 0);
 
                     instance.Changed = false;
                     instance.Deleted = false;

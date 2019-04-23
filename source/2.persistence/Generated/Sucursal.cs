@@ -3,9 +3,8 @@ using Library.Impl.Persistence;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
 using Library.Impl.Persistence.Sql;
+using Library.Impl.Persistence.Sql.Factory;
 using Library.Impl.Persistence.Table;
-using Library.Interface.Entities.Reader;
-using Library.Interface.Persistence.Mapper;
 using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System;
@@ -35,38 +34,22 @@ namespace Persistence.Table
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
-            ConnectionStringSettings connectionstringsettings,
-            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query,
-            IReader<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
+            ConnectionStringSettings connectionstringsettings)
             : this(entity,
-                  query,
-                  new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(reader, mapper, connectionstringsettings))
+                  new Persistence.Query.Sucursal(),
+                  new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
         {
         }
         public Sucursal(Entities.Table.Sucursal entity,
             string appsettingsconnectionstringname)
             : this(entity, 
-                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Persistence.Query.Sucursal(),
-                  new Entities.Reader.Sucursal(), new Persistence.Mapper.Sucursal())
+                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
 
         public Sucursal()
             : this(new Entities.Table.Sucursal())
         {
-        }
-
-        public override IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> QuerySelect
-        {
-            get
-            {
-                var query = (Persistence.Query.Sucursal)_query;
-
-                query.Id = (this.Id, WhereOperator.Equals);
-
-                return query;
-            }
         }
 
         public virtual int? Id
@@ -194,15 +177,13 @@ namespace Persistence.Query
             Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
         }
 
-        public Sucursal(ConnectionStringSettings connectionstringsettings,
-            IReader<Entities.Table.Sucursal> reader, IMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal> mapper)
-            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(reader, mapper, connectionstringsettings))
+        public Sucursal(ConnectionStringSettings connectionstringsettings)
+            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
         {
         }
 
         public Sucursal(string appsettingsconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  new Entities.Reader.Sucursal(), new Persistence.Mapper.Sucursal())
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
 
@@ -260,33 +241,36 @@ namespace Persistence.Query
 
 namespace Persistence.Mapper
 {
-    public partial class Sucursal : BaseMapperRepository<Entities.Table.Sucursal, Persistence.Table.Sucursal>
+    public partial class Sucursal : BaseMapper<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public Sucursal()
             : base()
         {
         }
 
-        public override Persistence.Table.Sucursal Clear(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
+        public override Persistence.Table.Sucursal Clear(Persistence.Table.Sucursal data)
         {
-            data["Id"].Value = data["Id"].DbValue = null;
-            data["Codigo"].Value = data["Codigo"].DbValue = null;
-            data["Nombre"].Value = data["Nombre"].DbValue = null;
-            data["Activo"].Value = data["Activo"].DbValue = null;
-            data["Fecha"].Value = data["Fecha"].DbValue = null;
-            data["Fecha"].Value = data["Fecha"].DbValue = null;
+            //data["Id"].Value = data["Id"].DbValue = null;
+            //data["Codigo"].Value = data["Codigo"].DbValue = null;
+            //data["Nombre"].Value = data["Nombre"].DbValue = null;
+            //data["Activo"].Value = data["Activo"].DbValue = null;
+            //data["Fecha"].Value = data["Fecha"].DbValue = null;
+            //data["IdEmpresa"].Value = data["IdEmpresa"].DbValue = null;
+
+            base.Clear(data);
 
             return data;
         }
-
         public override Persistence.Table.Sucursal Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
-            data["Codigo"].Value = data["Codigo"].DbValue = data.Entity.Codigo;
-            data["Nombre"].Value = data["Nombre"].DbValue = data.Entity.Nombre;
-            data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
-            data["Fecha"].Value = data["Fecha"].DbValue = data.Entity.Fecha;
-            data["IdEmpresa"].Value = data["IdEmpresa"].DbValue = data.Entity.IdEmpresa;
+            //data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
+            //data["Codigo"].Value = data["Codigo"].DbValue = data.Entity.Codigo;
+            //data["Nombre"].Value = data["Nombre"].DbValue = data.Entity.Nombre;
+            //data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
+            //data["Fecha"].Value = data["Fecha"].DbValue = data.Entity.Fecha;
+            //data["IdEmpresa"].Value = data["IdEmpresa"].DbValue = data.Entity.IdEmpresa;
+
+            base.Map(data, maxdepth, depth);
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)

@@ -1,6 +1,5 @@
 ﻿using Library.Impl;
 using Library.Impl.Persistence.Sql;
-using Library.Interface.Persistence.Query;
 using System.Collections.Generic;
 using System.Data;
 
@@ -19,40 +18,6 @@ namespace Persistence.Table
             InsertDbCommand = (false, ("gsp_sucursal_insert", CommandType.StoredProcedure, new List<SqlParameter>()));
             UpdateDbCommand = (false, ("gsp_sucursal_update", CommandType.StoredProcedure, new List<SqlParameter>()));
             DeleteDbCommand = (false, ("gsp_sucursal_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
-        }
-
-        public override IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> QueryUnique
-        {
-            get
-            {
-                var query = (Persistence.Query.Sucursal)_query;
-
-                if (this.Id != null)
-                {
-                    query.Id = (this.Id, WhereOperator.NotEquals);
-                }
-                query.Codigo = (this.Codigo, WhereOperator.Equals);
-
-                return query;
-            }
-        }
-        public override (Result result, Persistence.Table.Sucursal data, bool isunique) CheckIsUnique()
-        {
-            if (!string.IsNullOrWhiteSpace(this.Codigo))
-            {
-                var checkisunique = base.CheckIsUnique();
-
-                if (!checkisunique.isunique)
-                {
-                    checkisunique.result.Append(new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo {this.Codigo} already exists in Id: {checkisunique.data?.Id}") } });
-
-                    return checkisunique;
-                }
-
-                return (new Result() { Success = true }, null, true);
-            }
-
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Codigo cannot be empty") } }, null, false);
         }
 
         public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Empresa queryempresa = null)

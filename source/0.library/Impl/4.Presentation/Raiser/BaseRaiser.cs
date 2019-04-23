@@ -1,15 +1,17 @@
-﻿using Library.Interface.Business.Table;
+﻿using Hellosam.Net.Collections;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
 namespace Library.Impl.Presentation.Raiser
 {
-    public class BaseRaiserInteractive<T, U, V, W> : IRaiserInteractive<T, U, V, W> 
+    public class BaseRaiser<T, U, V, W> : IRaiser<T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -26,10 +28,13 @@ namespace Library.Impl.Presentation.Raiser
                                     CultureInfo.CurrentCulture);
         }
 
-        public virtual W Clear(W presentation, int maxdepth = 1, int depth = 0)
+        public virtual W Clear(W presentation)
         {
+            presentation.Validations = new Dictionary<string, string>();
+
             return presentation;
         }
+
         public virtual W Raise(W presentation, int maxdepth = 1, int depth = 0)
         {
             foreach (var column in presentation.Domain.Data.Columns)
@@ -37,10 +42,11 @@ namespace Library.Impl.Presentation.Raiser
                 presentation.OnPropertyChanged(column.Description.Reference);
             }
 
+            presentation.OnPropertyChanged("Validations");
+
             return presentation;
         }
-
-        public virtual W Extra(W presentation, int maxdepth = 1, int depth = 0)
+        public virtual W RaiseX(W presentation, int maxdepth = 1, int depth = 0)
         {
             return presentation;
         }

@@ -23,10 +23,6 @@ namespace Business.Mapper
 {
     public partial class Sucursal
     {
-        public override Business.Table.Sucursal Load(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
-        {
-            return domain;
-        }
     }
 }
 

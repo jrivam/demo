@@ -1,11 +1,10 @@
-﻿using Library.Interface.Business.Table;
+﻿using Hellosam.Net.Collections;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 
 namespace Library.Impl.Presentation.Table
@@ -50,13 +49,21 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
-        public Dictionary<string, string> Validations { get; } = new Dictionary<string, string>();
-        public string Validation
+        public Dictionary<string, string> Validations { get; set; } = new Dictionary<string, string>();
+        public bool Validate(string key, string value)
         {
-            get
+            var contains = Validations.ContainsKey(key);
+
+            if ((contains && Validations[key] != value) || (!contains && value != string.Empty))
             {
-                return String.Join("/", Validations.Select(x => x.Value).ToArray<string>()).Replace(Environment.NewLine, string.Empty);
+                Validations[key] = value;
+
+                OnPropertyChanged("Validations");
+
+                return true;
             }
+
+            return false;
         }
 
         public virtual V Domain { get; set; }

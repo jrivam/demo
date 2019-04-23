@@ -2,7 +2,6 @@
 using Library.Impl;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
-using Library.Interface.Persistence.Sql.Builder;
 using Library.Interface.Persistence.Sql.Repository;
 using System.Collections.Generic;
 using System.Data;
@@ -16,20 +15,15 @@ namespace library.Impl.Persistence
         protected readonly ISqlRepository<T> _sqlrepository;
         protected readonly ISqlRepositoryBulk _sqlrepositorybulk;
 
-        protected readonly ISqlSyntaxSign _sqlsyntaxsign;
-
-        public Repository(ISqlSyntaxSign sqlsyntaxsign,
-            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
+        public Repository(ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
         {
-            _sqlsyntaxsign = sqlsyntaxsign;
-
             _sqlrepository = sqlrepository;
             _sqlrepositorybulk = sqlrepositorybulk;
         }
 
         public virtual (Result result, IEnumerable<T> entities) Select(string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<T> entities = null)
         {
-            var executequery = _sqlrepository.ExecuteQuery(_sqlsyntaxsign.AliasSeparatorColumn, commandtext, commandtype, parameters, maxdepth, entities);
+            var executequery = _sqlrepository.ExecuteQuery(commandtext, commandtype, parameters, maxdepth, entities);
 
             if (executequery.entities?.Count() == 0)
             {

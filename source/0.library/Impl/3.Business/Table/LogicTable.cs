@@ -1,4 +1,4 @@
-﻿using Library.Interface.Business.Mapper;
+﻿using Library.Interface.Business.Loader;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
@@ -11,9 +11,16 @@ namespace Library.Impl.Domain.Table
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        public LogicTable(IMapperLogic<T, U, V> mapper)
+        public LogicTable(ILoader<T, U, V> mapper)
             : base(mapper)
         {
+        }
+
+        public virtual (Result result, V domain, bool isunique) CheckIsUnique(V table)
+        {
+            var checkisunique = table.Data.CheckIsUnique();
+
+            return (checkisunique.result, table, checkisunique.isunique);
         }
 
         public virtual (Result result, V domain) Load(V table, bool usedbcommand = false)
@@ -26,10 +33,10 @@ namespace Library.Impl.Domain.Table
                 {
                     table.Data = select.data;
 
-                    _mapper.Clear(table, 1, 0);
-                    _mapper.Load(table, 1, 0);
+                    _mapper.Clear(table);
 
-                    _mapper.Extra(table, 1, 0);
+                    _mapper.Load(table, 1, 0);
+                    _mapper.LoadX(table, 1, 0);
 
                     table.Changed = false;
                     table.Deleted = false;
@@ -52,10 +59,10 @@ namespace Library.Impl.Domain.Table
                 {
                     table.Data = selectquery.data;
 
-                    _mapper.Clear(table, maxdepth, 0);
-                    _mapper.Load(table, maxdepth, 0);
+                    _mapper.Clear(table);
 
-                    _mapper.Extra(table, maxdepth, 0);
+                    _mapper.Load(table, maxdepth, 0);
+                    _mapper.LoadX(table, maxdepth, 0);
 
                     table.Changed = false;
                     table.Deleted = false;

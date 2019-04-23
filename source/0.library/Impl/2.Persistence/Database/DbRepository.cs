@@ -1,5 +1,6 @@
 ﻿using Library.Interface.Entities.Reader;
 using Library.Interface.Persistence.Database;
+using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +16,7 @@ namespace Library.Impl.Persistence.Database
             _reader = reader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, string columnseparator, int maxdepth = 1, IList<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<T> entities = null)
         {
             var result = new Result() { Success = true };
 
@@ -32,7 +33,7 @@ namespace Library.Impl.Persistence.Database
                     {
                         var entity = iterator.MoveNext() ? iterator.Current : _reader.CreateInstance();
 
-                        _reader.Read(entity, reader, new List<string>(), columnseparator, maxdepth, 0);
+                        _reader.Read(entity, reader, new List<string>(), maxdepth, 0);
 
                         enumeration = enumeration ?? new List<T>();
                         enumeration.Add(entity);

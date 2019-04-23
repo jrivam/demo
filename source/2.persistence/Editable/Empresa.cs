@@ -1,6 +1,5 @@
 ﻿using Library.Impl;
 using Library.Impl.Persistence.Sql;
-using Library.Interface.Persistence.Query;
 using System.Collections.Generic;
 using System.Data;
 
@@ -19,40 +18,6 @@ namespace Persistence.Table
             InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<SqlParameter>()));
             UpdateDbCommand = (false, ("gsp_empresa_update", CommandType.StoredProcedure, new List<SqlParameter>()));
             DeleteDbCommand = (false, ("gsp_empresa_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
-        }
-
-        public override IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> QueryUnique
-        {
-            get
-            {
-                var query = (Persistence.Query.Empresa)_query;
-
-                if (this.Id != null)
-                {
-                    query.Id = (this.Id, WhereOperator.NotEquals);
-                }
-                query.Ruc = (this.Ruc, WhereOperator.Equals);
-
-                return query;
-            }
-        }
-        public override (Result result, Persistence.Table.Empresa data, bool isunique) CheckIsUnique()
-        {
-            if (!string.IsNullOrWhiteSpace(this.Ruc))
-            {
-                var checkisunique = base.CheckIsUnique();
-
-                if (!checkisunique.isunique)
-                {
-                    checkisunique.result.Append(new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc {this.Ruc} already exists in Id: {checkisunique.data?.Id}") } });
-
-                    return checkisunique;
-                }
-
-                return (new Result() { Success = true }, null, true);
-            }
-
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"Ruc cannot be empty") } }, null, false);
         }
 
         public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal querysucursal = null)

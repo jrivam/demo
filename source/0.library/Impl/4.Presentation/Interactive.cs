@@ -13,9 +13,9 @@ namespace Library.Impl.Presentation
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
+        protected readonly IRaiser<T, U, V, W> _raiser;
 
-        public Interactive(IRaiserInteractive<T, U, V, W> raiser)
+        public Interactive(IRaiser<T, U, V, W> raiser)
         {
             _raiser = raiser;
         }
