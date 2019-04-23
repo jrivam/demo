@@ -181,22 +181,12 @@ namespace Persistence.Mapper
 
         public override Persistence.Table.Empresa Clear(Persistence.Table.Empresa data)
         {
-            //data["Id"].Value = data["Id"].DbValue = null;
-            //data["Ruc"].Value = data["Ruc"].DbValue = null;
-            //data["RazonSocial"].Value = data["RazonSocial"].DbValue = null;
-            //data["Activo"].Value = data["Activo"].DbValue = null;
-
             base.Clear(data);
 
             return data;
         }
         public override Persistence.Table.Empresa Map(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            //data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
-            //data["Ruc"].Value = data["Ruc"].DbValue = data.Entity.Ruc;
-            //data["RazonSocial"].Value = data["RazonSocial"].DbValue = data.Entity.RazonSocial;
-            //data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
-
             base.Map(data, maxdepth, depth);
 
             return data;

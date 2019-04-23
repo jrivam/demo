@@ -250,26 +250,12 @@ namespace Persistence.Mapper
 
         public override Persistence.Table.Sucursal Clear(Persistence.Table.Sucursal data)
         {
-            //data["Id"].Value = data["Id"].DbValue = null;
-            //data["Codigo"].Value = data["Codigo"].DbValue = null;
-            //data["Nombre"].Value = data["Nombre"].DbValue = null;
-            //data["Activo"].Value = data["Activo"].DbValue = null;
-            //data["Fecha"].Value = data["Fecha"].DbValue = null;
-            //data["IdEmpresa"].Value = data["IdEmpresa"].DbValue = null;
-
             base.Clear(data);
 
             return data;
         }
         public override Persistence.Table.Sucursal Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            //data["Id"].Value = data["Id"].DbValue = data.Entity.Id;
-            //data["Codigo"].Value = data["Codigo"].DbValue = data.Entity.Codigo;
-            //data["Nombre"].Value = data["Nombre"].DbValue = data.Entity.Nombre;
-            //data["Activo"].Value = data["Activo"].DbValue = data.Entity.Activo;
-            //data["Fecha"].Value = data["Fecha"].DbValue = data.Entity.Fecha;
-            //data["IdEmpresa"].Value = data["IdEmpresa"].DbValue = data.Entity.IdEmpresa;
-
             base.Map(data, maxdepth, depth);
 
             depth++;

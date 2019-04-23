@@ -50,13 +50,6 @@ namespace Entities.Reader
 
         public override Entities.Table.Empresa Clear(Entities.Table.Empresa entity)
         {
-            //entity.Id = null;
-            //entity.Ruc = null;
-            //entity.RazonSocial = null;
-            //entity.Activo = null;
-
-            //entity.Sucursales = null;
-
             base.Clear(entity);
 
             return entity;
@@ -64,16 +57,6 @@ namespace Entities.Reader
 
         public override Entities.Table.Empresa Read(Entities.Table.Empresa entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            //prefixname.Add("Empresa");
-
-            //var prefix = string.Join(_sqlsyntaxsign.AliasSeparatorColumn, prefixname);
-            //prefix += (prefix == string.Empty ? prefix : _sqlsyntaxsign.AliasSeparatorColumn);
-
-            //entity.Id = reader[$"{prefix}Id"] as int?;
-            //entity.Ruc = reader[$"{prefix}Ruc"] as string;
-            //entity.RazonSocial = reader[$"{prefix}RazonSocial"] as string;
-            //entity.Activo = reader[$"{prefix}Activo"] as bool?;
-
             base.Read(entity, reader, prefixname, maxdepth, depth);
 
             return entity;

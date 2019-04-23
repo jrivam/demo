@@ -56,13 +56,6 @@ namespace Entities.Reader
 
         public override Entities.Table.Sucursal Clear(Entities.Table.Sucursal entity)
         {
-            //entity.Id = null;
-            //entity.Codigo = null;
-            //entity.Nombre = null;
-            //entity.Fecha = null;
-            //entity.Activo = null;
-            //entity.IdEmpresa = null;
-
             base.Clear(entity);
 
             return entity;
@@ -70,19 +63,6 @@ namespace Entities.Reader
 
         public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            //prefixname.Add("Sucursal");
-
-            //var prefix = string.Join(_sqlsyntaxsign.AliasSeparatorColumn, prefixname);
-            //prefix += (prefix == string.Empty ? prefix : _sqlsyntaxsign.AliasSeparatorColumn);
-
-            //entity.Id = reader[$"{prefix}Id"] as int?;
-            //entity.Codigo = reader[$"{prefix}Codigo"] as string;
-            //entity.Nombre = reader[$"{prefix}Nombre"] as string;
-            //entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
-            //entity.Activo = reader[$"{prefix}Activo"] as bool?;
-
-            //entity.IdEmpresa = reader[$"{prefix}IdEmpresa"] as int?;
-
             base.Read(entity, reader, prefixname, maxdepth, depth);
 
             depth++;

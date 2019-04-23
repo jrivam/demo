@@ -62,7 +62,6 @@ namespace Library.Impl.Entities.Reader
                     object converted = (value == null) ? null : Convert.ChangeType(value, t);
 
                     prop?.SetValue(entity, converted, null);
-
                 }
             }
 
