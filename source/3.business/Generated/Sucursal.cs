@@ -223,7 +223,9 @@ namespace Business.Mapper
         }
         public override Business.Table.Sucursal Load(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
-            return base.Load(domain, maxdepth, depth);
+            domain = base.Load(domain, maxdepth, depth);
+
+            return domain;
         }
     }
 }

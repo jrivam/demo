@@ -250,13 +250,13 @@ namespace Persistence.Mapper
 
         public override Persistence.Table.Sucursal Clear(Persistence.Table.Sucursal data)
         {
-            base.Clear(data);
+            data = base.Clear(data);
 
             return data;
         }
         public override Persistence.Table.Sucursal Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            base.Map(data, maxdepth, depth);
+            data = base.Map(data, maxdepth, depth);
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)

@@ -50,14 +50,14 @@ namespace Entities.Reader
 
         public override Entities.Table.Empresa Clear(Entities.Table.Empresa entity)
         {
-            base.Clear(entity);
+            entity = base.Clear(entity);
 
             return entity;
         }
 
         public override Entities.Table.Empresa Read(Entities.Table.Empresa entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            base.Read(entity, reader, prefixname, maxdepth, depth);
+            entity = base.Read(entity, reader, prefixname, maxdepth, depth);
 
             return entity;
         }

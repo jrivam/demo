@@ -181,13 +181,13 @@ namespace Persistence.Mapper
 
         public override Persistence.Table.Empresa Clear(Persistence.Table.Empresa data)
         {
-            base.Clear(data);
+            data = base.Clear(data);
 
             return data;
         }
         public override Persistence.Table.Empresa Map(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
         {
-            base.Map(data, maxdepth, depth);
+            data = base.Map(data, maxdepth, depth);
 
             return data;
         }

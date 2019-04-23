@@ -56,14 +56,14 @@ namespace Entities.Reader
 
         public override Entities.Table.Sucursal Clear(Entities.Table.Sucursal entity)
         {
-            base.Clear(entity);
+            entity = base.Clear(entity);
 
             return entity;
         }
 
         public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            base.Read(entity, reader, prefixname, maxdepth, depth);
+            entity = base.Read(entity, reader, prefixname, maxdepth, depth);
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)

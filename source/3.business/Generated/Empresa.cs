@@ -193,7 +193,9 @@ namespace Business.Mapper
         }
         public override Business.Table.Empresa Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
         {
-            return base.Load(domain, maxdepth, depth);
+            domain = base.Load(domain, maxdepth, depth);
+
+            return domain;
         }
     }
 }
