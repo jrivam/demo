@@ -1,5 +1,4 @@
-﻿using Business.Table;
-using Library.Impl;
+﻿using Library.Impl;
 using Library.Impl.Domain;
 using Library.Impl.Domain.Loader;
 using Library.Impl.Domain.Query;
@@ -192,7 +191,7 @@ namespace Business.Mapper
 
             return domain;
         }
-        public override Table.Empresa Load(Table.Empresa domain, int maxdepth = 1, int depth = 0)
+        public override Business.Table.Empresa Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
         {
             return base.Load(domain, maxdepth, depth);
         }
