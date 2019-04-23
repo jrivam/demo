@@ -203,7 +203,9 @@ namespace Presentation.Raiser
         }
         public override Presentation.Table.Empresa Raise(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
-            return base.Raise(model, maxdepth, depth);
+            model = base.Raise(model, maxdepth, depth);
+
+            return model;
         }
     }
 }
