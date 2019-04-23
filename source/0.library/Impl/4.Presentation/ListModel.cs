@@ -103,19 +103,19 @@ namespace Library.Impl.Presentation
             return this;
         }
         
-        public virtual (Result result, W presentation) CommandLoad((CommandAction action, (Result result, W presentation) operation) message)
+        public virtual (Result result, W model) CommandLoad((CommandAction action, (Result result, W model) operation) message)
         {
             return message.operation;
         }
-        public virtual (Result result, W presentation) CommandSave((CommandAction action, (Result result, W presentation) operation) message)
+        public virtual (Result result, W model) CommandSave((CommandAction action, (Result result, W model) operation) message)
         {
             return message.operation;
         }
-        public virtual (Result result, W presentation) CommandErase((CommandAction action, (Result result, W presentation) operation) message)
+        public virtual (Result result, W model) CommandErase((CommandAction action, (Result result, W model) operation) message)
         {
             if (message.operation.result.Success)
-                if (message.operation.presentation?.Domain.Data.Entity.Id != null)
-                    this.Remove(this.FirstOrDefault(x => x.Domain.Data.Entity.Id == message.operation.presentation?.Domain.Data.Entity.Id));
+                if (message.operation.model?.Domain.Data.Entity.Id != null)
+                    this.Remove(this.FirstOrDefault(x => x.Domain.Data.Entity.Id == message.operation.model?.Domain.Data.Entity.Id));
 
             TotalRecords();
 
@@ -134,10 +134,10 @@ namespace Library.Impl.Presentation
             TotalRecords();
         }
 
-        public virtual void CommandAdd(W presentation)
+        public virtual void CommandAdd(W model)
         {
-            if (presentation.Domain?.Data?.Entity?.Id != null)
-                this.Add(presentation);
+            if (model.Domain?.Data?.Entity?.Id != null)
+                this.Add(model);
 
             TotalRecords();
         }

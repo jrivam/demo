@@ -15,6 +15,6 @@ namespace Library.Interface.Presentation
     {
         ICommand RefreshCommand { get; }
 
-        (Result result, IListModel<T, U, V, W> list) Refresh(int top = 0);
+        (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0);
     }
 }

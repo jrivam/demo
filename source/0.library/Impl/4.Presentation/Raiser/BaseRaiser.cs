@@ -27,27 +27,27 @@ namespace Library.Impl.Presentation.Raiser
                                     CultureInfo.CurrentCulture);
         }
 
-        public virtual W Clear(W presentation)
+        public virtual W Clear(W model)
         {
-            presentation.Validations = new Dictionary<string, string>();
+            model.Validations = new Dictionary<string, string>();
 
-            return presentation;
+            return model;
         }
 
-        public virtual W Raise(W presentation, int maxdepth = 1, int depth = 0)
+        public virtual W Raise(W model, int maxdepth = 1, int depth = 0)
         {
-            foreach (var column in presentation.Domain.Data.Columns)
+            foreach (var column in model.Domain.Data.Columns)
             {
-                presentation.OnPropertyChanged(column.Description.Reference);
+                model.OnPropertyChanged(column.Description.Reference);
             }
 
-            presentation.OnPropertyChanged("Validations");
+            model.OnPropertyChanged("Validations");
 
-            return presentation;
+            return model;
         }
-        public virtual W RaiseX(W presentation, int maxdepth = 1, int depth = 0)
+        public virtual W RaiseX(W model, int maxdepth = 1, int depth = 0)
         {
-            return presentation;
+            return model;
         }
     }
 }

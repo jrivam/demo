@@ -1,4 +1,5 @@
-﻿using Library.Interface.Business.Loader;
+﻿using library.Impl.Business;
+using Library.Interface.Business.Loader;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
@@ -6,13 +7,13 @@ using System.Collections.Generic;
 
 namespace Library.Impl.Domain.Table
 {
-    public class LogicTable<T, U, V> : Logic<T, U, V>, ILogicTable<T, U, V> 
+    public class LogicTable<T, U, V> : LogicLoader<T, U, V>, ILogicTable<T, U, V> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        public LogicTable(ILoader<T, U, V> mapper)
-            : base(mapper)
+        public LogicTable(ILoader<T, U, V> loader)
+            : base(loader)
         {
         }
 
@@ -33,11 +34,9 @@ namespace Library.Impl.Domain.Table
                 {
                     table.Data = select.data;
 
-                    _mapper.Clear(table);
-
-                    _mapper.Load(table, 1, 0);
-                    _mapper.LoadX(table, 1, 0);
-
+                    _loader.Clear(table);
+                    Load(table, 1);
+               
                     table.Changed = false;
                     table.Deleted = false;
 
@@ -59,10 +58,8 @@ namespace Library.Impl.Domain.Table
                 {
                     table.Data = selectquery.data;
 
-                    _mapper.Clear(table);
-
-                    _mapper.Load(table, maxdepth, 0);
-                    _mapper.LoadX(table, maxdepth, 0);
+                    _loader.Clear(table);
+                    Load(table, maxdepth);
 
                     table.Changed = false;
                     table.Deleted = false;

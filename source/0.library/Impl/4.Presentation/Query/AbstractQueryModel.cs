@@ -41,15 +41,15 @@ namespace Library.Impl.Presentation.Query
             _interactive = interactive;
         }
 
-        public virtual (Result result, W presentation) Retrieve(int maxdepth = 1, W presentation = default(W))
+        public virtual (Result result, W model) Retrieve(int maxdepth = 1, W model = default(W))
         {
-            var retrieve = _interactive.Retrieve(this, maxdepth, presentation);
+            var retrieve = _interactive.Retrieve(this, maxdepth, model);
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(int maxdepth = 1, int top = 0, IListModel<T, U, V, W> presentations = null)
+        public virtual (Result result, IEnumerable<W> models) List(int maxdepth = 1, int top = 0, IListModel<T, U, V, W> models = null)
         {
-            var list = _interactive.List(this, maxdepth, top, presentations);
+            var list = _interactive.List(this, maxdepth, top, models);
 
             return list;
         }

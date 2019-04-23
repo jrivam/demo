@@ -31,11 +31,11 @@ namespace Presentation.Raiser
 {
     public partial class Sucursal
     {
-        public override Table.Sucursal RaiseX(Table.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Sucursal RaiseX(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
         {
-            presentation.OnPropertyChanged("CodigoX");
+            model.OnPropertyChanged("CodigoX");
 
-            return presentation;
+            return model;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Library.Interface.Entities;
 using Library.Interface.Persistence.Mapper;
-using Library.Interface.Persistence.Sql.Builder;
 using Library.Interface.Persistence.Sql.Repository;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
@@ -22,8 +21,6 @@ namespace library.Impl.Persistence
 
         protected virtual U Map(U data, int maxdepth = 1)
         {
-            _mapper.Clear(data);
-
             _mapper.Map(data, maxdepth, 0);
             _mapper.MapX(data, maxdepth, 0);
 

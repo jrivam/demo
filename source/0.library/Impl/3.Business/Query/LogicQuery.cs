@@ -1,4 +1,5 @@
-﻿using Library.Impl.Persistence;
+﻿using library.Impl.Business;
+using Library.Impl.Persistence;
 using Library.Interface.Business;
 using Library.Interface.Business.Loader;
 using Library.Interface.Business.Query;
@@ -10,14 +11,14 @@ using System.Collections.Generic;
 
 namespace Library.Impl.Domain.Query
 {
-    public class LogicQuery<S, T, U, V> : Logic<T, U, V>, ILogicQuery<S, T, U, V> 
+    public class LogicQuery<S, T, U, V> : LogicLoader<T, U, V>, ILogicQuery<S, T, U, V> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
         where S : IQueryData<T, U>
     {
-        public LogicQuery(ILoader<T, U, V> mapper)
-            : base(mapper)
+        public LogicQuery(ILoader<T, U, V> loader)
+            : base(loader)
         {
         }
 
@@ -27,12 +28,9 @@ namespace Library.Impl.Domain.Query
 
             if (selectsingle.result.Success && selectsingle.data != null)
             {
-                var instance = _mapper.CreateInstance(selectsingle.data);
+                var instance = _loader.CreateInstance(selectsingle.data);
 
-                _mapper.Clear(instance);
-
-                _mapper.Load(instance, maxdepth, 0);
-                _mapper.LoadX(instance, maxdepth, 0);
+                Load(instance, maxdepth);
 
                 instance.Changed = false;
                 instance.Deleted = false;
@@ -49,15 +47,8 @@ namespace Library.Impl.Domain.Query
             var selectmultiple = query.Data.Select(maxdepth, top, (domains?.Datas != null ? domains?.Datas : new ListData<T, U>()));
             if (selectmultiple.result.Success && selectmultiple.datas != null)
             {
-                foreach (var data in selectmultiple.datas)
+                foreach (var instance in LoadDatas(selectmultiple.datas, maxdepth))
                 {
-                    var instance = _mapper.CreateInstance(data);
-
-                    _mapper.Clear(instance);
-
-                    _mapper.Load(instance, maxdepth, 0);
-                    _mapper.LoadX(instance, maxdepth, 0);
-
                     instance.Changed = false;
                     instance.Deleted = false;
 

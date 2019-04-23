@@ -6,7 +6,6 @@ using Library.Impl.Presentation.Raiser;
 using Library.Impl.Presentation.Table;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Table;
-using Presentation.Table;
 
 namespace Presentation.Table
 {
@@ -194,17 +193,17 @@ namespace Presentation.Raiser
 {
     public partial class Empresa : BaseRaiser<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public override Presentation.Table.Empresa Clear(Presentation.Table.Empresa presentation)
+        public override Presentation.Table.Empresa Clear(Presentation.Table.Empresa model)
         {
-            presentation = base.Clear(presentation);
+            model = base.Clear(model);
 
-            presentation.Sucursales = null;
+            model.Sucursales = null;
 
-            return presentation;
+            return model;
         }
-        public override Table.Empresa Raise(Table.Empresa presentation, int maxdepth = 1, int depth = 0)
+        public override Table.Empresa Raise(Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
-            return base.Raise(presentation, maxdepth, depth);
+            return base.Raise(model, maxdepth, depth);
         }
     }
 }

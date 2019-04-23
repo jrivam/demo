@@ -31,11 +31,11 @@ namespace Presentation.Raiser
 {
     public partial class Empresa
     {
-        public override Table.Empresa RaiseX(Table.Empresa presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Empresa RaiseX(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
-            presentation.OnPropertyChanged("RucX");
+            model.OnPropertyChanged("RucX");
 
-            return presentation;
+            return model;
         }
     }
 }

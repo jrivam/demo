@@ -11,9 +11,9 @@ namespace Library.Interface.Presentation.Table
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        (Result result, W presentation) Load(W table, bool usedbcommand = false);
-        (Result result, W presentation) LoadQuery(W table, int maxdepth = 1);
-        (Result result, W presentation) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false);
-        (Result result, W presentation) Erase(W table, bool usedbcommand = false);
+        (Result result, W model) Load(W table, bool usedbcommand = false);
+        (Result result, W model) LoadQuery(W table, int maxdepth = 1);
+        (Result result, W model) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false);
+        (Result result, W model) Erase(W table, bool usedbcommand = false);
     }
 }

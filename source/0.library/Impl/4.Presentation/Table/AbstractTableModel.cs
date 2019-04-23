@@ -96,15 +96,15 @@ namespace Library.Impl.Presentation.Table
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W presentation) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Domain.Data.Description.Reference}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Domain.Data.Description.Reference}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W presentation) operation)>((CommandAction.Save, Save()), $"{Domain.Data.Description.Reference}Save");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, Save()), $"{Domain.Data.Description.Reference}Save");
             }, delegate (object parameter) { return this.Domain.Changed; });
             EraseCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W presentation) operation)>((CommandAction.Erase, Erase()), $"{Domain.Data.Description.Reference}Erase");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, Erase()), $"{Domain.Data.Description.Reference}Erase");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
@@ -114,26 +114,26 @@ namespace Library.Impl.Presentation.Table
         }
 
 
-        public virtual (Result result, W presentation) Load(bool usedbcommand = false)
+        public virtual (Result result, W model) Load(bool usedbcommand = false)
         {
             var load = _interactive.Load(this as W, usedbcommand);
 
             return load;
         }
-        public virtual (Result result, W presentation) LoadQuery(int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(int maxdepth = 1)
         {
             var loadquery = _interactive.LoadQuery(this as W, maxdepth);
 
             return loadquery;
         }
 
-        public virtual (Result result, W presentation) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             var save = _interactive.Save(this as W, useinsertdbcommand, useupdatedbcommand);
 
             return save;
         }
-        public virtual (Result result, W presentation) Erase(bool usedbcommand = false)
+        public virtual (Result result, W model) Erase(bool usedbcommand = false)
         {
             var erase = _interactive.Erase(this as W, usedbcommand);
 

@@ -114,6 +114,7 @@ namespace Library.Impl.Persistence.Table
             {
                 table.Entity = executequery.entities.FirstOrDefault();
 
+                _mapper.Clear(table);
                 Map(table, 1);
 
                 return (executequery.result, table);

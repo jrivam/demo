@@ -1,5 +1,4 @@
 ﻿using Library.Interface.Business;
-using Library.Interface.Business.Loader;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
@@ -11,11 +10,8 @@ namespace Library.Impl.Domain
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        protected readonly ILoader<T, U, V> _mapper;
-
-        public Logic(ILoader<T, U, V> mapper)
+        public Logic()
         {
-            _mapper = mapper;
         }
     }
 }

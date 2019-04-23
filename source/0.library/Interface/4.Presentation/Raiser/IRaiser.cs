@@ -13,9 +13,9 @@ namespace Library.Interface.Presentation.Raiser
     {
         W CreateInstance(V domain, int maxdepth);
 
-        W Clear(W presentation);
+        W Clear(W model);
 
-        W Raise(W presentation, int maxdepth = 1, int depth = 0);
-        W RaiseX(W presentation, int maxdepth = 1, int depth = 0);
+        W Raise(W model, int maxdepth = 1, int depth = 0);
+        W RaiseX(W model, int maxdepth = 1, int depth = 0);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Library.Interface.Business.Table;
+﻿using library.Impl.Presentation;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace Library.Impl.Presentation.Table
 {
-    public class InteractiveTable<T, U, V, W> : Interactive<T, U, V, W>, IInteractiveTable<T, U, V, W> 
+    public class InteractiveTable<T, U, V, W> : InteractiveRaiser<T, U, V, W>, IInteractiveTable<T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -19,7 +20,7 @@ namespace Library.Impl.Presentation.Table
         {
         }
 
-        public virtual (Result result, W presentation) Load(W table, bool usedbcommand = false)
+        public virtual (Result result, W model) Load(W table, bool usedbcommand = false)
         {
             table.Status = "Loading...";
 
@@ -30,9 +31,7 @@ namespace Library.Impl.Presentation.Table
                 table.Domain = load.domain;
 
                 _raiser.Clear(table);
-
-                _raiser.Raise(table, 1, 0);
-                _raiser.RaiseX(table, 1, 0);
+                Raise(table, 1);
 
                 table.Status = string.Empty;
 
@@ -43,7 +42,7 @@ namespace Library.Impl.Presentation.Table
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W presentation) LoadQuery(W table, int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(W table, int maxdepth = 1)
         {
             table.Status = "Loading...";
 
@@ -54,9 +53,7 @@ namespace Library.Impl.Presentation.Table
                 table.Domain = loadquery.domain;
 
                 _raiser.Clear(table);
-
-                _raiser.Raise(table, maxdepth, 0);
-                _raiser.RaiseX(table, maxdepth, 0);
+                Raise(table, maxdepth);
 
                 table.Status = string.Empty;
 
@@ -67,7 +64,7 @@ namespace Library.Impl.Presentation.Table
 
             return (loadquery.result, default(W));
         }
-        public virtual (Result result, W presentation) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W model) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
             table.Status = "Saving...";
 
@@ -75,8 +72,7 @@ namespace Library.Impl.Presentation.Table
 
             if (save.result.Success)
             {
-                _raiser.Raise(table);
-                _raiser.RaiseX(table);
+                Raise(table);
 
                 table.Status = string.Empty;
 
@@ -87,7 +83,7 @@ namespace Library.Impl.Presentation.Table
 
             return (save.result, default(W));
         }
-        public virtual (Result result, W presentation) Erase(W table, bool usedbcommand = false)
+        public virtual (Result result, W model) Erase(W table, bool usedbcommand = false)
         {
             table.Status = "Deleting...";
 
@@ -95,8 +91,7 @@ namespace Library.Impl.Presentation.Table
 
             if (erase.result.Success)
             {
-                _raiser.Raise(table);
-                _raiser.RaiseX(table);
+                Raise(table);
 
                 table.Status = string.Empty;
 

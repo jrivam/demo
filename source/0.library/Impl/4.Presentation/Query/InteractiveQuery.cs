@@ -1,4 +1,5 @@
-﻿using Library.Impl.Domain;
+﻿using library.Impl.Presentation;
+using Library.Impl.Domain;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
@@ -14,7 +15,7 @@ using System.Linq;
 
 namespace Library.Impl.Presentation.Query
 {
-    public class InteractiveQuery<Q, R, S, T, U, V, W> : Interactive<T, U, V, W>, IInteractiveQuery<R, S, T, U, V, W> 
+    public class InteractiveQuery<Q, R, S, T, U, V, W> : InteractiveRaiser<T, U, V, W>, IInteractiveQuery<R, S, T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -28,47 +29,41 @@ namespace Library.Impl.Presentation.Query
         {
         }
 
-        public virtual (Result result, W presentation) Retrieve(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, W presentation = default(W))
+        public virtual (Result result, W model) Retrieve(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, W model = default(W))
         {
             query.Status = "Loading...";
 
-            var retrieve = query.Domain.Retrieve(maxdepth, (presentation != null ? presentation.Domain : default(V)));
+            var retrieve = query.Domain.Retrieve(maxdepth, (model != null ? model.Domain : default(V)));
 
             if (retrieve.result.Success && retrieve.domain != null)
             {
                 var instance = _raiser.CreateInstance(retrieve.domain, maxdepth);
 
-                _raiser.Clear(instance);
+                Raise(instance, maxdepth);
 
-                _raiser.Raise(instance, maxdepth, 0);
-                _raiser.RaiseX(instance, maxdepth, 0);
+                instance.Status = string.Empty;
 
                 query.Status = string.Empty;
 
-                return (retrieve.result, presentation);
+                return (retrieve.result, model);
             }
 
             query.Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (retrieve.result, default(W));
         }
-        public virtual (Result result, IEnumerable<W> presentations) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IListModel<T, U, V, W> presentations = null)
+        public virtual (Result result, IEnumerable<W> models) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IListModel<T, U, V, W> models = null)
         {
             query.Status = "Loading...";
 
             var enumeration = new List<W>();
 
-            var list = query.Domain.List(maxdepth, top, (presentations?.Domains != null ? presentations?.Domains : new ListDomain<T, U, V>()));
+            var list = query.Domain.List(maxdepth, top, (models?.Domains != null ? models?.Domains : new ListDomain<T, U, V>()));
             if (list.result.Success && list.domains != null)
             {
-                foreach (var domain in list.domains)
+                foreach (var instance in RaiseDomains(list.domains, maxdepth))
                 {
-                    var instance = _raiser.CreateInstance(domain, maxdepth);
-
-                    _raiser.Clear(instance);
-
-                    _raiser.Raise(instance, maxdepth, 0);
-                    _raiser.RaiseX(instance, maxdepth, 0);
+                    instance.Status = string.Empty;
 
                     enumeration.Add(instance);
                 }

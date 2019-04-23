@@ -50,20 +50,19 @@ namespace Library.Impl.Presentation
         {
         }
 
-        public virtual (Result result, IListModel<T, U, V, W> list) Refresh(int top = 0)
+        public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0)
         {
             this.ClearItems();
 
             var list = _query.List(_maxdepth, top);
 
-            var load = Load(list.presentations, _query.Status);
+            var load = Load(list.models, _query.Status);
 
             return (list.result, load);
         }
 
-        public virtual void CommandRefresh((Result result, IListModel<T, U, V, W> presentations) operation)
+        public virtual void CommandRefresh((Result result, IListModel<T, U, V, W> models) operation)
         {
-            //TotalRecords();
         }
     }
 }
