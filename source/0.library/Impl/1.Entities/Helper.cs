@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace library.Impl.Entities
+namespace Library.Impl.Entities
 {
     public class Helper
     {

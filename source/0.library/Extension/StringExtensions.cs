@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace library.Extension
+namespace Library.Extension
 {
     public static class StringExtensions
     {

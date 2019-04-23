@@ -1,10 +1,7 @@
-﻿using library.Impl;
-using library.Impl.Data.Query;
-using library.Interface.Data.Sql;
-using library.Interface.Data.Sql.Builder;
+﻿using Library.Impl;
+using Library.Interface.Persistence.Sql.Builder;
+using Library.Interface.Persistence.Sql.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using Moq.Protected;
 
 namespace test.Empresa
 {
@@ -28,11 +25,11 @@ namespace test.Empresa
 
         }
 
-        public domain.Model.Empresa Domain_Load_NonDbCommand()
+        public Business.Table.Empresa Domain_Load_NonDbCommand()
         {
             var data = Data.Data_Table_Select_NonDbCommand();
 
-            return new domain.Model.Empresa(data)
+            return new Business.Table.Empresa(data)
             {
             };
         }
@@ -47,11 +44,11 @@ namespace test.Empresa
             Assert.AreEqual(Data.Entity.Activo, load.domain.Activo);
         }
 
-        public Moq.Mock<domain.Model.Empresa> Domain_Erase_NonDbCommand()
+        public Moq.Mock<Business.Table.Empresa> Domain_Erase_NonDbCommand()
         {
             var data = Data.Data_Table_Delete_NonDbCommand();
 
-            return new Moq.Mock<domain.Model.Empresa>(data)
+            return new Moq.Mock<Business.Table.Empresa>(data)
             {
                 CallBase = true
             };
@@ -68,9 +65,9 @@ namespace test.Empresa
 
             //var data = new data.Query.Empresa
             //    (
-            //        new RepositoryQuery<data.Query.Empresa, entities.Model.Empresa, data.Model.Empresa>
+            //        new RepositoryQuery<data.Query.Empresa, Entities.Table.Empresa, data.Model.Empresa>
             //        (mockDatabaseQuery.mockCreator.Object,
-            //        new entities.Reader.Empresa(),
+            //        new Entities.Reader.Empresa(),
             //        new data.Mapper.Empresa(),
             //        mockDatabaseQuery.mockSyntaxSign.Object,
             //        mockCommandBuilderQuery.Object, mockBuilderQuery.Object)
@@ -80,9 +77,9 @@ namespace test.Empresa
             //{ CallBase = true };
             //query.Setup(x => x.Data.Sucursal(It.IsAny<data.Query.Sucursal>())).Returns(new data.Query.Sucursal
             //    (
-            //        new RepositoryQuery<data.Query.Sucursal, entities.Model.Sucursal, data.Model.Sucursal>
+            //        new RepositoryQuery<data.Query.Sucursal, Entities.Table.Sucursal, data.Model.Sucursal>
             //        (mockDatabaseQuery.mockCreator.Object,
-            //        new entities.Reader.Sucursal(),
+            //        new Entities.Reader.Sucursal(),
             //        new data.Mapper.Sucursal(),
             //        mockDatabaseQuery.mockSyntaxSign.Object,
             //        mockCommandBuilderQuery.Object, mockBuilderQuery.Object))
@@ -100,11 +97,11 @@ namespace test.Empresa
             Assert.IsTrue(erase.domain.Deleted);
         }
 
-        public domain.Model.Empresa Domain_Save_NonDbCommand_Insert()
+        public Business.Table.Empresa Domain_Save_NonDbCommand_Insert()
         {
             var data = Data.Data_Table_Insert_NonDbCommand();
 
-            return new domain.Model.Empresa(data)
+            return new Business.Table.Empresa(data)
             {
             };
         }
@@ -113,6 +110,7 @@ namespace test.Empresa
         {
             var domain = Domain_Save_NonDbCommand_Insert();
 
+            domain.Ruc = "RUC";
             domain.RazonSocial += "1";
             domain.Activo = false;
 
@@ -125,11 +123,11 @@ namespace test.Empresa
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
 
-        public domain.Model.Empresa Domain_Save_NonDbCommand_Update()
+        public Business.Table.Empresa Domain_Save_NonDbCommand_Update()
         {
             var data = Data.Data_Table_Update_NonDbCommand();
 
-            return new domain.Model.Empresa(data)
+            return new Business.Table.Empresa(data)
             {
             };
         }

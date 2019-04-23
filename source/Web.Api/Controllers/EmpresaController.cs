@@ -1,4 +1,4 @@
-﻿using library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -15,7 +15,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var query = new domain.Query.Empresa();
+                var query = new Business.Query.Empresa();
 
                 if (razonsocial != null)
                     query.RazonSocial = (razonsocial, WhereOperator.Like);
@@ -25,7 +25,7 @@ namespace Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new domain.Model.Empresas().Load(list.domains)?.Datas?.Entities?.List);
+                    return Ok(new Business.Table.Empresas().Load(list.domains)?.Datas?.Entities?.List);
                 }
 
                 return InternalServerError();
@@ -47,7 +47,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Empresa() { Id = id }.Load();
+                var load = new Business.Table.Empresa() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
@@ -69,7 +69,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody]entities.Model.Empresa entity)
+        public IHttpActionResult Create([FromBody]Entities.Table.Empresa entity)
         {
             try
             {
@@ -77,12 +77,12 @@ namespace Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new domain.Model.Empresa(entity).Save();
+                        var save = new Business.Table.Empresa(entity).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();
 
-                            return Created<entities.Model.Empresa>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
+                            return Created<Entities.Table.Empresa>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
                         return InternalServerError();
@@ -98,13 +98,13 @@ namespace Web.Api.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Update(int id, [FromBody]entities.Model.Empresa entity)
+        public IHttpActionResult Update(int id, [FromBody]Entities.Table.Empresa entity)
         {
             try
             {
                 if (entity != null)
                 {
-                    var load = new domain.Model.Empresa() { Id = id }.Load();
+                    var load = new Business.Table.Empresa() { Id = id }.Load();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -144,7 +144,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Empresa() { Id = id }.Load();
+                var load = new Business.Table.Empresa() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)

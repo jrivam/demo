@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace library.Impl
+namespace Library.Impl
 {
     public class Result
     {

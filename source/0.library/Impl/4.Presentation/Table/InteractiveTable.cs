@@ -1,78 +1,106 @@
-﻿using library.Interface.Data.Table;
-using library.Interface.Domain.Table;
-using library.Interface.Entities;
-using library.Interface.Presentation.Raiser;
-using library.Interface.Presentation.Table;
+﻿using library.Impl.Presentation;
+using Library.Interface.Business.Table;
+using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
+using Library.Interface.Presentation.Raiser;
+using Library.Interface.Presentation.Table;
+using System;
+using System.Linq;
 
-namespace library.Impl.Presentation.Table
+namespace Library.Impl.Presentation.Table
 {
-    public class InteractiveTable<T, U, V, W> : Interactive<T, U, V>, IInteractiveTable<T, U, V, W> 
+    public class InteractiveTable<T, U, V, W> : InteractiveRaiser<T, U, V, W>, IInteractiveTable<T, U, V, W> 
         where T : IEntity
-        where U : ITableRepository, ITableEntity<T>
-        where V : ITableLogic<T, U>, ITableLogicMethods<T, U, V>
-        where W : ITableInteractive<T, U, V>
+        where U : ITableData<T, U>
+        where V : ITableDomain<T, U, V>
+        where W : ITableModel<T, U, V, W>
     {
-        protected readonly IRaiserInteractive<T, U, V, W> _raiser;
-
-        public InteractiveTable(IRaiserInteractive<T, U, V, W> raiser)
-            : base()
+        public InteractiveTable(IRaiser<T, U, V, W> raiser)
+            : base(raiser)
         {
-            _raiser = raiser;
         }
 
-        public virtual (Result result, W presentation) Load(W presentation, bool usedbcommand = false)
+        public virtual (Result result, W model) Load(W table, bool usedbcommand = false)
         {
-            var load = presentation.Domain.Load(usedbcommand);
+            table.Status = "Loading...";
+
+            var load = table.Domain.Load(usedbcommand);
 
             if (load.result.Success && load.domain != null)
             {
-                _raiser.Clear(presentation, 1, 0);
-                _raiser.Raise(presentation, 1, 0);
+                table.Domain = load.domain;
 
-                _raiser.Extra(presentation, 1, 0);
+                _raiser.Clear(table);
+                Raise(table, 1);
 
-                return (load.result, presentation);
+                table.Status = string.Empty;
+
+                return (load.result, table);
             }
+
+            table.Status = String.Join("/", load.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W presentation) LoadQuery(W presentation, int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(W table, int maxdepth = 1)
         {
-            var loadquery = presentation.Domain.LoadQuery(maxdepth);
+            table.Status = "Loading...";
+
+            var loadquery = table.Domain.LoadQuery(maxdepth);
 
             if (loadquery.result.Success && loadquery.domain != null)
             {
-                _raiser.Clear(presentation, maxdepth, 0);
-                _raiser.Raise(presentation, maxdepth, 0);
+                table.Domain = loadquery.domain;
 
-                _raiser.Extra(presentation, maxdepth, 0);
+                _raiser.Clear(table);
+                Raise(table, maxdepth);
 
-                return (loadquery.result, presentation);
+                table.Status = string.Empty;
+
+                return (loadquery.result, table);
             }
+
+            table.Status = String.Join("/", loadquery.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
 
             return (loadquery.result, default(W));
         }
-        public virtual (Result result, W presentation) Save(W presentation, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W model) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = presentation.Domain.Save(useinsertdbcommand, useupdatedbcommand);
+            table.Status = "Saving...";
+
+            var save = table.Domain.Save(useinsertdbcommand, useupdatedbcommand);
 
             if (save.result.Success)
             {
-                _raiser.Raise(presentation);
+                Raise(table);
+
+                table.Status = string.Empty;
+
+                return (save.result, table);
             }
 
-            return (save.result, presentation);
+            table.Status = String.Join("/", save.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+
+            return (save.result, default(W));
         }
-        public virtual (Result result, W presentation) Erase(W presentation, bool usedbcommand = false)
+        public virtual (Result result, W model) Erase(W table, bool usedbcommand = false)
         {
-            var erase = presentation.Domain.Erase(usedbcommand);
+            table.Status = "Deleting...";
+
+            var erase = table.Domain.Erase(usedbcommand);
 
             if (erase.result.Success)
             {
-                _raiser.Raise(presentation);
+                Raise(table);
+
+                table.Status = string.Empty;
+
+                return (erase.result, table);
             }
 
-            return (erase.result, presentation);
+            table.Status = String.Join("/", erase.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+
+            return (erase.result, default(W));
         }
     }
 }

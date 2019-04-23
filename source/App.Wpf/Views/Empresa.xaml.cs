@@ -1,5 +1,5 @@
-﻿using library.Impl;
-using library.Impl.Presentation;
+﻿using Library.Impl;
+using Library.Impl.Presentation;
 using System;
 using System.Windows;
 
@@ -7,11 +7,11 @@ namespace WpfApp.Views
 {
     public partial class Empresa : Window
     {
-        public presentation.Model.Empresa ViewModel
+        public Presentation.Table.Empresa ViewModel
         {
             get
             {
-                return (presentation.Model.Empresa)DataContext;
+                return (Presentation.Table.Empresa)DataContext;
             }
             set
             {
@@ -31,15 +31,15 @@ namespace WpfApp.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
             Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
 
-            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalEdit, "SucursalEdit");
-            Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, "SucursalEdit");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
-            Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
 
-            SucursalesRefresh();
+            //SucursalesRefresh();
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -54,12 +54,12 @@ namespace WpfApp.Views
             //ViewModel.Dispose();
         }
 
-        public virtual void EmpresaErase((CommandAction action, (Result result, presentation.Model.Empresa entity) operation) message)
+        public virtual void EmpresaErase((CommandAction action, (Result result, Presentation.Table.Empresa entity) operation) message)
         {
             this.Close();
         }
 
-        public virtual void SucursalesAdd(presentation.Model.Sucursal entity)
+        public virtual void SucursalesAdd(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -70,7 +70,7 @@ namespace WpfApp.Views
             view.ShowDialog();
 
             if (view.ViewModel.IdEmpresa == ViewModel.Id)
-                ViewModel.Sucursales.CommandAdd((presentation.Model.Sucursal)view.ViewModel);
+                ViewModel.Sucursales.CommandAdd((Presentation.Table.Sucursal)view.ViewModel);
         }
         public virtual void SucursalesRefresh(int top = 0)
         {
@@ -79,7 +79,7 @@ namespace WpfApp.Views
             ViewModel.Sucursales.CommandRefresh(refresh);
         }
 
-        public virtual void SucursalEdit(presentation.Model.Sucursal entity)
+        public virtual void SucursalEdit(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -98,7 +98,7 @@ namespace WpfApp.Views
                 ViewModel.Sucursales.CommandEdit((entity, view.ViewModel));
             }
         }
-        public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
+        public virtual void SucursalErase((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
             ViewModel.Sucursales.CommandErase(message);
         }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace presentation.Model
+﻿namespace Presentation.Table
 {
     public partial class Empresa
     {
@@ -15,50 +12,30 @@ namespace presentation.Model
             {
                 Ruc = value;
 
-                var checkisunique = Domain.Data.CheckIsUnique();
-                ValidateRuc = String.Join("/", checkisunique.result.Messages.Select(x => x.message).ToArray()).Replace(Environment.NewLine, string.Empty);
+                Validate("ValidateRuc", Domain.CheckIsUnique());
 
                 OnPropertyChanged("RucX");
             }
         }
-        public string ValidateRuc
-        {
-            get
-            {
-                return Validations["ValidateRuc"];
-            }
-            set
-            {
-                var contains = Validations.ContainsKey("ValidateRuc");
-
-                if ((contains && Validations["ValidateRuc"] != value) || !contains)
-                {
-                    Validations["ValidateRuc"] = value;
-
-                    OnPropertyChanged("Validations");
-                    OnPropertyChanged("Validation");
-                }
-            }
-        }
     }
 }
 
-namespace presentation.Query
+namespace Presentation.Query
 {
     public partial class Empresa
     {
     }
 }
 
-namespace presentation.Raiser
+namespace Presentation.Raiser
 {
     public partial class Empresa
     {
-        public override Model.Empresa Extra(Model.Empresa presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Empresa RaiseX(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
-            presentation.RucX = presentation.Ruc;
+            model.OnPropertyChanged("RucX");
 
-            return presentation;
+            return model;
         }
     }
 }

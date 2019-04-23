@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace library.Extension
+namespace Library.Extension
 {
     public static class ListExtensions
     {
