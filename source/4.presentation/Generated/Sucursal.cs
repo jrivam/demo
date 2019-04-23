@@ -112,7 +112,7 @@ namespace Presentation.Table
         }
 
         protected Presentation.Table.Empresas _empresas;
-        public virtual (Result result, Presentation.Table.Empresas presentation) Empresas_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Empresa queryempresa = null)
+        public virtual (Result result, Presentation.Table.Empresas model) Empresas_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Empresa queryempresa = null)
         {
             var refresh = Domain.Empresas_Refresh(maxdepth, top, queryempresa?.Domain);
 
@@ -124,7 +124,7 @@ namespace Presentation.Table
         {
             get
             {
-                return _empresas ?? Empresas_Refresh().presentation;
+                return _empresas ?? Empresas_Refresh().model;
             }
             set
             {
@@ -255,25 +255,25 @@ namespace Presentation.Raiser
 {
     public partial class Sucursal : BaseRaiser<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public override Presentation.Table.Sucursal Clear(Presentation.Table.Sucursal presentation)
+        public override Presentation.Table.Sucursal Clear(Presentation.Table.Sucursal model)
         {
-            presentation = base.Clear(presentation);
+            model = base.Clear(model);
 
-            presentation.Empresa = null;
+            model.Empresa = null;
 
-            return presentation;
+            return model;
         }
-        public override Presentation.Table.Sucursal Raise(Presentation.Table.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Sucursal Raise(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
         {
-            presentation = base.Raise(presentation);
+            model = base.Raise(model);
 
             depth++;
             if (depth < maxdepth)
             {
-                presentation.OnPropertyChanged("Empresa");
+                model.OnPropertyChanged("Empresa");
             }
 
-            return presentation;
+            return model;
         }
     }
 }

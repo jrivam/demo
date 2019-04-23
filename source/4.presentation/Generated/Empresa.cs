@@ -52,7 +52,7 @@ namespace Presentation.Table
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
         protected Presentation.Table.SucursalesQuery _sucursales;
-        public virtual (Result result, Presentation.Table.SucursalesQuery presentations) Sucursales_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Sucursal query = null)
+        public virtual (Result result, Presentation.Table.SucursalesQuery models) Sucursales_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Sucursal query = null)
         {
             var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
 
@@ -201,7 +201,7 @@ namespace Presentation.Raiser
 
             return model;
         }
-        public override Table.Empresa Raise(Table.Empresa model, int maxdepth = 1, int depth = 0)
+        public override Table.Empresa Raise(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
             return base.Raise(model, maxdepth, depth);
         }
