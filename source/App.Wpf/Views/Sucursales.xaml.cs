@@ -1,5 +1,5 @@
-﻿using library.Impl;
-using library.Impl.Presentation;
+﻿using Library.Impl;
+using Library.Impl.Presentation;
 using System;
 using System.Windows;
 
@@ -7,11 +7,11 @@ namespace WpfApp.Views
 {
     public partial class Sucursales : Window
     {
-        public presentation.Model.Sucursales ViewModel
+        public Presentation.Table.SucursalesQuery ViewModel
         {
             get
             {
-                return (presentation.Model.Sucursales)DataContext;
+                return (Presentation.Table.SucursalesQuery)DataContext;
             }
             set
             {
@@ -26,13 +26,13 @@ namespace WpfApp.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalLoad, "SucursalLoad");
-            Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalSave, "SucursalSave");
-            Messenger.Default.Register<(CommandAction action, (Result result, presentation.Model.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalLoad, "SucursalLoad");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalSave, "SucursalSave");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
-            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalEdit, "SucursalEdit");
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, "SucursalEdit");
 
-            Messenger.Default.Register<presentation.Model.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
             Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
 
             SucursalesRefresh();
@@ -49,20 +49,20 @@ namespace WpfApp.Views
             Messenger.Default.Unregister(this, "SucursalesRefresh");
         }
 
-        public virtual void SucursalLoad((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
+        public virtual void SucursalLoad((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
             ViewModel.CommandLoad(message);
         }
-        public virtual void SucursalSave((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
+        public virtual void SucursalSave((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
             ViewModel.CommandSave(message);
         }
-        public virtual void SucursalErase((CommandAction action, (Result result, presentation.Model.Sucursal entity) operation) message)
+        public virtual void SucursalErase((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
             ViewModel.CommandErase(message);
         }
 
-        public virtual void SucursalEdit(presentation.Model.Sucursal entity)
+        public virtual void SucursalEdit(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -76,7 +76,7 @@ namespace WpfApp.Views
                 ViewModel.CommandEdit((entity, view.ViewModel));
         }
 
-        public virtual void SucursalesAdd(presentation.Model.Sucursal entity)
+        public virtual void SucursalesAdd(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
@@ -85,7 +85,7 @@ namespace WpfApp.Views
 
             view.ShowDialog();
 
-            ViewModel.CommandAdd((presentation.Model.Sucursal)view.ViewModel);
+            ViewModel.CommandAdd((Presentation.Table.Sucursal)view.ViewModel);
         }
         public virtual void SucursalesRefresh(int top = 0)
         {

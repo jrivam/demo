@@ -1,4 +1,4 @@
-﻿namespace library.Impl
+﻿namespace Library.Impl
 {
     public enum ResultCategory
     {

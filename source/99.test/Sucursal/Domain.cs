@@ -22,11 +22,11 @@ namespace test.Sucursal
 
         }
 
-        public domain.Model.Sucursal Domain_NonDbCommand_Load()
+        public Business.Table.Sucursal Domain_NonDbCommand_Load()
         {
             var dataselect = Data.Data_Table_Select_NonDbCommand();
 
-            return new domain.Model.Sucursal(dataselect)
+            return new Business.Table.Sucursal(dataselect)
             {
             };
         }
@@ -43,11 +43,11 @@ namespace test.Sucursal
             Assert.AreEqual(Data.Entity.IdEmpresa, domainload.domain.IdEmpresa);
         }
 
-        public domain.Model.Sucursal Domain_NonDbCommand_Erase()
+        public Business.Table.Sucursal Domain_NonDbCommand_Erase()
         {
             var datadelete = Data.Data_Table_Delete_NonDbCommand();
 
-            return new domain.Model.Sucursal(datadelete)
+            return new Business.Table.Sucursal(datadelete)
             {
             };
         }
@@ -60,11 +60,11 @@ namespace test.Sucursal
             Assert.IsTrue(domainerase.domain.Deleted);
         }
 
-        public domain.Model.Sucursal Domain_Save_NonDbCommand_Insert()
+        public Business.Table.Sucursal Domain_Save_NonDbCommand_Insert()
         {
             var datainsert = Data.Data_Table_Insert_NonDbCommand();
 
-            return new domain.Model.Sucursal(datainsert)
+            return new Business.Table.Sucursal(datainsert)
             {
             };
         }
@@ -85,11 +85,11 @@ namespace test.Sucursal
             Assert.AreEqual(!Data.Entity.Activo, false);
         }
 
-        public domain.Model.Sucursal Domain_Save_NonDbCommand_Update()
+        public Business.Table.Sucursal Domain_Save_NonDbCommand_Update()
         {
             var datainsert = Data.Data_Table_Update_NonDbCommand();
 
-            return new domain.Model.Sucursal(datainsert)
+            return new Business.Table.Sucursal(datainsert)
             {
             };
         }

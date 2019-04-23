@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Autofac.Features.ResolveAnything;
 using Autofac.Integration.WebApi;
-using library.Impl.Data.Mapper;
-using library.Impl.Domain.Mapper;
-using library.Impl.Entities.Reader;
-using library.Impl.Presentation.Raiser;
+using Library.Impl.Persistence.Mapper;
+using Library.Impl.Domain.Loader;
+using Library.Impl.Entities.Reader;
+using Library.Impl.Presentation.Raiser;
 using System.Reflection;
 using System.Web.Http;
 
@@ -30,73 +30,73 @@ namespace Web.Api.App_Start
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
 
-            builder.RegisterGeneric(typeof(BaseReaderEntity<>))
-                     .As(typeof(library.Interface.Entities.Reader.IReaderEntity<>))
+            builder.RegisterGeneric(typeof(BaseReader<>))
+                     .As(typeof(Library.Interface.Entities.Reader.IReader<>))
                      .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Entities.Repository.Repository<>))
-                   .As(typeof(library.Interface.Entities.Repository.IRepository<>))
-                   .InstancePerRequest();
-            builder.RegisterType(typeof(library.Impl.Entities.Repository.RepositoryBulk))
-                   .As(typeof(library.Interface.Entities.Repository.IRepositoryBulk))
-                   .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Entities.Repository.DbRepository<>))
-                   .As(typeof(library.Interface.Entities.Repository.IDbRepository<>))
-                   .InstancePerRequest();
-            builder.RegisterType(typeof(library.Impl.Entities.Repository.DbRepositoryBulk))
-                   .As(typeof(library.Interface.Entities.Repository.IDbRepositoryBulk))
-                   .InstancePerRequest();
-
-
-            builder.RegisterGeneric(typeof(BaseMapperRepository<,>))
-                     .As(typeof(library.Interface.Data.Mapper.IMapperRepository<,>))
+            builder.RegisterGeneric(typeof(BaseMapper<,>))
+                     .As(typeof(Library.Interface.Persistence.Mapper.IMapper<,>))
                      .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Data.Table.RepositoryTable<,>))
-                   .As(typeof(library.Interface.Data.Table.IRepositoryTable<,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Table.RepositoryTable<,>))
+                   .As(typeof(Library.Interface.Persistence.Table.IRepositoryTable<,>))
                    .InstancePerRequest();
-            builder.RegisterGeneric(typeof(library.Impl.Data.Query.RepositoryQuery<,,>))
-                   .As(typeof(library.Interface.Data.Query.IRepositoryQuery<,,>))
-                   .InstancePerRequest();
-
-            builder.RegisterType(typeof(library.Impl.Data.Sql.Builder.SqlBuilderTable))
-                   .As(typeof(library.Interface.Data.Sql.Builder.ISqlBuilderTable))
-                   .InstancePerRequest();
-            builder.RegisterType(typeof(library.Impl.Data.Sql.Builder.SqlBuilderQuery))
-                   .As(typeof(library.Interface.Data.Sql.Builder.ISqlBuilderQuery))
+            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Query.RepositoryQuery<,>))
+                   .As(typeof(Library.Interface.Persistence.Query.IRepositoryQuery<,>))
                    .InstancePerRequest();
 
+            builder.RegisterType(typeof(Library.Impl.Persistence.Sql.Builder.SqlBuilderTable))
+                   .As(typeof(Library.Interface.Persistence.Sql.Builder.ISqlBuilderTable))
+                   .InstancePerRequest();
+            builder.RegisterType(typeof(Library.Impl.Persistence.Sql.Builder.SqlBuilderQuery))
+                   .As(typeof(Library.Interface.Persistence.Sql.Builder.ISqlBuilderQuery))
+                   .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(BaseMapperLogic<,,>))
-                     .As(typeof(library.Interface.Domain.Mapper.IMapperLogic<,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Sql.Repository.SqlRepository<>))
+                   .As(typeof(Library.Interface.Persistence.Sql.Repository.ISqlRepository<>))
+                   .InstancePerRequest();
+            builder.RegisterType(typeof(Library.Impl.Persistence.Sql.Repository.SqlRepositoryBulk))
+                   .As(typeof(Library.Interface.Persistence.Sql.Repository.ISqlRepositoryBulk))
+                   .InstancePerRequest();
+
+            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Database.DbRepository<>))
+                   .As(typeof(Library.Interface.Persistence.Database.IDbRepository<>))
+                   .InstancePerRequest();
+            builder.RegisterType(typeof(Library.Impl.Persistence.Database.DbRepositoryBulk))
+                   .As(typeof(Library.Interface.Persistence.Database.IDbRepositoryBulk))
+                   .InstancePerRequest();
+
+
+            builder.RegisterGeneric(typeof(BaseLoader<,,>))
+                     .As(typeof(Library.Interface.Business.Loader.ILoader<,,>))
                      .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Domain.Table.LogicTable<,,>))
-                   .As(typeof(library.Interface.Domain.Table.ILogicTable<,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Domain.Table.LogicTable<,,>))
+                   .As(typeof(Library.Interface.Business.Table.ILogicTable<,,>))
                    .InstancePerRequest();
-            builder.RegisterGeneric(typeof(library.Impl.Domain.Query.LogicQuery<,,>))
-                   .As(typeof(library.Interface.Domain.Query.ILogicQuery<,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Domain.Query.LogicQuery<,,,>))
+                   .As(typeof(Library.Interface.Business.Query.ILogicQuery<,,,>))
                    .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Domain.Logic<,>))
-                 .As(typeof(library.Interface.Domain.ILogic<,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Domain.Logic<,,>))
+                 .As(typeof(Library.Interface.Business.ILogic<,,>))
                  .InstancePerRequest();
 
 
-            builder.RegisterGeneric(typeof(BaseRaiserInteractive<,,,>))
-                     .As(typeof(library.Interface.Presentation.Raiser.IRaiserInteractive<,,,>))
+            builder.RegisterGeneric(typeof(BaseRaiser<,,,>))
+                     .As(typeof(Library.Interface.Presentation.Raiser.IRaiser<,,,>))
                      .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Presentation.Table.InteractiveTable<,,,>))
-                   .As(typeof(library.Interface.Presentation.Table.IInteractiveTable<,,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Presentation.Table.InteractiveTable<,,,>))
+                   .As(typeof(Library.Interface.Presentation.Table.IInteractiveTable<,,,>))
                    .InstancePerRequest();
-            builder.RegisterGeneric(typeof(library.Impl.Presentation.Query.InteractiveQuery<,,,>))
-                   .As(typeof(library.Interface.Presentation.Query.IInteractiveQuery<,,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Presentation.Query.InteractiveQuery<,,,,,,>))
+                   .As(typeof(Library.Interface.Presentation.Query.IInteractiveQuery<,,,,,>))
                    .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(library.Impl.Presentation.Interactive<,,>))
-                 .As(typeof(library.Interface.Presentation.IInteractive<,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Presentation.Interactive<,,,>))
+                 .As(typeof(Library.Interface.Presentation.IInteractive<,,,>))
                  .InstancePerRequest();
 
 
@@ -104,8 +104,8 @@ namespace Web.Api.App_Start
 
 
             //builder.RegisterType<data.Model.Empresa>()
-            //       .As<IEntityTable<entities.Model.Empresa>>()
-            //       .As<IEntityRepository<entities.Model.Empresa, data.Model.Empresa>>()
+            //       .As<IEntityTable<Entities.Table.Empresa>>()
+            //       .As<IEntityRepository<Entities.Table.Empresa, data.Model.Empresa>>()
             //       .InstancePerRequest();
 
             //Set the dependency resolver to be Autofac.  

@@ -24,6 +24,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -133,13 +134,13 @@
       <Project>{c6ac5bb1-29cd-4e8d-865c-902f54833a06}</Project>
       <Name>1.entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\2.data\2.data.csproj">
+    <ProjectReference Include="..\2.persistence\2.persistence.csproj">
       <Project>{5c9f70ff-24c2-4630-b5b0-fe2731a06803}</Project>
-      <Name>2.data</Name>
+      <Name>2.persistence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\3.domain\3.domain.csproj">
+    <ProjectReference Include="..\3.business\3.business.csproj">
       <Project>{175c8652-8e2e-4285-8bfb-94a430e8bc72}</Project>
-      <Name>3.domain</Name>
+      <Name>3.business</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

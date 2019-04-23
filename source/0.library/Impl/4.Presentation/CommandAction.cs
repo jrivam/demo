@@ -1,4 +1,4 @@
-﻿namespace library.Impl.Presentation
+﻿namespace Library.Impl.Presentation
 {
     public enum CommandAction
     {

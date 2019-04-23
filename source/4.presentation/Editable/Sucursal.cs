@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace presentation.Model
+﻿namespace Presentation.Table
 {
     public partial class Sucursal
     {
@@ -15,50 +12,30 @@ namespace presentation.Model
             {
                 Codigo = value;
 
-                var checkisunique = Domain.Data.CheckIsUnique();
-                ValidateCodigo = String.Join("/", checkisunique.result.Messages.Select(x => x.message).ToArray()).Replace(Environment.NewLine, string.Empty);
+                Validate("ValidateCodigo", Domain.CheckIsUnique());
 
                 OnPropertyChanged("CodigoX");
             }
         }
-        public string ValidateCodigo
-        {
-            get
-            {
-                return Validations["ValidateCodigo"];
-            }
-            set
-            {
-                var contains = Validations.ContainsKey("ValidateCodigo");
-
-                if ((contains && Validations["ValidateCodigo"] != value) || !contains)
-                {
-                    Validations["ValidateCodigo"] = value;
-
-                    OnPropertyChanged("Validations");
-                    OnPropertyChanged("Validation");
-                }
-            }
-        }
     }
 }
 
-namespace presentation.Query
+namespace Presentation.Query
 {
     public partial class Sucursal
     {
     }
 }
 
-namespace presentation.Raiser
+namespace Presentation.Raiser
 {
     public partial class Sucursal
     {
-        public override Model.Sucursal Extra(Model.Sucursal presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Sucursal RaiseX(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
         {
-            presentation.CodigoX = presentation.Codigo;
+            model.OnPropertyChanged("CodigoX");
 
-            return presentation;
+            return model;
         }
     }
 }

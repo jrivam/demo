@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 //Messenger downloaded from StackOverflow and small modifications made
-namespace library.Impl.Presentation
+namespace Library.Impl.Presentation
 {
     public class Messenger
     {

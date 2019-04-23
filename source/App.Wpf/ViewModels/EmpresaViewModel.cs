@@ -1,6 +1,6 @@
 ﻿namespace WpfApp.ViewModels
 {
-    public class EmpresaViewModel : presentation.Model.Empresa
+    public class EmpresaViewModel : Presentation.Table.Empresa
     {
         public EmpresaViewModel()
             : base()

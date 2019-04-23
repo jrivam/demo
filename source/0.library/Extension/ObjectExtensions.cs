@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace library.Extension
+namespace Library.Extension
 {
     public static class ObjectExtensions
     {

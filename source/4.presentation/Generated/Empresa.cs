@@ -1,19 +1,18 @@
-﻿using library.Impl;
-using library.Impl.Data.Sql;
-using library.Impl.Presentation;
-using library.Impl.Presentation.Query;
-using library.Impl.Presentation.Raiser;
-using library.Impl.Presentation.Table;
-using library.Interface.Presentation.Query;
-using library.Interface.Presentation.Raiser;
-using library.Interface.Presentation.Table;
+﻿using Library.Impl;
+using Library.Impl.Persistence.Sql;
+using Library.Impl.Presentation;
+using Library.Impl.Presentation.Query;
+using Library.Impl.Presentation.Raiser;
+using Library.Impl.Presentation.Table;
+using Library.Interface.Presentation.Query;
+using Library.Interface.Presentation.Table;
 
-namespace presentation.Model
+namespace Presentation.Table
 {
-    public partial class Empresa : AbstractTableInteractiveMethods<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresa(domain.Model.Empresa domain,
-            IInteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive,
+        public Empresa(Business.Table.Empresa domain,
+            IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive,
             int maxdepth = 1)
             : base(domain, 
                   interactive, 
@@ -21,36 +20,28 @@ namespace presentation.Model
         {
         }
 
-        public Empresa(domain.Model.Empresa domain,
-            IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> raiser,
+        public Empresa(Business.Table.Empresa domain,
              int maxdepth = 1)
             : this(domain,
-                  new InteractiveTable<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(raiser),
+                  new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()),
                   maxdepth)
         {
         }
-        public Empresa(domain.Model.Empresa domain, 
-             int maxdepth = 1)
-            : this(domain,
-                  new presentation.Raiser.Empresa(),
-                    maxdepth)
-        {
-        }
 
-        public Empresa(data.Model.Empresa data,
+        public Empresa(Persistence.Table.Empresa data,
             int maxdepth = 1)
-            : this(new domain.Model.Empresa(data),
+            : this(new Business.Table.Empresa(data),
                 maxdepth)
         {
         }
-        public Empresa(entities.Model.Empresa entity,
+        public Empresa(Entities.Table.Empresa entity,
             int maxdepth = 1)
-            : this(new data.Model.Empresa(entity),
+            : this(new Persistence.Table.Empresa(entity),
                 maxdepth)
         {
         }
         public Empresa(int maxdepth = 1)
-            : this(new entities.Model.Empresa(),
+            : this(new Entities.Table.Empresa(),
                   maxdepth)
         {
         }
@@ -60,16 +51,16 @@ namespace presentation.Model
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
-        protected presentation.Model.Sucursales _sucursales;
-        public virtual (Result result, presentation.Model.Sucursales presentations) Sucursales_Refresh(int maxdepth = 1, int top = 0, presentation.Query.Empresa query = null)
+        protected Presentation.Table.SucursalesQuery _sucursales;
+        public virtual (Result result, Presentation.Table.SucursalesQuery models) Sucursales_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Sucursal query = null)
         {
             var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
 
-            Sucursales = new presentation.Model.Sucursales(refresh.domains);
+            Sucursales = new Presentation.Table.SucursalesQuery(refresh.domains);
 
             return (refresh.result, _sucursales);
         }
-        public virtual presentation.Model.Sucursales Sucursales
+        public virtual Presentation.Table.SucursalesQuery Sucursales
         {
             get
             {
@@ -77,7 +68,7 @@ namespace presentation.Model
                 {
                     if (Domain?.Sucursales != null)
                     {
-                        Sucursales = new presentation.Model.Sucursales(Domain?.Sucursales);
+                        Sucursales = new Presentation.Table.SucursalesQuery(Domain?.Sucursales);
                     }
                     else
                     {
@@ -93,7 +84,7 @@ namespace presentation.Model
                 {
                     _sucursales = value;
 
-                    Domain.Sucursales = (_sucursales != null) ? (domain.Model.Sucursales)new domain.Model.Sucursales().Load(_sucursales?.Domains) : null;
+                    Domain.Sucursales = (_sucursales != null) ? (Business.Table.Sucursales)new Business.Table.Sucursales().Load(_sucursales?.Domains) : null;
  
                     OnPropertyChanged("Sucursales");
                 }
@@ -101,57 +92,63 @@ namespace presentation.Model
         }
     }
 
-    public partial class Empresas : ListPresentation<data.Query.Empresa, domain.Query.Empresa, presentation.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresas : ListModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresas(domain.Model.Empresas domains,
-            presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
+        public Empresas(Business.Table.Empresas domains)
+            : base(domains, "Empresas")
+        {
+        }
+        public Empresas()
+            : base("Empresas")
+        {
+        }
+    }
+
+    public partial class EmpresasQuery : ListModelQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
+    {
+        public EmpresasQuery(Business.Table.Empresas domains,
+            Presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
             : base(domains, "Empresas",
                   query, maxdepth, top)
         {
         }
-        public Empresas(presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
+        public EmpresasQuery(Presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
             : base("Empresas",
                   query, maxdepth, top)
         {
         }
 
-        public Empresas(domain.Model.Empresas domains, int maxdepth = 1, int top = 0)
+        public EmpresasQuery(Business.Table.Empresas domains, int maxdepth = 1, int top = 0)
             : this(domains, 
-                  new presentation.Query.Empresa(), maxdepth, top)
+                  new Presentation.Query.Empresa(), maxdepth, top)
         {
         }
-        public Empresas(int maxdepth = 1, int top = 0)
-            : this(new presentation.Query.Empresa(), maxdepth, top)
+        public EmpresasQuery(int maxdepth = 1, int top = 0)
+            : this(new Presentation.Query.Empresa(), maxdepth, top)
         {
         }
     }
 }
 
-namespace presentation.Query
+namespace Presentation.Query
 {
-    public partial class Empresa : AbstractQueryInteractiveMethods<data.Query.Empresa, domain.Query.Empresa, entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : AbstractQueryModel<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresa(domain.Query.Empresa domain,
-            IInteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> interactive)
+        public Empresa(Business.Query.Empresa domain,
+            IInteractiveQuery<Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive)
             : base(domain,
                   interactive)
         {
         }
 
-        public Empresa(domain.Query.Empresa domain,
-            IRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa> mapper)
+        public Empresa(Business.Query.Empresa domain)
             : this(domain,
-                  new InteractiveQuery<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>(mapper))
+                  new InteractiveQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()))
         {
         }
 
-        public Empresa(domain.Query.Empresa domain)
-            : this(domain,
-                  new presentation.Raiser.Empresa())
-        {
-        }
         public Empresa()
-            : this(new domain.Query.Empresa())
+            : this(new Business.Query.Empresa())
         {
         }
 
@@ -184,25 +181,31 @@ namespace presentation.Query
             }
         }
 
-        protected presentation.Query.Sucursal _sucursal;
-        public virtual presentation.Query.Sucursal Sucursal(presentation.Query.Sucursal query = null)
+        protected Presentation.Query.Sucursal _sucursal;
+        public virtual Presentation.Query.Sucursal Sucursal(Presentation.Query.Sucursal query = null)
         {
-            return _sucursal = query ?? _sucursal ?? new presentation.Query.Sucursal(Domain?.Sucursal());
+            return _sucursal = query ?? _sucursal ?? new Presentation.Query.Sucursal(Domain?.Sucursal());
         }
     }
 }
 
-namespace presentation.Raiser
+namespace Presentation.Raiser
 {
-    public partial class Empresa : BaseRaiserInteractive<entities.Model.Empresa, data.Model.Empresa, domain.Model.Empresa, presentation.Model.Empresa>
+    public partial class Empresa : BaseRaiser<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public override presentation.Model.Empresa Clear(presentation.Model.Empresa presentation, int maxdepth = 1, int depth = 0)
+        public override Presentation.Table.Empresa Clear(Presentation.Table.Empresa model)
         {
-            presentation = base.Clear(presentation, maxdepth, depth);
+            model = base.Clear(model);
 
-            presentation.Sucursales = null;
+            model.Sucursales = null;
 
-            return presentation;
+            return model;
+        }
+        public override Presentation.Table.Empresa Raise(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
+        {
+            model = base.Raise(model, maxdepth, depth);
+
+            return model;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using library.Impl.Data.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -15,7 +15,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var query = new domain.Query.Sucursal();
+                var query = new Business.Query.Sucursal();
 
                 if (nombre != null)
                     query.Nombre = (nombre, WhereOperator.Like);
@@ -27,7 +27,7 @@ namespace Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new domain.Model.Sucursales().Load(list.domains)?.Datas?.Entities?.List);
+                    return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities?.List);
                 }
 
                 return InternalServerError();
@@ -49,7 +49,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Sucursal() { Id = id }.Load();
+                var load = new Business.Table.Sucursal() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
@@ -69,7 +69,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody]entities.Model.Sucursal entity)
+        public IHttpActionResult Create([FromBody]Entities.Table.Sucursal entity)
         {
             try
             {
@@ -77,12 +77,12 @@ namespace Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new domain.Model.Sucursal(entity).Save();
+                        var save = new Business.Table.Sucursal(entity).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();
 
-                            return Created<entities.Model.Sucursal>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
+                            return Created<Entities.Table.Sucursal>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
                         return InternalServerError();
@@ -98,13 +98,13 @@ namespace Web.Api.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Update(int id, [FromBody]entities.Model.Sucursal entity)
+        public IHttpActionResult Update(int id, [FromBody]Entities.Table.Sucursal entity)
         {
             try
             {
                 if (entity != null)
                 {
-                    var load = new domain.Model.Sucursal() { Id = id }.Load();
+                    var load = new Business.Table.Sucursal() { Id = id }.Load();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -144,7 +144,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var load = new domain.Model.Sucursal() { Id = id }.Load();
+                var load = new Business.Table.Sucursal() { Id = id }.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)

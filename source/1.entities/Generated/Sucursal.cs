@@ -1,13 +1,14 @@
-﻿using library.Impl.Entities;
-using library.Impl.Entities.Reader;
-using library.Interface.Entities;
+﻿using Library.Impl.Entities;
+using Library.Impl.Entities.Reader;
+using Library.Interface.Entities;
+using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
-namespace entities.Model
+namespace Entities.Table
 {
     [MetadataType(typeof(SucursalMetadata))]
     [Table("sucursal")]
@@ -28,73 +29,46 @@ namespace entities.Model
         [Column("id_empresa")]
         [ForeignKey("empresa")]
         public virtual int? IdEmpresa { get; set; }
-        public virtual entities.Model.Empresa Empresa { get; set; }
+        public virtual Entities.Table.Empresa Empresa { get; set; }
     }
 
-    public partial class Sucursales : ListEntity<entities.Model.Sucursal>
+    public partial class Sucursales : ListEntity<Entities.Table.Sucursal>
     {
         public Sucursales()
             : base()
         {
         }
-        public Sucursales(List<entities.Model.Sucursal> entities)
+        public Sucursales(List<Entities.Table.Sucursal> entities)
             : base(entities)
         {
         }
     }
 }
 
-namespace entities.Reader
+namespace Entities.Reader
 {
-    public partial class Sucursal : BaseReaderEntity<entities.Model.Sucursal>
+    public partial class Sucursal : BaseReader<Entities.Table.Sucursal>
     {
-        public Sucursal()
-            : base()
+        public Sucursal(ISqlSyntaxSign sqlsyntaxsign)
+            : base(sqlsyntaxsign)
         {
         }
 
-        public override entities.Model.Sucursal CreateInstance()
+        public override Entities.Table.Sucursal Clear(Entities.Table.Sucursal entity)
         {
-            return base.CreateInstance();
-        }
-
-        public override entities.Model.Sucursal Clear(entities.Model.Sucursal entity, int maxdepth = 1, int depth = 0)
-        {
-            entity.Id = null;
-            entity.Codigo = null;
-            entity.Nombre = null;
-            entity.Fecha = null;
-            entity.Activo = null;
-            entity.IdEmpresa = null;
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                entity.Empresa = null;
-            }
+            entity = base.Clear(entity);
 
             return entity;
         }
 
-        public override entities.Model.Sucursal Read(entities.Model.Sucursal entity, IDataReader reader, IList<string> prefixname, string columnseparator, int maxdepth = 1, int depth = 0)
+        public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            prefixname.Add("Sucursal");
-
-            var prefix = string.Join(columnseparator, prefixname);
-            prefix += (prefix == string.Empty ? prefix : columnseparator);
-
-            entity.Id = reader[$"{prefix}Id"] as int?;
-            entity.Codigo = reader[$"{prefix}Codigo"] as string;
-            entity.Nombre = reader[$"{prefix}Nombre"] as string;
-            entity.Fecha = reader[$"{prefix}Fecha"] as DateTime?;
-            entity.Activo = reader[$"{prefix}Activo"] as bool?;
-
-            entity.IdEmpresa = reader[$"{prefix}IdEmpresa"] as int?;
+            entity = base.Read(entity, reader, prefixname, maxdepth, depth);
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                entity.Empresa = new entities.Reader.Empresa().Read(new entities.Model.Empresa(), reader, new List<string>(prefixname), columnseparator, maxdepth, depth);
+                entity.Empresa = new Entities.Reader.Empresa(_sqlsyntaxsign).Read(new Entities.Table.Empresa(), reader, new List<string>(prefixname), maxdepth, depth);
             }
 
             return entity;
