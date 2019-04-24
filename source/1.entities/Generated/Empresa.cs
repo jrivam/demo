@@ -14,11 +14,14 @@ namespace Entities.Table
     public partial class Empresa : IEntity
     {
         [Column("id")]
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int? Id { get; set; }
         [Column("ruc")]
+        [StringLength(20)]
+        //[Index(IsUnique = true)]
         public virtual string Ruc { get; set; }
         [Column("razon_social")]
+        [StringLength(100)]
         public virtual string RazonSocial { get; set; }
         [Column("activo")]
         public virtual bool? Activo { get; set; }

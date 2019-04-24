@@ -15,11 +15,14 @@ namespace Entities.Table
     public partial class Sucursal : IEntity
     {        
         [Column("id")]
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int? Id { get; set; }
         [Column("codigo")]
+        [StringLength(10)]
+        //[Index(IsUnique = true)]
         public virtual string Codigo { get; set; }
         [Column("nombre")]
+        [StringLength(100)]
         public virtual string Nombre { get; set; }
         [Column("fecha")]
         public virtual DateTime? Fecha { get; set; }
