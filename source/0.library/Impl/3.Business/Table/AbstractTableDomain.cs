@@ -56,7 +56,10 @@ namespace Library.Impl.Domain.Table
         {
             var save = _logic.Save(this as V, useinsertdbcommand, useupdatedbcommand);
 
-            save.result.Append(SaveChildren());
+            if (save.result.Success)
+            {
+                save.result.Append(SaveChildren());
+            }
 
             return save;
         }

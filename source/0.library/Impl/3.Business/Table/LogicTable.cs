@@ -97,36 +97,28 @@ namespace Library.Impl.Domain.Table
                     var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
                     if (primarykeycolumn != null)
                     {
-                        if (primarykeycolumn.DbValue == null)
-                        {
-                            var insert = table.Data.Insert(useinsertdbcommand);
-
-                            if (insert.result.Success)
-                            {
-                                table.Changed = false;
-                            }
-
-                            return (insert.result, table);
-                        }
-                        else
+                        if (primarykeycolumn.DbValue != null)
                         {
                             var update = table.Data.Update(useupdatedbcommand);
 
-                            if (update.result.Success)
-                            {
-                                table.Changed = false;
-                            }
+                            table.Changed = !update.result.Success;
 
                             return (update.result, table);
+                        }
+                        else
+                        {
+                            var insert = table.Data.Insert(useinsertdbcommand);
+
+                            table.Changed = !insert.result.Success;
+
+                            return (insert.result, table);
                         }
                     }
 
                     return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Save", $"Primary Key column in {table.Data.Description.Name} not defined") } }, default(V));
                 }
-                else
-                {
-                    return (checkisunique.result, default(V)); 
-                }
+
+                return (checkisunique.result, default(V)); 
             }
 
             return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Save", $"No changes to persist in {table.Data.Description.Name} with Id {table.Data.Entity.Id}") } }, default(V));
@@ -142,10 +134,7 @@ namespace Library.Impl.Domain.Table
                     {
                         var delete = table.Data.Delete(usedbcommand);
 
-                        if (delete.result.Success)
-                        {
-                            table.Deleted = true;
-                        }
+                         table.Deleted = delete.result.Success;
 
                         return (delete.result, table);
                     }

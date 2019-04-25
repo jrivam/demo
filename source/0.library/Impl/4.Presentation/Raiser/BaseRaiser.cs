@@ -31,6 +31,8 @@ namespace Library.Impl.Presentation.Raiser
         {
             model.Validations = new Dictionary<string, string>();
 
+            model.OnPropertyChanged("Validations");
+
             return model;
         }
 
@@ -40,8 +42,6 @@ namespace Library.Impl.Presentation.Raiser
             {
                 model.OnPropertyChanged(column.Description.Reference);
             }
-
-            model.OnPropertyChanged("Validations");
 
             return model;
         }
