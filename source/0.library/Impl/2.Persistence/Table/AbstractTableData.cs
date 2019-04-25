@@ -39,16 +39,16 @@ namespace Library.Impl.Persistence.Table
         protected readonly IRepositoryTable<T, U> _repository;
 
         public AbstractTableData(T entity,
-            IQueryData<T, U> query,
             IRepositoryTable<T, U> repository,
+            IQueryData<T, U> query,
             string name, string reference)
         {
             Description = new Description(name, reference);
 
             Entity = entity;
 
-            _query = query;
             _repository = repository;
+            _query = query;
 
             Init();
         }

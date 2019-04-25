@@ -16,11 +16,11 @@ namespace Persistence.Table
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresa(Entities.Table.Empresa entity,
-            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query,
-            IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
+            IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository,
+            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query)
             : base(entity,
-                  query,
                   repository,
+                  query,
                   typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
         {
             Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
@@ -30,9 +30,15 @@ namespace Persistence.Table
         }
 
         public Empresa(Entities.Table.Empresa entity,
+            IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
+            : this(entity,
+                    repository,
+                    new Persistence.Query.Empresa())
+        {
+        }
+        public Empresa(Entities.Table.Empresa entity,
             ConnectionStringSettings connectionstringsettings)
             : this(entity,
-                    new Persistence.Query.Empresa(),
                     new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Empresa(), connectionstringsettings))
         {
         }

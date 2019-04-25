@@ -17,11 +17,11 @@ namespace Persistence.Table
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public Sucursal(Entities.Table.Sucursal entity,
-            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query,
-            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
+            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
+            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query)
             : base(entity, 
+                  repository,
                   query,
-                  repository, 
                   typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
         {
             Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
@@ -34,9 +34,15 @@ namespace Persistence.Table
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
+            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
+            : this(entity,
+                    repository,
+                    new Persistence.Query.Sucursal())
+        {
+        }
+        public Sucursal(Entities.Table.Sucursal entity,
             ConnectionStringSettings connectionstringsettings)
             : this(entity,
-                  new Persistence.Query.Sucursal(),
                   new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
         {
         }
