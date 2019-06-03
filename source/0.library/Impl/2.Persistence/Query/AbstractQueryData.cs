@@ -34,6 +34,13 @@ namespace Library.Impl.Persistence.Query
             Columns.ForEach(x => x.Wheres.Clear());
         }
 
+        public virtual void Init()
+        {
+        }
+        public virtual void InitX()
+        {
+        }
+
         protected readonly IRepositoryQuery<T, U> _repository;
 
         public AbstractQueryData(IRepositoryQuery<T, U> repository,
@@ -42,6 +49,9 @@ namespace Library.Impl.Persistence.Query
             Description = new Description(name, reference);
 
             _repository = repository;
+
+            Init();
+            InitX();
         }
 
         public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))

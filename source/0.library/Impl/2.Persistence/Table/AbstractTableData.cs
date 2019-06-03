@@ -109,7 +109,7 @@ namespace Library.Impl.Persistence.Table
                         return (selectsingle.result, selectsingle.data, true);
                     }
 
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } }, default(U), false);
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Table.Description.Reference}.{primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } }, default(U), false);
                 }
 
                 return (selectsingle.result, default(U), false);
