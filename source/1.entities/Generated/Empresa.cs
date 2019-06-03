@@ -31,12 +31,13 @@ namespace Entities.Table
 
     public partial class Empresas : ListEntity<Entities.Table.Empresa>
     {
-        public Empresas()
-            : base()
-        {
-        }
         public Empresas(List<Entities.Table.Empresa> entities)
             : base(entities)
+        {
+        }
+
+        public Empresas()
+            : this(new List<Entities.Table.Empresa>())
         {
         }
     }
@@ -49,13 +50,6 @@ namespace Entities.Reader
         public Empresa(ISqlSyntaxSign sqlsyntaxsign)
             : base(sqlsyntaxsign)
         {
-        }
-
-        public override Entities.Table.Empresa Clear(Entities.Table.Empresa entity)
-        {
-            entity = base.Clear(entity);
-
-            return entity;
         }
 
         public override Entities.Table.Empresa Read(Entities.Table.Empresa entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)

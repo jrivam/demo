@@ -3,10 +3,7 @@ using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
 
 namespace Library.Impl.Presentation.Raiser
 {
@@ -16,17 +13,6 @@ namespace Library.Impl.Presentation.Raiser
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        public W CreateInstance(V domain, int maxdepth)
-        {
-            return (W)Activator.CreateInstance(typeof(W),
-                                    BindingFlags.CreateInstance |
-                                    BindingFlags.Public |
-                                    BindingFlags.Instance |
-                                    BindingFlags.OptionalParamBinding,
-                                    null, new object[] { domain, maxdepth },
-                                    CultureInfo.CurrentCulture);
-        }
-
         public virtual W Clear(W model)
         {
             model.Validations = new Dictionary<string, string>();

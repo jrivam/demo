@@ -12,7 +12,23 @@ namespace Library.Impl.Persistence.Table
         where T : IEntity, new()
         where U : class, ITableData<T, U>
     {
-        public virtual T Entity { get; set; }
+        protected T _entity;
+        public virtual T Entity
+        {
+            get
+            {
+                return _entity;
+            }
+            set
+            {
+                _entity = value;
+
+                foreach (var column in Persistence.HelperRepository<T, U>.GetPropertiesValue(this as U))
+                {
+                    Columns[column.name].Value = column.value;
+                }
+            }
+        }
 
         public virtual Description Description { get; protected set; }
 
@@ -34,6 +50,9 @@ namespace Library.Impl.Persistence.Table
         public virtual void Init()
         {
         }
+        public virtual void InitX()
+        {
+        }
 
         protected readonly IQueryData<T, U> _query;
         protected readonly IRepositoryTable<T, U> _repository;
@@ -45,12 +64,13 @@ namespace Library.Impl.Persistence.Table
         {
             Description = new Description(name, reference);
 
-            Entity = entity;
-
             _repository = repository;
             _query = query;
 
             Init();
+            InitX();
+
+            Entity = entity;
         }
 
         public virtual (Result result, U data, bool isunique) CheckIsUnique()
@@ -137,11 +157,6 @@ namespace Library.Impl.Persistence.Table
             var delete = _repository.Delete(this as U, usedbcommand);
 
             return delete;
-        }
-
-        public U SetProperties(T entity, bool nulls = false)
-        {
-            return Entities.Helper.SetProperties<T, U>(entity, this as U, nulls);
         }
     }
 }

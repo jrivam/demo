@@ -4,7 +4,7 @@ using Library.Interface.Persistence.Sql.Repository;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 
-namespace library.Impl.Persistence
+namespace Library.Impl.Persistence
 {
     public class RepositoryMapper<T, U> : Repository<T>
         where T : IEntity
@@ -31,7 +31,7 @@ namespace library.Impl.Persistence
         {
             foreach (var entity in entities)
             {
-                var data = _mapper.CreateInstance(entity);
+                var data = HelperRepository<T, U>.CreateInstance(entity);
 
                 Map(data, maxdepth);
 

@@ -1,7 +1,7 @@
-﻿using Library.Impl.Persistence.Sql;
+﻿using Library.Impl.Persistence.Query;
+using Library.Impl.Persistence.Sql;
 using Library.Impl.Persistence.Table;
 using Library.Interface.Persistence.Database;
-using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Sql.Builder;
 using Library.Interface.Persistence.Sql.Database;
 using Library.Interface.Persistence.Sql.Providers;
@@ -25,6 +25,7 @@ namespace test.Empresa
             : this(new Entities.Table.Empresa()
             {
                 Id = 1,
+                Ruc = "ruc",
                 RazonSocial = "razon_social",
                 Activo = true
             })
@@ -81,6 +82,35 @@ namespace test.Empresa
 
             return (mockCommand, mockSyntaxSign, mockCreator);
         }
+        public ((Mock<IDbCommand> mockCommand, Mock<ISqlSyntaxSign> mockSyntaxSign, Mock<ISqlCreator> mockCreator) mockDatabase,
+            Persistence.Table.Empresa table) Data_Table(Entities.Table.Empresa entity)
+        {
+            var mockDatabase = GetDatabaseMock();
+
+            var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
+
+            var repositoryQuery = new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(
+                new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
+                new Persistence.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object);
+
+            var queryUnique = new Persistence.Query.Empresa(repositoryQuery);
+
+            var repositoryTable = new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
+                new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
+                new Persistence.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object, 
+                mockDatabase.mockCreator.Object);
+
+            var table = new Persistence.Table.Empresa(entity,
+            repositoryTable,
+            queryUnique);
+
+            return (mockDatabase, table);
+        }
 
         public Persistence.Table.Empresa Data_Table_Select()
         {
@@ -90,11 +120,12 @@ namespace test.Empresa
             var mockDataReader = new Moq.Mock<IDataReader>();
             mockDataReader.Setup(x => x.Read()).Returns(() => read).Callback(() => read = false);
             mockDataReader.Setup(x => x["Empresa.Id"]).Returns(Entity.Id);
+            mockDataReader.Setup(x => x["Empresa.Ruc"]).Returns(Entity.Ruc);
             mockDataReader.Setup(x => x["Empresa.RazonSocial"]).Returns(Entity.RazonSocial);
             mockDataReader.Setup(x => x["Empresa.Activo"]).Returns(Entity.Activo);
 
             mockDatabase.mockCommand.Setup(x => x.ExecuteReader())
-                .Returns(mockDataReader.Object);
+               .Returns(mockDataReader.Object);
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
@@ -103,11 +134,11 @@ namespace test.Empresa
                 Id = Entity.Id
             },
             new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
-                new Entities.Reader.Empresa(),
+                new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
-                mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Table.Empresa Data_Table_Select_NonDbCommand()
         {
@@ -151,26 +182,30 @@ namespace test.Empresa
             mockDatabase.mockCommand.Setup(x => x.ExecuteScalar())
                 .Returns(Entity.Id);
 
-            var mockBuilderTable = new Moq.Mock<ISqlBuilderTable>();
+            var mockDataReader = new Moq.Mock<IDataReader>();
+            mockDataReader.Setup(x => x.Read()).Returns(() => false);
+            mockDatabase.mockCommand.Setup(x => x.ExecuteReader())
+                .Returns(mockDataReader.Object);
+
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            var data = new Persistence.Table.Empresa(new Entities.Table.Empresa()
+            return new Persistence.Table.Empresa(new Entities.Table.Empresa()
             {
                 RazonSocial = Entity.RazonSocial,
-                Ruc = Entity.Ruc,                
+                Ruc = Entity.Ruc,
                 Activo = Entity.Activo
             },
             new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
-                new Entities.Reader.Empresa(),
+                new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
-                mockDatabase.mockCreator.Object,
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
-
-            var mockQueryRepositoryMethods = new Moq.Mock<IQueryDataMethods<Entities.Table.Empresa, Persistence.Table.Empresa>>();
-            mockQueryRepositoryMethods.Setup(x => x.SelectSingle(1)).Returns(null);
-
-            return data;
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object),
+            new Persistence.Query.Empresa(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
+                new Persistence.Mapper.Empresa(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object)));
         }
         public Persistence.Table.Empresa Data_Table_Insert_NonDbCommand()
         {
@@ -224,11 +259,11 @@ namespace test.Empresa
                 Activo = Entity.Activo
             },
             new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
-                new Entities.Reader.Empresa(),
+                new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Table.Empresa Data_Table_Update_NonDbCommand()
         {
@@ -282,11 +317,11 @@ namespace test.Empresa
                 Activo = Entity.Activo
             },
             new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
-                new Entities.Reader.Empresa(),
+                new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Table.Empresa Data_Table_Delete_NonDbCommand()
         {

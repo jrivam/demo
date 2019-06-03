@@ -1,13 +1,12 @@
-﻿using library.Interface.Persistence;
-using Library.Impl;
-using Library.Impl.Persistence.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
+using Library.Interface.Persistence;
 using Library.Interface.Persistence.Sql.Repository;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace library.Impl.Persistence
+namespace Library.Impl.Persistence
 {
     public class Repository<T> : IRepository<T>
         where T : IEntity

@@ -1,4 +1,4 @@
-﻿using library.Impl.Business;
+﻿using Library.Impl.Business;
 using Library.Impl.Persistence;
 using Library.Interface.Business;
 using Library.Interface.Business.Loader;
@@ -28,7 +28,7 @@ namespace Library.Impl.Domain.Query
 
             if (selectsingle.result.Success && selectsingle.data != null)
             {
-                var instance = _loader.CreateInstance(selectsingle.data);
+                var instance = Business.HelperLogic<T, U, V>.CreateInstance(selectsingle.data);
 
                 Load(instance, maxdepth);
 

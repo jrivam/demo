@@ -110,7 +110,7 @@ namespace test.Empresa
         {
             var domain = Domain_Save_NonDbCommand_Insert();
 
-            domain.Ruc = "RUC";
+            domain.Ruc = "ruc";
             domain.RazonSocial += "1";
             domain.Activo = false;
 
@@ -119,6 +119,7 @@ namespace test.Empresa
             Assert.IsTrue(save.result.Success);
             Assert.IsTrue(!save.domain.Changed);
             Assert.AreEqual(Data.Entity.Id, save.domain.Id);
+            Assert.AreEqual(Data.Entity.Ruc, save.domain.Ruc);
             Assert.AreEqual(Data.Entity.RazonSocial + "1", save.domain.RazonSocial);
             Assert.AreEqual(!Data.Entity.Activo, false);
         }

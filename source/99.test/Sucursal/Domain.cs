@@ -73,6 +73,7 @@ namespace test.Sucursal
         {
             var domainsave = Domain_Save_NonDbCommand_Insert();
 
+            domainsave.Codigo = "codigo";
             domainsave.Nombre += "1";
             domainsave.Activo = false;
 
@@ -81,6 +82,7 @@ namespace test.Sucursal
             Assert.IsTrue(save.result.Success);
             Assert.IsTrue(!save.domain.Changed);
             Assert.AreEqual(Data.Entity.Id, save.domain.Id);
+            Assert.AreEqual(Data.Entity.Codigo, save.domain.Codigo);
             Assert.AreEqual($"{Data.Entity.Nombre}1", save.domain.Nombre);
             Assert.AreEqual(!Data.Entity.Activo, false);
         }

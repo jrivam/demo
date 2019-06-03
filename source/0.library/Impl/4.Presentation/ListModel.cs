@@ -5,13 +5,10 @@ using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation;
 using Library.Interface.Presentation.Table;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Input;
 
 namespace Library.Impl.Presentation
@@ -30,13 +27,7 @@ namespace Library.Impl.Presentation
             }
             set
             {
-                value?.ToList().ForEach(x => this.Add((W)Activator.CreateInstance(typeof(W),
-                           BindingFlags.CreateInstance |
-                           BindingFlags.Public |
-                           BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, null,
-                           new object[] { x },
-                           CultureInfo.CurrentCulture)));
+                value?.ToList().ForEach(x => this.Add(Presentation.HelperInteractive<T, U, V, W>.CreateInstance(x)));
             }
         }
 

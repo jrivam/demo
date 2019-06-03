@@ -11,7 +11,33 @@ namespace Library.Impl.Domain.Table
         where U : ITableData<T, U>, new()
         where V : class, ITableDomain<T, U, V>
     {
-        public virtual U Data { get; set; }
+        public virtual T Entity
+        {
+            get
+            {
+                return Data.Entity;
+            }
+            set
+            {
+                Data.Entity = value;
+
+                Changed = true;
+                Deleted = false;
+            }
+        }
+
+        protected U _data;
+        public virtual U Data
+        {
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+            }
+        }
 
         public virtual IColumnTable this[string reference]
         {
@@ -29,9 +55,9 @@ namespace Library.Impl.Domain.Table
         public AbstractTableDomain(U data, 
             ILogicTable<T, U, V> logic)
         {
-            Data = data;
-
             _logic = logic;
+
+            Data = data;
         }
 
         public string CheckIsUnique()
@@ -90,11 +116,6 @@ namespace Library.Impl.Domain.Table
             var erasechildren = new Result() { Success = true };
 
             return erasechildren;
-        }
-
-        public V SetProperties(T entity, bool nulls = false)
-        {
-            return Entities.Helper.SetProperties<T, V>(entity, this as V, nulls);
         }
     }
 }

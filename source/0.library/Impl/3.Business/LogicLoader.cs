@@ -5,7 +5,7 @@ using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 
-namespace library.Impl.Business
+namespace Library.Impl.Business
 {
     public class LogicLoader<T, U, V> : Logic<T, U, V>
         where T : IEntity
@@ -32,7 +32,7 @@ namespace library.Impl.Business
         {
             foreach (var data in datas)
             {
-                var domain = _loader.CreateInstance(data);
+                var domain = Business.HelperLogic<T, U, V>.CreateInstance(data);
 
                 Load(domain, maxdepth);
 

@@ -12,7 +12,7 @@ namespace Persistence.Table
         {
         }
 
-        public override void Init()
+        public override void InitX()
         {
             SelectDbCommand = (false, ("gsp_empresa_select", CommandType.StoredProcedure, new List<SqlParameter>()));
             InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<SqlParameter>()));

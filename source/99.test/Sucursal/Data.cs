@@ -26,6 +26,7 @@ namespace test.Sucursal
             : this(new Entities.Table.Sucursal()
             {
                 Id = 1,
+                Codigo = "codigo",
                 Nombre = "nombre",
                 Fecha = DateTime.Now,
                 Activo = true,
@@ -82,6 +83,7 @@ namespace test.Sucursal
             var mockDataReader = new Moq.Mock<IDataReader>();
             mockDataReader.Setup(x => x.Read()).Returns(() => read).Callback(() => read = false);
             mockDataReader.Setup(x => x["Sucursal.Id"]).Returns(Entity.Id);
+            mockDataReader.Setup(x => x["Sucursal.Codigo"]).Returns(Entity.Codigo);
             mockDataReader.Setup(x => x["Sucursal.Nombre"]).Returns(Entity.Nombre);
             mockDataReader.Setup(x => x["Sucursal.Fecha"]).Returns(Entity.Fecha);
             mockDataReader.Setup(x => x["Sucursal.Activo"]).Returns(Entity.Activo);
@@ -97,11 +99,11 @@ namespace test.Sucursal
                 Id = Entity.Id
             },
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
-                new Entities.Reader.Sucursal(),
+                new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Table.Sucursal Data_Table_Select_NonDbCommand()
         {
@@ -153,21 +155,32 @@ namespace test.Sucursal
             mockDatabase.mockCommand.Setup(x => x.ExecuteScalar())
                 .Returns(Entity.Id);
 
+            var mockDataReader = new Moq.Mock<IDataReader>();
+            mockDataReader.Setup(x => x.Read()).Returns(() => false);
+            mockDatabase.mockCommand.Setup(x => x.ExecuteReader())
+                .Returns(mockDataReader.Object);
+
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
             {
                 Nombre = Entity.Nombre,
+                Codigo = Entity.Codigo,
                 Fecha = Entity.Fecha,
                 Activo = Entity.Activo,
                 IdEmpresa = Entity.IdEmpresa
             },
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
-                new Entities.Reader.Sucursal(),
+                new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object),
+            new Persistence.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
+                new Persistence.Mapper.Sucursal(),
+                mockDatabase.mockSyntaxSign.Object,
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object)));
         }
         public Persistence.Table.Sucursal Data_Table_Insert_NonDbCommand()
         {
@@ -230,11 +243,11 @@ namespace test.Sucursal
                 IdEmpresa = Entity.IdEmpresa,
             },
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
-                new Entities.Reader.Sucursal(),
+                new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Query.Sucursal Data_Query_Update()
         {
@@ -246,11 +259,11 @@ namespace test.Sucursal
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
-                new Entities.Reader.Sucursal(),
+                new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Table.Sucursal Data_Table_Update_NonDbCommand()
         {
@@ -313,11 +326,11 @@ namespace test.Sucursal
                 IdEmpresa = Entity.IdEmpresa
             },
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
-                new Entities.Reader.Sucursal(),
+                new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
-                mockDatabase.mockCreator.Object, 
                 mockDatabase.mockSyntaxSign.Object,
-                mockCommandBuilder.Object));
+                mockCommandBuilder.Object,
+                mockDatabase.mockCreator.Object));
         }
         public Persistence.Query.Sucursal Data_Query_Delete()
         {

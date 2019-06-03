@@ -1,6 +1,6 @@
-﻿using Library.Interface.Persistence.Table;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
+using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
 
 namespace Library.Interface.Presentation.Raiser
@@ -11,8 +11,6 @@ namespace Library.Interface.Presentation.Raiser
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        W CreateInstance(V domain, int maxdepth);
-
         W Clear(W model);
 
         W Raise(W model, int maxdepth = 1, int depth = 0);
