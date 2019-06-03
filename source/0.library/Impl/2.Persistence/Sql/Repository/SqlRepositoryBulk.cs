@@ -27,9 +27,18 @@ namespace Library.Impl.Persistence.Sql.Repository
         {
         }
 
+        public virtual (Result result, int rows) ExecuteNonQuery(SqlCommand sqlcommand)
+        {
+            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters);
+        }
         public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
             return ExecuteNonQuery(_creator.GetCommand(commandtext, commandtype, parameters));
+        }
+
+        public virtual (Result result, object scalar) ExecuteScalar(SqlCommand sqlcommand)
+        {
+            return ExecuteScalar(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters);
         }
         public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {

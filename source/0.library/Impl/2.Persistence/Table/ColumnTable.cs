@@ -56,7 +56,5 @@ namespace Library.Impl.Persistence.Table
             IsIdentity = isidentity;
             IsUnique = isunique;
         }
-
-
     }
 }

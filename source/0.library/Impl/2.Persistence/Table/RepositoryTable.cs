@@ -5,6 +5,7 @@ using Library.Impl.Persistence.Sql.Repository;
 using Library.Interface.Entities;
 using Library.Interface.Entities.Reader;
 using Library.Interface.Persistence.Mapper;
+using Library.Interface.Persistence.Sql;
 using Library.Interface.Persistence.Sql.Builder;
 using Library.Interface.Persistence.Sql.Database;
 using Library.Interface.Persistence.Sql.Providers;
@@ -99,11 +100,11 @@ namespace Library.Impl.Persistence.Table
 
             return Select(table, selectcommand, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Select(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
+        public virtual (Result result, U data) Select(U table, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Select(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
+            return Select(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
         public virtual (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
@@ -150,11 +151,11 @@ namespace Library.Impl.Persistence.Table
 
             return Insert(table, insertcommand, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Insert(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
+        public virtual (Result result, U data) Insert(U table, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => !c.IsIdentity).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => !c.IsIdentity).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Insert(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
+            return Insert(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
         public virtual (Result result, U data) Insert(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
@@ -193,11 +194,11 @@ namespace Library.Impl.Persistence.Table
 
             return Update(table, updatecommand, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Update(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
+        public virtual (Result result, U data) Update(U table, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Update(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
+            return Update(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
         public virtual (Result result, U data) Update(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
@@ -233,11 +234,11 @@ namespace Library.Impl.Persistence.Table
 
             return Delete(table, deletecommand, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Delete(U table, (string commandtext, CommandType commandtype, IList<SqlParameter> parameters) dbcommand)
+        public virtual (Result result, U data) Delete(U table, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Delete(table, dbcommand.commandtext, dbcommand.commandtype, dbcommand.parameters);
+            return Delete(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
         public virtual (Result result, U data) Delete(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {

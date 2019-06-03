@@ -115,7 +115,7 @@ namespace test.Sucursal
         {
             var dataselect = Data_Table_Select();
 
-            dataselect.SelectDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            dataselect.SelectDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return dataselect;
         }
@@ -192,7 +192,7 @@ namespace test.Sucursal
         {
             var datainsert = Data_Table_Insert();
 
-            datainsert.InsertDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            datainsert.InsertDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return datainsert;
         }
@@ -275,7 +275,7 @@ namespace test.Sucursal
         {
             var dataupdate = Data_Table_Update();
 
-            dataupdate.UpdateDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            dataupdate.UpdateDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return dataupdate;
         }
@@ -353,7 +353,7 @@ namespace test.Sucursal
         {
             var datadelete = Data_Table_Delete();
 
-            datadelete.DeleteDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            datadelete.DeleteDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return datadelete;
         }
