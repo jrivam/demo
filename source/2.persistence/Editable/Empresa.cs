@@ -12,12 +12,12 @@ namespace Persistence.Table
         {
         }
 
-        public override void Init()
+        public override void InitX()
         {
-            SelectDbCommand = (false, ("gsp_empresa_select", CommandType.StoredProcedure, new List<SqlParameter>()));
-            InsertDbCommand = (false, ("gsp_empresa_insert", CommandType.StoredProcedure, new List<SqlParameter>()));
-            UpdateDbCommand = (false, ("gsp_empresa_update", CommandType.StoredProcedure, new List<SqlParameter>()));
-            DeleteDbCommand = (false, ("gsp_empresa_delete", CommandType.StoredProcedure, new List<SqlParameter>()));
+            SelectDbCommand = (false, new SqlCommand() { Text = "gsp_empresa_select", Type = CommandType.StoredProcedure });
+            InsertDbCommand = (false, new SqlCommand() { Text = "gsp_empresa_insert", Type = CommandType.StoredProcedure });
+            UpdateDbCommand = (false, new SqlCommand() { Text = "gsp_empresa_update", Type = CommandType.StoredProcedure });
+            DeleteDbCommand = (false, new SqlCommand() { Text = "gsp_empresa_delete", Type = CommandType.StoredProcedure });
         }
 
         public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal querysucursal = null)

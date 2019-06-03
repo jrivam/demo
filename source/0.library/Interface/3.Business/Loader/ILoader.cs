@@ -9,8 +9,6 @@ namespace Library.Interface.Business.Loader
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        V CreateInstance(U data);
-
         V Clear(V domain);
 
         V Load(V domain, int maxdepth = 1, int depth = 0);

@@ -1,4 +1,4 @@
-﻿using library.Impl.Presentation;
+﻿using Library.Impl.Presentation;
 using Library.Impl.Domain;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
@@ -37,7 +37,7 @@ namespace Library.Impl.Presentation.Query
 
             if (retrieve.result.Success && retrieve.domain != null)
             {
-                var instance = _raiser.CreateInstance(retrieve.domain, maxdepth);
+                var instance = Presentation.HelperInteractive<T, U, V, W>.CreateInstance(retrieve.domain, maxdepth);
 
                 Raise(instance, maxdepth);
 

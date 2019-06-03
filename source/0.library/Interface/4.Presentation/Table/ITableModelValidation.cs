@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace library.Interface.Presentation.Table
+namespace Library.Interface.Presentation.Table
 {
     public interface ITableModelValidation
     {

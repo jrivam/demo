@@ -63,7 +63,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBox x:Name="txtCodigo" Text="{Binding Codigo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtCodigo" Text="{Binding CodigoX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -122,6 +122,27 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="btnEditSucursal" Content="Editar" Command="{Binding EditCommand}" CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTemplateColumn Header="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblStatus" Content="{Binding Status}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Validation">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Label x:Name="lblValidation" Content="{Binding Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateCodigo, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Foreground="Red"/>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

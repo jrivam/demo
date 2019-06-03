@@ -1,9 +1,9 @@
 ﻿using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Sql;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Library.Impl.Persistence.Table
@@ -12,7 +12,23 @@ namespace Library.Impl.Persistence.Table
         where T : IEntity, new()
         where U : class, ITableData<T, U>
     {
-        public virtual T Entity { get; set; }
+        protected T _entity;
+        public virtual T Entity
+        {
+            get
+            {
+                return _entity;
+            }
+            set
+            {
+                _entity = value;
+
+                foreach (var column in Persistence.HelperRepository<T, U>.GetPropertiesValue(this as U))
+                {
+                    Columns[column.name].Value = column.value;
+                }
+            }
+        }
 
         public virtual Description Description { get; protected set; }
 
@@ -26,12 +42,15 @@ namespace Library.Impl.Persistence.Table
         public virtual ListColumns<IColumnTable> Columns { get; set; } = new ListColumns<IColumnTable>();
 
         public virtual bool UseDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? SelectDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? InsertDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? SelectDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? InsertDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? UpdateDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? DeleteDbCommand { get; set; }
 
         public virtual void Init()
+        {
+        }
+        public virtual void InitX()
         {
         }
 
@@ -39,18 +58,19 @@ namespace Library.Impl.Persistence.Table
         protected readonly IRepositoryTable<T, U> _repository;
 
         public AbstractTableData(T entity,
-            IQueryData<T, U> query,
             IRepositoryTable<T, U> repository,
+            IQueryData<T, U> query,
             string name, string reference)
         {
             Description = new Description(name, reference);
 
-            Entity = entity;
-
-            _query = query;
             _repository = repository;
+            _query = query;
 
             Init();
+            InitX();
+
+            Entity = entity;
         }
 
         public virtual (Result result, U data, bool isunique) CheckIsUnique()
@@ -89,7 +109,7 @@ namespace Library.Impl.Persistence.Table
                         return (selectsingle.result, selectsingle.data, true);
                     }
 
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } }, default(U), false);
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Table.Description.Reference}.{primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } }, default(U), false);
                 }
 
                 return (selectsingle.result, default(U), false);
@@ -137,11 +157,6 @@ namespace Library.Impl.Persistence.Table
             var delete = _repository.Delete(this as U, usedbcommand);
 
             return delete;
-        }
-
-        public U SetProperties(T entity, bool nulls = false)
-        {
-            return Entities.Helper.SetProperties<T, U>(entity, this as U, nulls);
         }
     }
 }

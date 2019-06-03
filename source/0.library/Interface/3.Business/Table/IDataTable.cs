@@ -7,6 +7,8 @@ namespace Library.Interface.Business.Table
         where T: IEntity
         where U : ITableData<T, U>
     {
+        T Entity { get; set; }
+
         U Data { get; set; }
     }
 }

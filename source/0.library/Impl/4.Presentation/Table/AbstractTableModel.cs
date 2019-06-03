@@ -14,6 +14,33 @@ namespace Library.Impl.Presentation.Table
         where V : ITableDomain<T, U, V>, new()
         where W : class, ITableModel<T, U, V, W>
     {
+        public virtual T Entity
+        {
+            get
+            {
+                return Domain.Entity;
+            }
+            set
+            {
+                Domain.Entity = value;
+
+                OnPropertyChanged("Entity");
+            }
+        }
+
+        protected V _domain;
+        public virtual V Domain
+        {
+            get
+            {
+                return _domain;
+            }
+            set
+            {
+                _domain = value;
+            }
+        }
+
         public virtual void OnStatusChange(string status)
         {
             _status = status;
@@ -65,8 +92,6 @@ namespace Library.Impl.Presentation.Table
             return false;
         }
 
-        public virtual V Domain { get; set; }
-
         public virtual IColumnTable this[string reference]
         {
             get
@@ -88,11 +113,8 @@ namespace Library.Impl.Presentation.Table
         public AbstractTableModel(V domain, IInteractiveTable<T, U, V, W> interactive,
             int maxdepth = 1)
         {
-            Domain = domain;
-
-            _maxdepth = maxdepth;
-
             _interactive = interactive;
+            _maxdepth = maxdepth;
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
@@ -111,6 +133,8 @@ namespace Library.Impl.Presentation.Table
             {
                 Messenger.Default.Send<W>(this as W, $"{Domain.Data.Description.Reference}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
+
+            Domain = domain;
         }
 
 
@@ -138,11 +162,6 @@ namespace Library.Impl.Presentation.Table
             var erase = _interactive.Erase(this as W, usedbcommand);
 
             return erase;
-        }
-
-        public W SetProperties(T entity, bool nulls = false)
-        {
-            return Entities.Helper.SetProperties<T, W>(entity, this as W, nulls);
         }
     }
 }

@@ -34,6 +34,20 @@ namespace Business.Table
         {
         }
 
+        public override Persistence.Table.Sucursal Data
+        {
+            get
+            {
+                return base.Data;
+            }
+            set
+            {
+                base.Data = value;
+
+                _empresa = null;
+            }
+        }
+
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Codigo { get { return Data?.Codigo; } set { if (Data?.Codigo != value) { Data.Codigo = value; Changed = true; } } }
         public virtual string Nombre { get { return Data?.Nombre; } set { if (Data?.Nombre != value) { Data.Nombre = value; Changed = true; } } }
@@ -129,8 +143,9 @@ namespace Business.Table
             : base(datas)
         {
         }
+
         public Sucursales()
-            : base()
+            : this(new Persistence.Table.Sucursales())
         {
         }
     }
@@ -213,14 +228,6 @@ namespace Business.Mapper
 {
     public partial class Sucursal : BaseLoader<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public override Business.Table.Sucursal Clear(Business.Table.Sucursal domain)
-        {
-            domain = base.Clear(domain);
-
-            domain.Empresa = null;
-
-            return domain;
-        }
         public override Business.Table.Sucursal Load(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
             domain = base.Load(domain, maxdepth, depth);

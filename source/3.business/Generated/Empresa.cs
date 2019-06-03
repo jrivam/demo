@@ -33,6 +33,20 @@ namespace Business.Table
         {
         }
 
+        public override Persistence.Table.Empresa Data
+        {
+            get
+            {
+                return base.Data;
+            }
+            set
+            {
+                 base.Data = value;
+
+                 _sucursales = null;
+            }
+        }
+
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Ruc { get { return Data?.Ruc; } set { if (Data?.Ruc != value) { Data.Ruc = value; Changed = true; } } }
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
@@ -93,14 +107,11 @@ namespace Business.Table
         {
             var erasechildren = base.EraseChildren();
 
-            if (this.Id != null)
+            if (erasechildren.Success)
             {
-                if (erasechildren.Success)
-                {
-                    var eraseall = Sucursales?.EraseAll();
+                var eraseall = Sucursales?.EraseAll();
 
-                    erasechildren.Append(eraseall);
-                }
+                erasechildren.Append(eraseall);
             }
 
             return erasechildren;
@@ -113,8 +124,9 @@ namespace Business.Table
             : base(datas)
         {
         }
+
         public Empresas()
-            : base()
+            : this(new Persistence.Table.Empresas())
         {
         }
     }
@@ -183,14 +195,6 @@ namespace Business.Mapper
 {
     public partial class Empresa : BaseLoader<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public override Business.Table.Empresa Clear(Business.Table.Empresa domain)
-        {
-            domain = base.Clear(domain);
-
-            domain.Sucursales = null;
-
-            return domain;
-        }
         public override Business.Table.Empresa Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
         {
             domain = base.Load(domain, maxdepth, depth);

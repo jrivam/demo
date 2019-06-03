@@ -15,11 +15,14 @@ namespace Entities.Table
     public partial class Sucursal : IEntity
     {        
         [Column("id")]
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int? Id { get; set; }
         [Column("codigo")]
+        [StringLength(10)]
+        //[Index(IsUnique = true)]
         public virtual string Codigo { get; set; }
         [Column("nombre")]
+        [StringLength(100)]
         public virtual string Nombre { get; set; }
         [Column("fecha")]
         public virtual DateTime? Fecha { get; set; }
@@ -34,12 +37,13 @@ namespace Entities.Table
 
     public partial class Sucursales : ListEntity<Entities.Table.Sucursal>
     {
-        public Sucursales()
-            : base()
-        {
-        }
         public Sucursales(List<Entities.Table.Sucursal> entities)
             : base(entities)
+        {
+        }
+
+        public Sucursales()
+            : this(new List<Entities.Table.Sucursal>())
         {
         }
     }
@@ -52,13 +56,6 @@ namespace Entities.Reader
         public Sucursal(ISqlSyntaxSign sqlsyntaxsign)
             : base(sqlsyntaxsign)
         {
-        }
-
-        public override Entities.Table.Sucursal Clear(Entities.Table.Sucursal entity)
-        {
-            entity = base.Clear(entity);
-
-            return entity;
         }
 
         public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)

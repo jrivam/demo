@@ -4,11 +4,8 @@ using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence;
 using Library.Interface.Persistence.Table;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace Library.Impl.Domain
 {
@@ -25,13 +22,7 @@ namespace Library.Impl.Domain
             }
             set
             {
-                value?.ToList().ForEach(x => this?.Add((V)Activator.CreateInstance(typeof(V),
-                           BindingFlags.CreateInstance |
-                           BindingFlags.Public |
-                           BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding,
-                           null, new object[] { x },
-                           CultureInfo.CurrentCulture)));
+                value?.ToList().ForEach(x => this?.Add(Business.HelperLogic<T, U, V>.CreateInstance(x)));
             }
         }
 

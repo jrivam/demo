@@ -4,9 +4,9 @@ namespace Library.Impl.Entities
 {
     public class Helper
     {
-        public static U SetProperties<T, U>(T from, U to, bool nulls = false)
+        public static B SetProperties<A, B>(A from, B to, bool nulls = false)
         {
-            var propsfrom = from?.GetType().GetProperties();
+            var propsfrom = from?.GetType().GetProperties().Where(x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || (x.PropertyType == typeof(string)));
             var propsto = to?.GetType().GetProperties();
 
             foreach (var propfrom in propsfrom)

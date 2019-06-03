@@ -8,5 +8,7 @@ namespace Library.Interface.Persistence.Query
         where U : ITableData<T, U>
     {
         void Clear();
+
+        void Init();
     }
 }

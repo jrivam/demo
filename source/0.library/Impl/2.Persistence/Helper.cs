@@ -7,7 +7,7 @@ using System.Data;
 namespace Library.Impl.Persistence
 {
     public class Helper
-    {
+    {    
         public static IDictionary<Type, DbType> TypeToDbType
         {
             get
