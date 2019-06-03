@@ -1,6 +1,5 @@
 ﻿using Library.Interface.Entities.Reader;
 using Library.Interface.Persistence.Database;
-using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,7 +30,7 @@ namespace Library.Impl.Persistence.Database
                 {
                     while (reader.Read())
                     {
-                        var entity = iterator.MoveNext() ? iterator.Current : _reader.CreateInstance();
+                        var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateInstance();
 
                         _reader.Read(entity, reader, new List<string>(), maxdepth, 0);
 

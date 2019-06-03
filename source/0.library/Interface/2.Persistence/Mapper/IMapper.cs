@@ -7,8 +7,6 @@ namespace Library.Interface.Persistence.Mapper
         where T : IEntity
         where U : ITableData<T, U>
     {
-        U CreateInstance(T entity);
-
         U Clear(U data);
 
         U Map(U data, int maxdepth = 1, int depth = 0);

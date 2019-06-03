@@ -2,9 +2,6 @@
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
-using System;
-using System.Globalization;
-using System.Reflection;
 
 namespace Library.Impl.Domain.Loader
 {
@@ -17,16 +14,6 @@ namespace Library.Impl.Domain.Loader
         {
         }
 
-        public V CreateInstance(U data)
-        {
-            return (V)Activator.CreateInstance(typeof(V),
-                                BindingFlags.CreateInstance |
-                                BindingFlags.Public |
-                                BindingFlags.Instance |
-                                BindingFlags.OptionalParamBinding,
-                                null, new object[] { data },
-                                CultureInfo.CurrentCulture);
-        }
         public virtual V Clear(V domain)
         {
             return domain;

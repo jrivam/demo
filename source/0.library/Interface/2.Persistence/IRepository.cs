@@ -4,7 +4,7 @@ using Library.Interface.Entities;
 using System.Collections.Generic;
 using System.Data;
 
-namespace library.Interface.Persistence
+namespace Library.Interface.Persistence
 {
     public interface IRepository<T>
         where T : IEntity

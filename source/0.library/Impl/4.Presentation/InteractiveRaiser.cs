@@ -1,12 +1,11 @@
-﻿using Library.Impl.Presentation;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 
-namespace library.Impl.Presentation
+namespace Library.Impl.Presentation
 {
     public class InteractiveRaiser<T, U, V, W> : Interactive<T, U, V, W>
         where T : IEntity
@@ -34,7 +33,7 @@ namespace library.Impl.Presentation
         {
             foreach (var domain in domains)
             {
-                var presentation = _raiser.CreateInstance(domain, maxdepth);
+                var presentation = Presentation.HelperInteractive<T, U, V, W>.CreateInstance(domain, maxdepth);
 
                 Raise(presentation, maxdepth);
 

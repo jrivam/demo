@@ -14,11 +14,14 @@ namespace Entities.Table
     public partial class Empresa : IEntity
     {
         [Column("id")]
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int? Id { get; set; }
         [Column("ruc")]
+        [StringLength(20)]
+        //[Index(IsUnique = true)]
         public virtual string Ruc { get; set; }
         [Column("razon_social")]
+        [StringLength(100)]
         public virtual string RazonSocial { get; set; }
         [Column("activo")]
         public virtual bool? Activo { get; set; }
@@ -28,12 +31,13 @@ namespace Entities.Table
 
     public partial class Empresas : ListEntity<Entities.Table.Empresa>
     {
-        public Empresas()
-            : base()
-        {
-        }
         public Empresas(List<Entities.Table.Empresa> entities)
             : base(entities)
+        {
+        }
+
+        public Empresas()
+            : this(new List<Entities.Table.Empresa>())
         {
         }
     }
@@ -46,13 +50,6 @@ namespace Entities.Reader
         public Empresa(ISqlSyntaxSign sqlsyntaxsign)
             : base(sqlsyntaxsign)
         {
-        }
-
-        public override Entities.Table.Empresa Clear(Entities.Table.Empresa entity)
-        {
-            entity = base.Clear(entity);
-
-            return entity;
         }
 
         public override Entities.Table.Empresa Read(Entities.Table.Empresa entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)

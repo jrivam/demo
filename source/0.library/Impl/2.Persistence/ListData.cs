@@ -2,11 +2,8 @@
 using Library.Interface.Entities;
 using Library.Interface.Persistence;
 using Library.Interface.Persistence.Table;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace Library.Impl.Persistence
 {
@@ -22,13 +19,7 @@ namespace Library.Impl.Persistence
             }
             set
             {
-                value?.ToList().ForEach(x => this?.Add((U)Activator.CreateInstance(typeof(U),
-                           BindingFlags.CreateInstance |
-                           BindingFlags.Public |
-                           BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding,
-                           null, new object[] { x },
-                           CultureInfo.CurrentCulture)));
+                value?.ToList().ForEach(x => this?.Add(Persistence.HelperRepository<T, U>.CreateInstance(x)));
             }
         }
 

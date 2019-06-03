@@ -46,6 +46,20 @@ namespace Presentation.Table
         {
         }
 
+        public override Business.Table.Empresa Domain
+        {
+            get
+            {
+                return base.Domain;
+            }
+            set
+            {
+                base.Domain = value;
+
+                _sucursales = null;
+            }
+        }
+
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string Ruc { get { return Domain?.Ruc; } set { if (Domain?.Ruc != value) { Domain.Ruc = value; OnPropertyChanged("Ruc"); } } }
         public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; OnPropertyChanged("RazonSocial"); } } }
@@ -98,8 +112,9 @@ namespace Presentation.Table
             : base(domains, "Empresas")
         {
         }
+
         public Empresas()
-            : base("Empresas")
+            : this(new Business.Table.Empresas())
         {
         }
     }
@@ -112,12 +127,12 @@ namespace Presentation.Table
                   query, maxdepth, top)
         {
         }
+
         public EmpresasQuery(Presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
-            : base("Empresas",
+            : this(new Business.Table.Empresas(),
                   query, maxdepth, top)
         {
         }
-
         public EmpresasQuery(Business.Table.Empresas domains, int maxdepth = 1, int top = 0)
             : this(domains, 
                   new Presentation.Query.Empresa(), maxdepth, top)
@@ -193,17 +208,11 @@ namespace Presentation.Raiser
 {
     public partial class Empresa : BaseRaiser<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public override Presentation.Table.Empresa Clear(Presentation.Table.Empresa model)
-        {
-            model = base.Clear(model);
-
-            model.Sucursales = null;
-
-            return model;
-        }
         public override Presentation.Table.Empresa Raise(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
             model = base.Raise(model, maxdepth, depth);
+
+            model.OnPropertyChanged("Sucursales");
 
             return model;
         }

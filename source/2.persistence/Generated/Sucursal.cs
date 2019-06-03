@@ -16,13 +16,7 @@ namespace Persistence.Table
 {
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursal(Entities.Table.Sucursal entity,
-            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query,
-            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
-            : base(entity, 
-                  query,
-                  repository, 
-                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+        public override void Init()
         {
             Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
             Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo", isunique: true));
@@ -34,9 +28,25 @@ namespace Persistence.Table
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
+            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
+            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query)
+            : base(entity, 
+                  repository,
+                  query,
+                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+        {
+        }
+
+        public Sucursal(Entities.Table.Sucursal entity,
+            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
+            : this(entity,
+                    repository,
+                    new Persistence.Query.Sucursal())
+        {
+        }
+        public Sucursal(Entities.Table.Sucursal entity,
             ConnectionStringSettings connectionstringsettings)
             : this(entity,
-                  new Persistence.Query.Sucursal(),
                   new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
         {
         }
@@ -50,6 +60,20 @@ namespace Persistence.Table
         public Sucursal()
             : this(new Entities.Table.Sucursal())
         {
+        }
+
+        public override Entities.Table.Sucursal Entity
+        {
+            get
+            {
+                return base.Entity;
+            }
+            set
+            {
+                base.Entity = value;
+
+                _empresa = null;
+            }
         }
 
         public virtual int? Id
@@ -141,8 +165,9 @@ namespace Persistence.Table
             : base(entities)
         {
         }
+
         public Sucursales()
-           : base()
+           : this(new Entities.Table.Sucursales())
         {
         }
     }
@@ -243,17 +268,6 @@ namespace Persistence.Mapper
 {
     public partial class Sucursal : BaseMapper<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursal()
-            : base()
-        {
-        }
-
-        public override Persistence.Table.Sucursal Clear(Persistence.Table.Sucursal data)
-        {
-            data = base.Clear(data);
-
-            return data;
-        }
         public override Persistence.Table.Sucursal Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
             data = base.Map(data, maxdepth, depth);

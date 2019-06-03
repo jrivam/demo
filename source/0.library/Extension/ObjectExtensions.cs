@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.Impl.Entities;
+using System;
 using System.Linq;
 
 namespace Library.Extension
@@ -8,7 +9,7 @@ namespace Library.Extension
         public static T ForceType<T>(this object o)
         {
             T res;
-            res = Activator.CreateInstance<T>();
+            res = HelperEntities<T>.CreateInstance();
 
             Type x = o.GetType();
             Type y = res.GetType();

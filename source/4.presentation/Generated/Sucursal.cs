@@ -47,6 +47,20 @@ namespace Presentation.Table
         {
         }
 
+        public override Business.Table.Sucursal Domain
+        {
+            get
+            {
+                return base.Domain;
+            }
+            set
+            {
+                base.Domain = value;
+
+                _empresa = null;
+            }
+        }
+
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
         public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged("Codigo"); } } }
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
@@ -146,8 +160,9 @@ namespace Presentation.Table
             : base(domains, "Sucursales")
         {
         }
+
         public Sucursales()
-            : base("Sucursales")
+            : this(new Business.Table.Sucursales())
         {
         }
     }
@@ -160,12 +175,12 @@ namespace Presentation.Table
                 query, maxdepth, top)
         {
         }
+
         public SucursalesQuery(Presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-            : base("Sucursales",
+            : this(new Business.Table.Sucursales(),
                 query, maxdepth, top)
         {
         }
-
         public SucursalesQuery(Business.Table.Sucursales domains, int maxdepth = 1, int top = 0)
             : this(domains,
                 new Presentation.Query.Sucursal(), maxdepth, top)
@@ -255,14 +270,6 @@ namespace Presentation.Raiser
 {
     public partial class Sucursal : BaseRaiser<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public override Presentation.Table.Sucursal Clear(Presentation.Table.Sucursal model)
-        {
-            model = base.Clear(model);
-
-            model.Empresa = null;
-
-            return model;
-        }
         public override Presentation.Table.Sucursal Raise(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
         {
             model = base.Raise(model);
