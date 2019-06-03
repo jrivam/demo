@@ -1,9 +1,9 @@
 ﻿using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Query;
+using Library.Interface.Persistence.Sql;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Library.Impl.Persistence.Table
@@ -42,10 +42,10 @@ namespace Library.Impl.Persistence.Table
         public virtual ListColumns<IColumnTable> Columns { get; set; } = new ListColumns<IColumnTable>();
 
         public virtual bool UseDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? SelectDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? InsertDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? UpdateDbCommand { get; set; }
-        public virtual (bool usedbcommand, (string text, CommandType type, IList<SqlParameter> parameters) dbcommand)? DeleteDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? SelectDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? InsertDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? UpdateDbCommand { get; set; }
+        public virtual (bool usedbcommand, ISqlCommand dbcommand)? DeleteDbCommand { get; set; }
 
         public virtual void Init()
         {

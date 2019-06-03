@@ -150,7 +150,7 @@ namespace test.Empresa
         {
             var data = Data_Table_Select();
 
-            data.SelectDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.SelectDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return data;
         }
@@ -217,7 +217,7 @@ namespace test.Empresa
         {
             var data = Data_Table_Insert();
 
-            data.InsertDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.InsertDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return data;
         }
@@ -275,7 +275,7 @@ namespace test.Empresa
         {
             var data = Data_Table_Update();
 
-            data.UpdateDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.UpdateDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return data;
         }
@@ -333,7 +333,7 @@ namespace test.Empresa
         {
             var data = Data_Table_Delete();
 
-            data.DeleteDbCommand = (true, ("", CommandType.StoredProcedure, new List<SqlParameter>()));
+            data.DeleteDbCommand = (true, new SqlCommand() { Type = CommandType.StoredProcedure });
 
             return data;
         }
