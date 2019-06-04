@@ -66,14 +66,6 @@ namespace Presentation.Table
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
 
         protected Presentation.Table.SucursalesQuery _sucursales;
-        public virtual (Result result, Presentation.Table.SucursalesQuery models) Sucursales_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Sucursal query = null)
-        {
-            var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
-
-            Sucursales = new Presentation.Table.SucursalesQuery(refresh.domains);
-
-            return (refresh.result, _sucursales);
-        }
         public virtual Presentation.Table.SucursalesQuery Sucursales
         {
             get
@@ -103,6 +95,14 @@ namespace Presentation.Table
                     OnPropertyChanged("Sucursales");
                 }
             }
+        }
+        public virtual (Result result, Presentation.Table.SucursalesQuery models) Sucursales_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Sucursal query = null)
+        {
+            var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
+
+            Sucursales = new Presentation.Table.SucursalesQuery(refresh.domains);
+
+            return (refresh.result, _sucursales);
         }
     }
 

@@ -27,20 +27,26 @@
     <Grid DataContext="{StaticResource ViewModel}">
         <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocial, UpdateSourceTrigger=PropertyChanged, Source={StaticResource ViewModel}}" HorizontalAlignment="Left" Height="22" Margin="92,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190"/>-->
 
-        <Label x:Name="lblId" Content="Id" HorizontalAlignment="Left" Margin="67,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.688,0.587" Height="26" Width="20"/>
-        <Label x:Name="txtId" Content="{Binding Id, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" />
-        <Label x:Name="lblRuc" Content="Ruc" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
-        <TextBox x:Name="txtRuc" Text="{Binding RucX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Height="22" Margin="92,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
-        <Label x:Name="lblValidateRuc" Content="{Binding Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateRuc, UpdateSourceTrigger=PropertyChanged}" Margin="217,76,10,0" VerticalAlignment="Top" Height="26" FontWeight="Bold" Foreground="Red"/>
-        <Label x:Name="lblRazonSocial" Content="Razon Social" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
-        <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocial, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,109,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,144,0,0" VerticalAlignment="Top" Height="15" Width="53"/>
-
-        <Button x:Name="btnCargar" Content="Cargar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding LoadCommand}" Height="20" RenderTransformOrigin="-0.271,0.75"/>
-        <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding SaveCommand}" Height="20"/>
+        <Button x:Name="btnCargar" Content="Cargar" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding Empresa.LoadCommand}" Height="20" RenderTransformOrigin="-0.271,0.75"/>
+        <Button x:Name="btnGrabar" Content="Grabar" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Width="59" Command="{Binding Empresa.SaveCommand}" Height="20"/>
         <Button x:Name="btnBorrar" Content="Borrar" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="59" RenderTransformOrigin="0.717,-0.648"  Command="{Binding EraseCommand}" Height="20"/>
 
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Sucursales}" Margin="0,199,0,60">
+        <Label x:Name="lblId" Content="Id" HorizontalAlignment="Left" Margin="67,45,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.688,0.587" Height="26" Width="20"/>
+        <Label x:Name="txtId" Content="{Binding Empresa.Id, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" />
+        
+        <Label x:Name="lblRuc" Content="Ruc" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
+        <TextBox x:Name="txtRuc" Text="{Binding Empresa.RucX, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Height="22" Margin="92,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+        <Label x:Name="lblValidateRuc" Content="{Binding Empresa.Validations, Converter={StaticResource converterhelper}, ConverterParameter=ValidateRuc, UpdateSourceTrigger=PropertyChanged}" Margin="217,76,10,0" VerticalAlignment="Top" Height="26" FontWeight="Bold" Foreground="Red"/>
+
+        <Label x:Name="lblRazonSocial" Content="Razon Social" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
+        <TextBox x:Name="txtRazonSocial" Text="{Binding Empresa.RazonSocial, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,109,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        
+        <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Empresa.Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,144,0,0" VerticalAlignment="Top" Height="15" Width="53"/>
+
+        <Button  x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding Empresa.Sucursales.AddCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
+        <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding Empresa.Sucursales.RefreshCommand}" CommandParameter="{Binding}" Margin="0,172,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="129"/>
+
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Empresa.Sucursales}" Margin="0,199,0,60">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -149,16 +155,15 @@
 
             </DataGrid.Columns>
         </DataGrid>
-        <Button  x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding Sucursales.AddCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
+        
         <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" >
             <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblTotal" Text="{Binding Sucursales.Total}"/>
+                <TextBlock x:Name="lblTotal" Text="{Binding Empresa.Sucursales.Total}"/>
             </StatusBarItem>
         </StatusBar>
-        <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding Sucursales.RefreshCommand}" CommandParameter="{Binding}" Margin="0,172,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="129"/>
         <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
             <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
+                <TextBlock x:Name="lblStatus" Text="{Binding Empresa.Status}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

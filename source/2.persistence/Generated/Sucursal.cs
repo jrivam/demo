@@ -1,4 +1,5 @@
 ﻿using Library.Extension;
+using Library.Impl;
 using Library.Impl.Persistence;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
@@ -141,21 +142,22 @@ namespace Persistence.Table
                 }
             }
         }
-
-        protected Persistence.Table.Empresas _empresas;
-        public virtual Persistence.Table.Empresas Empresas
+        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Empresa queryempresa = null)
         {
-            get
+            if (this.IdEmpresa != null)
             {
-                return _empresas ?? Empresas_Refresh().datas;
+                var query = queryempresa ?? new Persistence.Query.Empresa();
+
+                query.Id = (this.IdEmpresa, WhereOperator.Equals);
+
+                var selectsingle = query?.SelectSingle(maxdepth);
+
+                Empresa = selectsingle?.data;
+
+                return (selectsingle?.result, _empresa);
             }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-                }
-            }
+
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
     }
 

@@ -73,14 +73,6 @@ namespace Business.Table
         }
 
         protected Business.Table.Empresa _empresa;
-        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Empresa queryempresa = null)
-        {
-            var refresh = Data.Empresa_Refresh(maxdepth, queryempresa?.Data);
-
-            Empresa = new Business.Table.Empresa(refresh.data);
-
-            return (refresh.result, _empresa);
-        }
         public virtual Business.Table.Empresa Empresa
         {
             get
@@ -109,31 +101,13 @@ namespace Business.Table
                 }
             }
         }
-
-        protected Business.Table.Empresas _empresas;
-        public virtual (Result result, Business.Table.Empresas domains) Empresas_Refresh(int maxdepth = 1, int top = 0, Business.Query.Empresa queryempresa = null)
+        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Empresa queryempresa = null)
         {
-            var refresh = Data.Empresas_Refresh(maxdepth, top, queryempresa?.Data);
+            var refresh = Data.Empresa_Refresh(maxdepth, queryempresa?.Data);
 
-            Empresas = new Business.Table.Empresas(refresh.datas);
+            Empresa = new Business.Table.Empresa(refresh.data);
 
-            return (refresh.result, _empresas);
-        }
-        public virtual Business.Table.Empresas Empresas
-        {
-            get
-            {
-                return _empresas ?? Empresas_Refresh().domains;
-            }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-
-                    Data.Empresas = (Persistence.Table.Empresas)new Persistence.Table.Empresas().Load(_empresas?.Datas);
-                }
-            }
+            return (refresh.result, _empresa);
         }
     }
 
