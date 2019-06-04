@@ -1,16 +1,17 @@
 ﻿using Library.Impl;
 using Library.Impl.Presentation;
 using System.Windows;
+using WpfApp.ViewModels;
 
 namespace WpfApp.Views
 {
     public partial class Sucursal : Window
     {
-        public Presentation.Table.Sucursal ViewModel
+        public SucursalViewModel ViewModel
         {
             get
             {
-                return (Presentation.Table.Sucursal)DataContext;
+                return (SucursalViewModel)DataContext;
             }
             set
             {
@@ -26,7 +27,6 @@ namespace WpfApp.Views
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
-
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {

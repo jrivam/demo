@@ -17,13 +17,10 @@
     </Window.Resources>
 
     <Grid>
-        <Button x:Name="btnAddEmpresa" Content="Adicionar Empresa" Command="{Binding AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
-        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" >
-            <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblTotal" Text="{Binding Total}"/>
-            </StatusBarItem>
-        </StatusBar>
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding}" Margin="0,37,0,60">
+        <Button x:Name="btnAddEmpresa" Content="Adicionar Empresa" Command="{Binding EmpresasQuery.AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
+        <Button x:Name="btnRefreshEmpresas" Content="Refrescar" Command="{Binding EmpresasQuery.RefreshCommand}" CommandParameter="{Binding}" Margin="0,10,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="163"/>
+
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding EmpresasQuery}" Margin="0,37,0,60">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -119,10 +116,15 @@
                 
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="btnRefreshEmpresas" Content="Refrescar" Command="{Binding RefreshCommand}" CommandParameter="{Binding}" Margin="0,10,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="163"/>
+
+        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" >
+            <StatusBarItem HorizontalAlignment="Left">
+                <TextBlock x:Name="lblTotal" Text="{Binding EmpresasQuery.Total}"/>
+            </StatusBarItem>
+        </StatusBar>
         <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
             <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblStatus" Text="{Binding Status}"/>
+                <TextBlock x:Name="lblStatus" Text="{Binding EmpresasQuery.Status}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

@@ -86,14 +86,6 @@ namespace Presentation.Table
         }
 
         protected Presentation.Table.Empresa _empresa;
-        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Empresa queryempresa = null)
-        {
-            var refresh = Domain.Empresa_Refresh(maxdepth, queryempresa?.Domain);
-
-            Empresa = new Presentation.Table.Empresa(refresh.domain);
-
-            return (refresh.result, _empresa);
-        }
         public virtual Presentation.Table.Empresa Empresa
         {
             get
@@ -124,33 +116,13 @@ namespace Presentation.Table
                 }
             }
         }
-
-        protected Presentation.Table.Empresas _empresas;
-        public virtual (Result result, Presentation.Table.Empresas model) Empresas_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Empresa queryempresa = null)
+        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Empresa queryempresa = null)
         {
-            var refresh = Domain.Empresas_Refresh(maxdepth, top, queryempresa?.Domain);
+            var refresh = Domain.Empresa_Refresh(maxdepth, queryempresa?.Domain);
 
-            Empresas = new Presentation.Table.Empresas(refresh.domains);
+            Empresa = new Presentation.Table.Empresa(refresh.domain);
 
-            return (refresh.result, _empresas);
-        }
-        public virtual Presentation.Table.Empresas Empresas
-        {
-            get
-            {
-                return _empresas ?? Empresas_Refresh().model;
-            }
-            set
-            {
-                if (_empresas != value)
-                {
-                    _empresas = value;
-
-                    Domain.Empresas = (Business.Table.Empresas)new Business.Table.Empresas().Load(_empresas?.Domains);
-
-                    OnPropertyChanged("Empresas");
-                }
-            }
+            return (refresh.result, _empresa);
         }
     }
 
