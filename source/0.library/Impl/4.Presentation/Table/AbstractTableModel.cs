@@ -1,14 +1,14 @@
-﻿using Library.Interface.Business.Table;
+﻿using library.Impl.Presentation;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace Library.Impl.Presentation.Table
 {
-    public abstract class AbstractTableModel<T, U, V, W> : ITableModel<T, U, V, W>, INotifyPropertyChanged
+    public abstract class AbstractTableModel<T, U, V, W> : NotifyPropertyChanged, ITableModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>, new()
@@ -41,21 +41,22 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
-        public virtual void OnStatusChange(string status)
+        public override void OnPropertyChanged(string propertyName)
         {
-            _status = status;
-            PropertyChanged(this, new PropertyChangedEventArgs("Status"));
-        }
-
-        public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            base.OnPropertyChanged(propertyName);
 
             if (Domain.Changed)
             {
                 OnStatusChange("Editing");
+            }
+        }
+
+        public virtual void OnStatusChange(string status)
+        {
+            if (_status != status)
+            {
+                _status = status;
+                base.OnPropertyChanged("Status");
             }
         }
 

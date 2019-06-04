@@ -91,6 +91,7 @@
     <Compile Include="Impl\4.Presentation\HelperInteractive.cs" />
     <Compile Include="Impl\4.Presentation\InteractiveRaiser.cs" />
     <Compile Include="Impl\4.Presentation\ListModelQuery.cs" />
+    <Compile Include="Impl\4.Presentation\NotifyPropertyChanged.cs" />
     <Compile Include="Impl\4.Presentation\Table\AbstractTableModel.cs" />
     <Compile Include="Interface\2.Persistence\IColumn.cs" />
     <Compile Include="Impl\2.Persistence\ListColumns.cs" />

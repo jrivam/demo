@@ -1,4 +1,5 @@
 ﻿using Library.Extension;
+using Library.Impl;
 using Library.Impl.Persistence;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
@@ -7,6 +8,7 @@ using Library.Impl.Persistence.Sql.Factory;
 using Library.Impl.Persistence.Table;
 using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Linq;
@@ -117,6 +119,23 @@ namespace Persistence.Table
                     Entity.Sucursales = _sucursales?.Entities;
                 }
             }
+        }
+        public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal query = null)
+        {
+            if (this.Id != null)
+            {
+                var queryselect = query ?? new Persistence.Query.Sucursal();
+
+                queryselect.IdEmpresa = (this.Id, WhereOperator.Equals);
+
+                var selectmultiple = queryselect.Select(maxdepth, top);
+
+                Sucursales = (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(selectmultiple.datas);
+
+                return (selectmultiple.result, _sucursales);
+            }
+
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Sucursales_Refresh", $"Id in {this?.Description?.Name} cannot be null") } }, null);
         }
     }
 

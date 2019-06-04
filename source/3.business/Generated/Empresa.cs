@@ -53,14 +53,6 @@ namespace Business.Table
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
         protected Business.Table.Sucursales _sucursales;
-        public virtual (Result result, Business.Table.Sucursales domains) Sucursales_Refresh(int maxdepth = 1, int top = 0, Business.Query.Sucursal query = null)
-        {
-            var refresh = Data.Sucursales_Refresh(maxdepth, top, query?.Data);
-
-            Sucursales = new Business.Table.Sucursales(refresh.datas);
-
-            return (refresh.result, _sucursales);
-        }
         public virtual Business.Table.Sucursales Sucursales
         {
             get
@@ -88,6 +80,14 @@ namespace Business.Table
                     Data.Sucursales = _sucursales != null ? (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(_sucursales?.Datas) : null;
                 }
             }
+        }
+        public virtual (Result result, Business.Table.Sucursales domains) Sucursales_Refresh(int maxdepth = 1, int top = 0, Business.Query.Sucursal query = null)
+        {
+            var refresh = Data.Sucursales_Refresh(maxdepth, top, query?.Data);
+
+            Sucursales = new Business.Table.Sucursales(refresh.datas);
+
+            return (refresh.result, _sucursales);
         }
 
         protected override Result SaveChildren()

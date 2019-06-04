@@ -1,16 +1,17 @@
 ﻿using Library.Impl;
 using Library.Impl.Presentation;
 using System.Windows;
+using WpfApp.ViewModels;
 
 namespace WpfApp.Views
 {
     public partial class Empresas : Window
     {
-        public Presentation.Table.EmpresasQuery ViewModel
+        public EmpresasViewModel ViewModel
         {
             get
             {
-                return (Presentation.Table.EmpresasQuery)DataContext;
+                return (EmpresasViewModel)DataContext;
             }
             set
             {
@@ -50,46 +51,46 @@ namespace WpfApp.Views
 
         public virtual void EmpresaLoad((CommandAction action, (Result result, Presentation.Table.Empresa entity) operation) message)
         {
-            ViewModel.CommandLoad(message);
+            ViewModel.EmpresasQuery.CommandLoad(message);
         }
         public virtual void EmpresaSave((CommandAction action, (Result result, Presentation.Table.Empresa entity) operation) message)
         {
-            ViewModel.CommandSave(message);
+            ViewModel.EmpresasQuery.CommandSave(message);
         }
         public virtual void EmpresaErase((CommandAction action, (Result result, Presentation.Table.Empresa entity) operation) message)
         {
-            ViewModel.CommandErase(message);
+            ViewModel.EmpresasQuery.CommandErase(message);
         }
 
         public virtual void EmpresaEdit(Presentation.Table.Empresa entity)
         {
             var view = new Views.Empresa();
 
-            view.ViewModel = entity;
+            view.ViewModel.Empresa = entity;
 
             view.ShowDialog();
 
-            if (view.ViewModel.Domain.Deleted)
-                ViewModel.Remove(entity);
+            if (view.ViewModel.Empresa.Domain.Deleted)
+                ViewModel.EmpresasQuery.Remove(entity);
             else
-                ViewModel.CommandEdit((entity, view.ViewModel));
+                ViewModel.EmpresasQuery.CommandEdit((entity, view.ViewModel.Empresa));
         }
 
         public virtual void EmpresasAdd(Presentation.Table.Empresa entity)
         {
             var view = new Views.Empresa();
 
-            view.ViewModel.Activo = true;
+            view.ViewModel.Empresa.Activo = true;
 
             view.ShowDialog();
 
-            ViewModel.CommandAdd((Presentation.Table.Empresa)view.ViewModel);
+            ViewModel.EmpresasQuery.CommandAdd(view.ViewModel.Empresa);
         }
         public virtual void EmpresasRefresh(int top = 0)
         {
-            var refresh = ViewModel.Refresh(top);
+            var refresh = ViewModel.EmpresasQuery.Refresh(top);
 
-            ViewModel.CommandRefresh(refresh);
+            ViewModel.EmpresasQuery.CommandRefresh(refresh);
         }
     }
 }

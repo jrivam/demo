@@ -2,16 +2,17 @@
 using Library.Impl.Presentation;
 using System;
 using System.Windows;
+using WpfApp.ViewModels;
 
 namespace WpfApp.Views
 {
     public partial class Sucursales : Window
     {
-        public Presentation.Table.SucursalesQuery ViewModel
+        public SucursalesViewModel ViewModel
         {
             get
             {
-                return (Presentation.Table.SucursalesQuery)DataContext;
+                return (SucursalesViewModel)DataContext;
             }
             set
             {
@@ -51,47 +52,47 @@ namespace WpfApp.Views
 
         public virtual void SucursalLoad((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.CommandLoad(message);
+            ViewModel.SucursalesQuery.CommandLoad(message);
         }
         public virtual void SucursalSave((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.CommandSave(message);
+            ViewModel.SucursalesQuery.CommandSave(message);
         }
         public virtual void SucursalErase((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.CommandErase(message);
+            ViewModel.SucursalesQuery.CommandErase(message);
         }
 
         public virtual void SucursalEdit(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
-            view.ViewModel = entity;
+            view.ViewModel.Sucursal = entity;
 
             view.ShowDialog();
 
-            if (view.ViewModel.Domain.Deleted)
-                ViewModel.Remove(entity);
+            if (view.ViewModel.Sucursal.Domain.Deleted)
+                ViewModel.SucursalesQuery.Remove(entity);
             else
-                ViewModel.CommandEdit((entity, view.ViewModel));
+                ViewModel.SucursalesQuery.CommandEdit((entity, view.ViewModel.Sucursal));
         }
 
         public virtual void SucursalesAdd(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
-            view.ViewModel.Fecha = DateTime.Now.Date;
-            view.ViewModel.Activo = true;
+            view.ViewModel.Sucursal.Fecha = DateTime.Now.Date;
+            view.ViewModel.Sucursal.Activo = true;
 
             view.ShowDialog();
 
-            ViewModel.CommandAdd((Presentation.Table.Sucursal)view.ViewModel);
+            ViewModel.SucursalesQuery.CommandAdd(view.ViewModel.Sucursal);
         }
         public virtual void SucursalesRefresh(int top = 0)
         {
-            var refresh = ViewModel.Refresh(top);
+            var refresh = ViewModel.SucursalesQuery.Refresh(top);
 
-            ViewModel.CommandRefresh(refresh);
+            ViewModel.SucursalesQuery.CommandRefresh(refresh);
         }
     }
 }

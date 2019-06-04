@@ -2,16 +2,17 @@
 using Library.Impl.Presentation;
 using System;
 using System.Windows;
+using WpfApp.ViewModels;
 
 namespace WpfApp.Views
 {
     public partial class Empresa : Window
     {
-        public Presentation.Table.Empresa ViewModel
+        public EmpresaViewModel ViewModel
         {
             get
             {
-                return (Presentation.Table.Empresa)DataContext;
+                return (EmpresaViewModel)DataContext;
             }
             set
             {
@@ -63,44 +64,44 @@ namespace WpfApp.Views
         {
             var view = new Views.Sucursal();
 
-            view.ViewModel.IdEmpresa = ViewModel.Id;
-            view.ViewModel.Fecha = DateTime.Now.Date;
-            view.ViewModel.Activo = true;
+            view.ViewModel.Sucursal.IdEmpresa = ViewModel.Empresa.Id;
+            view.ViewModel.Sucursal.Fecha = DateTime.Now.Date;
+            view.ViewModel.Sucursal.Activo = true;
 
             view.ShowDialog();
 
-            if (view.ViewModel.IdEmpresa == ViewModel.Id)
-                ViewModel.Sucursales.CommandAdd((Presentation.Table.Sucursal)view.ViewModel);
+            if (view.ViewModel.Sucursal.IdEmpresa == ViewModel.Empresa.Id)
+                ViewModel.Empresa.Sucursales.CommandAdd(view.ViewModel.Sucursal);
         }
         public virtual void SucursalesRefresh(int top = 0)
         {
-            var refresh = ViewModel.Sucursales_Refresh(top);
+            var refresh = ViewModel.Empresa.Sucursales_Refresh(top);
 
-            ViewModel.Sucursales.CommandRefresh(refresh);
+            ViewModel.Empresa.Sucursales.CommandRefresh(refresh);
         }
 
         public virtual void SucursalEdit(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
 
-            view.ViewModel = entity;
+            view.ViewModel.Sucursal = entity;
 
             var idempresa = entity.IdEmpresa;
 
             view.ShowDialog();
 
-            if (view.ViewModel.Domain.Deleted || (!view.ViewModel.Domain.Changed && entity.IdEmpresa != idempresa))
+            if (view.ViewModel.Sucursal.Domain.Deleted || (!view.ViewModel.Sucursal.Domain.Changed && entity.IdEmpresa != idempresa))
             {
-                ViewModel.Sucursales.Remove(entity);
+                ViewModel.Empresa.Sucursales.Remove(entity);
             }
             else
             {
-                ViewModel.Sucursales.CommandEdit((entity, view.ViewModel));
+                ViewModel.Empresa.Sucursales.CommandEdit((entity, view.ViewModel.Sucursal));
             }
         }
         public virtual void SucursalErase((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.Sucursales.CommandErase(message);
+            ViewModel.Empresa.Sucursales.CommandErase(message);
         }
     }
 }
