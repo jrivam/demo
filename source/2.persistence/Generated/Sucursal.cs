@@ -142,15 +142,15 @@ namespace Persistence.Table
                 }
             }
         }
-        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Empresa queryempresa = null)
+        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Empresa query = null)
         {
             if (this.IdEmpresa != null)
             {
-                var query = queryempresa ?? new Persistence.Query.Empresa();
+                var queryselect = query ?? new Persistence.Query.Empresa();
 
-                query.Id = (this.IdEmpresa, WhereOperator.Equals);
+                queryselect.Id = (this.IdEmpresa, WhereOperator.Equals);
 
-                var selectsingle = query?.SelectSingle(maxdepth);
+                var selectsingle = queryselect?.SelectSingle(maxdepth);
 
                 Empresa = selectsingle?.data;
 

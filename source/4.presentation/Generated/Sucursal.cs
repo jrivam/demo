@@ -116,9 +116,9 @@ namespace Presentation.Table
                 }
             }
         }
-        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Empresa queryempresa = null)
+        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Empresa query = null)
         {
-            var refresh = Domain.Empresa_Refresh(maxdepth, queryempresa?.Domain);
+            var refresh = Domain.Empresa_Refresh(maxdepth, query?.Domain);
 
             Empresa = new Presentation.Table.Empresa(refresh.domain);
 

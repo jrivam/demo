@@ -101,9 +101,9 @@ namespace Business.Table
                 }
             }
         }
-        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Empresa queryempresa = null)
+        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Empresa query = null)
         {
-            var refresh = Data.Empresa_Refresh(maxdepth, queryempresa?.Data);
+            var refresh = Data.Empresa_Refresh(maxdepth, query?.Data);
 
             Empresa = new Business.Table.Empresa(refresh.data);
 

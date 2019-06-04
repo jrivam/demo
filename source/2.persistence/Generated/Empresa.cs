@@ -120,15 +120,15 @@ namespace Persistence.Table
                 }
             }
         }
-        public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal querysucursal = null)
+        public virtual (Result result, Persistence.Table.Sucursales datas) Sucursales_Refresh(int maxdepth = 1, int top = 0, Persistence.Query.Sucursal query = null)
         {
             if (this.Id != null)
             {
-                var query = querysucursal ?? new Persistence.Query.Sucursal();
+                var queryselect = query ?? new Persistence.Query.Sucursal();
 
-                query.IdEmpresa = (this.Id, WhereOperator.Equals);
+                queryselect.IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                var selectmultiple = query.Select(maxdepth, top);
+                var selectmultiple = queryselect.Select(maxdepth, top);
 
                 Sucursales = (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(selectmultiple.datas);
 
