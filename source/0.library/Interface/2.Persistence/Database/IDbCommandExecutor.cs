@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Library.Interface.Persistence.Database
 {
-    public interface IDbRepository<T>
+    public interface IDbCommandExecutor<T>
     {
         (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<T> entities = null);
     }

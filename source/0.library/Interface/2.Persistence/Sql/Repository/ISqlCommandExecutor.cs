@@ -6,7 +6,7 @@ using System.Data;
 
 namespace Library.Interface.Persistence.Sql.Repository
 {
-    public interface ISqlRepository<T>
+    public interface ISqlCommandExecutor<T>
         where T : IEntity
     {
         (Result result, IEnumerable<T> entities) ExecuteQuery(SqlCommand sqlcommand, int maxdepth = 1, IList<T> entities = null);

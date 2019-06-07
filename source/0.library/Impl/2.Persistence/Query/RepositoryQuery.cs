@@ -27,11 +27,11 @@ namespace Library.Impl.Persistence.Query
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderQuery _sqlbuilder;
 
-        public RepositoryQuery(ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+        public RepositoryQuery(ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk,
             IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlBuilderQuery sqlbuilder)
-            : base(sqlrepository, sqlrepositorybulk,
+            : base(sqlcommandexecutor, sqlcommandexecutorbulk,
                   mapper)
         {
             _sqlcommandbuilder = sqlcommandbuilder;
@@ -41,8 +41,8 @@ namespace Library.Impl.Persistence.Query
         public RepositoryQuery(ISqlSyntaxSign sqlsyntaxsign, 
             IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
-            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
-            : this(sqlrepository, sqlrepositorybulk,
+            ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk)
+            : this(sqlcommandexecutor, sqlcommandexecutorbulk,
                   mapper, 
                   sqlcommandbuilder,
                   new SqlBuilderQuery(sqlsyntaxsign))
@@ -55,7 +55,7 @@ namespace Library.Impl.Persistence.Query
             : this(sqlsyntaxsign, 
                   mapper, 
                   sqlcommandbuilder,
-                  new SqlRepository<T>(sqlcreator, reader), new SqlRepositoryBulk(sqlcreator))
+                  new SqlCommandExecutor<T>(sqlcreator, reader), new SqlCommandExecutorBulk(sqlcreator))
         {
         }
         public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper, 
@@ -94,11 +94,11 @@ namespace Library.Impl.Persistence.Query
             var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
             var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
 
-            var selectcommand = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(querycolumns),
+            var selectcommandtext = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(querycolumns),
                 _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
                 _sqlbuilder.GetWhere(querycolumns, parameters), top);
 
-            return Select(selectcommand, CommandType.Text, parameters, maxdepth, datas);
+            return Select(selectcommandtext, CommandType.Text, parameters, maxdepth, datas);
         }
 
         public virtual (Result result, IEnumerable<U> datas)
@@ -108,19 +108,18 @@ namespace Library.Impl.Persistence.Query
         {
             var enumeration = new List<U>();
 
-            var executequery = Select(commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new ListEntity<T>()));
-
-            if (executequery.result.Success && executequery.entities?.Count() > 0)
+            var select = Select(commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new ListEntity<T>()));
+            if (select.result.Success && select.entities?.Count() > 0)
             {
-                foreach (var instance in MapEntities(executequery.entities, maxdepth))
+                foreach (var instance in MapEntities(select.entities, maxdepth))
                 {
                     enumeration.Add(instance);
                 }
 
-                return (executequery.result, enumeration);
+                return (select.result, enumeration);
             }
 
-            return (executequery.result, default(IList<U>));
+            return (select.result, default(IList<U>));
         }
 
         public virtual (Result result, int rows) 
@@ -134,12 +133,12 @@ namespace Library.Impl.Persistence.Query
             var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
             var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
 
-            var updatecommand = _sqlcommandbuilder.Update($"{query.Description.Name}",
+            var updatecommandtext = _sqlcommandbuilder.Update($"{query.Description.Name}",
                 _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
                 _sqlbuilder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
-            return Update(updatecommand, CommandType.Text, parameters);
+            return Update(updatecommandtext, CommandType.Text, parameters);
         }
 
         public virtual (Result result, int rows) 
@@ -152,11 +151,11 @@ namespace Library.Impl.Persistence.Query
             var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
             var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
 
-            var deletecommand = _sqlcommandbuilder.Delete($"{query.Description.Name}", 
+            var deletecommandtext = _sqlcommandbuilder.Delete($"{query.Description.Name}", 
                 _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
-            return Delete(deletecommand, CommandType.Text, parameters);
+            return Delete(deletecommandtext, CommandType.Text, parameters);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Data;
 
 namespace Library.Interface.Persistence.Sql.Repository
 {
-    public interface ISqlRepositoryBulk
+    public interface ISqlCommandExecutorBulk
     {
         (Result result, int rows) ExecuteNonQuery(SqlCommand sqlcommand);
         (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null);

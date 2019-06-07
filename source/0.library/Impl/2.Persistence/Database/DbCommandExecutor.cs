@@ -6,11 +6,11 @@ using System.Data;
 
 namespace Library.Impl.Persistence.Database
 {
-    public class DbRepository<T> : IDbRepository<T>
+    public class DbCommandExecutor<T> : IDbCommandExecutor<T>
     {
         protected readonly IReader<T> _reader;
 
-        public DbRepository(IReader<T> reader)
+        public DbCommandExecutor(IReader<T> reader)
         {
             _reader = reader;
         }

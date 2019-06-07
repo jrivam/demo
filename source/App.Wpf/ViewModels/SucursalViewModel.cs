@@ -1,5 +1,5 @@
-﻿using library.Impl.Presentation;
-using Library.Impl.Persistence.Sql;
+﻿using Library.Impl.Persistence.Sql;
+using Library.Impl.Presentation;
 
 namespace WpfApp.ViewModels
 {

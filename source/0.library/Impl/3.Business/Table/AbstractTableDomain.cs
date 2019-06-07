@@ -63,7 +63,8 @@ namespace Library.Impl.Domain.Table
         public string CheckIsUnique()
         {
             var checkisunique = Data.CheckIsUnique();
-            return String.Join("/", checkisunique.result.Messages.Select(x => x.message).ToArray()).Replace(Environment.NewLine, string.Empty);
+
+            return checkisunique.result.FilteredAsTextSelected<string>("/", x => x.category == (x.category & ResultCategory.OnlyErrors), y => y.message);
         }
 
         public virtual (Result result, V domain) Load(bool usedbcommand = false)

@@ -33,7 +33,6 @@ namespace Library.Impl.Domain.Table
                 if (primarykeycolumn.Value != null)
                 {
                     var select = table.Data.Select(usedbcommand);
-
                     if (select.result.Success && select.data != null)
                     {
                         table.Data = select.data;
@@ -63,7 +62,6 @@ namespace Library.Impl.Domain.Table
                 if (primarykeycolumn.Value != null)
                 {
                     var selectquery = table.Data.SelectQuery(maxdepth);
-
                     if (selectquery.result.Success && selectquery.data != null)
                     {
                         table.Data = selectquery.data;
