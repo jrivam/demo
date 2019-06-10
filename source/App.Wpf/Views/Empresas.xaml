@@ -43,7 +43,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBox x:Name="txtRuc" Text="{Binding RucUnique, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                <TextBox x:Name="txtRuc" Text="{Binding Ruc, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -61,7 +61,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocialNotEmpty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtRazonSocial" Text="{Binding RazonSocial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
