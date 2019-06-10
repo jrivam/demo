@@ -2,7 +2,7 @@
 {
     public partial class Sucursal
     {
-        public string CodigoX
+        public string CodigoUnique
         {
             get
             {
@@ -12,9 +12,24 @@
             {
                 Codigo = value;
 
-                Validate("ValidateCodigo", Domain.CheckIsUnique());
+                Validate("Codigo", CheckIsUnique());
 
-                OnPropertyChanged("CodigoX");
+                OnPropertyChanged("CodigoUnique");
+            }
+        }
+        public string NombreNotEmpty
+        {
+            get
+            {
+                return Nombre;
+            }
+            set
+            {
+                Nombre = value;
+
+                Validate("Nombre", CheckIsRequiredColumn("Nombre"));
+
+                OnPropertyChanged("NombreNotEmpty");
             }
         }
     }
@@ -33,7 +48,8 @@ namespace Presentation.Raiser
     {
         public override Presentation.Table.Sucursal RaiseX(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
         {
-            model.OnPropertyChanged("CodigoX");
+            model.OnPropertyChanged("CodigoUnique");
+            model.OnPropertyChanged("NombreNotEmpty");
 
             return model;
         }

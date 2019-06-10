@@ -1,8 +1,6 @@
 ﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
-using System;
-using System.Linq;
 
 namespace Library.Impl.Domain.Table
 {
@@ -58,13 +56,6 @@ namespace Library.Impl.Domain.Table
             _logic = logic;
 
             Data = data;
-        }
-
-        public string CheckIsUnique()
-        {
-            var checkisunique = Data.CheckIsUnique();
-
-            return checkisunique.result.FilteredAsTextSelected<string>("/", x => x.category == (x.category & ResultCategory.OnlyErrors), y => y.message);
         }
 
         public virtual (Result result, V domain) Load(bool usedbcommand = false)
