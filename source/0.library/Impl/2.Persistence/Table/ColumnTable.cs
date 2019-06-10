@@ -13,8 +13,6 @@ namespace Library.Impl.Persistence.Table
 
         public virtual object Value { get; set; }
 
-        public virtual string RequiredMessage { get; set; }
-
         protected object _dbvalue;
         public virtual object DbValue
         {
@@ -38,20 +36,9 @@ namespace Library.Impl.Persistence.Table
 
         public ColumnTable(IBuilderTableData table,
             string name, string reference,
-            string requiredmessage = "")
-            : this(table,
-                  name, reference)
-        {
-            RequiredMessage = requiredmessage;
-        }
-
-        public ColumnTable(IBuilderTableData table,
-            string name, string reference,
-            string requiredmessage = "",
             bool isprimarykey = false, bool isidentity = false, bool isunique = false, bool isrequired = false)
             : this(table,
-                name, reference,
-                requiredmessage)
+                name, reference)
         {
             IsPrimaryKey = isprimarykey;
             IsIdentity = isidentity;
