@@ -8,12 +8,11 @@ using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Table;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace Library.Impl.Presentation
 {
-    public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelRefresh<T, U, V, W>, INotifyPropertyChanged, IStatus
+    public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelRefresh<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>

@@ -1,5 +1,4 @@
-﻿using library.Impl.Presentation;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
@@ -138,6 +137,18 @@ namespace Library.Impl.Presentation.Table
             Domain = domain;
         }
 
+        public string CheckIsUnique()
+        {
+            var checkisunique = Domain?.Data?.CheckIsUnique();
+
+            return checkisunique?.result.FilteredAsTextSelected<string>("/", x => x.category == ResultCategory.Error, y => y.message);
+        }
+        public string CheckIsRequiredColumn(string columnname)
+        {
+            var checkisrequiredcolumn = Domain?.Data?.CheckIsEmptyColumn(columnname);
+
+            return checkisrequiredcolumn?.result.FilteredAsTextSelected<string>("/", x => x.category == ResultCategory.Error, y => y.message);
+        }
 
         public virtual (Result result, W model) Load(bool usedbcommand = false)
         {

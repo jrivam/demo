@@ -104,18 +104,43 @@ namespace Library.Impl.Persistence.Table
 
                 if (selectsingle.result.Success)
                 {
-                    if (selectsingle.data == null)
+                    if (selectsingle.data != null)
                     {
-                        return (selectsingle.result, selectsingle.data, true);
+                        selectsingle.result.Append(new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Table.Description.Reference}.{primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } });
                     }
 
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsUnique", $"{uniquecolumn.Description.Reference} {uniquecolumn.Value} already exists in {primarykeycolumn.Table.Description.Reference}.{primarykeycolumn.Description.Reference}: {selectsingle.data?.Columns[primarykeycolumn.Description.Reference].Value}") } }, default(U), false);
+                    return (selectsingle.result, selectsingle.data, selectsingle.data == null);
                 }
 
                 return (selectsingle.result, default(U), false);
             }
 
             return (new Result() { Success = true }, default(U), true);
+        }
+        public virtual (Result result, IList<IColumnTable> columns, bool hasrequired) CheckHasRequiredColumns()
+        {
+            var requiredcolumns = Columns?.Where(x => x.IsRequired && string.IsNullOrWhiteSpace(x.Value?.ToString())).ToList();
+
+            if (requiredcolumns != null)
+            {
+                var columnnames = string.Join(", ", requiredcolumns.Select(x => x.Description.Reference));
+
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckHasRequiredColumns", $"{columnnames} must have a value") } }, requiredcolumns, true);
+            }
+
+            return (new Result() { Success = true }, null, false);
+        }
+
+        public virtual (Result result, bool isempty) CheckIsEmptyColumn(string columnname)
+        {
+            var requiredcolumn = CheckHasRequiredColumns().columns?.FirstOrDefault(x => x.Description.Reference == columnname);
+
+            if (requiredcolumn != null)
+            {
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "CheckIsEmptyColumn", $"{requiredcolumn.Description.Reference} must have a value") } }, true);
+            }
+
+            return (new Result() { Success = true }, false);
         }
 
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)

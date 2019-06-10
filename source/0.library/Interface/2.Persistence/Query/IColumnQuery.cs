@@ -9,9 +9,9 @@ namespace Library.Interface.Persistence.Query
 
         IList<(object value, WhereOperator? sign)> Wheres { get; set; }
 
-        void Where((object value, WhereOperator? sign) condition);
-        void Where(params (object value, WhereOperator? sign)[] conditions);
+        IColumnQuery Where((object value, WhereOperator? sign) condition);
+        IColumnQuery Where(params (object value, WhereOperator? sign)[] conditions);
 
-        void Where(object value, WhereOperator? sign = WhereOperator.Equals);
+        IColumnQuery Where(object value, WhereOperator? sign = WhereOperator.Equals);
     }
 }

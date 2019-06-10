@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace library.Impl.Presentation
+namespace Library.Impl.Presentation
 {
     public class NotifyPropertyChanged : INotifyPropertyChanged
     {

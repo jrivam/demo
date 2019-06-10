@@ -9,6 +9,7 @@ namespace Library.Impl.Persistence.Table
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
         public virtual bool IsUnique { get; }
+        public virtual bool IsRequired { get; }
 
         public virtual object Value { get; set; }
 
@@ -47,7 +48,7 @@ namespace Library.Impl.Persistence.Table
         public ColumnTable(IBuilderTableData table,
             string name, string reference,
             string requiredmessage = "",
-            bool isprimarykey = false, bool isidentity = false, bool isunique = false)
+            bool isprimarykey = false, bool isidentity = false, bool isunique = false, bool isrequired = false)
             : this(table,
                 name, reference,
                 requiredmessage)
@@ -55,6 +56,7 @@ namespace Library.Impl.Persistence.Table
             IsPrimaryKey = isprimarykey;
             IsIdentity = isidentity;
             IsUnique = isunique;
+            IsRequired = isrequired;
         }
     }
 }

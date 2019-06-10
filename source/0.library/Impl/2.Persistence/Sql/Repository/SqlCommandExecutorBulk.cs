@@ -7,22 +7,22 @@ using System.Data;
 
 namespace Library.Impl.Persistence.Sql.Repository
 {
-    public class SqlRepositoryBulk : DbRepositoryBulk, ISqlRepositoryBulk 
+    public class SqlCommandExecutorBulk : DbCommandExecutorBulk, ISqlCommandExecutorBulk 
     {
         protected readonly ISqlCreator _creator;
 
-        public SqlRepositoryBulk(ISqlCreator creator)
+        public SqlCommandExecutorBulk(ISqlCreator creator)
             : base()
         {
             _creator = creator;
         }
 
-        public SqlRepositoryBulk(ConnectionStringSettings appconnectionstringsettings)
+        public SqlCommandExecutorBulk(ConnectionStringSettings appconnectionstringsettings)
             : this(new SqlCreator(appconnectionstringsettings))
         {
         }
 
-        public SqlRepositoryBulk(string appconnectionstringname)
+        public SqlCommandExecutorBulk(string appconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }

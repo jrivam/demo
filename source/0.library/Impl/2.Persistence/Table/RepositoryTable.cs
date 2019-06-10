@@ -26,11 +26,11 @@ namespace Library.Impl.Persistence.Table
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderTable _sqlbuilder;
 
-        public RepositoryTable(ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+        public RepositoryTable(ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk,
             IMapper<T, U> mapper,
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlBuilderTable sqlbuilder)
-            : base(sqlrepository, sqlrepositorybulk,
+            : base(sqlcommandexecutor, sqlcommandexecutorbulk,
                   mapper)
         {
             _sqlcommandbuilder = sqlcommandbuilder;
@@ -40,8 +40,8 @@ namespace Library.Impl.Persistence.Table
         public RepositoryTable(ISqlSyntaxSign sqlsyntaxsign,
             IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
-            ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk)
-            : this(sqlrepository, sqlrepositorybulk,
+            ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk)
+            : this(sqlcommandexecutor, sqlcommandexecutorbulk,
                   mapper, 
                   sqlcommandbuilder,
                   new SqlBuilderTable(sqlsyntaxsign))
@@ -54,7 +54,7 @@ namespace Library.Impl.Persistence.Table
             : this(sqlsyntaxsign, 
                   mapper, 
                   sqlcommandbuilder,
-                  new SqlRepository<T>(sqlcreator, reader), new SqlRepositoryBulk(sqlcreator))
+                  new SqlCommandExecutor<T>(sqlcreator, reader), new SqlCommandExecutorBulk(sqlcreator))
         {
         }
         public RepositoryTable(IReader<T> reader, IMapper<T, U> mapper, 
@@ -94,11 +94,11 @@ namespace Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var selectcommand = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(table.Columns),
+            var selectcommandtext = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(table.Columns),
                 $"{table.Description.Name}",
                 _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
 
-            return Select(table, selectcommand, CommandType.Text, parameters);
+            return Select(table, selectcommandtext, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Select(U table, ISqlCommand dbcommand)
         {
@@ -108,19 +108,18 @@ namespace Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executequery = Select(commandtext, commandtype, parameters, 1);
-
-            if (executequery.result.Success && executequery.entities?.Count() > 0)
+            var select = Select(commandtext, commandtype, parameters, 1);
+            if (select.result.Success && select.entities?.Count() > 0)
             {
-                table.Entity = executequery.entities.FirstOrDefault();
+                table.Entity = select.entities.FirstOrDefault();
 
                 _mapper.Clear(table);
                 Map(table, 1);
 
-                return (executequery.result, table);
+                return (select.result, table);
             }
 
-            return (executequery.result, default(U));
+            return (select.result, default(U));
         }
 
         public virtual (Result result, U data) Insert(U table, bool usedbcommand = false)
@@ -144,12 +143,12 @@ namespace Library.Impl.Persistence.Table
                 output += $"{(string.IsNullOrWhiteSpace(output) ? " " : ", ")}";
             }
 
-            var insertcommand = _sqlcommandbuilder.Insert($"{table.Description.Name}",
+            var insertcommandtext = _sqlcommandbuilder.Insert($"{table.Description.Name}",
                 _sqlbuilder.GetInsertColumns(table.Columns.Where(c => !c.IsIdentity).ToList()),
                 _sqlbuilder.GetInsertValues(table.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
                 output);
 
-            return Insert(table, insertcommand, CommandType.Text, parameters);
+            return Insert(table, insertcommandtext, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Insert(U table, ISqlCommand dbcommand)
         {
@@ -159,18 +158,17 @@ namespace Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Insert(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executescalar = Insert(commandtext, commandtype, parameters);
-
-            if (executescalar.result.Success && executescalar.scalar != null)
+            var insert = Insert(commandtext, commandtype, parameters);
+            if (insert.result.Success && insert.scalar != null)
             {
-                table.Entity.Id = Convert.ToInt32(executescalar.scalar);
+                table.Entity.Id = Convert.ToInt32(insert.scalar);
 
                 Map(table, 1);
 
-                return (executescalar.result, table);
+                return (insert.result, table);
             }
 
-            return (executescalar.result, default(U));
+            return (insert.result, default(U));
         }
 
         public virtual (Result result, U data) Update(U table, bool usedbcommand = false)
@@ -187,12 +185,12 @@ namespace Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var updatecommand = _sqlcommandbuilder.Update($"{table.Description.Name}",
+            var updatecommandtext = _sqlcommandbuilder.Update($"{table.Description.Name}",
                 $"{table.Description.Name}",
                 _sqlbuilder.GetUpdateSet(table.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
                 _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Update(table, updatecommand, CommandType.Text, parameters);
+            return Update(table, updatecommandtext, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Update(U table, ISqlCommand dbcommand)
         {
@@ -202,16 +200,15 @@ namespace Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Update(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = Update(commandtext, commandtype, parameters);
-
-            if (executenonquery.result.Success && executenonquery.rows > 0)
+            var update = Update(commandtext, commandtype, parameters);
+            if (update.result.Success && update.rows > 0)
             {
                 Map(table, 1);
 
-                return (executenonquery.result, table);
+                return (update.result, table);
             }
 
-            return (executenonquery.result, default(U));
+            return (update.result, default(U));
         }
 
         public virtual (Result result, U data) Delete(U table, bool usedbcommand = false)
@@ -228,11 +225,11 @@ namespace Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var deletecommand = _sqlcommandbuilder.Delete($"{table.Description.Name}",
+            var deletecommandtext = _sqlcommandbuilder.Delete($"{table.Description.Name}",
                 $"{table.Description.Name}",
                 _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Delete(table, deletecommand, CommandType.Text, parameters);
+            return Delete(table, deletecommandtext, CommandType.Text, parameters);
         }
         public virtual (Result result, U data) Delete(U table, ISqlCommand dbcommand)
         {
@@ -242,14 +239,13 @@ namespace Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Delete(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = Delete(commandtext, commandtype, parameters);
-
-            if (executenonquery.result.Success && executenonquery.rows > 0)
+            var delete = Delete(commandtext, commandtype, parameters);
+            if (delete.result.Success && delete.rows > 0)
             {
-                return (executenonquery.result, table);
+                return (delete.result, table);
             }
 
-            return (executenonquery.result, default(U));
+            return (delete.result, default(U));
         }
     }
 }

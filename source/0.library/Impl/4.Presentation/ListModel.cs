@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Library.Impl.Presentation
 {
-    public class ListModel<T, U, V, W> : ObservableCollection<W>, IListModel<T, U, V, W>, INotifyPropertyChanged, IStatus
+    public class ListModel<T, U, V, W> : ObservableCollection<W>, IListModel<T, U, V, W>, IStatus
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
