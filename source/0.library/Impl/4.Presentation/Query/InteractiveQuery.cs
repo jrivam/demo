@@ -1,5 +1,4 @@
-﻿using Library.Impl.Presentation;
-using Library.Impl.Domain;
+﻿using Library.Impl.Domain;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
@@ -9,9 +8,7 @@ using Library.Interface.Presentation;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Library.Impl.Presentation.Query
 {
@@ -34,7 +31,6 @@ namespace Library.Impl.Presentation.Query
             query.Status = "Loading...";
 
             var retrieve = query.Domain.Retrieve(maxdepth, (model != null ? model.Domain : default(V)));
-
             if (retrieve.result.Success && retrieve.domain != null)
             {
                 var instance = Presentation.HelperInteractive<T, U, V, W>.CreateInstance(retrieve.domain, maxdepth);
@@ -48,7 +44,7 @@ namespace Library.Impl.Presentation.Query
                 return (retrieve.result, model);
             }
 
-            query.Status = String.Join("/", retrieve.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+            query.Status = retrieve.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (retrieve.result, default(W));
         }
@@ -73,7 +69,7 @@ namespace Library.Impl.Presentation.Query
                 return (list.result, enumeration);
             }
 
-            query.Status = String.Join("/", list.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+            query.Status = list.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (list.result, default(IList<W>));
         }

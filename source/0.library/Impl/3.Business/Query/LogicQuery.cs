@@ -25,7 +25,6 @@ namespace Library.Impl.Domain.Query
         public virtual (Result result, V domain) Retrieve(IQueryDomain<S, T, U, V> query, int maxdepth = 1, V domain = default(V))
         {
             var selectsingle = query.Data.SelectSingle(maxdepth, (domain != null ? domain.Data : default(U)));
-
             if (selectsingle.result.Success && selectsingle.data != null)
             {
                 var instance = Business.HelperLogic<T, U, V>.CreateInstance(selectsingle.data);

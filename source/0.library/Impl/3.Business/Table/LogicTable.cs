@@ -18,13 +18,6 @@ namespace Library.Impl.Domain.Table
         {
         }
 
-        public virtual (Result result, V domain, bool isunique) CheckIsUnique(V table)
-        {
-            var checkisunique = table.Data.CheckIsUnique();
-
-            return (checkisunique.result, table, checkisunique.isunique);
-        }
-
         public virtual (Result result, V domain) Load(V table, bool usedbcommand = false)
         {
             var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
@@ -33,7 +26,6 @@ namespace Library.Impl.Domain.Table
                 if (primarykeycolumn.Value != null)
                 {
                     var select = table.Data.Select(usedbcommand);
-
                     if (select.result.Success && select.data != null)
                     {
                         table.Data = select.data;
@@ -63,7 +55,6 @@ namespace Library.Impl.Domain.Table
                 if (primarykeycolumn.Value != null)
                 {
                     var selectquery = table.Data.SelectQuery(maxdepth);
-
                     if (selectquery.result.Success && selectquery.data != null)
                     {
                         table.Data = selectquery.data;
@@ -90,32 +81,39 @@ namespace Library.Impl.Domain.Table
         {
             if (table.Changed)
             {
-                var checkisunique = CheckIsUnique(table);
+                var checkisunique = table.Data.CheckIsUnique();
 
                 if (checkisunique.isunique)
                 {
-                    var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-                    if (primarykeycolumn != null)
+                    var checkhasrequired = table.Data.CheckHasRequiredColumns();
+
+                    if (!checkhasrequired.hasrequired)
                     {
-                        if (primarykeycolumn.DbValue != null)
+                        var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
+                        if (primarykeycolumn != null)
                         {
-                            var update = table.Data.Update(useupdatedbcommand);
+                            if (primarykeycolumn.DbValue != null)
+                            {
+                                var update = table.Data.Update(useupdatedbcommand);
 
-                            table.Changed = !update.result.Success;
+                                table.Changed = !update.result.Success;
 
-                            return (update.result, table);
+                                return (update.result, table);
+                            }
+                            else
+                            {
+                                var insert = table.Data.Insert(useinsertdbcommand);
+
+                                table.Changed = !insert.result.Success;
+
+                                return (insert.result, table);
+                            }
                         }
-                        else
-                        {
-                            var insert = table.Data.Insert(useinsertdbcommand);
 
-                            table.Changed = !insert.result.Success;
-
-                            return (insert.result, table);
-                        }
+                        return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Save", $"Primary Key column in {table.Data.Description.Name} not defined") } }, default(V));
                     }
 
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Save", $"Primary Key column in {table.Data.Description.Name} not defined") } }, default(V));
+                    return (checkhasrequired.result, default(V));
                 }
 
                 return (checkisunique.result, default(V)); 

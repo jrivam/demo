@@ -1,11 +1,8 @@
-﻿using Library.Impl.Presentation;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
-using System;
-using System.Linq;
 
 namespace Library.Impl.Presentation.Table
 {
@@ -25,7 +22,6 @@ namespace Library.Impl.Presentation.Table
             table.Status = "Loading...";
 
             var load = table.Domain.Load(usedbcommand);
-
             if (load.result.Success && load.domain != null)
             {
                 table.Domain = load.domain;
@@ -38,7 +34,7 @@ namespace Library.Impl.Presentation.Table
                 return (load.result, table);
             }
 
-            table.Status = String.Join("/", load.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = load.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (load.result, default(W));
         }
@@ -47,7 +43,6 @@ namespace Library.Impl.Presentation.Table
             table.Status = "Loading...";
 
             var loadquery = table.Domain.LoadQuery(maxdepth);
-
             if (loadquery.result.Success && loadquery.domain != null)
             {
                 table.Domain = loadquery.domain;
@@ -60,7 +55,7 @@ namespace Library.Impl.Presentation.Table
                 return (loadquery.result, table);
             }
 
-            table.Status = String.Join("/", loadquery.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = loadquery.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (loadquery.result, default(W));
         }
@@ -69,7 +64,6 @@ namespace Library.Impl.Presentation.Table
             table.Status = "Saving...";
 
             var save = table.Domain.Save(useinsertdbcommand, useupdatedbcommand);
-
             if (save.result.Success)
             {
                 Raise(table);
@@ -79,7 +73,7 @@ namespace Library.Impl.Presentation.Table
                 return (save.result, table);
             }
 
-            table.Status = String.Join("/", save.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = save.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (save.result, default(W));
         }
@@ -88,7 +82,6 @@ namespace Library.Impl.Presentation.Table
             table.Status = "Deleting...";
 
             var erase = table.Domain.Erase(usedbcommand);
-
             if (erase.result.Success)
             {
                 Raise(table);
@@ -98,7 +91,7 @@ namespace Library.Impl.Presentation.Table
                 return (erase.result, table);
             }
 
-            table.Status = String.Join("/", erase.result.Messages.Where(x => x.category == ResultCategory.Error || x.category == ResultCategory.Exception).ToArray()).Replace(Environment.NewLine, string.Empty);
+            table.Status = erase.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (erase.result, default(W));
         }

@@ -12,7 +12,7 @@ namespace Library.Impl.Persistence
     {
         protected readonly IMapper<T, U> _mapper;
 
-        public RepositoryMapper(ISqlRepository<T> sqlrepository, ISqlRepositoryBulk sqlrepositorybulk,
+        public RepositoryMapper(ISqlCommandExecutor<T> sqlrepository, ISqlCommandExecutorBulk sqlrepositorybulk,
             IMapper<T, U> mapper)
             : base(sqlrepository, sqlrepositorybulk)
         {

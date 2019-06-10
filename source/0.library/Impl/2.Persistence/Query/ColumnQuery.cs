@@ -18,25 +18,29 @@ namespace Library.Impl.Persistence.Query
             Query = query;
         }
 
-        public virtual void Where((object value, WhereOperator? sign) condition)
+        public virtual IColumnQuery Where((object value, WhereOperator? sign) condition)
         {
             if (!Wheres.Contains(condition))
                 Wheres?.Add(condition);
+
+            return this;
         }
-        public virtual void Where(params (object value, WhereOperator? sign)[] conditions)
+        public virtual IColumnQuery Where(params (object value, WhereOperator? sign)[] conditions)
         {
             conditions?.ToList()?.ForEach(x => Where(x));
+
+            return this;
         }
-        public virtual void Where(object value, WhereOperator? sign = WhereOperator.Equals)
+        public virtual IColumnQuery Where(object value, WhereOperator? sign = WhereOperator.Equals)
         {
             if (value is IList<object>)
-                Where(((IList<object>)value).Select(x => (x, sign)).ToArray());
+                return Where(((IList<object>)value).Select(x => (x, sign)).ToArray());
             else
-                Where((value, sign));
+                return Where((value, sign));
         }
-        public virtual void Where(IList<object> value, WhereOperator sign = WhereOperator.Equals)
+        public virtual IColumnQuery Where(IList<object> value, WhereOperator sign = WhereOperator.Equals)
         {
-            Where(value.Select(x => (x, sign)).ToArray());
+            return Where(value.Select(x => (x, sign)).ToArray());
         }
     }
 }

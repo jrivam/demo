@@ -9,23 +9,23 @@ using System.Data;
 
 namespace Library.Impl.Persistence.Sql.Repository
 {
-    public class SqlRepository<T> : DbRepository<T>, ISqlRepository<T> 
+    public class SqlCommandExecutor<T> : DbCommandExecutor<T>, ISqlCommandExecutor<T> 
         where T : IEntity
     {
         protected readonly ISqlCreator _creator;
 
-        public SqlRepository(ISqlCreator creator, IReader<T> reader)
+        public SqlCommandExecutor(ISqlCreator creator, IReader<T> reader)
             : base(reader)
         {
             _creator = creator;
         }
 
-        public SqlRepository(IReader<T> reader, ConnectionStringSettings connectionstringsettings)
+        public SqlCommandExecutor(IReader<T> reader, ConnectionStringSettings connectionstringsettings)
             : this(new SqlCreator(connectionstringsettings), reader)
         {
         }
 
-        public SqlRepository(IReader<T> reader, string appconnectionstringname)
+        public SqlCommandExecutor(IReader<T> reader, string appconnectionstringname)
             : this(reader, ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }

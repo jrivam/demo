@@ -53,18 +53,18 @@ namespace Web.Api.App_Start
                    .As(typeof(Library.Interface.Persistence.Sql.Builder.ISqlBuilderQuery))
                    .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Sql.Repository.SqlRepository<>))
-                   .As(typeof(Library.Interface.Persistence.Sql.Repository.ISqlRepository<>))
+            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Sql.Repository.SqlCommandExecutor<>))
+                   .As(typeof(Library.Interface.Persistence.Sql.Repository.ISqlCommandExecutor<>))
                    .InstancePerRequest();
-            builder.RegisterType(typeof(Library.Impl.Persistence.Sql.Repository.SqlRepositoryBulk))
-                   .As(typeof(Library.Interface.Persistence.Sql.Repository.ISqlRepositoryBulk))
+            builder.RegisterType(typeof(Library.Impl.Persistence.Sql.Repository.SqlCommandExecutorBulk))
+                   .As(typeof(Library.Interface.Persistence.Sql.Repository.ISqlCommandExecutorBulk))
                    .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Database.DbRepository<>))
-                   .As(typeof(Library.Interface.Persistence.Database.IDbRepository<>))
+            builder.RegisterGeneric(typeof(Library.Impl.Persistence.Database.DbCommandExecutor<>))
+                   .As(typeof(Library.Interface.Persistence.Database.IDbCommandExecutor<>))
                    .InstancePerRequest();
-            builder.RegisterType(typeof(Library.Impl.Persistence.Database.DbRepositoryBulk))
-                   .As(typeof(Library.Interface.Persistence.Database.IDbRepositoryBulk))
+            builder.RegisterType(typeof(Library.Impl.Persistence.Database.DbCommandExecutorBulk))
+                   .As(typeof(Library.Interface.Persistence.Database.IDbCommandExecutorBulk))
                    .InstancePerRequest();
 
 

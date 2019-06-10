@@ -5,9 +5,9 @@ using System.Data;
 
 namespace Library.Impl.Persistence.Database
 {
-    public class DbRepositoryBulk : IDbRepositoryBulk
+    public class DbCommandExecutorBulk : IDbCommandExecutorBulk
     {
-        public DbRepositoryBulk()
+        public DbCommandExecutorBulk()
         {
         }
 

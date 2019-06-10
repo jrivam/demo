@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Library.Impl
@@ -36,6 +37,29 @@ namespace Library.Impl
             }
 
             return this;
+        }
+
+        public IList<(ResultCategory category, string name, string message)> Filtered(Func<(ResultCategory category, string name, string message), bool> condition = null)
+        {
+            if (condition != null)
+            {
+                return Messages.Where(condition).ToList();
+            }
+
+            return Messages;
+        }
+        public string FilteredAsText(string newlinereplacement, Func<(ResultCategory category, string name, string message), bool> condition = null)
+        {
+            return String.Join(newlinereplacement, Filtered(condition).ToArray()).Replace(Environment.NewLine, string.Empty);
+        }
+        public string FilteredAsTextSelected<T>(string newlinereplacement, Func<(ResultCategory category, string name, string message), bool> condition = null, Func<(ResultCategory category, string name, string message), T> selector = null)
+        {
+            if (selector != null)
+            {
+                return String.Join(newlinereplacement, Filtered(condition).Select(selector).ToArray()).Replace(Environment.NewLine, string.Empty);
+            }
+
+            return FilteredAsText(newlinereplacement, condition);
         }
     }
 }
