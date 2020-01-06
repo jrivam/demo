@@ -1,5 +1,4 @@
-﻿using Library.Impl.Business;
-using Library.Impl.Persistence;
+﻿using Library.Impl.Persistence;
 using Library.Interface.Business;
 using Library.Interface.Business.Loader;
 using Library.Interface.Business.Query;
@@ -9,7 +8,7 @@ using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 
-namespace Library.Impl.Domain.Query
+namespace Library.Impl.Business.Query
 {
     public class LogicQuery<S, T, U, V> : LogicLoader<T, U, V>, ILogicQuery<S, T, U, V> 
         where T : IEntity

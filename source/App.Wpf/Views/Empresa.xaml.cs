@@ -39,8 +39,6 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
 
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
-
-            //SucursalesRefresh();
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {

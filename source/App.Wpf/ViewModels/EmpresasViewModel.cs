@@ -26,6 +26,7 @@ namespace WpfApp.ViewModels
         {
             EmpresasQuery = empresasquery;
         }
+
         public EmpresasViewModel()
             : this(new Presentation.Table.EmpresasQuery(new Presentation.Query.Empresa()))
         {

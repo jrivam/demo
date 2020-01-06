@@ -8,8 +8,7 @@ namespace Library.Extension
     {
         public static T ForceType<T>(this object o)
         {
-            T res;
-            res = HelperEntities<T>.CreateInstance();
+            T res = HelperEntities<T>.CreateInstance();
 
             Type x = o.GetType();
             Type y = res.GetType();
@@ -26,15 +25,15 @@ namespace Library.Extension
             return res;
         }
 
-        public static T GetAttributeFromType<T>(this Type instance)
+        public static T GetAttributeFromType<T>(this Type t)
             where T : Attribute
         {
-            return (T)instance.GetCustomAttributes(typeof(T), false).FirstOrDefault();
+            return (T)t.GetCustomAttributes(typeof(T), false).FirstOrDefault();
         }
-        public static T GetAttributeFromTypeProperty<T>(this Type instance, string propertyName)
+        public static T GetAttributeFromTypeProperty<T>(this Type t, string propertyName)
             where T : Attribute
         {
-            return (T)instance.GetProperty(propertyName).GetCustomAttributes(typeof(T), false).FirstOrDefault();
+            return (T)t.GetProperty(propertyName).GetCustomAttributes(typeof(T), false).FirstOrDefault();
         }
     }
 }

@@ -6,11 +6,6 @@ namespace Library.Impl.Persistence.Table
     {
         public virtual IBuilderTableData Table { get; protected set; }
 
-        public virtual bool IsPrimaryKey { get; }
-        public virtual bool IsIdentity { get; }
-        public virtual bool IsUnique { get; }
-        public virtual bool IsRequired { get; }
-
         public virtual object Value { get; set; }
 
         protected object _dbvalue;
@@ -27,6 +22,9 @@ namespace Library.Impl.Persistence.Table
             }
         }
 
+        public virtual bool IsPrimaryKey { get; }
+        public virtual bool IsIdentity { get; }
+
         public ColumnTable(IBuilderTableData table, 
             string name, string reference)
             : base(name, reference)
@@ -36,14 +34,12 @@ namespace Library.Impl.Persistence.Table
 
         public ColumnTable(IBuilderTableData table,
             string name, string reference,
-            bool isprimarykey = false, bool isidentity = false, bool isunique = false, bool isrequired = false)
+            bool isprimarykey = false, bool isidentity = false)
             : this(table,
                 name, reference)
         {
             IsPrimaryKey = isprimarykey;
             IsIdentity = isidentity;
-            IsUnique = isunique;
-            IsRequired = isrequired;
         }
     }
 }

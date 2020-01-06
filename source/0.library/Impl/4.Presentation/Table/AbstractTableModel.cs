@@ -3,11 +3,14 @@ using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Linq;
 
 namespace Library.Impl.Presentation.Table
 {
-    public abstract class AbstractTableModel<T, U, V, W> : NotifyPropertyChanged, ITableModel<T, U, V, W>
+    public abstract class AbstractTableModel<T, U, V, W> : TableModelValidation, ITableModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>, new()
@@ -50,16 +53,7 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
-        public virtual void OnStatusChange(string status)
-        {
-            if (_status != status)
-            {
-                _status = status;
-                base.OnPropertyChanged("Status");
-            }
-        }
-
-        private string _status = string.Empty;
+        protected string _status = string.Empty;
         public string Status
         {
             get
@@ -74,22 +68,13 @@ namespace Library.Impl.Presentation.Table
                 }
             }
         }
-
-        public Dictionary<string, string> Validations { get; set; } = new Dictionary<string, string>();
-        public bool Validate(string key, string value)
+        public virtual void OnStatusChange(string status)
         {
-            var contains = Validations.ContainsKey(key);
-
-            if ((contains && Validations[key] != value) || (!contains && value != string.Empty))
+            if (_status != status)
             {
-                Validations[key] = value;
-
-                OnPropertyChanged("Validations");
-
-                return true;
+                _status = status;
+                base.OnPropertyChanged("Status");
             }
-
-            return false;
         }
 
         public virtual IColumnTable this[string reference]
@@ -100,8 +85,6 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
-        protected int _maxdepth;
-
         public virtual ICommand LoadCommand { get; protected set; }
         public virtual ICommand SaveCommand { get; protected set; }
         public virtual ICommand EraseCommand { get; protected set; }
@@ -109,6 +92,7 @@ namespace Library.Impl.Presentation.Table
         public virtual ICommand EditCommand { get; protected set; }
 
         protected readonly IInteractiveTable<T, U, V, W> _interactive;
+        protected readonly int _maxdepth;
 
         public AbstractTableModel(V domain, IInteractiveTable<T, U, V, W> interactive,
             int maxdepth = 1)
@@ -137,19 +121,6 @@ namespace Library.Impl.Presentation.Table
             Domain = domain;
         }
 
-        public string CheckIsUnique()
-        {
-            var checkisunique = Domain?.Data?.CheckIsUnique();
-
-            return checkisunique?.result.FilteredAsTextSelected<string>("/", x => x.category == ResultCategory.Error, y => y.message);
-        }
-        public string CheckIsRequiredColumn(string columnname)
-        {
-            var checkisrequiredcolumn = Domain?.Data?.CheckIsEmptyColumn(columnname);
-
-            return checkisrequiredcolumn?.result.FilteredAsTextSelected<string>("/", x => x.category == ResultCategory.Error, y => y.message);
-        }
-
         public virtual (Result result, W model) Load(bool usedbcommand = false)
         {
             var load = _interactive.Load(this as W, usedbcommand);
@@ -174,6 +145,31 @@ namespace Library.Impl.Presentation.Table
             var erase = _interactive.Erase(this as W, usedbcommand);
 
             return erase;
+        }
+
+        public void ValidateProperty(object value, [CallerMemberName] string propertyName = null)
+        {
+            var validationContext = new ValidationContext(Domain.Data.Entity, null, null);
+            validationContext.MemberName = propertyName;
+            var validationResults = new List<ValidationResult>();
+            Validator.TryValidateProperty(value, validationContext, validationResults);
+
+            //clear previous _errors from tested property  
+            if (_errors.ContainsKey(propertyName))
+                _errors.Remove(propertyName);
+            OnErrorsChanged(propertyName);
+
+            var resultsByPropNames = from res in validationResults
+                                     from mname in res.MemberNames
+                                     group res by mname into g
+                                     select g;
+
+            foreach (var prop in resultsByPropNames)
+            {
+                var messages = prop.Select(r => r.ErrorMessage).ToList();
+                _errors.Add(prop.Key, messages);
+                OnErrorsChanged(prop.Key);
+            }
         }
     }
 }

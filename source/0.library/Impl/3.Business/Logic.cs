@@ -3,7 +3,7 @@ using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 
-namespace Library.Impl.Domain
+namespace Library.Impl.Business
 {
     public class Logic<T, U, V> : ILogic<T, U, V>
         where T : IEntity

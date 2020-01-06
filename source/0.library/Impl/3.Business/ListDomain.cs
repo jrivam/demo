@@ -7,7 +7,7 @@ using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Impl.Domain
+namespace Library.Impl.Business
 {
     public class ListDomain<T, U, V> : List<V>, IListDomain<T, U, V>
         where T : IEntity

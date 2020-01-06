@@ -2,7 +2,7 @@
 
 namespace Library.Impl.Presentation
 {
-    public class NotifyPropertyChanged : INotifyPropertyChanged
+    public abstract class NotifyPropertyChanged : INotifyPropertyChanged
     {
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
         public virtual void OnPropertyChanged(string propertyName)

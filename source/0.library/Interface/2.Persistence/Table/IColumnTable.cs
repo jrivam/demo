@@ -4,12 +4,10 @@
     {
         IBuilderTableData Table { get; }
 
-        bool IsPrimaryKey { get; }
-        bool IsIdentity { get; }
-        bool IsUnique { get; }
-        bool IsRequired { get; }
-
         object Value { get; set; }
         object DbValue { get; set; }
+
+        bool IsPrimaryKey { get; }
+        bool IsIdentity { get; }
     }
 }

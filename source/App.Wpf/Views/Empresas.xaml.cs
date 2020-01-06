@@ -82,6 +82,8 @@ namespace WpfApp.Views
 
             view.ViewModel.Empresa.Activo = true;
 
+
+
             view.ShowDialog();
 
             ViewModel.EmpresasQuery.CommandAdd(view.ViewModel.Empresa);

@@ -56,6 +56,7 @@ namespace WpfApp.ViewModels
         {
             SucursalesQuery = sucursalesquery;
         }
+
         public SucursalesViewModel()
             : this(new Presentation.Table.SucursalesQuery(new Presentation.Query.Sucursal(), 2))
         {

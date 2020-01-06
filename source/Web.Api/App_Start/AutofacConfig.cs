@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Autofac.Features.ResolveAnything;
 using Autofac.Integration.WebApi;
-using Library.Impl.Persistence.Mapper;
-using Library.Impl.Domain.Loader;
+using Library.Impl.Business.Loader;
 using Library.Impl.Entities.Reader;
+using Library.Impl.Persistence.Mapper;
 using Library.Impl.Presentation.Raiser;
 using System.Reflection;
 using System.Web.Http;
@@ -72,14 +72,14 @@ namespace Web.Api.App_Start
                      .As(typeof(Library.Interface.Business.Loader.ILoader<,,>))
                      .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(Library.Impl.Domain.Table.LogicTable<,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Business.Table.LogicTable<,,>))
                    .As(typeof(Library.Interface.Business.Table.ILogicTable<,,>))
                    .InstancePerRequest();
-            builder.RegisterGeneric(typeof(Library.Impl.Domain.Query.LogicQuery<,,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Business.Query.LogicQuery<,,,>))
                    .As(typeof(Library.Interface.Business.Query.ILogicQuery<,,,>))
                    .InstancePerRequest();
 
-            builder.RegisterGeneric(typeof(Library.Impl.Domain.Logic<,,>))
+            builder.RegisterGeneric(typeof(Library.Impl.Business.Logic<,,>))
                  .As(typeof(Library.Interface.Business.ILogic<,,>))
                  .InstancePerRequest();
 

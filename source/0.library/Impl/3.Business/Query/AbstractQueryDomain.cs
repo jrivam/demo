@@ -6,7 +6,7 @@ using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 
-namespace Library.Impl.Domain.Query
+namespace Library.Impl.Business.Query
 {
     public abstract class AbstractQueryDomain<S, T, U, V> : IQueryDomain<S, T, U, V>
         where T : IEntity

@@ -51,6 +51,7 @@ namespace WpfApp.ViewModels
         {
             Sucursal = sucursal;
         }
+
         public SucursalViewModel()
             : this(new Presentation.Table.Sucursal())
         {

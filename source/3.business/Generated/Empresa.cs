@@ -1,8 +1,9 @@
 ﻿using Library.Impl;
-using Library.Impl.Domain;
-using Library.Impl.Domain.Loader;
-using Library.Impl.Domain.Query;
-using Library.Impl.Domain.Table;
+using Library.Impl.Business;
+using Library.Impl.Business.Loader;
+using Library.Impl.Business.Query;
+using Library.Impl.Business.Table;
+using Library.Impl.Business.Validator;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
@@ -11,6 +12,15 @@ namespace Business.Table
 {
     public partial class Empresa : AbstractTableDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
+        protected override void Init()
+        {
+            base.Init();
+
+            //Validations.Add(("RucNotEmpty", new EmptyValidator(Data["Ruc"])));
+            //Validations.Add(("RucUnique", new UniqueValidator<Entities.Table.Empresa, Persistence.Table.Empresa>(Data["Ruc"], new Persistence.Query.Empresa())));
+            //Validations.Add(("RazonSocialNotEmpty", new EmptyValidator(Data["RazonSocial"])));
+        }
+
         public Empresa(Persistence.Table.Empresa data,
             ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic)
             : base(data, 

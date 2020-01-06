@@ -1,8 +1,10 @@
 ﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Library.Impl.Domain.Table
+namespace Library.Impl.Business.Table
 {
     public abstract class AbstractTableDomain<T, U, V> : ITableDomain<T, U, V>
         where T : IEntity
@@ -48,6 +50,15 @@ namespace Library.Impl.Domain.Table
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
+        public IList<(string name, IColumnValidator validator)> Validations { get; set; } = new List<(string, IColumnValidator)>();
+
+        protected virtual void Init()
+        {
+        }
+        protected virtual void InitX()
+        {
+        }
+
         protected readonly ILogicTable<T, U, V> _logic;
 
         public AbstractTableDomain(U data, 
@@ -55,7 +66,26 @@ namespace Library.Impl.Domain.Table
         {
             _logic = logic;
 
+            Init();
+            InitX();
+
             Data = data;
+        }
+
+        public virtual Result Validate()
+        {
+            var result = new Result() { Success = true };
+
+            foreach (var validation in Validations)
+            {
+                result.Append(validation.validator.Validate());
+            }
+
+            return result;
+        }
+        public virtual Result Validate(string name)
+        {
+            return Validations.FirstOrDefault(x => x.name == name).validator.Validate();
         }
 
         public virtual (Result result, V domain) Load(bool usedbcommand = false)

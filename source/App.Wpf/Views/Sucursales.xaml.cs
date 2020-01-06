@@ -35,8 +35,6 @@ namespace WpfApp.Views
 
             Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
             Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
-
-            SucursalesRefresh();
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {

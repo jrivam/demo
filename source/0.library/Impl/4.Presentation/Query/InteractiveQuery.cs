@@ -1,4 +1,4 @@
-﻿using Library.Impl.Domain;
+﻿using Library.Impl.Business;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;

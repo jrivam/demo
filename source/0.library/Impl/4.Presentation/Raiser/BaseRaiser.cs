@@ -15,7 +15,7 @@ namespace Library.Impl.Presentation.Raiser
     {
         public virtual W Clear(W model)
         {
-            model.Validations = new Dictionary<string, string>();
+           //model.Validations = new Dictionary<string, string>();
 
             model.OnPropertyChanged("Validations");
 

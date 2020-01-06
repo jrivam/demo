@@ -1,12 +1,11 @@
-﻿using Library.Impl.Business;
-using Library.Interface.Business.Loader;
+﻿using Library.Interface.Business.Loader;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Impl.Domain.Table
+namespace Library.Impl.Business.Table
 {
     public class LogicTable<T, U, V> : LogicLoader<T, U, V>, ILogicTable<T, U, V> 
         where T : IEntity
@@ -81,42 +80,36 @@ namespace Library.Impl.Domain.Table
         {
             if (table.Changed)
             {
-                var checkisunique = table.Data.CheckIsUnique();
+                var validate = table.Validate();
 
-                if (checkisunique.isunique)
+                if (validate.Success)
                 {
-                    var checkhasrequired = table.Data.CheckHasRequiredColumns();
-
-                    if (!checkhasrequired.hasrequired)
+                    var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
+                    if (primarykeycolumn != null)
                     {
-                        var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-                        if (primarykeycolumn != null)
+                        if (primarykeycolumn.DbValue != null)
                         {
-                            if (primarykeycolumn.DbValue != null)
-                            {
-                                var update = table.Data.Update(useupdatedbcommand);
+                            var update = table.Data.Update(useupdatedbcommand);
 
-                                table.Changed = !update.result.Success;
+                            table.Changed = !update.result.Success;
 
-                                return (update.result, table);
-                            }
-                            else
-                            {
-                                var insert = table.Data.Insert(useinsertdbcommand);
-
-                                table.Changed = !insert.result.Success;
-
-                                return (insert.result, table);
-                            }
+                            return (update.result, table);
                         }
+                        else
+                        {
+                            var insert = table.Data.Insert(useinsertdbcommand);
 
-                        return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Save", $"Primary Key column in {table.Data.Description.Name} not defined") } }, default(V));
+                            table.Changed = !insert.result.Success;
+
+                            return (insert.result, table);
+                        }
                     }
 
-                    return (checkhasrequired.result, default(V));
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Save", $"Primary Key column in {table.Data.Description.Name} not defined") } }, default(V));
+
                 }
 
-                return (checkisunique.result, default(V)); 
+                return (validate, default(V));
             }
 
             return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Save", $"No changes to persist in {table.Data.Description.Name} with Id {table.Data.Entity.Id}") } }, default(V));

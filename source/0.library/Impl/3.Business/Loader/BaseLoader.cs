@@ -3,7 +3,7 @@ using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 
-namespace Library.Impl.Domain.Loader
+namespace Library.Impl.Business.Loader
 {
     public class BaseLoader<T, U, V> : ILoader<T, U, V> 
         where T : IEntity

@@ -39,8 +39,26 @@
         <Label x:Name="lblValidateRuc" Content="{Binding Empresa.Validations, Converter={StaticResource converterhelper}, ConverterParameter=Ruc, UpdateSourceTrigger=PropertyChanged}" Margin="217,76,10,0" VerticalAlignment="Top" Height="26" FontWeight="Bold" Foreground="Red"/>
 
         <Label x:Name="lblRazonSocial" Content="Razon Social" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
-        <TextBox x:Name="txtRazonSocial" Text="{Binding Empresa.RazonSocial, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,109,289,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Label x:Name="lblValidateRazonSocial" Content="{Binding Empresa.Validations, ConverterParameter=RazonSocial, Converter={StaticResource converterhelper}, UpdateSourceTrigger=PropertyChanged}" Margin="375,107,10,0" VerticalAlignment="Top" Height="26" FontWeight="Bold" Foreground="Red"/>
+        <!--<TextBox x:Name="txtRazonSocial" Text="{Binding Empresa.RazonSocial, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,109,289,0" TextWrapping="Wrap" VerticalAlignment="Top"/>-->
+        <!--<Label x:Name="lblValidateRazonSocial" Content="{Binding Empresa.Validations, ConverterParameter=RazonSocial, Converter={StaticResource converterhelper}, UpdateSourceTrigger=PropertyChanged}" Margin="375,107,10,0" VerticalAlignment="Top" Height="26" FontWeight="Bold" Foreground="Red"/>-->
+        <TextBox x:Name="txtRazonSocial" Text="{Binding Empresa.RazonSocial, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Height="22" Margin="92,109,289,0" TextWrapping="Wrap" VerticalAlignment="Top">
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+
 
         <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Empresa.Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,144,0,0" VerticalAlignment="Top" Height="15" Width="53"/>
 

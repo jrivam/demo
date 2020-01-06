@@ -26,6 +26,7 @@ namespace WpfApp.ViewModels
         {
             Empresa = empresa;
         }
+
         public EmpresaViewModel()
             : this(new Presentation.Table.Empresa())
         {

@@ -6,6 +6,5 @@ namespace Library.Interface.Persistence.Table
         where T : IEntity
         where U : ITableData<T, U>
     {
-        void Init();
     }
 }

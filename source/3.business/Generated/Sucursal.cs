@@ -1,8 +1,9 @@
 ﻿using Library.Impl;
-using Library.Impl.Domain;
-using Library.Impl.Domain.Loader;
-using Library.Impl.Domain.Query;
-using Library.Impl.Domain.Table;
+using Library.Impl.Business;
+using Library.Impl.Business.Loader;
+using Library.Impl.Business.Query;
+using Library.Impl.Business.Table;
+using Library.Impl.Business.Validator;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
@@ -12,6 +13,15 @@ namespace Business.Table
 {
     public partial class Sucursal : AbstractTableDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
+        protected override void Init()
+        {
+            base.Init();
+
+            //Validations.Add(("CodigoNotEmpty", new EmptyValidator(Data["Codigo"])));
+            //Validations.Add(("CodigoUnique", new UniqueValidator<Entities.Table.Sucursal, Persistence.Table.Sucursal>(Data["Codigo"], new Persistence.Query.Sucursal())));
+            //Validations.Add(("NombreNotEmpty", new EmptyValidator(Data["Nombre"])));
+        }
+
         public Sucursal(Persistence.Table.Sucursal data,
             ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic)
             : base(data, 
