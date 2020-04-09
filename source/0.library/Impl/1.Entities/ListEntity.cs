@@ -11,13 +11,12 @@ namespace Library.Impl.Entities
         {
             get
             {
-                var list = new List<T>();
-                this?.ForEach(x => list.Add(x));
-                return list;
+                return this?.ToList();
             }
             set
             {
-                value?.ToList().ForEach(x => this?.Add(x));
+                if (this?.Count != 0 || value?.Count != 0)
+                    this?.AddRange(value);
             }
         }
 
@@ -32,10 +31,7 @@ namespace Library.Impl.Entities
 
         public virtual IListEntity<T> Load(IEnumerable<T> list)
         {
-            if (list != null)
-            {
-                this?.AddRange(list);
-            }
+            List = list?.ToList();
 
             return this;
         }

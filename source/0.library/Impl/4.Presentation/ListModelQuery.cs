@@ -38,8 +38,6 @@ namespace Library.Impl.Presentation
             {
                 Messenger.Default.Send<int>(top, $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
-
-            TotalRecords();
         }
         public ListModelQuery(string name,
             Q query, int maxdepth = 1, int top = 0)
@@ -51,13 +49,20 @@ namespace Library.Impl.Presentation
 
         public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0)
         {
-            this.ClearItems();
-
             var list = _query.List(_maxdepth, top);
 
-            var load = Load(list.models, _query.Status);
+            Status = _query.Status;
 
-            return (list.result, load);
+            if (list.result.Success)
+            {
+                this.ClearItems();
+
+                var load = Load(list.models);
+
+                return (list.result, load);
+            }
+
+            return (list.result, null);
         }
 
         public virtual void CommandRefresh((Result result, IListModel<T, U, V, W> models) operation)

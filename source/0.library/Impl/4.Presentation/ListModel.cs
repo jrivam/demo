@@ -74,6 +74,8 @@ namespace Library.Impl.Presentation
             {
                 Messenger.Default.Send<W>(null, $"{Name}Add");
             }, delegate (object parameter) { return this != null; });
+
+            TotalRecords();
         }
         public ListModel(string name)
             : this(new ListDomain<T, U, V>(),
@@ -81,15 +83,10 @@ namespace Library.Impl.Presentation
         {
         }
 
-        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list, string status = null)
+        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list)
         {
-            if (list != null)
-            {
-                foreach (var item in list)
-                    this?.CommandAdd(item);
-            }
-
-            Status = status;
+            list?.ToList()?.ForEach(x => this?.Add(x));
+            TotalRecords();
 
             return this;
         }
@@ -105,35 +102,51 @@ namespace Library.Impl.Presentation
         public virtual (Result result, W model) CommandErase((CommandAction action, (Result result, W model) operation) message)
         {
             if (message.operation.result.Success)
-                if (message.operation.model?.Domain.Data.Entity.Id != null)
-                    this.Remove(this.FirstOrDefault(x => x.Domain.Data.Entity.Id == message.operation.model?.Domain.Data.Entity.Id));
-
-            TotalRecords();
+                ItemRemove(this.FirstOrDefault(x => x.Domain?.Data?.Entity?.Id == message.operation.model?.Domain?.Data?.Entity?.Id));
 
             return message.operation;
         }
 
-        public virtual void CommandEdit((W oldvalue, W newvalue) message)
+        public virtual void ItemEdit((W oldvalue, W newvalue) message)
         {
             if (this.Count > 0)
             {
-                var i = this.IndexOf(message.oldvalue);
-                if (i >= 0)
-                    this[i] = message.newvalue;
+                if (!message.newvalue.Domain.Deleted)
+                {
+                    var i = this.IndexOf(message.oldvalue);
+                    if (i >= 0)
+                    {
+                        this[i] = message.newvalue;
+                        TotalRecords();
+                    }
+                }
+                else
+                {
+                    ItemRemove(message.oldvalue);
+                }
             }
-
-            TotalRecords();
         }
 
-        public virtual void CommandAdd(W model)
+        public virtual void ItemAdd(W model)
         {
             if (model.Domain?.Data?.Entity?.Id != null)
-                this.Add(model);
-
-            TotalRecords();
+                if (!model.Domain.Deleted)
+                {
+                    this.Add(model);
+                    TotalRecords();
+                }
         }
 
-        protected virtual void TotalRecords()
+        public virtual void ItemRemove(W model)
+        {
+            if (model.Domain?.Data?.Entity?.Id != null)
+            {
+                this.Remove(model);
+                TotalRecords();
+            }
+        }
+
+        public virtual void TotalRecords()
         {
             Total = $"{(this.Count == 0 ? "No records" : $"Total records: {this.Count}")}";
         }

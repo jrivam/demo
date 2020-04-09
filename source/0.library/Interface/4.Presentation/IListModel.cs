@@ -20,6 +20,6 @@ namespace Library.Interface.Presentation
 
         ICommand AddCommand { get; }
 
-        IListModel<T, U, V, W> Load(IEnumerable<W> list, string status = null);
+        IListModel<T, U, V, W> Load(IEnumerable<W> list);
     }
 }

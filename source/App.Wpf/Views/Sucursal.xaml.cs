@@ -23,6 +23,11 @@ namespace WpfApp.Views
         {
             InitializeComponent();
         }
+        public Sucursal(Presentation.Table.Sucursal entity)
+            : this()
+        {
+            ViewModel.Sucursal = entity;
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

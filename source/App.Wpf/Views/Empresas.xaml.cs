@@ -22,6 +22,7 @@ namespace WpfApp.Views
         public Empresas()
         {
             InitializeComponent();
+            ViewModel.EmpresasQuery.Refresh();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -30,12 +31,10 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaSave, "EmpresaSave");
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
 
-            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresaEdit, "EmpresaEdit");
-
-            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresasAdd, "EmpresasAdd");
             Messenger.Default.Register<int>(this, EmpresasRefresh, "EmpresasRefresh");
 
-            EmpresasRefresh();
+            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresasAdd, "EmpresasAdd");
+            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresaEdit, "EmpresaEdit");
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -43,10 +42,10 @@ namespace WpfApp.Views
             Messenger.Default.Unregister(this, "EmpresaSave");
             Messenger.Default.Unregister(this, "EmpresaErase");
 
-            Messenger.Default.Unregister(this, "EmpresaEdit");
+            Messenger.Default.Unregister(this, "EmpresasRefresh");
 
             Messenger.Default.Unregister(this, "EmpresasAdd");
-            Messenger.Default.Unregister(this, "EmpresasRefresh");
+            Messenger.Default.Unregister(this, "EmpresaEdit");
         }
 
         public virtual void EmpresaLoad((CommandAction action, (Result result, Presentation.Table.Empresa entity) operation) message)
@@ -62,37 +61,25 @@ namespace WpfApp.Views
             ViewModel.EmpresasQuery.CommandErase(message);
         }
 
-        public virtual void EmpresaEdit(Presentation.Table.Empresa entity)
+        public virtual void EmpresasRefresh(int top = 0)
         {
-            var view = new Views.Empresa();
-
-            view.ViewModel.Empresa = entity;
-
-            view.ShowDialog();
-
-            if (view.ViewModel.Empresa.Domain.Deleted)
-                ViewModel.EmpresasQuery.Remove(entity);
-            else
-                ViewModel.EmpresasQuery.CommandEdit((entity, view.ViewModel.Empresa));
+            ViewModel.EmpresasQuery.CommandRefresh(ViewModel.EmpresasQuery.Refresh(top:top));
         }
 
         public virtual void EmpresasAdd(Presentation.Table.Empresa entity)
         {
             var view = new Views.Empresa();
-
             view.ViewModel.Empresa.Activo = true;
-
-
-
             view.ShowDialog();
 
-            ViewModel.EmpresasQuery.CommandAdd(view.ViewModel.Empresa);
+            ViewModel.EmpresasQuery.ItemAdd(view.ViewModel.Empresa);
         }
-        public virtual void EmpresasRefresh(int top = 0)
+        public virtual void EmpresaEdit(Presentation.Table.Empresa entity)
         {
-            var refresh = ViewModel.EmpresasQuery.Refresh(top);
+            var view = new Views.Empresa(entity);
+            view.ShowDialog();
 
-            ViewModel.EmpresasQuery.CommandRefresh(refresh);
+            ViewModel.EmpresasQuery.ItemEdit((entity, view.ViewModel.Empresa));
         }
     }
 }
