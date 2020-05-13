@@ -112,13 +112,13 @@ namespace Persistence.Table
 
                 return _sucursales;
             }
-            set
+            protected set
             {
                 if (_sucursales != value)
                 {
                     _sucursales = value;
 
-                    Entity.Sucursales = _sucursales?.Entities;
+                    //Entity.Sucursales = _sucursales?.Entities;
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace Persistence.Table
                 return (select.result, _sucursales);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Sucursales_Refresh", $"Id in {this?.Description?.Name} cannot be null") } }, null);
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Sucursales_Refresh", $"Id in {this?.Description?.Name} cannot be null") } }, null);
         }
     }
 

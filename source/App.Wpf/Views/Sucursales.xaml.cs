@@ -81,7 +81,7 @@ namespace WpfApp.Views
             var view = new Views.Sucursal(entity);
             view.ShowDialog();
 
-            ViewModel.SucursalesQuery.ItemEdit((entity, view.ViewModel.Sucursal));
+            ViewModel.SucursalesQuery.ItemEdit(entity, view.ViewModel.Sucursal);
         }
     }
 }

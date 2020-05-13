@@ -21,5 +21,9 @@ namespace Library.Interface.Presentation
         ICommand AddCommand { get; }
 
         IListModel<T, U, V, W> Load(IEnumerable<W> list);
+        
+        void ItemEdit(W oldmodel, W newmodel);
+        bool ItemAdd(W model);
+        bool ItemRemove(W model);
     }
 }

@@ -8,5 +8,9 @@ namespace Library.Interface.Entities
         IList<T> List { get; set; }
 
         IListEntity<T> Load(IEnumerable<T> list);
+
+        void ItemEdit(T oldentity, T newentity);
+        bool ItemAdd(T entity);
+        bool ItemRemove(T entity);
     }
 }

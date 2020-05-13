@@ -134,13 +134,13 @@ namespace Persistence.Table
 
                 return _empresa;
             }
-            set
+            protected set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
 
-                    Entity.Empresa = _empresa?.Entity;
+                    //Entity.Empresa = _empresa?.Entity;
                 }
             }
         }
@@ -283,7 +283,7 @@ namespace Persistence.Mapper
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                data.Empresa = new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
+                //data.Empresa = new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
             }
 
             return data;

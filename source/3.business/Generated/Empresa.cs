@@ -3,7 +3,6 @@ using Library.Impl.Business;
 using Library.Impl.Business.Loader;
 using Library.Impl.Business.Query;
 using Library.Impl.Business.Table;
-using Library.Impl.Business.Validator;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
@@ -81,13 +80,13 @@ namespace Business.Table
 
                 return _sucursales;
             }
-            set
+            protected set
             {
                 if (_sucursales != value)
                 {
                     _sucursales = value;
 
-                    Data.Sucursales = _sucursales != null ? (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(_sucursales?.Datas) : null;
+                    //Data.Sucursales = _sucursales != null ? (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(_sucursales?.Datas) : null;
                 }
             }
         }
@@ -95,7 +94,8 @@ namespace Business.Table
         {
             var refresh = Data.Sucursales_Refresh(maxdepth, top, query?.Data);
 
-            Sucursales = new Business.Table.Sucursales(refresh.datas);
+            if (refresh.datas != null)
+                Sucursales = new Business.Table.Sucursales(refresh.datas);
 
             return (refresh.result, _sucursales);
         }

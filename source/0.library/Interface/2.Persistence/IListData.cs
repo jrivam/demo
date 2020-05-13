@@ -12,5 +12,9 @@ namespace Library.Interface.Persistence
         IListEntity<T> Entities { get; set; }
 
         ListData<T, U> Load(IEnumerable<U> list);
+
+        void ItemEdit(U olddata, U newdata);
+        bool ItemAdd(U data);
+        bool ItemRemove(U data);
     }
 }

@@ -99,13 +99,13 @@ namespace Presentation.Table
 
                 return _sucursales;
             }
-            set
+            protected set
             {
                 if (_sucursales != value)
                 {
                     _sucursales = value;
 
-                    Domain.Sucursales = (_sucursales != null) ? (Business.Table.Sucursales)new Business.Table.Sucursales().Load(_sucursales?.Domains) : null;
+                    //Domain.Sucursales = (_sucursales != null) ? (Business.Table.Sucursales)new Business.Table.Sucursales().Load(_sucursales?.Domains) : null;
  
                     OnPropertyChanged("Sucursales");
                 }
@@ -115,7 +115,8 @@ namespace Presentation.Table
         {
             var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
 
-            Sucursales = new Presentation.Table.SucursalesQuery(refresh.domains);
+            if (refresh.domains != null)
+                Sucursales = new Presentation.Table.SucursalesQuery(refresh.domains);
 
             return (refresh.result, _sucursales);
         }

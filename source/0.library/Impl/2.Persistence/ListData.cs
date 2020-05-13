@@ -11,15 +11,20 @@ namespace Library.Impl.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
+        protected IListEntity<T> _entities;
         public virtual IListEntity<T> Entities
         {
             get
             {
-                return new ListEntity<T>().Load(this?.Select(x => x.Entity));
+                return _entities;
             }
             set
             {
-                value?.ToList().ForEach(x => this?.Add(Persistence.HelperRepository<T, U>.CreateInstance(x)));
+                if (_entities != value)
+                {
+                    _entities = value;
+                    _entities?.ToList().ForEach(x => this.Add(Persistence.HelperRepository<T, U>.CreateInstance(x)));
+                }
             }
         }
 
@@ -37,9 +42,37 @@ namespace Library.Impl.Persistence
             if (list != null)
             {
                 this?.AddRange(list);
+                _entities = new ListEntity<T>(this?.Select(x => x.Entity).ToList());
             }
 
             return this;
+        }
+
+        public virtual void ItemEdit(U olddata, U newdata)
+        {
+            Entities.ItemEdit(olddata.Entity, newdata.Entity);
+        }
+        public virtual bool ItemAdd(U data)
+        {
+            if (Entities.ItemAdd(data.Entity))
+            {
+                this.Add(data);
+
+                return true;
+            }
+
+            return false;
+        }
+        public virtual bool ItemRemove(U data)
+        {
+            if (Entities.ItemRemove(data.Entity))
+            {
+                this.Remove(data);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

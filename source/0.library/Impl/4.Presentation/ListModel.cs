@@ -19,15 +19,20 @@ namespace Library.Impl.Presentation
         where V : ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
     {
+        protected IListDomain<T, U, V> _domains;
         public virtual IListDomain<T, U, V> Domains
         {
             get
             {
-                return new ListDomain<T, U, V>().Load(this?.Select(x => x.Domain));
+                return _domains;
             }
             set
             {
-                value?.ToList().ForEach(x => this.Add(Presentation.HelperInteractive<T, U, V, W>.CreateInstance(x)));
+                if (_domains != value)
+                {
+                    _domains = value;
+                    _domains?.ToList().ForEach(x => this.Add(Presentation.HelperInteractive<T, U, V, W>.CreateInstance(x)));
+                }
             }
         }
 
@@ -85,8 +90,13 @@ namespace Library.Impl.Presentation
 
         public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list)
         {
-            list?.ToList()?.ForEach(x => this?.Add(x));
-            TotalRecords();
+            if (list != null)
+            {
+                list.ToList()?.ForEach(x => this?.Add(x));
+                _domains = new ListDomain<T, U, V>().Load(this?.Select(x => x.Domain));
+
+                TotalRecords();
+            }
 
             return this;
         }
@@ -107,43 +117,35 @@ namespace Library.Impl.Presentation
             return message.operation;
         }
 
-        public virtual void ItemEdit((W oldvalue, W newvalue) message)
+        public virtual void ItemEdit(W oldmodel, W newmodel)
         {
-            if (this.Count > 0)
+            Domains.ItemEdit(oldmodel.Domain, newmodel.Domain);
+        }
+
+        public virtual bool ItemAdd(W model)
+        {
+            if (Domains.ItemAdd(model.Domain))
             {
-                if (!message.newvalue.Domain.Deleted)
-                {
-                    var i = this.IndexOf(message.oldvalue);
-                    if (i >= 0)
-                    {
-                        this[i] = message.newvalue;
-                        TotalRecords();
-                    }
-                }
-                else
-                {
-                    ItemRemove(message.oldvalue);
-                }
+                this.Add(model);
+
+                TotalRecords();
+                return true;
             }
+
+            return false;
         }
 
-        public virtual void ItemAdd(W model)
+        public virtual bool ItemRemove(W model)
         {
-            if (model.Domain?.Data?.Entity?.Id != null)
-                if (!model.Domain.Deleted)
-                {
-                    this.Add(model);
-                    TotalRecords();
-                }
-        }
-
-        public virtual void ItemRemove(W model)
-        {
-            if (model.Domain?.Data?.Entity?.Id != null)
+            if (Domains.ItemRemove(model.Domain))
             {
                 this.Remove(model);
+
                 TotalRecords();
+                return true;
             }
+
+            return false;
         }
 
         public virtual void TotalRecords()

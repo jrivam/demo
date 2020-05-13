@@ -100,17 +100,18 @@ namespace Presentation.Table
                     {
                         Empresa_Refresh();
                     }
+
                 }
 
                 return _empresa;
             }
-            set
+            protected set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
 
-                    Domain.Empresa = _empresa?.Domain;
+                    //Domain.Empresa = _empresa?.Domain;
 
                     OnPropertyChanged("Empresa");
                 }
@@ -120,7 +121,8 @@ namespace Presentation.Table
         {
             var refresh = Domain.Empresa_Refresh(maxdepth, query?.Domain);
 
-            Empresa = new Presentation.Table.Empresa(refresh.domain);
+            if (refresh.domain != null)
+                Empresa = new Presentation.Table.Empresa(refresh.domain);
 
             return (refresh.result, _empresa);
         }
@@ -158,10 +160,10 @@ namespace Presentation.Table
                 new Presentation.Query.Sucursal(), maxdepth, top)
         {
         }
-        public SucursalesQuery(int maxdepth = 1, int top = 0)
-            : this(new Presentation.Query.Sucursal(), maxdepth, top)
-        {
-        }
+        //public SucursalesQuery(int maxdepth = 1, int top = 0)
+        //    : this(new Presentation.Query.Sucursal(), maxdepth, top)
+        //{
+        //}
     }
 }
 

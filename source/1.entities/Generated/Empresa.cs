@@ -29,7 +29,7 @@ namespace Entities.Table
 
     public partial class Empresas : ListEntity<Entities.Table.Empresa>
     {
-        public Empresas(List<Entities.Table.Empresa> entities)
+        public Empresas(IList<Entities.Table.Empresa> entities)
             : base(entities)
         {
         }

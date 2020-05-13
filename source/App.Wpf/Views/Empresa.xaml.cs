@@ -94,6 +94,7 @@ namespace WpfApp.Views
             view.ViewModel.Sucursal.Activo = true;
             view.ShowDialog();
 
+            //view.ViewModel.Sucursal.Id != null && 
             if (view.ViewModel.Sucursal.IdEmpresa == ViewModel.Empresa.Id)
                 ViewModel.Empresa.Sucursales.ItemAdd(view.ViewModel.Sucursal);
         }
@@ -103,7 +104,7 @@ namespace WpfApp.Views
             view.ShowDialog();
 
             if (view.ViewModel.Sucursal.IdEmpresa == ViewModel.Empresa.Id)
-                ViewModel.Empresa.Sucursales.ItemEdit((entity, view.ViewModel.Sucursal));
+                ViewModel.Empresa.Sucursales.ItemEdit(entity, view.ViewModel.Sucursal);
             else if (!view.ViewModel.Sucursal.Domain.Changed)
                 ViewModel.Empresa.Sucursales.ItemRemove(entity);
         }

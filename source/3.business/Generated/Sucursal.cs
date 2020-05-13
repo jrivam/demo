@@ -101,13 +101,13 @@ namespace Business.Table
 
                 return _empresa;
             }
-            set
+            protected set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
 
-                    Data.Empresa = _empresa?.Data;
+                    //Data.Empresa = _empresa?.Data;
                 }
             }
         }
@@ -115,7 +115,8 @@ namespace Business.Table
         {
             var refresh = Data.Empresa_Refresh(maxdepth, query?.Data);
 
-            Empresa = new Business.Table.Empresa(refresh.data);
+            if (refresh.data != null)
+                Empresa = new Business.Table.Empresa(refresh.data);
 
             return (refresh.result, _empresa);
         }

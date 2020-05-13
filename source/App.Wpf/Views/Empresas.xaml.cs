@@ -79,7 +79,7 @@ namespace WpfApp.Views
             var view = new Views.Empresa(entity);
             view.ShowDialog();
 
-            ViewModel.EmpresasQuery.ItemEdit((entity, view.ViewModel.Empresa));
+            ViewModel.EmpresasQuery.ItemEdit(entity, view.ViewModel.Empresa);
         }
     }
 }

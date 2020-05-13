@@ -35,5 +35,26 @@ namespace Library.Impl.Entities
 
             return this;
         }
+
+        public void ItemEdit(T oldentity, T newentity)
+        {
+        }
+        public virtual bool ItemAdd(T entity)
+        {
+            if (entity.Id != null)
+            {
+                this.Add(entity);
+
+                return true;
+            }
+
+            return false;
+        }
+        public virtual bool ItemRemove(T entity)
+        {
+            this.Remove(entity);
+
+            return true;
+        }
     }
 }

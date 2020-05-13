@@ -14,15 +14,20 @@ namespace Library.Impl.Business
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
+        protected IListData<T, U> _datas;
         public virtual IListData<T, U> Datas
         {
             get
             {
-                return new ListData<T, U>().Load(this?.Select(x => x.Data));
+                return _datas;
             }
             set
             {
-                value?.ToList().ForEach(x => this?.Add(Business.HelperLogic<T, U, V>.CreateInstance(x)));
+                if (_datas != value)
+                {
+                    _datas = value;
+                    _datas?.ToList().ForEach(x => this.Add(Business.HelperLogic<T, U, V>.CreateInstance(x)));
+                }
             }
         }
 
@@ -40,6 +45,7 @@ namespace Library.Impl.Business
             if (list != null)
             {
                 this?.AddRange(list);
+                _datas = new ListData<T, U>().Load(this?.Select(x => x.Data));
             }
 
             return this;
@@ -70,6 +76,37 @@ namespace Library.Impl.Business
             }
 
             return result;
+        }
+
+        public virtual void ItemEdit(V olddomain, V newdomain)
+        {
+            Datas.ItemEdit(olddomain.Data, olddomain.Data);
+        }
+        public virtual bool ItemAdd(V domain)
+        {
+            if (!domain.Deleted)
+            {
+                if (Datas.ItemAdd(domain.Data))
+                {
+                    this.Add(domain);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public virtual bool ItemRemove(V domain)
+        {
+            if (Datas.ItemRemove(domain.Data))
+            {
+                this.Remove(domain);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

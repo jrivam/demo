@@ -37,7 +37,7 @@ namespace Entities.Table
 
     public partial class Sucursales : ListEntity<Entities.Table.Sucursal>
     {
-        public Sucursales(List<Entities.Table.Sucursal> entities)
+        public Sucursales(IList<Entities.Table.Sucursal> entities)
             : base(entities)
         {
         }
