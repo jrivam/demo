@@ -11,20 +11,20 @@ namespace Library.Impl.Business.Table
         where U : ITableData<T, U>, new()
         where V : class, ITableDomain<T, U, V>
     {
-        public virtual T Entity
-        {
-            get
-            {
-                return Data.Entity;
-            }
-            set
-            {
-                Data.Entity = value;
+        //public virtual T Entity
+        //{
+        //    get
+        //    {
+        //        return Data.Entity;
+        //    }
+        //    set
+        //    {
+        //        Data.Entity = value;
 
-                Changed = true;
-                Deleted = false;
-            }
-        }
+        //        Changed = true;
+        //        Deleted = false;
+        //    }
+        //}
 
         protected U _data;
         public virtual U Data

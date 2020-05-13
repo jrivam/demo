@@ -109,7 +109,7 @@ namespace Web.Api.Controllers
                     {
                         if (load.domain != null)
                         {
-                            load.domain.Entity = entity;
+                            load.domain.Data.Entity = entity;
 
                             using (var scope = new TransactionScope())
                             {

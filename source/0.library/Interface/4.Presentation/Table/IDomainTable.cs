@@ -9,7 +9,7 @@ namespace Library.Interface.Presentation.Table
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        T Entity { get; set; }
+        //T Entity { get; set; }
 
         V Domain { get; set; }
     }

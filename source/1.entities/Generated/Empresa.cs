@@ -24,7 +24,7 @@ namespace Entities.Table
         [Column("activo")]
         public virtual bool? Activo { get; set; }
 
-        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; set; }
+        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; protected set; }
     }
 
     public partial class Empresas : ListEntity<Entities.Table.Empresa>

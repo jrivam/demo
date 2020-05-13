@@ -21,10 +21,10 @@ namespace Persistence.Table
         {
             base.Init();
 
-            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
-            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc"));
-            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), nameof(Id), isprimarykey: true, isidentity: true));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Ruc))?.Name ?? nameof(Ruc).ToUnderscoreCase().ToLower(), nameof(Ruc)));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(RazonSocial))?.Name ?? nameof(RazonSocial).ToUnderscoreCase().ToLower(), nameof(RazonSocial)));
+            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower(), nameof(Activo)));
         }
 
         public Empresa(Entities.Table.Empresa entity,
@@ -33,7 +33,7 @@ namespace Persistence.Table
             : base(entity,
                   repository,
                   query,
-                  typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? "empresa", "Empresa")
+                  typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Empresa).ToUnderscoreCase().ToLower(), nameof(Empresa))
         {
         }
 
@@ -83,15 +83,15 @@ namespace Persistence.Table
             {
                 if (Entity?.Id != value)
                 {
-                    Columns["Id"].Value = Entity.Id = value;
+                    Columns[nameof(Id)].Value = Entity.Id = value;
 
                     _sucursales?.ForEach(x => x.IdEmpresa = value);
                 }
             }
         }
-        public virtual string Ruc { get { return Entity?.Ruc; } set { if (Entity?.Ruc != value) { Columns["Ruc"].Value = Entity.Ruc = value; } } }
-        public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { Columns["RazonSocial"].Value = Entity.RazonSocial = value; } } }
-        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns["Activo"].Value = Entity.Activo = value; } } }
+        public virtual string Ruc { get { return Entity?.Ruc; } set { if (Entity?.Ruc != value) { Columns[nameof(Ruc)].Value = Entity.Ruc = value; } } }
+        public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { Columns[nameof(RazonSocial)].Value = Entity.RazonSocial = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns[nameof(Activo)].Value = Entity.Activo = value; } } }
 
         protected Persistence.Table.Sucursales _sucursales;
         public virtual Persistence.Table.Sucursales Sucursales
@@ -161,10 +161,10 @@ namespace Persistence.Query
     {
         public override void Init()
         {
-            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
-            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Ruc")?.Name ?? "ruc", "Ruc"));
-            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("RazonSocial")?.Name ?? "razon_social", "RazonSocial"));
-            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), nameof(Id)));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Ruc))?.Name ?? nameof(Ruc).ToUnderscoreCase().ToLower(), nameof(Ruc)));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(RazonSocial))?.Name ?? nameof(RazonSocial).ToUnderscoreCase().ToLower(), nameof(RazonSocial)));
+            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower(), nameof(Activo)));
         }
 
         public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
@@ -187,28 +187,28 @@ namespace Persistence.Query
         {
             set
             {
-                Columns["Id"].Where(value.value, value.sign);
+                Columns[nameof(Id)].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Ruc
         {
             set
             {
-                Columns["Ruc"].Where(value.value, value.sign);
+                Columns[nameof(Ruc)].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) RazonSocial
         {
             set
             {
-                Columns["RazonSocial"].Where(value.value, value.sign);
+                Columns[nameof(RazonSocial)].Where(value.value, value.sign);
             }
         }
         public virtual (bool? value, WhereOperator? sign) Activo
         {
             set
             {
-                Columns["Activo"].Where(value.value, value.sign);
+                Columns[nameof(Activo)].Where(value.value, value.sign);
             }
         }
 

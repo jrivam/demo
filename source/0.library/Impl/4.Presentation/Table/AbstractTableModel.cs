@@ -16,19 +16,19 @@ namespace Library.Impl.Presentation.Table
         where V : ITableDomain<T, U, V>, new()
         where W : class, ITableModel<T, U, V, W>
     {
-        public virtual T Entity
-        {
-            get
-            {
-                return Domain.Entity;
-            }
-            set
-            {
-                Domain.Entity = value;
+        //public virtual T Entity
+        //{
+        //    get
+        //    {
+        //        return Domain.Entity;
+        //    }
+        //    set
+        //    {
+        //        Domain.Entity = value;
 
-                OnPropertyChanged("Entity");
-            }
-        }
+        //        OnPropertyChanged("Entity");
+        //    }
+        //}
 
         protected V _domain;
         public virtual V Domain

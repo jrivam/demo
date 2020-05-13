@@ -21,13 +21,13 @@ namespace Persistence.Table
         {
             base.Init();
 
-            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id", isprimarykey: true, isidentity: true));
-            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo"));
-            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new ColumnTable<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), nameof(Id), isprimarykey: true, isidentity: true));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower(), nameof(Codigo)));
+            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower(), nameof(Nombre)));
+            Columns.Add(new ColumnTable<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower(), nameof(Fecha)));
+            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower(), nameof(Activo)));
 
-            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower(), nameof(IdEmpresa)));
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
@@ -36,7 +36,7 @@ namespace Persistence.Table
             : base(entity, 
                   repository,
                   query,
-                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower(), nameof(Sucursal))
         {
         }
 
@@ -93,10 +93,10 @@ namespace Persistence.Table
                 }
             }
         }
-        public virtual string Codigo { get { return Entity?.Codigo; } set { if (Entity?.Codigo != value) { Columns["Codigo"].Value = Entity.Codigo = value; } } }
-        public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { Columns["Nombre"].Value = Entity.Nombre = value; } } }
-        public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { Columns["Fecha"].Value = Entity.Fecha = value; } } }
-        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns["Activo"].Value = Entity.Activo = value; } } }
+        public virtual string Codigo { get { return Entity?.Codigo; } set { if (Entity?.Codigo != value) { Columns[nameof(Codigo)].Value = Entity.Codigo = value; } } }
+        public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { Columns[nameof(Nombre)].Value = Entity.Nombre = value; } } }
+        public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { Columns[nameof(Fecha)].Value = Entity.Fecha = value; } } }
+        public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns[nameof(Activo)].Value = Entity.Activo = value; } } }
 
         public virtual int? IdEmpresa
         {
@@ -108,7 +108,7 @@ namespace Persistence.Table
             {
                 if (Entity?.IdEmpresa != value)
                 {
-                    Columns["IdEmpresa"].Value = Entity.IdEmpresa = value;
+                    Columns[nameof(IdEmpresa)].Value = Entity.IdEmpresa = value;
 
                     Empresa = null;
                 }
@@ -187,7 +187,7 @@ namespace Persistence.Query
 
             if (_empresa != null || depth < maxdepth || maxdepth == 0)
             {
-                joins.Add((Columns["IdEmpresa"], Empresa()["Id"]));
+                joins.Add((Columns[nameof(IdEmpresa)], Empresa()[nameof(Id)]));
             }
 
             return joins;
@@ -195,13 +195,13 @@ namespace Persistence.Query
 
         public override void Init()
         {
-            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Id")?.Name ?? "id", "Id"));
-            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Codigo")?.Name ?? "codigo", "Codigo"));
-            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Nombre")?.Name ?? "nombre", "Nombre"));
-            Columns.Add(new ColumnQuery<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Fecha")?.Name ?? "fecha", "Fecha"));
-            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("Activo")?.Name ?? "activo", "Activo"));
+            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), nameof(Id)));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower(), nameof(Codigo)));
+            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower(), nameof(Nombre)));
+            Columns.Add(new ColumnQuery<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower(), nameof(Fecha)));
+            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower(), nameof(Activo)));
 
-            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>("IdEmpresa")?.Name ?? "id_empresa", "IdEmpresa"));
+            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower(), nameof(IdEmpresa)));
         }
 
         public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
@@ -224,35 +224,35 @@ namespace Persistence.Query
         {
             set
             {
-                Columns["Id"].Where(value.value, value.sign);
+                Columns[nameof(Id)].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Codigo
         {
             set
             {
-                Columns["Codigo"].Where(value.value, value.sign);
+                Columns[nameof(Codigo)].Where(value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Nombre
         {
             set
             {
-                Columns["Nombre"].Where(value.value, value.sign);
+                Columns[nameof(Nombre)].Where(value.value, value.sign);
             }
         }
         public virtual (DateTime? value, WhereOperator? sign) Fecha
         {
             set
             {
-                Columns["Fecha"].Where(value.value, value.sign);
+                Columns[nameof(Fecha)].Where(value.value, value.sign);
             }
         }
         public virtual (bool? value, WhereOperator? sign) Activo
         {
             set
             {
-                Columns["Activo"].Where(value.value, value.sign);
+                Columns[nameof(Activo)].Where(value.value, value.sign);
             }
         }
 
@@ -260,7 +260,7 @@ namespace Persistence.Query
         {
             set
             {
-                Columns["IdEmpresa"].Where(value.value, value.sign);
+                Columns[nameof(IdEmpresa)].Where(value.value, value.sign);
             }
         }
 
