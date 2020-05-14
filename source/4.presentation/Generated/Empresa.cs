@@ -1,4 +1,5 @@
-﻿using Library.Impl;
+﻿using Business.Mapper;
+using Library.Impl;
 using Library.Impl.Persistence.Sql;
 using Library.Impl.Presentation;
 using Library.Impl.Presentation.Query;
@@ -60,8 +61,8 @@ namespace Presentation.Table
             }
         }
 
-        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; ValidateProperty(value); OnPropertyChanged("Id"); } } }
-        public virtual string Ruc { get { return Domain?.Ruc; } set { if (Domain?.Ruc != value) { Domain.Ruc = value; ValidateProperty(value); OnPropertyChanged("Ruc"); } } }
+        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; ValidateProperty(value); OnPropertyChanged(nameof(Id)); } } }
+        public virtual string Ruc { get { return Domain?.Ruc; } set { if (Domain?.Ruc != value) { Domain.Ruc = value; ValidateProperty(value); OnPropertyChanged(nameof(Ruc)); } } }
         public virtual string RazonSocial
         {
             get
@@ -74,11 +75,11 @@ namespace Presentation.Table
                 {
                     Domain.RazonSocial = value;
                     ValidateProperty(value);
-                    OnPropertyChanged("RazonSocial");
+                    OnPropertyChanged(nameof(RazonSocial));
                 }
             }
         }
-        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; ValidateProperty(value); OnPropertyChanged("Activo"); } } }
+        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; ValidateProperty(value); OnPropertyChanged(nameof(Activo)); } } }
 
         protected Presentation.Table.SucursalesQuery _sucursales;
         public virtual Presentation.Table.SucursalesQuery Sucursales
@@ -107,7 +108,7 @@ namespace Presentation.Table
 
                     //Domain.Sucursales = (_sucursales != null) ? (Business.Table.Sucursales)new Business.Table.Sucursales().Load(_sucursales?.Domains) : null;
  
-                    OnPropertyChanged("Sucursales");
+                    OnPropertyChanged(nameof(Sucursales));
                 }
             }
         }
@@ -125,7 +126,7 @@ namespace Presentation.Table
     public partial class Empresas : ListModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
         public Empresas(Business.Table.Empresas domains)
-            : base(domains, "Empresas")
+            : base(domains, nameof(Empresas))
         {
         }
 
@@ -139,7 +140,7 @@ namespace Presentation.Table
     {
         public EmpresasQuery(Business.Table.Empresas domains,
             Presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
-            : base(domains, "Empresas",
+            : base(domains, nameof(Empresas),
                   query, maxdepth, top)
         {
         }

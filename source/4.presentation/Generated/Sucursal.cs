@@ -61,11 +61,11 @@ namespace Presentation.Table
             }
         }
 
-        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged("Id"); } } }
-        public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged("Codigo"); } } }
-        public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged("Nombre"); } } }
-        public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { Domain.Fecha = value; OnPropertyChanged("Fecha"); } } }
-        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged("Activo"); } } }
+        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged(nameof(Id)); } } }
+        public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged(nameof(Codigo)); } } }
+        public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged(nameof(Nombre)); } } }
+        public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { Domain.Fecha = value; OnPropertyChanged(nameof(Fecha)); } } }
+        public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged(nameof(Activo)); } } }
 
         public virtual int? IdEmpresa
         {
@@ -78,7 +78,7 @@ namespace Presentation.Table
                 if (Domain?.IdEmpresa != value)
                 {
                     Domain.IdEmpresa = value;
-                    OnPropertyChanged("IdEmpresa");
+                    OnPropertyChanged(nameof(IdEmpresa));
 
                     Empresa = null;
                 }
@@ -113,7 +113,7 @@ namespace Presentation.Table
 
                     //Domain.Empresa = _empresa?.Domain;
 
-                    OnPropertyChanged("Empresa");
+                    OnPropertyChanged(nameof(Empresa));
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace Presentation.Table
     public partial class Sucursales : ListModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
         public Sucursales(Business.Table.Sucursales domains)
-            : base(domains, "Sucursales")
+            : base(domains, nameof(Sucursales))
         {
         }
 
@@ -145,7 +145,7 @@ namespace Presentation.Table
     {
         public SucursalesQuery(Business.Table.Sucursales domains,
             Presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-            : base(domains, "Sucursales",
+            : base(domains, nameof(Sucursales),
                 query, maxdepth, top)
         {
         }
@@ -251,7 +251,7 @@ namespace Presentation.Raiser
             depth++;
             if (depth < maxdepth)
             {
-                model.OnPropertyChanged("Empresa");
+                model.OnPropertyChanged(nameof(Empresa));
             }
 
             return model;
