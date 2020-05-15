@@ -31,7 +31,7 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaSave, "EmpresaSave");
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
 
-            Messenger.Default.Register<int>(this, EmpresasRefresh, "EmpresasRefresh");
+            Messenger.Default.Register<(Result result, Presentation.Table.Empresas list)>(this, EmpresasRefresh, "EmpresasRefresh");
 
             Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresasAdd, "EmpresasAdd");
             Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresaEdit, "EmpresaEdit");
@@ -61,9 +61,9 @@ namespace WpfApp.Views
             ViewModel.EmpresasQuery.CommandErase(message);
         }
 
-        public virtual void EmpresasRefresh(int top = 0)
+        public virtual void EmpresasRefresh((Result result, Presentation.Table.Empresas list) message)
         {
-            ViewModel.EmpresasQuery.CommandRefresh(ViewModel.EmpresasQuery.Refresh(top:top));
+            ViewModel.EmpresasQuery.CommandRefresh(message);
         }
 
         public virtual void EmpresasAdd(Presentation.Table.Empresa entity)

@@ -36,7 +36,7 @@ namespace Library.Impl.Presentation
 
             RefreshCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<int>(top, $"{Name}Refresh");
+                Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(Refresh(top), $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
         }
         public ListModelQuery(string name,
@@ -65,8 +65,9 @@ namespace Library.Impl.Presentation
             return (list.result, null);
         }
 
-        public virtual void CommandRefresh((Result result, IListModel<T, U, V, W> models) operation)
+        public virtual (Result result, IListModel<T, U, V, W> models) CommandRefresh((Result result, IListModel<T, U, V, W> models) operation)
         {
+            return operation;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace WpfApp.Views
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalSave, "SucursalSave");
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
             
-            Messenger.Default.Register<int>(this, SucursalesRefresh, "SucursalesRefresh");
+            Messenger.Default.Register<(Result result, Presentation.Table.Sucursales list)>(this, SucursalesRefresh, "SucursalesRefresh");
 
             Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesAdd, "SucursalesAdd");
             Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, "SucursalEdit");
@@ -81,9 +81,9 @@ namespace WpfApp.Views
             ViewModel.Empresa.Sucursales.CommandErase(message);
         }
 
-        public virtual void SucursalesRefresh(int top = 0)
+        public virtual void SucursalesRefresh((Result result, Presentation.Table.Sucursales list) message)
         {
-            ViewModel.Empresa.Sucursales.CommandRefresh(ViewModel.Empresa.Sucursales_Refresh());
+            ViewModel.Empresa.Sucursales.CommandRefresh(message);
         }
 
         public virtual void SucursalesAdd(Presentation.Table.Sucursal entity)
