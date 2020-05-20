@@ -1,28 +1,33 @@
 ﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
-using Library.Interface.Presentation.Table;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 
-namespace Library.Impl.Presentation
+namespace Library.Impl.Business
 {
-    public class HelperInteractive<T, U, V, W>
+    public class HelperTableLogic<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
-        where W : ITableModel<T, U, V, W>
     {
-        public static W CreateInstance(V domain, int maxdepth = 1)
+        public static V CreateDomain(U data)
         {
-            return (W)Activator.CreateInstance(typeof(W),
+            return (V)Activator.CreateInstance(typeof(V),
                            BindingFlags.CreateInstance |
                            BindingFlags.Public |
                            BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding, null,
-                           new object[] { domain, maxdepth },
+                           BindingFlags.OptionalParamBinding,
+                           null, new object[] { data },
                            CultureInfo.CurrentCulture);
+        }
+
+        public static IEnumerable<V> CreateDomainList(IEnumerable<U> datas)
+        {
+            return datas.Select(x => CreateDomain(x));
         }
     }
 }

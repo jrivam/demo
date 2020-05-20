@@ -1,5 +1,4 @@
-﻿using Library.Impl.Business;
-using Library.Interface.Business;
+﻿using Library.Interface.Business;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
@@ -25,14 +24,6 @@ namespace Library.Impl.Presentation
             get
             {
                 return _domains;
-            }
-            set
-            {
-                if (_domains != value)
-                {
-                    _domains = value;
-                    _domains?.ToList().ForEach(x => this.Add(Presentation.HelperInteractive<T, U, V, W>.CreateInstance(x)));
-                }
             }
         }
 
@@ -68,32 +59,34 @@ namespace Library.Impl.Presentation
 
         public virtual ICommand AddCommand { get; protected set; }
 
-        public ListModel(IListDomain<T, U, V> domains, 
-            string name)
+        public ListModel(string name)
         {
-            Domains = domains;
-
             Name = name;
 
             AddCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<W>(null, $"{Name}Add");
             }, delegate (object parameter) { return this != null; });
+        }
+
+        public ListModel(string name, IListDomain<T, U, V> domains)
+            : this(name)
+        {
+            _domains = domains;
+            _domains.ToList().ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
 
             TotalRecords();
         }
-        public ListModel(string name)
-            : this(new ListDomain<T, U, V>(),
-                  name)
-        {
-        }
 
-        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> list)
+        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> models)
         {
-            if (list != null)
+            if (models != null)
             {
-                list.ToList()?.ForEach(x => this?.Add(x));
-                _domains = new ListDomain<T, U, V>().Load(this?.Select(x => x.Domain));
+                models.ToList()?.ForEach(x => this?.Add(x));
+
+                _domains.Clear();
+                _domains.Load(this.Select(x => x.Domain));
+                //this.ToList()?.ForEach(x => _domains?.Add(x.Domain));
 
                 TotalRecords();
             }

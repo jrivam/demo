@@ -9,6 +9,7 @@ using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Library.Impl.Presentation.Query
 {
@@ -28,20 +29,23 @@ namespace Library.Impl.Presentation.Query
 
         public virtual (Result result, W model) Retrieve(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, W model = default(W))
         {
-            query.Status = "Loading...";
+            query.Status = "Retrieving...";
 
             var retrieve = query.Domain.Retrieve(maxdepth, (model != null ? model.Domain : default(V)));
-            if (retrieve.result.Success && retrieve.domain != null)
+            if (retrieve.result.Success)
             {
-                var instance = Presentation.HelperInteractive<T, U, V, W>.CreateInstance(retrieve.domain, maxdepth);
+                if (retrieve.domain != null)
+                {
+                    var instance = Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(retrieve.domain, maxdepth);
 
-                Raise(instance, maxdepth);
+                    Raise(instance, maxdepth);
 
-                instance.Status = string.Empty;
+                    instance.Status = string.Empty;
 
-                query.Status = string.Empty;
+                    query.Status = string.Empty;
 
-                return (retrieve.result, model);
+                    return (retrieve.result, model);
+                }
             }
 
             query.Status = retrieve.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
@@ -50,18 +54,21 @@ namespace Library.Impl.Presentation.Query
         }
         public virtual (Result result, IEnumerable<W> models) List(IQueryModel<R, S, T, U, V, W> query, int maxdepth = 1, int top = 0, IListModel<T, U, V, W> models = null)
         {
-            query.Status = "Loading...";
-
-            var enumeration = new List<W>();
+            query.Status = "Listing...";
 
             var list = query.Domain.List(maxdepth, top, (models?.Domains != null ? models?.Domains : new ListDomain<T, U, V>()));
-            if (list.result.Success && list.domains != null)
+            if (list.result.Success)
             {
-                foreach (var instance in RaiseDomains(list.domains, maxdepth))
-                {
-                    instance.Status = string.Empty;
+                var enumeration = new List<W>();
 
-                    enumeration.Add(instance);
+                if (list.domains != null)
+                {
+                    foreach (var instance in RaiseDomains(list.domains, maxdepth))
+                    {
+                        instance.Status = string.Empty;
+
+                        enumeration.Add(instance);
+                    }
                 }
 
                 query.Status = string.Empty;

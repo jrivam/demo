@@ -31,7 +31,7 @@ namespace Library.Impl.Persistence
         {
             foreach (var entity in entities)
             {
-                var data = HelperRepository<T, U>.CreateInstance(entity);
+                var data = HelperTableRepository<T, U>.CreateData(entity);
 
                 Map(data, maxdepth);
 

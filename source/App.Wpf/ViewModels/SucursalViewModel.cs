@@ -32,7 +32,8 @@ namespace WpfApp.ViewModels
                     var query = new Presentation.Query.Empresa();
                     query.Activo = (true, WhereOperator.Equals);
 
-                    Empresas = (Presentation.Table.Empresas)new Presentation.Table.Empresas().Load(query.List().models);
+                    var list = query.List();
+                    Empresas = (Presentation.Table.Empresas)new Presentation.Table.Empresas().Load(list.models);
                 }
                 return _empresas;
             }

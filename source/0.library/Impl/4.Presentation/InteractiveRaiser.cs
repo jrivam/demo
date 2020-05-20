@@ -33,9 +33,9 @@ namespace Library.Impl.Presentation
         {
             foreach (var domain in domains)
             {
-                var presentation = Presentation.HelperInteractive<T, U, V, W>.CreateInstance(domain, maxdepth);
+                var presentation = Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(domain, maxdepth);
 
-                Raise(presentation, maxdepth);
+                //Raise(presentation, maxdepth);
 
                 yield return presentation;
             }

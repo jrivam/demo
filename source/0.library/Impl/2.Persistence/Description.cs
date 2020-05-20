@@ -3,12 +3,12 @@
     public class Description
     {
         public string Name { get; set; }
-        public string Reference { get; set; }
+        public string DbName { get; set; }
 
-        public Description(string name, string reference)
+        public Description(string name, string dbname)
         {
             Name = name;
-            Reference = reference;
+            DbName = dbname;
         }
     }
 }

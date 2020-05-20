@@ -12,8 +12,8 @@ namespace Library.Impl.Persistence.Query
         public virtual IList<(object value, WhereOperator? sign)> Wheres { get; set; } = new List<(object, WhereOperator?)>();
 
         public ColumnQuery(IBuilderQueryData query,
-            string name, string reference)
-            : base(name, reference)
+            string name, string dbname)
+            : base(name, dbname)
         {
             Query = query;
         }

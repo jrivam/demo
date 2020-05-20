@@ -33,7 +33,7 @@ namespace Library.Impl.Persistence.Sql.Builder
         {
             foreach (var c in columns)
             {
-                var parameter = GetParameter($"{_sqlsyntaxsign.ParameterPrefix}{c.view.Reference}{_sqlsyntaxsign.ParameterSeparator}{c.column.Reference}", c.type, c.value, ParameterDirection.Input);
+                var parameter = GetParameter($"{_sqlsyntaxsign.ParameterPrefix}{c.view.Name}{_sqlsyntaxsign.ParameterSeparator}{c.column.Name}", c.type, c.value, ParameterDirection.Input);
                 if (parameters.IndexOf(parameter) < 0)
                     parameters.Add(parameter);
 
@@ -49,7 +49,7 @@ namespace Library.Impl.Persistence.Sql.Builder
 
             foreach (var cp in GetParameters(columns, parameters))
             {
-                set += $"{(string.IsNullOrWhiteSpace(set) ? string.Empty : $",{Environment.NewLine}")}{(_sqlsyntaxsign.UpdateSetUseAlias ? $"{cp.view.Name}." : string.Empty)}{cp.column.Name} = {cp.parameter.Name}";
+                set += $"{(string.IsNullOrWhiteSpace(set) ? string.Empty : $",{Environment.NewLine}")}{(_sqlsyntaxsign.UpdateSetUseAlias ? $"{cp.view.DbName}." : string.Empty)}{cp.column.DbName} = {cp.parameter.Name}";
             }
             set = $"{(!string.IsNullOrWhiteSpace(set) ? $"{set}{Environment.NewLine}" : string.Empty)}";
 

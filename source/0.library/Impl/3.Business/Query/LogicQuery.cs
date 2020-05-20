@@ -24,33 +24,39 @@ namespace Library.Impl.Business.Query
         public virtual (Result result, V domain) Retrieve(IQueryDomain<S, T, U, V> query, int maxdepth = 1, V domain = default(V))
         {
             var selectsingle = query.Data.SelectSingle(maxdepth, (domain != null ? domain.Data : default(U)));
-            if (selectsingle.result.Success && selectsingle.data != null)
+            if (selectsingle.result.Success)
             {
-                var instance = Business.HelperLogic<T, U, V>.CreateInstance(selectsingle.data);
+                if (selectsingle.data != null)
+                {
+                    var instance = Business.HelperTableLogic<T, U, V>.CreateDomain(selectsingle.data);
 
-                Load(instance, maxdepth);
+                    Load(instance, maxdepth);
 
-                instance.Changed = false;
-                instance.Deleted = false;
+                    instance.Changed = false;
+                    instance.Deleted = false;
 
-                return (selectsingle.result, instance);
+                    return (selectsingle.result, instance);
+                }
             }
 
             return (selectsingle.result, default(V));
         }
         public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<S, T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
         {
-            var enumeration = new List<V>();
-
             var selectmultiple = query.Data.Select(maxdepth, top, (domains?.Datas != null ? domains?.Datas : new ListData<T, U>()));
-            if (selectmultiple.result.Success && selectmultiple.datas != null)
+            if (selectmultiple.result.Success)
             {
-                foreach (var instance in LoadDatas(selectmultiple.datas, maxdepth))
-                {
-                    instance.Changed = false;
-                    instance.Deleted = false;
+                var enumeration = new List<V>();
 
-                    enumeration.Add(instance);
+                if (selectmultiple.datas != null)
+                {
+                    foreach (var instance in LoadDatas(selectmultiple.datas, maxdepth))
+                    {
+                        instance.Changed = false;
+                        instance.Deleted = false;
+
+                        enumeration.Add(instance);
+                    }
                 }
 
                 return (selectmultiple.result, enumeration);

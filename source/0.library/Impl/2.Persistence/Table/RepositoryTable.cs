@@ -89,13 +89,13 @@ namespace Library.Impl.Persistence.Table
                     return Select(table, table.SelectDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Select", "No SelectDbCommand defined.") } }, default(U));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Select), "No SelectDbCommand defined.") } }, default(U));
             }
 
             var parameters = new List<SqlParameter>();
 
             var selectcommandtext = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(table.Columns),
-                $"{table.Description.Name}",
+                $"{table.Description.DbName}",
                 _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
 
             return Select(table, selectcommandtext, CommandType.Text, parameters);
@@ -131,7 +131,7 @@ namespace Library.Impl.Persistence.Table
                     return Insert(table, table.InsertDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Insert", "No InsertDbCommand defined.") } }, default(U));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Insert), "No InsertDbCommand defined.") } }, default(U));
             }
 
             var parameters = new List<SqlParameter>();
@@ -143,7 +143,7 @@ namespace Library.Impl.Persistence.Table
                 output += $"{(string.IsNullOrWhiteSpace(output) ? " " : ", ")}";
             }
 
-            var insertcommandtext = _sqlcommandbuilder.Insert($"{table.Description.Name}",
+            var insertcommandtext = _sqlcommandbuilder.Insert($"{table.Description.DbName}",
                 _sqlbuilder.GetInsertColumns(table.Columns.Where(c => !c.IsIdentity).ToList()),
                 _sqlbuilder.GetInsertValues(table.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
                 output);
@@ -180,13 +180,13 @@ namespace Library.Impl.Persistence.Table
                     return Update(table, table.UpdateDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Update", "No UpdateDbCommand defined.") } }, default(U));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Update), "No UpdateDbCommand defined.") } }, default(U));
             }
 
             var parameters = new List<SqlParameter>();
 
-            var updatecommandtext = _sqlcommandbuilder.Update($"{table.Description.Name}",
-                $"{table.Description.Name}",
+            var updatecommandtext = _sqlcommandbuilder.Update($"{table.Description.DbName}",
+                $"{table.Description.DbName}",
                 _sqlbuilder.GetUpdateSet(table.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
                 _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
@@ -220,13 +220,13 @@ namespace Library.Impl.Persistence.Table
                     return Delete(table, table.DeleteDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Delete", "No DeleteDbCommand defined.") } }, default(U));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Delete), "No DeleteDbCommand defined.") } }, default(U));
             }
 
             var parameters = new List<SqlParameter>();
 
-            var deletecommandtext = _sqlcommandbuilder.Delete($"{table.Description.Name}",
-                $"{table.Description.Name}",
+            var deletecommandtext = _sqlcommandbuilder.Delete($"{table.Description.DbName}",
+                $"{table.Description.DbName}",
                 _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
             return Delete(table, deletecommandtext, CommandType.Text, parameters);

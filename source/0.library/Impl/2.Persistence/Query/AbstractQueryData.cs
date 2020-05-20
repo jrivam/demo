@@ -13,11 +13,11 @@ namespace Library.Impl.Persistence.Query
     {
         public virtual Description Description { get; protected set; }
 
-        public virtual IColumnQuery this[string reference]
+        public virtual IColumnQuery this[string name]
         {
             get
             {
-                return Columns[reference];
+                return Columns[name];
             }
         }
         public virtual ListColumns<IColumnQuery> Columns { get; set; } = new ListColumns<IColumnQuery>();
@@ -44,9 +44,9 @@ namespace Library.Impl.Persistence.Query
         protected readonly IRepositoryQuery<T, U> _repository;
 
         public AbstractQueryData(IRepositoryQuery<T, U> repository,
-            string name, string reference)
+            string name, string dbname)
         {
-            Description = new Description(name, reference);
+            Description = new Description(name, dbname);
 
             _repository = repository;
 

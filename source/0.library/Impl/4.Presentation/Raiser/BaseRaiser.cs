@@ -24,9 +24,9 @@ namespace Library.Impl.Presentation.Raiser
 
         public virtual W Raise(W model, int maxdepth = 1, int depth = 0)
         {
-            foreach (var column in model.Domain.Data.Columns)
+            foreach (var element in model.Elements)
             {
-                model.OnPropertyChanged(column.Description.Reference);
+                model.OnPropertyChanged(element.Name);
             }
 
             return model;

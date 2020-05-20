@@ -39,13 +39,13 @@ namespace Library.Impl.Business.Table
             }
         }
 
-        public virtual IColumnTable this[string reference]
-        {
-            get
-            {
-                return Data[reference];
-            }
-        }
+        //public virtual IColumnTable this[string reference]
+        //{
+        //    get
+        //    {
+        //        return Data[reference];
+        //    }
+        //}
 
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }

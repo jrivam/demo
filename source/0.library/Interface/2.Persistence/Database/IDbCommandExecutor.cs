@@ -6,6 +6,6 @@ namespace Library.Interface.Persistence.Database
 {
     public interface IDbCommandExecutor<T>
     {
-        (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<T> entities = null);
+        (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null);
     }
 }

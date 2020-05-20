@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace Library.Impl.Entities
 {
-    public class HelperEntities<T>
+    public class HelperTableEntities<T>
     {
-        public static T CreateInstance()
+        public static T CreateEntity()
         {
             return (T)Activator.CreateInstance(typeof(T),
                                     BindingFlags.CreateInstance |

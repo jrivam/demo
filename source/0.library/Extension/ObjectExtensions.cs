@@ -8,7 +8,7 @@ namespace Library.Extension
     {
         public static T ForceType<T>(this object o)
         {
-            T res = HelperEntities<T>.CreateInstance();
+            T res = HelperTableEntities<T>.CreateEntity();
 
             Type x = o.GetType();
             Type y = res.GetType();

@@ -6,6 +6,9 @@ using Library.Impl.Business.Table;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
+using Library.Interface.Persistence;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Business.Table
 {
@@ -61,26 +64,32 @@ namespace Business.Table
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
-        protected Business.Table.Sucursales _sucursales;
-        public virtual Business.Table.Sucursales Sucursales
+        protected Business.Table.SucursalesQuery _sucursales;
+        public virtual Business.Table.SucursalesQuery Sucursales
         {
             get
             {
                 if (_sucursales == null)
                 {
-                    if (Data?.Sucursales != null)
+                    if (Data?.Sucursales == null)
                     {
-                        Sucursales = new Business.Table.Sucursales(Data?.Sucursales);
+                        if (this.Id != null)
+                        {
+                            var refresh = Data?.Sucursales?.Refresh();
+
+                            if (refresh?.datas != null)
+                                Sucursales = new Business.Table.SucursalesQuery(refresh?.datas, new Business.Query.Sucursal(Data?.Sucursales?.Query));
+                        }
                     }
                     else
                     {
-                        Sucursales_Refresh();
+                        Sucursales = new Business.Table.SucursalesQuery(Data?.Sucursales, new Business.Query.Sucursal(Data?.Sucursales?.Query));
                     }
                 }
 
                 return _sucursales;
             }
-            protected set
+            set
             {
                 if (_sucursales != value)
                 {
@@ -89,15 +98,6 @@ namespace Business.Table
                     //Data.Sucursales = _sucursales != null ? (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(_sucursales?.Datas) : null;
                 }
             }
-        }
-        public virtual (Result result, Business.Table.Sucursales domains) Sucursales_Refresh(int maxdepth = 1, int top = 0, Business.Query.Sucursal query = null)
-        {
-            var refresh = Data.Sucursales_Refresh(maxdepth, top, query?.Data);
-
-            if (refresh.datas != null)
-                Sucursales = new Business.Table.Sucursales(refresh.datas);
-
-            return (refresh.result, _sucursales);
         }
 
         protected override Result SaveChildren()
@@ -130,13 +130,39 @@ namespace Business.Table
 
     public partial class Empresas : ListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresas(Persistence.Table.Empresas datas)
+        public Empresas(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
             : base(datas)
         {
         }
 
+        public Empresas(ICollection<Entities.Table.Empresa> entities)
+           : this(new Persistence.Table.Empresas(entities))
+        {
+        }
         public Empresas()
-            : this(new Persistence.Table.Empresas())
+            : this(new Collection<Entities.Table.Empresa>())
+        {
+        }
+    }
+
+    public partial class EmpresasQuery : ListDomainQuery<Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    {
+        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, Business.Query.Empresa query, 
+            int maxdepth = 1)
+            : base(datas, query, 
+                  maxdepth)
+        {
+        }
+
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, Business.Query.Empresa query = null,
+            int maxdepth = 1)
+            : this(new Persistence.Table.Empresas(entities), query ?? new Business.Query.Empresa(),
+                 maxdepth)
+        {
+        }
+        public EmpresasQuery(Business.Query.Empresa query = null, int maxdepth = 1)
+            : this(new Collection<Entities.Table.Empresa>(), query ?? new Business.Query.Empresa(),
+                  maxdepth)
         {
         }
     }

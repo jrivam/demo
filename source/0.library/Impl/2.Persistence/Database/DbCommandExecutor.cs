@@ -2,6 +2,7 @@
 using Library.Interface.Persistence.Database;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace Library.Impl.Persistence.Database
@@ -15,14 +16,14 @@ namespace Library.Impl.Persistence.Database
             _reader = reader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, IList<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
         {
             var result = new Result() { Success = true };
 
             try
             {
-                var enumeration = default(IList<T>);
-                var iterator = (entities ?? new List<T>()).GetEnumerator();
+                var enumeration = default(ICollection<T>);
+                var iterator = (entities ?? new Collection<T>()).GetEnumerator();
 
                 command.Connection.Open();
 
@@ -30,11 +31,11 @@ namespace Library.Impl.Persistence.Database
                 {
                     while (reader.Read())
                     {
-                        var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateInstance();
+                        var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperTableEntities<T>.CreateEntity();
 
                         _reader.Read(entity, reader, new List<string>(), maxdepth, 0);
 
-                        enumeration = enumeration ?? new List<T>();
+                        enumeration = enumeration ?? new Collection<T>();
                         enumeration.Add(entity);
                     }
 
@@ -47,7 +48,7 @@ namespace Library.Impl.Persistence.Database
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, "ExecuteQuery", $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, nameof(ExecuteQuery), $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
             }
         } 
     }

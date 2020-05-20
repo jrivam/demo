@@ -1,5 +1,4 @@
-﻿using Library.Impl.Business;
-using Library.Interface.Business;
+﻿using Library.Interface.Business;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
@@ -12,26 +11,28 @@ using System.Windows.Input;
 
 namespace Library.Impl.Presentation
 {
-    public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelRefresh<T, U, V, W>
+    public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelQuery<Q, R, S, T, U, V, W>, IListModelRefresh<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>
+        where V : class, ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>
         where Q : IQueryModel<R, S, T, U, V, W>
     {
-        protected Q _query;
+        public Q Query { get; set; }
         protected int _maxdepth = 1;
 
         public virtual ICommand RefreshCommand { get; protected set; }
 
-        public ListModelQuery(IListDomain<T, U, V> domains, 
-            string name, 
-            Q query, int maxdepth = 1, int top = 0)
-            : base(domains, name)
+        public ListModelQuery(string name, 
+            IListDomain<T, U, V> domains,
+            Q query,
+            int maxdepth = 1, int top = 0)
+            : base(name, 
+                  domains)
         {
-            _query = query;
+            Query = query;
             _maxdepth = maxdepth;
 
             RefreshCommand = new RelayCommand(delegate (object parameter)
@@ -39,19 +40,12 @@ namespace Library.Impl.Presentation
                 Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(Refresh(top), $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
         }
-        public ListModelQuery(string name,
-            Q query, int maxdepth = 1, int top = 0)
-            : this(new ListDomain<T, U, V>(), 
-                  name, 
-                  query, maxdepth, top)
-        {
-        }
 
         public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0)
         {
-            var list = _query.List(_maxdepth, top);
+            var list = Query.List(_maxdepth, top);
 
-            Status = _query.Status;
+            Status = Query.Status;
 
             if (list.result.Success)
             {

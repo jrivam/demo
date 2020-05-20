@@ -1,5 +1,4 @@
-﻿using Library.Interface.Presentation.Table;
-using Library.Interface.Business.Table;
+﻿using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 

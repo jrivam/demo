@@ -1,5 +1,4 @@
-﻿using Library.Impl.Entities;
-using Library.Impl.Entities.Reader;
+﻿using Library.Impl.Entities.Reader;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Sql.Builder;
 using System.Collections.Generic;
@@ -24,20 +23,7 @@ namespace Entities.Table
         [Column("activo")]
         public virtual bool? Activo { get; set; }
 
-        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; protected set; }
-    }
-
-    public partial class Empresas : ListEntity<Entities.Table.Empresa>
-    {
-        public Empresas(IList<Entities.Table.Empresa> entities)
-            : base(entities)
-        {
-        }
-
-        public Empresas()
-            : this(new List<Entities.Table.Empresa>())
-        {
-        }
+        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; set; }
     }
 }
 

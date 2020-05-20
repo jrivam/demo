@@ -31,7 +31,7 @@ namespace Library.Impl.Business
         {
             foreach (var data in datas)
             {
-                var domain = Business.HelperLogic<T, U, V>.CreateInstance(data);
+                var domain = Business.HelperTableLogic<T, U, V>.CreateDomain(data);
 
                 Load(domain, maxdepth);
 

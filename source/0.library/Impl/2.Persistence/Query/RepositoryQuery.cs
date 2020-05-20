@@ -1,5 +1,4 @@
-﻿using Library.Impl.Entities;
-using Library.Impl.Persistence.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using Library.Impl.Persistence.Sql.Builder;
 using Library.Impl.Persistence.Sql.Factory;
 using Library.Impl.Persistence.Sql.Repository;
@@ -14,6 +13,7 @@ using Library.Interface.Persistence.Sql.Providers;
 using Library.Interface.Persistence.Sql.Repository;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -92,10 +92,10 @@ namespace Library.Impl.Persistence.Query
             var parameters = new List<SqlParameter>();
 
             var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.DbName }, maxdepth, 0);
 
             var selectcommandtext = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(querycolumns),
-                _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
+                _sqlbuilder.GetFrom(queryjoins, query.Description.DbName),
                 _sqlbuilder.GetWhere(querycolumns, parameters), top);
 
             return Select(selectcommandtext, CommandType.Text, parameters, maxdepth, datas);
@@ -106,16 +106,18 @@ namespace Library.Impl.Persistence.Query
             (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null,
             int maxdepth = 1, IListData<T, U> datas = null)
         {
-            var enumeration = new List<U>();
-
-            var select = Select(commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new ListEntity<T>()));
-            if (select.result.Success && select.entities?.Count() > 0)
+            var select = Select(commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new Collection<T>()));
+            if (select.result.Success)
             {
-                foreach (var instance in MapEntities(select.entities, maxdepth))
-                {
-                    enumeration.Add(instance);
-                }
+                var enumeration = new List<U>();
 
+                if (select.entities?.Count() > 0)
+                {
+                    foreach (var instance in MapEntities(select.entities, maxdepth))
+                    {
+                        enumeration.Add(instance);
+                    }
+                }
                 return (select.result, enumeration);
             }
 
@@ -131,10 +133,10 @@ namespace Library.Impl.Persistence.Query
             var parameters = new List<SqlParameter>();
 
             var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.DbName }, maxdepth, 0);
 
-            var updatecommandtext = _sqlcommandbuilder.Update($"{query.Description.Name}",
-                _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
+            var updatecommandtext = _sqlcommandbuilder.Update($"{query.Description.DbName}",
+                _sqlbuilder.GetFrom(queryjoins, query.Description.DbName),
                 _sqlbuilder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
@@ -149,10 +151,10 @@ namespace Library.Impl.Persistence.Query
             var parameters = new List<SqlParameter>();
 
             var querycolumns = _sqlbuilder.GetQueryColumns(query, null, null, maxdepth, 0);
-            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.Name }, maxdepth, 0);
+            var queryjoins = _sqlbuilder.GetQueryJoins(query, new List<string>() { query.Description.DbName }, maxdepth, 0);
 
-            var deletecommandtext = _sqlcommandbuilder.Delete($"{query.Description.Name}", 
-                _sqlbuilder.GetFrom(queryjoins, query.Description.Name),
+            var deletecommandtext = _sqlcommandbuilder.Delete($"{query.Description.DbName}", 
+                _sqlbuilder.GetFrom(queryjoins, query.Description.DbName),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
             return Delete(deletecommandtext, CommandType.Text, parameters);

@@ -1,6 +1,5 @@
-﻿using Library.Impl.Persistence;
+﻿using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
-using Library.Interface.Entities;
 using System.Collections.Generic;
 
 namespace Library.Interface.Persistence
@@ -9,9 +8,9 @@ namespace Library.Interface.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
-        IListEntity<T> Entities { get; set; }
+        ICollection<T> Entities { get; }
 
-        ListData<T, U> Load(IEnumerable<U> list);
+        IListData<T, U> Load(IEnumerable<U> list);
 
         void ItemEdit(U olddata, U newdata);
         bool ItemAdd(U data);

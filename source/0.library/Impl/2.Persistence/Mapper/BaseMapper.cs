@@ -16,7 +16,7 @@ namespace Library.Impl.Persistence.Mapper
         {
             foreach (var column in data.Columns)
             {
-                var name = column.Description.Reference;
+                var name = column.Description.Name;
 
                 data[name].DbValue = null;
             }
@@ -26,7 +26,7 @@ namespace Library.Impl.Persistence.Mapper
 
         public virtual U Map(U data, int maxdepth = 1, int depth = 0)
         {
-            foreach (var column in Persistence.HelperRepository<T, U>.GetPropertiesValue(data))
+            foreach (var column in Persistence.HelperTableRepository<T, U>.GetPropertiesValue(data))
             {
                 data[column.name].DbValue = column.value;
             }

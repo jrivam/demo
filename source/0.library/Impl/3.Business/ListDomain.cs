@@ -1,5 +1,4 @@
-﻿using Library.Impl.Persistence;
-using Library.Interface.Business;
+﻿using Library.Interface.Business;
 using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence;
@@ -21,31 +20,27 @@ namespace Library.Impl.Business
             {
                 return _datas;
             }
-            set
-            {
-                if (_datas != value)
-                {
-                    _datas = value;
-                    _datas?.ToList().ForEach(x => this.Add(Business.HelperLogic<T, U, V>.CreateInstance(x)));
-                }
-            }
         }
 
-        public ListDomain(IListData<T, U> datas)
-        {
-            Datas = datas;
-        }
         public ListDomain()
-            : this(new ListData<T, U>())
         {
         }
-
-        public virtual IListDomain<T, U, V> Load(IEnumerable<V> list)
+        public ListDomain(IListData<T, U> datas)
+            : this()
         {
-            if (list != null)
+            _datas = datas;
+            _datas.ToList().ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    
+        }
+
+        public virtual IListDomain<T, U, V> Load(IEnumerable<V> domains)
+        {
+            if (domains != null)
             {
-                this?.AddRange(list);
-                _datas = new ListData<T, U>().Load(this?.Select(x => x.Data));
+                this?.AddRange(domains);
+
+                _datas.Clear();
+                _datas.Load(this.Select(x => x.Data));
+                //this.ToList()?.ForEach(x => _datas?.Add(x.Data));
             }
 
             return this;

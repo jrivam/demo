@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Linq;
+using Library.Interface.Presentation;
 
 namespace Library.Impl.Presentation.Table
 {
@@ -43,6 +44,22 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
+        public virtual IElement this[string name]
+        {
+            get
+            {
+                return Elements[name];
+            }
+        }
+        public virtual ListElements<IElement> Elements { get; set; } = new ListElements<IElement>();
+
+        protected virtual void Init()
+        {
+        }
+        protected virtual void InitX()
+        {
+        }
+
         public override void OnPropertyChanged(string propertyName)
         {
             base.OnPropertyChanged(propertyName);
@@ -77,14 +94,6 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
-        public virtual IColumnTable this[string reference]
-        {
-            get
-            {
-                return Domain[reference];
-            }
-        }
-
         public virtual ICommand LoadCommand { get; protected set; }
         public virtual ICommand SaveCommand { get; protected set; }
         public virtual ICommand EraseCommand { get; protected set; }
@@ -94,7 +103,8 @@ namespace Library.Impl.Presentation.Table
         protected readonly IInteractiveTable<T, U, V, W> _interactive;
         protected readonly int _maxdepth;
 
-        public AbstractTableModel(V domain, IInteractiveTable<T, U, V, W> interactive,
+        public AbstractTableModel(string name, 
+            V domain, IInteractiveTable<T, U, V, W> interactive,
             int maxdepth = 1)
         {
             _interactive = interactive;
@@ -102,21 +112,24 @@ namespace Library.Impl.Presentation.Table
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Domain.Data.Description.Reference}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, Save()), $"{Domain.Data.Description.Reference}Save");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, Save()), $"{name}Save");
             }, delegate (object parameter) { return this.Domain.Changed; });
             EraseCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, Erase()), $"{Domain.Data.Description.Reference}Erase");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, Erase()), $"{name}Erase");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<W>(this as W, $"{Domain.Data.Description.Reference}Edit");
+                Messenger.Default.Send<W>(this as W, $"{name}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
+
+            Init();
+            InitX();
 
             Domain = domain;
         }

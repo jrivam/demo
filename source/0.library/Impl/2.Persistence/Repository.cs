@@ -20,12 +20,12 @@ namespace Library.Impl.Persistence
             _sqlcommandexecutorbulk = sqlcommandexecutorbulk;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) Select(string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) Select(string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
             var executequery = _sqlcommandexecutor.ExecuteQuery(commandtext, commandtype, parameters, maxdepth, entities);
             if (executequery.entities?.Count() == 0)
             {
-                executequery.result.Messages.Add((ResultCategory.Information, "Select", "No rows found"));
+                executequery.result.Messages.Add((ResultCategory.Information, nameof(Select), "No rows found"));
             }
 
             return executequery;
@@ -35,7 +35,7 @@ namespace Library.Impl.Persistence
             var executescalar = _sqlcommandexecutorbulk.ExecuteScalar(commandtext, commandtype, parameters);
             if (executescalar.scalar == null)
             {
-                executescalar.result.Messages.Add((ResultCategory.Information, "Insert", "No rows affected"));
+                executescalar.result.Messages.Add((ResultCategory.Information, nameof(Insert), "No rows affected"));
             }
 
             return executescalar;
@@ -45,7 +45,7 @@ namespace Library.Impl.Persistence
             var executenonquery = _sqlcommandexecutorbulk.ExecuteNonQuery(commandtext, commandtype, parameters);
             if (executenonquery.rows == 0)
             {
-                executenonquery.result.Messages.Add((ResultCategory.Information, "Update", "No rows affected"));
+                executenonquery.result.Messages.Add((ResultCategory.Information, nameof(Update), "No rows affected"));
             }
 
             return executenonquery;
@@ -55,7 +55,7 @@ namespace Library.Impl.Persistence
             var executenonquery = _sqlcommandexecutorbulk.ExecuteNonQuery(commandtext, commandtype, parameters);
             if (executenonquery.rows == 0)
             {
-                executenonquery.result.Messages.Add((ResultCategory.Information, "Delete", "No rows affected"));
+                executenonquery.result.Messages.Add((ResultCategory.Information, nameof(Delete), "No rows affected"));
             }
 
             return executenonquery;

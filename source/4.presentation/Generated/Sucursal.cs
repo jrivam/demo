@@ -1,21 +1,38 @@
-﻿using Library.Impl;
-using Library.Impl.Persistence.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using Library.Impl.Presentation;
 using Library.Impl.Presentation.Query;
 using Library.Impl.Presentation.Raiser;
 using Library.Impl.Presentation.Table;
+using Library.Interface.Business;
+using Library.Interface.Persistence;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Table;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Presentation.Table
 {
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
+        protected override void Init()
+        {
+            base.Init();
+
+            Elements.Add(new Element(nameof(Id)));
+            Elements.Add(new Element(nameof(Codigo)));
+            Elements.Add(new Element(nameof(Nombre)));
+            Elements.Add(new Element(nameof(Fecha)));
+            Elements.Add(new Element(nameof(Activo)));
+            Elements.Add(new Element(nameof(IdEmpresa)));
+            Elements.Add(new Element(nameof(Empresa)));
+        }
+
         public Sucursal(Business.Table.Sucursal domain, 
             IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactive,           
             int maxdepth = 1)
-            : base(domain, 
+            : base(nameof(Sucursal), 
+                  domain, 
                   interactive, 
                   maxdepth)
         {
@@ -92,78 +109,87 @@ namespace Presentation.Table
             {
                 if (_empresa == null)
                 {
-                    if (Domain?.Empresa != null)
+                    if (Domain?.Empresa == null)
                     {
-                        Empresa = new Presentation.Table.Empresa(Domain?.Empresa);
+                        if (this.IdEmpresa != null)
+                        {
+                            var refresh = Domain?.Empresa?.Load();
+
+                            if (refresh?.domain != null)
+                                _empresa = new Presentation.Table.Empresa(refresh?.domain);
+                        }
                     }
                     else
                     {
-                        Empresa_Refresh();
+                        _empresa = new Presentation.Table.Empresa(Domain?.Empresa);
                     }
 
                 }
 
                 return _empresa;
             }
-            protected set
+            set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
 
-                    //Domain.Empresa = _empresa?.Domain;
+                    Domain.Empresa = _empresa?.Domain;
 
                     OnPropertyChanged(nameof(Empresa));
                 }
             }
         }
-        public virtual (Result result, Presentation.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Presentation.Query.Empresa query = null)
-        {
-            var refresh = Domain.Empresa_Refresh(maxdepth, query?.Domain);
-
-            if (refresh.domain != null)
-                Empresa = new Presentation.Table.Empresa(refresh.domain);
-
-            return (refresh.result, _empresa);
-        }
     }
 
     public partial class Sucursales : ListModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursales(Business.Table.Sucursales domains)
-            : base(domains, nameof(Sucursales))
+        public Sucursales(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
+            : base(nameof(Sucursales), domains)
         {
         }
 
+        public Sucursales(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
+           : this(new Business.Table.Sucursales(datas))
+        {
+        }
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities)
+           : this(new Persistence.Table.Sucursales(entities))
+        {
+        }
         public Sucursales()
-            : this(new Business.Table.Sucursales())
+            : this(new Collection<Entities.Table.Sucursal>())
         {
         }
     }
 
     public partial class SucursalesQuery : ListModelQuery<Presentation.Query.Sucursal, Business.Query.Sucursal, Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public SucursalesQuery(Business.Table.Sucursales domains,
-            Presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-            : base(domains, nameof(Sucursales),
-                query, maxdepth, top)
+        public SucursalesQuery(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains, Presentation.Query.Sucursal query, 
+            int maxdepth = 1, int top = 0)
+            : base(nameof(Sucursales),
+                  domains, query,
+                  maxdepth, top)
         {
         }
 
-        public SucursalesQuery(Presentation.Query.Sucursal query, int maxdepth = 1, int top = 0)
-            : this(new Business.Table.Sucursales(),
-                query, maxdepth, top)
+        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas, Presentation.Query.Sucursal query = null,
+            int maxdepth = 1)
+            : this(new Business.Table.Sucursales(datas), query ?? new Presentation.Query.Sucursal(),
+                 maxdepth)
         {
         }
-        public SucursalesQuery(Business.Table.Sucursales domains, int maxdepth = 1, int top = 0)
-            : this(domains,
-                new Presentation.Query.Sucursal(), maxdepth, top)
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, Presentation.Query.Sucursal query = null,
+            int maxdepth = 1)
+            : this(new Persistence.Table.Sucursales(entities), query ?? new Presentation.Query.Sucursal(),
+                 maxdepth)
         {
         }
-        //public SucursalesQuery(int maxdepth = 1, int top = 0)
-        //    : this(new Presentation.Query.Sucursal(), maxdepth, top)
-        //{
-        //}
+        public SucursalesQuery(Presentation.Query.Sucursal query = null, int maxdepth = 1)
+            : this(new Collection<Entities.Table.Sucursal>(), query ?? new Presentation.Query.Sucursal(),
+                  maxdepth)
+        {
+        }
     }
 }
 
@@ -248,11 +274,11 @@ namespace Presentation.Raiser
         {
             model = base.Raise(model);
 
-            depth++;
-            if (depth < maxdepth)
-            {
-                model.OnPropertyChanged(nameof(Empresa));
-            }
+            //depth++;
+            //if (depth < maxdepth)
+            //{
+            //    model.OnPropertyChanged(nameof(Empresa));
+            //}
 
             return model;
         }

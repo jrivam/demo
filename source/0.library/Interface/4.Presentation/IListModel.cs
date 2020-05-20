@@ -14,7 +14,7 @@ namespace Library.Interface.Presentation
         where V : ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
     {
-        IListDomain<T, U, V> Domains { get; set; }
+        IListDomain<T, U, V> Domains { get; }
 
         string Name { get; }
 

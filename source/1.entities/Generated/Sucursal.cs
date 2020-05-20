@@ -1,5 +1,4 @@
-﻿using Library.Impl.Entities;
-using Library.Impl.Entities.Reader;
+﻿using Library.Impl.Entities.Reader;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Sql.Builder;
 using System;
@@ -32,20 +31,7 @@ namespace Entities.Table
         [Column("id_empresa")]
         [ForeignKey("empresa")]
         public virtual int? IdEmpresa { get; set; }
-        public virtual Entities.Table.Empresa Empresa { get; protected set; }
-    }
-
-    public partial class Sucursales : ListEntity<Entities.Table.Sucursal>
-    {
-        public Sucursales(IList<Entities.Table.Sucursal> entities)
-            : base(entities)
-        {
-        }
-
-        public Sucursales()
-            : this(new List<Entities.Table.Sucursal>())
-        {
-        }
+        public virtual Entities.Table.Empresa Empresa { get; set; }
     }
 }
 
@@ -65,7 +51,7 @@ namespace Entities.Reader
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                //entity.Empresa = new Entities.Reader.Empresa(_sqlsyntaxsign).Read(new Entities.Table.Empresa(), reader, new List<string>(prefixname), maxdepth, depth);
+                entity.Empresa = new Entities.Reader.Empresa(_sqlsyntaxsign).Read(new Entities.Table.Empresa(), reader, new List<string>(prefixname), maxdepth, depth);
             }
 
             return entity;

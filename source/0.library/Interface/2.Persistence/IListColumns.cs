@@ -2,6 +2,6 @@
 {
     public interface IListColumns<T>
     {
-        T this[string reference] { get; }
+        T this[string name] { get; }
     }
 }

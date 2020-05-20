@@ -30,11 +30,11 @@ namespace Library.Impl.Persistence.Sql.Repository
         {
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(SqlCommand sqlcommand, int maxdepth = 1, IList<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(SqlCommand sqlcommand, int maxdepth = 1, ICollection<T> entities = null)
         {
             return ExecuteQuery(_creator.GetCommand(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters), maxdepth, entities);
         }
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, IList<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
             return ExecuteQuery(_creator.GetCommand(commandtext, commandtype, parameters), maxdepth, entities);
         }

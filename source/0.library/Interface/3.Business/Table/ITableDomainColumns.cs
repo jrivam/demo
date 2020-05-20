@@ -4,6 +4,6 @@ namespace Library.Interface.Business.Table
 {
     public interface ITableDomainColumns
     {
-        IColumnTable this[string reference] { get; }
+        //IColumnTable this[string reference] { get; }
     }
 }

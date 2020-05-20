@@ -1,13 +1,14 @@
-﻿using Library.Impl;
-using Library.Impl.Business;
+﻿using Library.Impl.Business;
 using Library.Impl.Business.Loader;
 using Library.Impl.Business.Query;
 using Library.Impl.Business.Table;
-using Library.Impl.Business.Validator;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Business.Query;
 using Library.Interface.Business.Table;
+using Library.Interface.Persistence;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Business.Table
 {
@@ -75,6 +76,7 @@ namespace Business.Table
                 if (Data?.IdEmpresa != value)
                 {
                     Data.IdEmpresa = value;
+
                     Changed = true;
 
                     Empresa = null;
@@ -89,48 +91,71 @@ namespace Business.Table
             {
                 if (_empresa == null)
                 {
-                    if (Data?.Empresa != null)
+                    if (Data?.Empresa == null)
                     {
-                        Empresa = new Business.Table.Empresa(Data?.Empresa);
+                        if (this.IdEmpresa != null)
+                        {
+                            var refresh = Data?.Empresa?.Select();
+
+                            if (refresh?.data != null)
+                                _empresa = new Business.Table.Empresa(refresh?.data);
+                        }
                     }
                     else
                     {
-                        Empresa_Refresh();
+                        _empresa = new Business.Table.Empresa(Data?.Empresa);
                     }
                 }
 
                 return _empresa;
             }
-            protected set
+            set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
 
-                    //Data.Empresa = _empresa?.Data;
+                    Data.Empresa = _empresa?.Data;
                 }
             }
-        }
-        public virtual (Result result, Business.Table.Empresa domain) Empresa_Refresh(int maxdepth = 1, Business.Query.Empresa query = null)
-        {
-            var refresh = Data.Empresa_Refresh(maxdepth, query?.Data);
-
-            if (refresh.data != null)
-                Empresa = new Business.Table.Empresa(refresh.data);
-
-            return (refresh.result, _empresa);
         }
     }
 
     public partial class Sucursales : ListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursales(Persistence.Table.Sucursales datas)
+        public Sucursales(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
             : base(datas)
         {
         }
 
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities)
+           : this(new Persistence.Table.Sucursales(entities))
+        {
+        }
         public Sucursales()
-            : this(new Persistence.Table.Sucursales())
+            : this(new Collection<Entities.Table.Sucursal>())
+        {
+        }
+    }
+
+    public partial class SucursalesQuery : ListDomainQuery<Business.Query.Sucursal, Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
+    {
+        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas, Business.Query.Sucursal query, 
+            int maxdepth = 1)
+            : base(datas, query, 
+                  maxdepth)
+        {
+        }
+
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, Business.Query.Sucursal query = null,
+            int maxdepth = 1)
+            : this(new Persistence.Table.Sucursales(entities), query ?? new Business.Query.Sucursal(),
+                 maxdepth)
+        {
+        }
+        public SucursalesQuery(Business.Query.Sucursal query = null, int maxdepth = 1)
+            : this(new Collection<Entities.Table.Sucursal>(), query ?? new Business.Query.Sucursal(),
+                  maxdepth)
         {
         }
     }

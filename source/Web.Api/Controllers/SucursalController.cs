@@ -27,7 +27,7 @@ namespace Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities?.List);
+                    return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities);
                 }
 
                 return InternalServerError();

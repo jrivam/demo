@@ -7,11 +7,11 @@ namespace Library.Impl.Persistence
     public class ListColumns<T> : List<T>, IListColumns<T>
         where T : IColumn
     {
-        public virtual T this[string reference]
+        public virtual T this[string name]
         {
             get
             {
-                return this.SingleOrDefault(x => x.Description.Reference.ToLower() == reference.ToLower());
+                return this.SingleOrDefault(x => x.Description.Name.ToLower() == name.ToLower());
             }
         }
     }

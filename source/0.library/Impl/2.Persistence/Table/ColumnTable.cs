@@ -25,18 +25,18 @@ namespace Library.Impl.Persistence.Table
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
 
-        public ColumnTable(IBuilderTableData table, 
-            string name, string reference)
-            : base(name, reference)
+        public ColumnTable(IBuilderTableData table,
+            string name, string dbname)
+            : base(name, dbname)
         {
             Table = table;
         }
 
         public ColumnTable(IBuilderTableData table,
-            string name, string reference,
+            string name, string dbname, 
             bool isprimarykey = false, bool isidentity = false)
             : this(table,
-                name, reference)
+                name, dbname)
         {
             IsPrimaryKey = isprimarykey;
             IsIdentity = isidentity;

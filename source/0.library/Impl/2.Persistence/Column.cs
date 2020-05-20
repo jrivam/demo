@@ -15,9 +15,9 @@ namespace Library.Impl.Persistence
 
         public virtual Description Description { get; }
 
-        public Column(string name, string reference)
+        public Column(string name, string dbname)
         {
-            Description = new Description(name, reference);
+            Description = new Description(name, dbname);
         }
     }
 }

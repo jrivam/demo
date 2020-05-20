@@ -84,7 +84,7 @@ namespace Library.Impl.Presentation.Table
             var erase = table.Domain.Erase(usedbcommand);
             if (erase.result.Success)
             {
-                Raise(table);
+                //Raise(table);
 
                 table.Status = string.Empty;
 

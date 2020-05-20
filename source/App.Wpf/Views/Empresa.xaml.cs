@@ -33,7 +33,6 @@ namespace WpfApp.Views
             : this()
         {
             ViewModel.Empresa = entity;
-            ViewModel.Empresa.Sucursales_Refresh();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -1,5 +1,4 @@
-﻿using Library.Impl.Entities;
-using Library.Interface.Entities;
+﻿using Library.Interface.Entities;
 using Library.Interface.Persistence;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
@@ -11,38 +10,33 @@ namespace Library.Impl.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
-        protected IListEntity<T> _entities;
-        public virtual IListEntity<T> Entities
+        protected ICollection<T> _entities;
+        public virtual ICollection<T> Entities
         {
             get
             {
                 return _entities;
             }
-            set
-            {
-                if (_entities != value)
-                {
-                    _entities = value;
-                    _entities?.ToList().ForEach(x => this.Add(Persistence.HelperRepository<T, U>.CreateInstance(x)));
-                }
-            }
         }
 
-        public ListData(IListEntity<T> entities)
-        {
-            Entities = entities;
-        }
         public ListData()
-            : this(new ListEntity<T>())
         {
         }
-
-        public virtual ListData<T, U> Load(IEnumerable<U> list)
+        public ListData(ICollection<T> entities)
+            : this()
         {
-            if (list != null)
+            _entities = entities;
+            _entities.ToList().ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));
+        }
+
+        public virtual IListData<T, U> Load(IEnumerable<U> datas)
+        {
+            if (datas != null)
             {
-                this?.AddRange(list);
-                _entities = new ListEntity<T>(this?.Select(x => x.Entity).ToList());
+                this?.AddRange(datas);
+
+                _entities.Clear();
+                this.ToList()?.ForEach(x => _entities?.Add(x.Entity));
             }
 
             return this;
@@ -50,11 +44,10 @@ namespace Library.Impl.Persistence
 
         public virtual void ItemEdit(U olddata, U newdata)
         {
-            Entities.ItemEdit(olddata.Entity, newdata.Entity);
         }
         public virtual bool ItemAdd(U data)
         {
-            if (Entities.ItemAdd(data.Entity))
+            if (data.Entity.Id != null)
             {
                 this.Add(data);
 
@@ -65,14 +58,9 @@ namespace Library.Impl.Persistence
         }
         public virtual bool ItemRemove(U data)
         {
-            if (Entities.ItemRemove(data.Entity))
-            {
-                this.Remove(data);
+            this.Remove(data);
 
-                return true;
-            }
-
-            return false;
+            return true;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Library.Extension;
-using Library.Impl;
 using Library.Impl.Persistence;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
@@ -10,6 +9,7 @@ using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 
@@ -21,13 +21,13 @@ namespace Persistence.Table
         {
             base.Init();
 
-            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), nameof(Id), isprimarykey: true, isidentity: true));
-            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower(), nameof(Codigo)));
-            Columns.Add(new ColumnTable<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower(), nameof(Nombre)));
-            Columns.Add(new ColumnTable<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower(), nameof(Fecha)));
-            Columns.Add(new ColumnTable<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower(), nameof(Activo)));
+            Columns.Add(new ColumnTable<int?>(this, nameof(Id), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), isprimarykey: true, isidentity: true));
+            Columns.Add(new ColumnTable<string>(this, nameof(Codigo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnTable<string>(this, nameof(Nombre), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnTable<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
 
-            Columns.Add(new ColumnTable<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower(), nameof(IdEmpresa)));
+            Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
@@ -36,7 +36,7 @@ namespace Persistence.Table
             : base(entity, 
                   repository,
                   query,
-                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower(), nameof(Sucursal))
+                  nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
         {
         }
 
@@ -118,60 +118,96 @@ namespace Persistence.Table
         protected Persistence.Table.Empresa _empresa;
         public virtual Persistence.Table.Empresa Empresa
         {
+            //get
+            //{
+            //    if (_empresa == null)
+            //    {
+            //        if (Entity?.Empresa != null)
+            //        {
+            //            Empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+            //        }
+            //        else
+            //        {
+            //            if (this.IdEmpresa != null)
+            //            {
+            //                var queryselect = new Persistence.Query.Empresa();
+
+            //                queryselect.Id = (this.IdEmpresa, WhereOperator.Equals);
+
+            //                var selectsingle = queryselect?.SelectSingle();
+
+            //                if (selectsingle?.data != null)
+            //                    Empresa = selectsingle?.data;
+            //            }
+            //        }
+            //    }
+
+            //    return _empresa;
+            //}
             get
             {
                 if (_empresa == null)
                 {
-                    if (Entity?.Empresa != null)
+                    var query = new Persistence.Query.Empresa();
+                    query.Id = (this.IdEmpresa, WhereOperator.Equals);
+
+                    if (Entity?.Empresa == null)
                     {
-                        Empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+                        if (this.IdEmpresa != null)
+                        {
+                            var selectsingle = query?.SelectSingle();
+                            if (selectsingle?.data != null)
+                            {
+                                Entity.Empresa = selectsingle?.data?.Entity;
+                                _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+                            }
+                        }
                     }
                     else
                     {
-                        Empresa_Refresh();
+                        _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
                     }
                 }
 
                 return _empresa;
             }
-            protected set
+            set
             {
                 if (_empresa != value)
                 {
                     _empresa = value;
 
-                    //Entity.Empresa = _empresa?.Entity;
+                    Entity.Empresa = _empresa?.Entity;
                 }
             }
-        }
-        public virtual (Result result, Persistence.Table.Empresa data) Empresa_Refresh(int maxdepth = 1, Persistence.Query.Empresa query = null)
-        {
-            if (this.IdEmpresa != null)
-            {
-                var queryselect = query ?? new Persistence.Query.Empresa();
-
-                queryselect.Id = (this.IdEmpresa, WhereOperator.Equals);
-
-                var selectsingle = queryselect?.SelectSingle(maxdepth);
-
-                Empresa = selectsingle?.data;
-
-                return (selectsingle?.result, _empresa);
-            }
-
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Empresa_Refresh", $"IdEmpresa in {this.Description.Name} cannot be null") } }, null);
         }
     }
 
     public partial class Sucursales : ListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursales(Entities.Table.Sucursales entities)
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities)
             : base(entities)
         {
         }
 
         public Sucursales()
-           : this(new Entities.Table.Sucursales())
+            : this(new Collection<Entities.Table.Sucursal>())
+        {
+        }
+    }
+
+    public partial class SucursalesQuery : ListDataQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal>
+    {
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, Persistence.Query.Sucursal query, 
+            int maxdepth = 1)
+            : base(entities, query, 
+                  maxdepth)
+        {
+        }
+
+        public SucursalesQuery(Persistence.Query.Sucursal query = null, int maxdepth = 1)
+            : this(new Collection<Entities.Table.Sucursal>(), query ?? new Persistence.Query.Sucursal(),
+                  maxdepth)
         {
         }
     }
@@ -195,18 +231,18 @@ namespace Persistence.Query
 
         public override void Init()
         {
-            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), nameof(Id)));
-            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower(), nameof(Codigo)));
-            Columns.Add(new ColumnQuery<string>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower(), nameof(Nombre)));
-            Columns.Add(new ColumnQuery<DateTime?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower(), nameof(Fecha)));
-            Columns.Add(new ColumnQuery<bool?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower(), nameof(Activo)));
+            Columns.Add(new ColumnQuery<int?>(this, nameof(Id), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnQuery<string>(this, nameof(Codigo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnQuery<string>(this, nameof(Nombre), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnQuery<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
+            Columns.Add(new ColumnQuery<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
 
-            Columns.Add(new ColumnQuery<int?>(this, typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower(), nameof(IdEmpresa)));
+            Columns.Add(new ColumnQuery<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
         }
 
         public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
-            : base(repository, 
-                  typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? "sucursal", "Sucursal")
+            : base(repository,
+                  nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
         {
         }
 
@@ -283,7 +319,7 @@ namespace Persistence.Mapper
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                //data.Empresa = new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
+                data.Empresa = new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
             }
 
             return data;

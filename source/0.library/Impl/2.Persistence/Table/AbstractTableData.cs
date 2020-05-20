@@ -22,7 +22,7 @@ namespace Library.Impl.Persistence.Table
             {
                 _entity = value;
 
-                foreach (var column in Persistence.HelperRepository<T, U>.GetPropertiesValue(this as U))
+                foreach (var column in Persistence.HelperTableRepository<T, U>.GetPropertiesValue(this as U))
                 {
                     Columns[column.name].Value = column.value;
                 }
@@ -31,11 +31,11 @@ namespace Library.Impl.Persistence.Table
 
         public virtual Description Description { get; protected set; }
 
-        public virtual IColumnTable this[string reference]
+        public virtual IColumnTable this[string name]
         {
             get
             {
-                return Columns[reference];
+                return Columns[name];
             }
         }
         public virtual ListColumns<IColumnTable> Columns { get; set; } = new ListColumns<IColumnTable>();
@@ -60,9 +60,9 @@ namespace Library.Impl.Persistence.Table
         public AbstractTableData(T entity,
             IRepositoryTable<T, U> repository,
             IQueryData<T, U> query,
-            string name, string reference)
+            string name, string dbname)
         {
-            Description = new Description(name, reference);
+            Description = new Description(name, dbname);
 
             _repository = repository;
 
@@ -83,7 +83,7 @@ namespace Library.Impl.Persistence.Table
             {
                 foreach (var primarykeycolumn in primarykeycolumns)
                 {
-                    _query.Columns[primarykeycolumn.Description.Reference].Where(Columns[primarykeycolumn.Description.Reference].Value, WhereOperator.Equals);
+                    _query.Columns[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
                 }
             }
 

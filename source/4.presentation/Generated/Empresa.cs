@@ -1,21 +1,35 @@
-﻿using Business.Mapper;
-using Library.Impl;
-using Library.Impl.Persistence.Sql;
+﻿using Library.Impl.Persistence.Sql;
 using Library.Impl.Presentation;
 using Library.Impl.Presentation.Query;
 using Library.Impl.Presentation.Raiser;
 using Library.Impl.Presentation.Table;
+using Library.Interface.Business;
+using Library.Interface.Persistence;
 using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Table;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Presentation.Table
 {
     public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
+        protected override void Init()
+        {
+            base.Init();
+
+            Elements.Add(new Element(nameof(Id)));
+            Elements.Add(new Element(nameof(Ruc)));
+            Elements.Add(new Element(nameof(RazonSocial)));
+            Elements.Add(new Element(nameof(Activo)));
+            Elements.Add(new Element(nameof(Sucursales)));
+        }
+
         public Empresa(Business.Table.Empresa domain,
             IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive,
             int maxdepth = 1)
-            : base(domain, 
+            : base(nameof(Empresa),
+                  domain, 
                   interactive, 
                   maxdepth)
         {
@@ -61,7 +75,23 @@ namespace Presentation.Table
             }
         }
 
-        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; ValidateProperty(value); OnPropertyChanged(nameof(Id)); } } }
+        public virtual int? Id 
+        { 
+            get 
+            { 
+                return Domain?.Id; 
+            } 
+            set 
+            { 
+                if (Domain?.Id != value) 
+                { 
+                    Domain.Id = value;
+
+                    ValidateProperty(value); 
+                    OnPropertyChanged(nameof(Id)); 
+                } 
+            } 
+        }
         public virtual string Ruc { get { return Domain?.Ruc; } set { if (Domain?.Ruc != value) { Domain.Ruc = value; ValidateProperty(value); OnPropertyChanged(nameof(Ruc)); } } }
         public virtual string RazonSocial
         {
@@ -88,19 +118,25 @@ namespace Presentation.Table
             {
                 if (_sucursales == null)
                 {
-                    if (Domain?.Sucursales != null)
+                    if (Domain?.Sucursales == null)
                     {
-                        Sucursales = new Presentation.Table.SucursalesQuery(Domain?.Sucursales);
+                        if (this.Id != null)
+                        {
+                            var refresh = Domain?.Sucursales?.Refresh();
+
+                            if (refresh?.domains != null)
+                                Sucursales = new Presentation.Table.SucursalesQuery(refresh?.domains, new Presentation.Query.Sucursal(Domain?.Sucursales?.Query));
+                        }
                     }
                     else
                     {
-                        Sucursales_Refresh();
+                        Sucursales = new Presentation.Table.SucursalesQuery(Domain?.Sucursales, new Presentation.Query.Sucursal(Domain?.Sucursales?.Query));
                     }
                 }
 
                 return _sucursales;
             }
-            protected set
+            set
             {
                 if (_sucursales != value)
                 {
@@ -112,51 +148,54 @@ namespace Presentation.Table
                 }
             }
         }
-        public virtual (Result result, Presentation.Table.SucursalesQuery models) Sucursales_Refresh(int maxdepth = 1, int top = 0, Presentation.Query.Sucursal query = null)
-        {
-            var refresh = Domain.Sucursales_Refresh(maxdepth, top, query?.Domain);
-
-            if (refresh.domains != null)
-                Sucursales = new Presentation.Table.SucursalesQuery(refresh.domains);
-
-            return (refresh.result, _sucursales);
-        }
     }
 
     public partial class Empresas : ListModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresas(Business.Table.Empresas domains)
-            : base(domains, nameof(Empresas))
+        public Empresas(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
+            : base(nameof(Empresas), domains)
         {
         }
 
+        public Empresas(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+           : this(new Business.Table.Empresas(datas))
+        {
+        }
+        public Empresas(ICollection<Entities.Table.Empresa> entities)
+           : this(new Persistence.Table.Empresas(entities))
+        {
+        }
         public Empresas()
-            : this(new Business.Table.Empresas())
+            : this(new Collection<Entities.Table.Empresa>())
         {
         }
     }
 
     public partial class EmpresasQuery : ListModelQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public EmpresasQuery(Business.Table.Empresas domains,
-            Presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
-            : base(domains, nameof(Empresas),
-                  query, maxdepth, top)
+        public EmpresasQuery(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains, Presentation.Query.Empresa query,             
+            int maxdepth = 1, int top = 0)
+            : base(nameof(Empresas),
+                  domains, query, 
+                  maxdepth, top)
         {
         }
 
-        public EmpresasQuery(Presentation.Query.Empresa query, int maxdepth = 1, int top = 0)
-            : this(new Business.Table.Empresas(),
-                  query, maxdepth, top)
+        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, Presentation.Query.Empresa query = null,
+            int maxdepth = 1)
+            : this(new Business.Table.Empresas(datas), query ?? new Presentation.Query.Empresa(),
+                 maxdepth)
         {
         }
-        public EmpresasQuery(Business.Table.Empresas domains, int maxdepth = 1, int top = 0)
-            : this(domains, 
-                  new Presentation.Query.Empresa(), maxdepth, top)
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, Presentation.Query.Empresa query = null,
+            int maxdepth = 1)
+            : this(new Persistence.Table.Empresas(entities), query ?? new Presentation.Query.Empresa(),
+                 maxdepth)
         {
         }
-        public EmpresasQuery(int maxdepth = 1, int top = 0)
-            : this(new Presentation.Query.Empresa(), maxdepth, top)
+        public EmpresasQuery(Presentation.Query.Empresa query = null, int maxdepth = 1)
+            : this(new Collection<Entities.Table.Empresa>(), query ?? new Presentation.Query.Empresa(),
+                  maxdepth)
         {
         }
     }
@@ -229,7 +268,7 @@ namespace Presentation.Raiser
         {
             model = base.Raise(model, maxdepth, depth);
 
-            model.OnPropertyChanged("Sucursales");
+            //model.OnPropertyChanged("Sucursales");
 
             return model;
         }

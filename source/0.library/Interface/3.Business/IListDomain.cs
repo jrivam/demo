@@ -12,7 +12,7 @@ namespace Library.Interface.Business
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        IListData<T, U> Datas { get; set; }
+        IListData<T, U> Datas { get; }
         
         IListDomain<T, U, V> Load(IEnumerable<V> list);
 

@@ -70,6 +70,7 @@ namespace WpfApp.Views
         {
             var view = new Views.Empresa();
             view.ViewModel.Empresa.Activo = true;
+
             view.ShowDialog();
 
             ViewModel.EmpresasQuery.ItemAdd(view.ViewModel.Empresa);
