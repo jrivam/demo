@@ -61,19 +61,19 @@ namespace Presentation.Table
         {
         }
 
-        public override Business.Table.Empresa Domain
-        {
-            get
-            {
-                return base.Domain;
-            }
-            set
-            {
-                base.Domain = value;
+        //public override Business.Table.Empresa Domain
+        //{
+        //    get
+        //    {
+        //        return base.Domain;
+        //    }
+        //    set
+        //    {
+        //        base.Domain = value;
 
-                _sucursales = null;
-            }
-        }
+        //        _sucursales = null;
+        //    }
+        //}
 
         public virtual int? Id 
         { 
@@ -118,19 +118,12 @@ namespace Presentation.Table
             {
                 if (_sucursales == null)
                 {
-                    if (Domain?.Sucursales == null)
+                    if (this.Id != null)
                     {
-                        if (this.Id != null)
-                        {
-                            var refresh = Domain?.Sucursales?.Refresh();
+                        Sucursales = new SucursalesQuery(Domain.Sucursales, new Presentation.Query.Sucursal());
+                        _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                            if (refresh?.domains != null)
-                                Sucursales = new Presentation.Table.SucursalesQuery(refresh?.domains, new Presentation.Query.Sucursal(Domain?.Sucursales?.Query));
-                        }
-                    }
-                    else
-                    {
-                        Sucursales = new Presentation.Table.SucursalesQuery(Domain?.Sucursales, new Presentation.Query.Sucursal(Domain?.Sucursales?.Query));
+                        _sucursales.Refresh();
                     }
                 }
 

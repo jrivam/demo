@@ -23,11 +23,11 @@ namespace Library.Impl.Presentation.Query
 
         public virtual R Domain { get; protected set; }
 
-        public virtual IColumnQuery this[string reference]
+        public virtual IColumnQuery this[string name]
         {
             get
             {
-                return Domain[reference];
+                return Domain[name];
             }
         }
 

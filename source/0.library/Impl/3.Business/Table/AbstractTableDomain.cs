@@ -11,21 +11,6 @@ namespace Library.Impl.Business.Table
         where U : ITableData<T, U>, new()
         where V : class, ITableDomain<T, U, V>
     {
-        //public virtual T Entity
-        //{
-        //    get
-        //    {
-        //        return Data.Entity;
-        //    }
-        //    set
-        //    {
-        //        Data.Entity = value;
-
-        //        Changed = true;
-        //        Deleted = false;
-        //    }
-        //}
-
         protected U _data;
         public virtual U Data
         {
@@ -38,14 +23,6 @@ namespace Library.Impl.Business.Table
                 _data = value;
             }
         }
-
-        //public virtual IColumnTable this[string reference]
-        //{
-        //    get
-        //    {
-        //        return Data[reference];
-        //    }
-        //}
 
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
@@ -66,10 +43,10 @@ namespace Library.Impl.Business.Table
         {
             _logic = logic;
 
+            Data = data;
+
             Init();
             InitX();
-
-            Data = data;
         }
 
         public virtual Result Validate()

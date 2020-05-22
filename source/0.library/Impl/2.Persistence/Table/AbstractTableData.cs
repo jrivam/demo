@@ -68,10 +68,10 @@ namespace Library.Impl.Persistence.Table
 
             _query = query;
 
+            Entity = entity;
+
             Init();
             InitX();
-
-            Entity = entity;
         }
 
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)

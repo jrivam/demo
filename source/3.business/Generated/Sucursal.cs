@@ -45,19 +45,19 @@ namespace Business.Table
         {
         }
 
-        public override Persistence.Table.Sucursal Data
-        {
-            get
-            {
-                return base.Data;
-            }
-            set
-            {
-                base.Data = value;
+        //public override Persistence.Table.Sucursal Data
+        //{
+        //    get
+        //    {
+        //        return base.Data;
+        //    }
+        //    set
+        //    {
+        //        base.Data = value;
 
-                _empresa = null;
-            }
-        }
+        //        _empresa = null;
+        //    }
+        //}
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Codigo { get { return Data?.Codigo; } set { if (Data?.Codigo != value) { Data.Codigo = value; Changed = true; } } }
@@ -89,22 +89,9 @@ namespace Business.Table
         {
             get
             {
-                if (_empresa == null)
+                if (_empresa?.Id != this.IdEmpresa)
                 {
-                    if (Data?.Empresa == null)
-                    {
-                        if (this.IdEmpresa != null)
-                        {
-                            var refresh = Data?.Empresa?.Select();
-
-                            if (refresh?.data != null)
-                                _empresa = new Business.Table.Empresa(refresh?.data);
-                        }
-                    }
-                    else
-                    {
-                        _empresa = new Business.Table.Empresa(Data?.Empresa);
-                    }
+                    _empresa = new Business.Table.Empresa(Data?.Empresa);
                 }
 
                 return _empresa;
@@ -115,7 +102,7 @@ namespace Business.Table
                 {
                     _empresa = value;
 
-                    Data.Empresa = _empresa?.Data;
+                    //Data.Empresa = _empresa?.Data;
                 }
             }
         }

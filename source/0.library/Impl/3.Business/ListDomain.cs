@@ -29,7 +29,7 @@ namespace Library.Impl.Business
             : this()
         {
             _datas = datas;
-            _datas.ToList().ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    
+            _datas?.ToList()?.ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    
         }
 
         public virtual IListDomain<T, U, V> Load(IEnumerable<V> domains)
@@ -38,9 +38,8 @@ namespace Library.Impl.Business
             {
                 this?.AddRange(domains);
 
-                _datas.Clear();
-                _datas.Load(this.Select(x => x.Data));
-                //this.ToList()?.ForEach(x => _datas?.Add(x.Data));
+                _datas?.Clear();
+                _datas?.Load(this.Select(x => x.Data));
             }
 
             return this;

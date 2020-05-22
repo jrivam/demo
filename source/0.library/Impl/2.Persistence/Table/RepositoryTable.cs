@@ -13,6 +13,7 @@ using Library.Interface.Persistence.Sql.Repository;
 using Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -108,7 +109,7 @@ namespace Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var select = Select(commandtext, commandtype, parameters, 1);
+            var select = Select(commandtext, commandtype, parameters, 1, new Collection<T> { table.Entity });
             if (select.result.Success && select.entities?.Count() > 0)
             {
                 table.Entity = select.entities.FirstOrDefault();

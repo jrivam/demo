@@ -26,8 +26,10 @@ namespace Persistence.Table
             Columns.Add(new ColumnTable<string>(this, nameof(Nombre), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower()));
             Columns.Add(new ColumnTable<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
             Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
-
             Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
+
+            //if (Entity?.Empresa == null)
+            //    Entity.Empresa = new Entities.Table.Empresa();
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
@@ -65,19 +67,19 @@ namespace Persistence.Table
         {
         }
 
-        public override Entities.Table.Sucursal Entity
-        {
-            get
-            {
-                return base.Entity;
-            }
-            set
-            {
-                base.Entity = value;
+        //public override Entities.Table.Sucursal Entity
+        //{
+        //    get
+        //    {
+        //        return base.Entity;
+        //    }
+        //    set
+        //    {
+        //        base.Entity = value;
 
-                _empresa = null;
-            }
-        }
+        //        _empresa = null;
+        //    }
+        //}
 
         public virtual int? Id
         {
@@ -110,6 +112,7 @@ namespace Persistence.Table
                 {
                     Columns[nameof(IdEmpresa)].Value = Entity.IdEmpresa = value;
 
+                    Entity.Empresa = null;
                     Empresa = null;
                 }
             }
@@ -120,52 +123,38 @@ namespace Persistence.Table
         {
             //get
             //{
+            //    bool lazyload = false;
+
             //    if (_empresa == null)
             //    {
-            //        if (Entity?.Empresa != null)
+            //        if (Entity?.Empresa == null)
             //        {
-            //            Empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+            //            Entity.Empresa = new Entities.Table.Empresa();
+            //            lazyload = true;
             //        }
-            //        else
-            //        {
-            //            if (this.IdEmpresa != null)
-            //            {
-            //                var queryselect = new Persistence.Query.Empresa();
-
-            //                queryselect.Id = (this.IdEmpresa, WhereOperator.Equals);
-
-            //                var selectsingle = queryselect?.SelectSingle();
-
-            //                if (selectsingle?.data != null)
-            //                    Empresa = selectsingle?.data;
-            //            }
-            //        }
+            //        _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
             //    }
+
+            //    _empresa.Id = this.IdEmpresa;
+            //    if (lazyload)
+            //        _empresa.Select();
 
             //    return _empresa;
             //}
             get
             {
-                if (_empresa == null)
+                if (_empresa?.Id != this.IdEmpresa)
                 {
-                    var query = new Persistence.Query.Empresa();
-                    query.Id = (this.IdEmpresa, WhereOperator.Equals);
-
                     if (Entity?.Empresa == null)
                     {
-                        if (this.IdEmpresa != null)
-                        {
-                            var selectsingle = query?.SelectSingle();
-                            if (selectsingle?.data != null)
-                            {
-                                Entity.Empresa = selectsingle?.data?.Entity;
-                                _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
-                            }
-                        }
+                        Entity.Empresa = new Entities.Table.Empresa();
                     }
-                    else
+                    _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+
+                    if (_empresa.Id == null)
                     {
-                        _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+                        _empresa.Id = this.IdEmpresa;
+                        _empresa.Select();
                     }
                 }
 
@@ -177,7 +166,7 @@ namespace Persistence.Table
                 {
                     _empresa = value;
 
-                    Entity.Empresa = _empresa?.Entity;
+                    //Entity.Empresa = _empresa?.Entity;
                 }
             }
         }

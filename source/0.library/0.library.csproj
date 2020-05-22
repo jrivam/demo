@@ -160,6 +160,7 @@
     <Compile Include="Interface\1.Entities\Reader\IReader.cs" />
     <Compile Include="Interface\2.Persistence\Database\IDbCommandExecutor.cs" />
     <Compile Include="Interface\2.Persistence\Database\IDbCommandExecutorBulk.cs" />
+    <Compile Include="Interface\2.Persistence\IListDataEdit.cs" />
     <Compile Include="Interface\2.Persistence\IListDataQuery.cs" />
     <Compile Include="Interface\2.Persistence\IListDataRefresh.cs" />
     <Compile Include="Interface\2.Persistence\IParameter.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Interface\2.Persistence\Query\IQueryDataJoins.cs" />
     <Compile Include="Interface\2.Persistence\Sql\Providers\ISqlCommandBuilder.cs" />
     <Compile Include="Interface\2.Persistence\Table\IBuilderTableData.cs" />
+    <Compile Include="Interface\3.Business\IListDomainEdit.cs" />
     <Compile Include="Interface\3.Business\IListDomainQuery.cs" />
     <Compile Include="Interface\3.Business\IListDomainRefresh.cs" />
     <Compile Include="Interface\3.Business\Table\ITableDomainValidation.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="Interface\3.Business\Query\IQueryDomainMethods.cs" />
     <Compile Include="Interface\4.Presentation\IElement.cs" />
     <Compile Include="Interface\4.Presentation\IListElements.cs" />
+    <Compile Include="Interface\4.Presentation\IListModelEdit.cs" />
     <Compile Include="Interface\4.Presentation\IListModelQuery.cs" />
     <Compile Include="Interface\4.Presentation\Table\ITableModelValidation.cs" />
     <Compile Include="Interface\4.Presentation\IListModelRefresh.cs" />

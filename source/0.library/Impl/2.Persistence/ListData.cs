@@ -26,7 +26,7 @@ namespace Library.Impl.Persistence
             : this()
         {
             _entities = entities;
-            _entities.ToList().ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));
+            _entities?.ToList()?.ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));
         }
 
         public virtual IListData<T, U> Load(IEnumerable<U> datas)
@@ -35,7 +35,7 @@ namespace Library.Impl.Persistence
             {
                 this?.AddRange(datas);
 
-                _entities.Clear();
+                _entities?.Clear();
                 this.ToList()?.ForEach(x => _entities?.Add(x.Entity));
             }
 

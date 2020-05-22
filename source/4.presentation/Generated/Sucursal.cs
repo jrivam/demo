@@ -64,19 +64,19 @@ namespace Presentation.Table
         {
         }
 
-        public override Business.Table.Sucursal Domain
-        {
-            get
-            {
-                return base.Domain;
-            }
-            set
-            {
-                base.Domain = value;
+        //public override Business.Table.Sucursal Domain
+        //{
+        //    get
+        //    {
+        //        return base.Domain;
+        //    }
+        //    set
+        //    {
+        //        base.Domain = value;
 
-                _empresa = null;
-            }
-        }
+        //        _empresa = null;
+        //    }
+        //}
 
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged(nameof(Id)); } } }
         public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged(nameof(Codigo)); } } }
@@ -107,23 +107,9 @@ namespace Presentation.Table
         {
             get
             {
-                if (_empresa == null)
+                if (_empresa?.Id != this.IdEmpresa)
                 {
-                    if (Domain?.Empresa == null)
-                    {
-                        if (this.IdEmpresa != null)
-                        {
-                            var refresh = Domain?.Empresa?.Load();
-
-                            if (refresh?.domain != null)
-                                _empresa = new Presentation.Table.Empresa(refresh?.domain);
-                        }
-                    }
-                    else
-                    {
-                        _empresa = new Presentation.Table.Empresa(Domain?.Empresa);
-                    }
-
+                    _empresa = new Presentation.Table.Empresa(Domain?.Empresa);
                 }
 
                 return _empresa;
@@ -134,7 +120,7 @@ namespace Presentation.Table
                 {
                     _empresa = value;
 
-                    Domain.Empresa = _empresa?.Domain;
+                    //Domain.Empresa = _empresa?.Domain;
 
                     OnPropertyChanged(nameof(Empresa));
                 }

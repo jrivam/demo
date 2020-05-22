@@ -106,7 +106,7 @@ namespace Library.Impl.Persistence.Query
             (string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null,
             int maxdepth = 1, IListData<T, U> datas = null)
         {
-            var select = Select(commandtext, commandtype, parameters, maxdepth, (datas?.Entities != null ? datas?.Entities : new Collection<T>()));
+            var select = Select(commandtext, commandtype, parameters, maxdepth, datas?.Entities ?? new Collection<T>());
             if (select.result.Success)
             {
                 var enumeration = new List<U>();

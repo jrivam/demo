@@ -45,19 +45,19 @@ namespace Business.Table
         {
         }
 
-        public override Persistence.Table.Empresa Data
-        {
-            get
-            {
-                return base.Data;
-            }
-            set
-            {
-                 base.Data = value;
+        //public override Persistence.Table.Empresa Data
+        //{
+        //    get
+        //    {
+        //        return base.Data;
+        //    }
+        //    set
+        //    {
+        //         base.Data = value;
 
-                 _sucursales = null;
-            }
-        }
+        //         _sucursales = null;
+        //    }
+        //}
 
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Ruc { get { return Data?.Ruc; } set { if (Data?.Ruc != value) { Data.Ruc = value; Changed = true; } } }
@@ -71,19 +71,10 @@ namespace Business.Table
             {
                 if (_sucursales == null)
                 {
-                    if (Data?.Sucursales == null)
+                    if (this.Id != null)
                     {
-                        if (this.Id != null)
-                        {
-                            var refresh = Data?.Sucursales?.Refresh();
-
-                            if (refresh?.datas != null)
-                                Sucursales = new Business.Table.SucursalesQuery(refresh?.datas, new Business.Query.Sucursal(Data?.Sucursales?.Query));
-                        }
-                    }
-                    else
-                    {
-                        Sucursales = new Business.Table.SucursalesQuery(Data?.Sucursales, new Business.Query.Sucursal(Data?.Sucursales?.Query));
+                        Sucursales = new SucursalesQuery(Data.Sucursales, new Business.Query.Sucursal());
+                        _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
                     }
                 }
 

@@ -4,6 +4,6 @@ namespace Library.Interface.Business.Query
 {
     public interface IQueryDomainColumns
     {
-        IColumnQuery this[string reference] { get; }
+        IColumnQuery this[string name] { get; }
     }
 }

@@ -16,11 +16,11 @@ namespace Library.Impl.Business.Query
     {
         public virtual S Data { get; protected set; }
 
-        public virtual IColumnQuery this[string reference]
+        public virtual IColumnQuery this[string name]
         {
             get
             {
-                return Data[reference];
+                return Data[name];
             }
         }
 

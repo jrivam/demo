@@ -17,20 +17,6 @@ namespace Library.Impl.Presentation.Table
         where V : ITableDomain<T, U, V>, new()
         where W : class, ITableModel<T, U, V, W>
     {
-        //public virtual T Entity
-        //{
-        //    get
-        //    {
-        //        return Domain.Entity;
-        //    }
-        //    set
-        //    {
-        //        Domain.Entity = value;
-
-        //        OnPropertyChanged("Entity");
-        //    }
-        //}
-
         protected V _domain;
         public virtual V Domain
         {
@@ -128,10 +114,10 @@ namespace Library.Impl.Presentation.Table
                 Messenger.Default.Send<W>(this as W, $"{name}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
+            Domain = domain;
+
             Init();
             InitX();
-
-            Domain = domain;
         }
 
         public virtual (Result result, W model) Load(bool usedbcommand = false)

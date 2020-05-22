@@ -73,7 +73,7 @@ namespace Library.Impl.Presentation
             : this(name)
         {
             _domains = domains;
-            _domains.ToList().ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
+            _domains?.ToList()?.ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
 
             TotalRecords();
         }
@@ -84,9 +84,8 @@ namespace Library.Impl.Presentation
             {
                 models.ToList()?.ForEach(x => this?.Add(x));
 
-                _domains.Clear();
-                _domains.Load(this.Select(x => x.Domain));
-                //this.ToList()?.ForEach(x => _domains?.Add(x.Domain));
+                _domains?.Clear();
+                _domains?.Load(this.Select(x => x.Domain));
 
                 TotalRecords();
             }
