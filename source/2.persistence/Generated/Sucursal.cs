@@ -31,21 +31,14 @@ namespace Persistence.Table
 
         public Sucursal(Entities.Table.Sucursal entity,
             IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
-            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query)
+            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query = null)
             : base(entity, 
                   repository,
-                  query,
+                  query ?? new Persistence.Query.Sucursal(),
                   nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
         {
         }
 
-        public Sucursal(Entities.Table.Sucursal entity,
-            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
-            : this(entity,
-                    repository,
-                    new Persistence.Query.Sucursal())
-        {
-        }
         public Sucursal(Entities.Table.Sucursal entity,
             ConnectionStringSettings connectionstringsettings)
             : this(entity,
@@ -58,7 +51,6 @@ namespace Persistence.Table
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
-
         public Sucursal()
             : this(new Entities.Table.Sucursal())
         {
@@ -168,15 +160,19 @@ namespace Persistence.Table
 
     public partial class SucursalesQuery : ListDataQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, Persistence.Query.Sucursal query, 
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, 
+            Persistence.Query.Sucursal query = null, 
             int maxdepth = 1)
-            : base(entities, query, 
+            : base(entities, 
+                  query ?? new Persistence.Query.Sucursal(), 
                   maxdepth)
         {
         }
 
-        public SucursalesQuery(Persistence.Query.Sucursal query = null, int maxdepth = 1)
-            : this(new Collection<Entities.Table.Sucursal>(), query ?? new Persistence.Query.Sucursal(),
+        public SucursalesQuery(Persistence.Query.Sucursal query = null, 
+            int maxdepth = 1)
+            : this(new Collection<Entities.Table.Sucursal>(), 
+                  query ?? new Persistence.Query.Sucursal(),
                   maxdepth)
         {
         }
@@ -210,7 +206,7 @@ namespace Persistence.Query
             Columns.Add(new ColumnQuery<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
         }
 
-        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
+        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository = null)
             : base(repository,
                   nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
         {
@@ -220,7 +216,6 @@ namespace Persistence.Query
             : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
         {
         }
-
         public Sucursal(string appsettingsconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {

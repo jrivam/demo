@@ -12,7 +12,7 @@ namespace Library.Interface.Presentation
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
-        where W : class, ITableModel<T, U, V, W>
+        where W : ITableModel<T, U, V, W>
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>
         where Q : IQueryModel<R, S, T, U, V, W>

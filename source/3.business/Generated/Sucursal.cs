@@ -24,24 +24,21 @@ namespace Business.Table
         }
 
         public Sucursal(Persistence.Table.Sucursal data,
-            ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic)
+            ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
             : base(data, 
-                  logic)
+                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
         {
         }
 
-        public Sucursal(Persistence.Table.Sucursal data)
-            : this(data,
-                  new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
+        public Sucursal(Entities.Table.Sucursal entity,
+            ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
+            : this(new Persistence.Table.Sucursal(entity),
+                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
         {
         }
-
-        public Sucursal(Entities.Table.Sucursal entity)
-            : this(new Persistence.Table.Sucursal(entity))
-        {
-        }
-        public Sucursal()
-            : this(new Entities.Table.Sucursal())
+        public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
+            : this (new Entities.Table.Sucursal(),
+                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
         {
         }
 
@@ -111,21 +108,27 @@ namespace Business.Table
 
     public partial class SucursalesQuery : ListDomainQuery<Business.Query.Sucursal, Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas, Business.Query.Sucursal query, 
+        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas, 
+            Business.Query.Sucursal query = null, 
             int maxdepth = 1)
-            : base(datas, query, 
+            : base(datas, 
+                  query ?? new Business.Query.Sucursal(), 
                   maxdepth)
         {
         }
 
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, Business.Query.Sucursal query = null,
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, 
+            Business.Query.Sucursal query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Sucursales(entities), query ?? new Business.Query.Sucursal(),
+            : this(new Persistence.Table.Sucursales(entities), 
+                  query ?? new Business.Query.Sucursal(),
                  maxdepth)
         {
         }
-        public SucursalesQuery(Business.Query.Sucursal query = null, int maxdepth = 1)
-            : this(new Collection<Entities.Table.Sucursal>(), query ?? new Business.Query.Sucursal(),
+        public SucursalesQuery(Business.Query.Sucursal query = null, 
+            int maxdepth = 1)
+            : this(new Collection<Entities.Table.Sucursal>(), 
+                  query ?? new Business.Query.Sucursal(),
                   maxdepth)
         {
         }
@@ -136,21 +139,10 @@ namespace Business.Query
 {
     public partial class Sucursal : AbstractQueryDomain<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursal(Persistence.Query.Sucursal data,
-            ILogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic)
-            : base(data, 
-                  logic)
-        {
-        }
-
-        public Sucursal(Persistence.Query.Sucursal data)
-            : this(data,
-                  new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
-        {
-        }
-
-        public Sucursal()
-            : this(new Persistence.Query.Sucursal())
+        public Sucursal(Persistence.Query.Sucursal data = null,
+            ILogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
+            : base(data ?? new Persistence.Query.Sucursal(), 
+                  logic ?? new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
         {
         }
 

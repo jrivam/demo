@@ -10,7 +10,7 @@ namespace Library.Interface.Presentation
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
-        where W : class, ITableModel<T, U, V, W>
+        where W : ITableModel<T, U, V, W>
     {
         ICommand AddCommand { get; }
 

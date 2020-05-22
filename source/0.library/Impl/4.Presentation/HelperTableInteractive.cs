@@ -23,7 +23,7 @@ namespace Library.Impl.Presentation
                            BindingFlags.Public |
                            BindingFlags.Instance |
                            BindingFlags.OptionalParamBinding, null,
-                           new object[] { domain, maxdepth },
+                           new object[] { domain, null, maxdepth },
                            CultureInfo.CurrentCulture);
         }
         public static IEnumerable<W> CreateModelList(IEnumerable<V> domains, int maxdepth = 1)

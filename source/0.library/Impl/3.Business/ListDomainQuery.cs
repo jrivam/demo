@@ -11,7 +11,7 @@ namespace Library.Impl.Business
     public class ListDomainQuery<R, S, T, U, V> : ListDomain<T, U, V>, IListDomainQuery<R, S, T, U, V>, IListDomainRefresh<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : class, ITableDomain<T, U, V>
+        where V : ITableDomain<T, U, V>
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>
     {

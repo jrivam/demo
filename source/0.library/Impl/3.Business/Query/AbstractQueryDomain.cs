@@ -12,7 +12,7 @@ namespace Library.Impl.Business.Query
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
-        where S : IQueryData<T, U>, new()
+        where S : IQueryData<T, U>
     {
         public virtual S Data { get; protected set; }
 

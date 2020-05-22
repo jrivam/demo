@@ -21,7 +21,7 @@ namespace Library.Impl.Business
                            BindingFlags.Public |
                            BindingFlags.Instance |
                            BindingFlags.OptionalParamBinding,
-                           null, new object[] { data },
+                           null, new object[] { data, null },
                            CultureInfo.CurrentCulture);
         }
 

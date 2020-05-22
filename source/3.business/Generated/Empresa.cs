@@ -24,24 +24,22 @@ namespace Business.Table
         }
 
         public Empresa(Persistence.Table.Empresa data,
-            ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic)
+            ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
             : base(data, 
-                  logic)
+                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
         {
         }
 
-        public Empresa(Persistence.Table.Empresa data)
-            : this(data,
-                  new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
-        {
-        }
+        public Empresa(Entities.Table.Empresa entity,
+            ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
+            : this(new Persistence.Table.Empresa(entity),
+                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
 
-        public Empresa(Entities.Table.Empresa entity)
-            : this(new Persistence.Table.Empresa(entity))
         {
         }
-        public Empresa()
-            : this(new Entities.Table.Empresa())
+        public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
+            : this(new Entities.Table.Empresa(),
+                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
         {
         }
 
@@ -70,7 +68,7 @@ namespace Business.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = new SucursalesQuery(Data.Sucursales, new Business.Query.Sucursal());
+                    Sucursales = new SucursalesQuery(Data.Sucursales);
 
                     if (this.Id != null)
                     {
@@ -136,21 +134,27 @@ namespace Business.Table
 
     public partial class EmpresasQuery : ListDomainQuery<Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, Business.Query.Empresa query, 
+        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, 
+            Business.Query.Empresa query = null, 
             int maxdepth = 1)
-            : base(datas, query, 
+            : base(datas, 
+                  query ?? new Business.Query.Empresa(), 
                   maxdepth)
         {
         }
 
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, Business.Query.Empresa query = null,
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, 
+            Business.Query.Empresa query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Empresas(entities), query ?? new Business.Query.Empresa(),
+            : this(new Persistence.Table.Empresas(entities), 
+                  query ?? new Business.Query.Empresa(),
                  maxdepth)
         {
         }
-        public EmpresasQuery(Business.Query.Empresa query = null, int maxdepth = 1)
-            : this(new Collection<Entities.Table.Empresa>(), query ?? new Business.Query.Empresa(),
+        public EmpresasQuery(Business.Query.Empresa query = null, 
+            int maxdepth = 1)
+            : this(new Collection<Entities.Table.Empresa>(),
+                  query ?? new Business.Query.Empresa(),
                   maxdepth)
         {
         }
@@ -161,21 +165,10 @@ namespace Business.Query
 {
     public partial class Empresa : AbstractQueryDomain<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresa(Persistence.Query.Empresa data,
-            ILogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic)
-            : base(data, 
-                  logic)
-        {
-        }
-
-        public Empresa(Persistence.Query.Empresa data)
-            : this(data, 
-                  new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
-        {
-        }
-
-        public Empresa()
-            : this(new Persistence.Query.Empresa())
+        public Empresa(Persistence.Query.Empresa data = null,
+            ILogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
+            : base(data ?? new Persistence.Query.Empresa(), 
+                  logic ?? new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
         {
         }
 

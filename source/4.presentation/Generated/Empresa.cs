@@ -26,37 +26,35 @@ namespace Presentation.Table
         }
 
         public Empresa(Business.Table.Empresa domain,
-            IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive,
+            IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null,
             int maxdepth = 1)
             : base(nameof(Empresa),
                   domain, 
-                  interactive, 
-                  maxdepth)
-        {
-        }
-
-        public Empresa(Business.Table.Empresa domain,
-             int maxdepth = 1)
-            : this(domain,
-                  new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()),
+                  interactive ?? new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()), 
                   maxdepth)
         {
         }
 
         public Empresa(Persistence.Table.Empresa data,
+            IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null,
             int maxdepth = 1)
             : this(new Business.Table.Empresa(data),
+                  interactive ?? new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()),
                 maxdepth)
         {
         }
         public Empresa(Entities.Table.Empresa entity,
+            IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null,
             int maxdepth = 1)
             : this(new Persistence.Table.Empresa(entity),
+                  interactive ?? new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()),
                 maxdepth)
         {
         }
-        public Empresa(int maxdepth = 1)
+        public Empresa(IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null,
+            int maxdepth = 1)
             : this(new Entities.Table.Empresa(),
+                  interactive ?? new InteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()),
                   maxdepth)
         {
         }
@@ -119,7 +117,7 @@ namespace Presentation.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = new SucursalesQuery(Domain.Sucursales, new Presentation.Query.Sucursal());
+                    Sucursales = new SucursalesQuery(Domain.Sucursales);
 
                     if (this.Id != null)
                     {
@@ -165,28 +163,36 @@ namespace Presentation.Table
 
     public partial class EmpresasQuery : ListModelQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public EmpresasQuery(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains, Presentation.Query.Empresa query,             
+        public EmpresasQuery(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains, 
+            Presentation.Query.Empresa query = null,             
             int maxdepth = 1, int top = 0)
             : base(nameof(Empresas),
-                  domains, query, 
+                  domains, 
+                  query ?? new Presentation.Query.Empresa(), 
                   maxdepth, top)
         {
         }
 
-        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, Presentation.Query.Empresa query = null,
+        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, 
+            Presentation.Query.Empresa query = null,
             int maxdepth = 1)
-            : this(new Business.Table.Empresas(datas), query ?? new Presentation.Query.Empresa(),
+            : this(new Business.Table.Empresas(datas), 
+                  query ?? new Presentation.Query.Empresa(),
                  maxdepth)
         {
         }
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, Presentation.Query.Empresa query = null,
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, 
+            Presentation.Query.Empresa query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Empresas(entities), query ?? new Presentation.Query.Empresa(),
+            : this(new Persistence.Table.Empresas(entities), 
+                  query ?? new Presentation.Query.Empresa(),
                  maxdepth)
         {
         }
-        public EmpresasQuery(Presentation.Query.Empresa query = null, int maxdepth = 1)
-            : this(new Collection<Entities.Table.Empresa>(), query ?? new Presentation.Query.Empresa(),
+        public EmpresasQuery(Presentation.Query.Empresa query = null, 
+            int maxdepth = 1)
+            : this(new Collection<Entities.Table.Empresa>(), 
+                  query ?? new Presentation.Query.Empresa(),
                   maxdepth)
         {
         }
@@ -197,21 +203,10 @@ namespace Presentation.Query
 {
     public partial class Empresa : AbstractQueryModel<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresa(Business.Query.Empresa domain,
-            IInteractiveQuery<Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive)
-            : base(domain,
-                  interactive)
-        {
-        }
-
-        public Empresa(Business.Query.Empresa domain)
-            : this(domain,
-                  new InteractiveQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()))
-        {
-        }
-
-        public Empresa()
-            : this(new Business.Query.Empresa())
+        public Empresa(Business.Query.Empresa domain = null,
+            IInteractiveQuery<Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null)
+            : base(domain ?? new Business.Query.Empresa(),
+                  interactive ?? new InteractiveQuery<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>(new Presentation.Raiser.Empresa()))
         {
         }
 

@@ -41,10 +41,10 @@ namespace Library.Impl.Business.Table
                     return (select.result, default(V));
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Load", $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Load), $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Load", $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Load), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
         }
         public virtual (Result result, V domain) LoadQuery(V table, int maxdepth = 1)
         {
@@ -70,10 +70,10 @@ namespace Library.Impl.Business.Table
                     return (selectquery.result, default(V));
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "LoadQuery", $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(LoadQuery), $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "LoadQuery", $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(LoadQuery), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
         }
 
         public virtual (Result result, V domain) Save(V table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
@@ -105,14 +105,14 @@ namespace Library.Impl.Business.Table
                         }
                     }
 
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Save", $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Save), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
 
                 }
 
                 return (validate, default(V));
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Save", $"No changes to persist in {table.Data.Description.DbName} with Id {table.Data.Entity.Id}") } }, default(V));
+            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Save), $"No changes to persist in {table.Data.Description.DbName} with Id {table.Data.Entity.Id}") } }, default(V));
         }
         public virtual (Result result, V domain) Erase(V table, bool usedbcommand = false)
         {
@@ -130,13 +130,13 @@ namespace Library.Impl.Business.Table
                         return (delete.result, table);
                     }
 
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Erase", $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
+                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Erase), $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "Erase", $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Erase), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, "Erase", $"{table.Data.Description.DbName} with Id {table.Data.Entity.Id} already deleted") } }, default(V));
+            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Erase), $"{table.Data.Description.DbName} with Id {table.Data.Entity.Id} already deleted") } }, default(V));
         }
     }
 }

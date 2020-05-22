@@ -14,7 +14,7 @@ namespace Library.Impl.Presentation
     public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelQuery<Q, R, S, T, U, V, W>, IListModelRefresh<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : class, ITableDomain<T, U, V>
+        where V : ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
         where S : IQueryData<T, U>
         where R : IQueryDomain<S, T, U, V>

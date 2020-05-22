@@ -9,7 +9,7 @@ namespace Library.Impl.Persistence.Query
 {
     public abstract class AbstractQueryData<T, U> : IQueryData<T, U>
         where T : IEntity, new()
-        where U : class, ITableData<T, U>
+        where U : ITableData<T, U>
     {
         public virtual Description Description { get; protected set; }
 

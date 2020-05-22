@@ -28,21 +28,14 @@ namespace Persistence.Table
 
         public Empresa(Entities.Table.Empresa entity,
             IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository,
-            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query)
+            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query = null)
             : base(entity,
                   repository,
-                  query,
+                  query ?? new Persistence.Query.Empresa(),
                   nameof(Empresa), typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Empresa).ToUnderscoreCase().ToLower())
         {
         }
 
-        public Empresa(Entities.Table.Empresa entity,
-            IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
-            : this(entity,
-                    repository,
-                    new Persistence.Query.Empresa())
-        {
-        }
         public Empresa(Entities.Table.Empresa entity,
             ConnectionStringSettings connectionstringsettings)
             : this(entity,
@@ -55,7 +48,6 @@ namespace Persistence.Table
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {
         }
-
         public Empresa()
             : this(new Entities.Table.Empresa())
         {
@@ -102,7 +94,7 @@ namespace Persistence.Table
                     {
                         Entity.Sucursales = new Collection<Entities.Table.Sucursal>();
                     }
-                    Sucursales = new SucursalesQuery(Entity?.Sucursales, new Persistence.Query.Sucursal());
+                    Sucursales = new SucursalesQuery(Entity?.Sucursales);
 
                     if (this.Id != null)
                     {
@@ -137,15 +129,19 @@ namespace Persistence.Table
 
     public partial class EmpresasQuery : ListDataQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, Persistence.Query.Empresa query, 
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, 
+            Persistence.Query.Empresa query = null, 
            int maxdepth = 1)
-           : base(entities, query, 
+           : base(entities, 
+                 query ?? new Persistence.Query.Empresa(), 
              maxdepth)
         {
         }
 
-        public EmpresasQuery(Persistence.Query.Empresa query = null, int maxdepth = 1)
-            : this(new Collection<Entities.Table.Empresa>(), query ?? new Persistence.Query.Empresa(),
+        public EmpresasQuery(Persistence.Query.Empresa query = null, 
+            int maxdepth = 1)
+            : this(new Collection<Entities.Table.Empresa>(), 
+                  query ?? new Persistence.Query.Empresa(),
                   maxdepth)
         {
         }
@@ -174,7 +170,6 @@ namespace Persistence.Query
             : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Empresa(), connectionstringsettings))
         {
         }
-
         public Empresa(string appsettingsconnectionstringname)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
         {

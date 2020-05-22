@@ -14,7 +14,7 @@ namespace Library.Impl.Presentation.Table
     public abstract class AbstractTableModel<T, U, V, W> : TableModelValidation, ITableModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>, new()
+        where V : ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
     {
         protected V _domain;
