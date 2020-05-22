@@ -22,21 +22,17 @@ namespace WpfApp.ViewModels
             }
         }
 
-        protected Presentation.Table.Empresas _empresas;
-        public Presentation.Table.Empresas Empresas
+        protected Presentation.Table.EmpresasQuery _empresas;
+        public Presentation.Table.EmpresasQuery Empresas
         {
             get
             {
                 if (_empresas == null)
                 {
-                    var query = new Presentation.Query.Empresa();
-                    query.Activo = (true, WhereOperator.Equals);
+                    Empresas = new Presentation.Table.EmpresasQuery();
+                    _empresas.Query.Activo = (true, WhereOperator.Equals);
 
-                    var list = query.List();
-                    if (list.result.Success)
-                    {
-                        Empresas = (Presentation.Table.Empresas)new Presentation.Table.Empresas().Load(list.models);
-                    }
+                    _empresas.Refresh();
                 }
 
                 return _empresas;

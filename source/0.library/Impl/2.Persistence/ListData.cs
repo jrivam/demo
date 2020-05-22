@@ -47,18 +47,26 @@ namespace Library.Impl.Persistence
         }
         public virtual bool ItemAdd(U data)
         {
-            if (data.Entity.Id != null)
+            if (data != null)
             {
-                this.Add(data);
+                if (data.Entity.Id != null)
+                {
+                    this.Add(data);
 
-                return true;
+                    return true;
+                }
             }
 
             return false;
         }
         public virtual bool ItemRemove(U data)
         {
-            this.Remove(data);
+            if (data != null)
+            {
+                this.Remove(data);
+
+                return true;
+            }
 
             return true;
         }

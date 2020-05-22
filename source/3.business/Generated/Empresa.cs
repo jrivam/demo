@@ -45,20 +45,6 @@ namespace Business.Table
         {
         }
 
-        //public override Persistence.Table.Empresa Data
-        //{
-        //    get
-        //    {
-        //        return base.Data;
-        //    }
-        //    set
-        //    {
-        //         base.Data = value;
-
-        //         _sucursales = null;
-        //    }
-        //}
-
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Ruc { get { return Data?.Ruc; } set { if (Data?.Ruc != value) { Data.Ruc = value; Changed = true; } } }
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
@@ -67,13 +53,27 @@ namespace Business.Table
         protected Business.Table.SucursalesQuery _sucursales;
         public virtual Business.Table.SucursalesQuery Sucursales
         {
+            //get
+            //{
+            //    if (_sucursales == null)
+            //    {
+            //        if (this.Id != null)
+            //        {
+            //            Sucursales = new SucursalesQuery(Data.Sucursales, new Business.Query.Sucursal());
+            //            _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
+            //        }
+            //    }
+
+            //    return _sucursales;
+            //}
             get
             {
                 if (_sucursales == null)
                 {
+                    Sucursales = new SucursalesQuery(Data.Sucursales, new Business.Query.Sucursal());
+
                     if (this.Id != null)
                     {
-                        Sucursales = new SucursalesQuery(Data.Sucursales, new Business.Query.Sucursal());
                         _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
                     }
                 }
@@ -85,9 +85,7 @@ namespace Business.Table
                 if (_sucursales != value)
                 {
                     _sucursales = value;
-
-                    //Data.Sucursales = _sucursales != null ? (Persistence.Table.Sucursales)new Persistence.Table.Sucursales().Load(_sucursales?.Datas) : null;
-                }
+               }
             }
         }
 

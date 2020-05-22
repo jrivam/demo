@@ -45,20 +45,6 @@ namespace Business.Table
         {
         }
 
-        //public override Persistence.Table.Sucursal Data
-        //{
-        //    get
-        //    {
-        //        return base.Data;
-        //    }
-        //    set
-        //    {
-        //        base.Data = value;
-
-        //        _empresa = null;
-        //    }
-        //}
-
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
         public virtual string Codigo { get { return Data?.Codigo; } set { if (Data?.Codigo != value) { Data.Codigo = value; Changed = true; } } }
         public virtual string Nombre { get { return Data?.Nombre; } set { if (Data?.Nombre != value) { Data.Nombre = value; Changed = true; } } }
@@ -91,7 +77,7 @@ namespace Business.Table
             {
                 if (_empresa?.Id != this.IdEmpresa)
                 {
-                    _empresa = new Business.Table.Empresa(Data?.Empresa);
+                    Empresa = new Business.Table.Empresa(Data?.Empresa);
                 }
 
                 return _empresa;
@@ -101,8 +87,6 @@ namespace Business.Table
                 if (_empresa != value)
                 {
                     _empresa = value;
-
-                    //Data.Empresa = _empresa?.Data;
                 }
             }
         }

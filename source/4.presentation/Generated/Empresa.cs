@@ -61,20 +61,6 @@ namespace Presentation.Table
         {
         }
 
-        //public override Business.Table.Empresa Domain
-        //{
-        //    get
-        //    {
-        //        return base.Domain;
-        //    }
-        //    set
-        //    {
-        //        base.Domain = value;
-
-        //        _sucursales = null;
-        //    }
-        //}
-
         public virtual int? Id 
         { 
             get 
@@ -114,15 +100,30 @@ namespace Presentation.Table
         protected Presentation.Table.SucursalesQuery _sucursales;
         public virtual Presentation.Table.SucursalesQuery Sucursales
         {
+            //get
+            //{
+            //    if (_sucursales == null)
+            //    {
+            //        if (this.Id != null)
+            //        {
+            //            Sucursales = new SucursalesQuery(Domain.Sucursales, new Presentation.Query.Sucursal());
+            //            _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
+
+            //            _sucursales.Refresh();
+            //        }
+            //    }
+
+            //    return _sucursales;
+            //}
             get
             {
                 if (_sucursales == null)
                 {
+                    Sucursales = new SucursalesQuery(Domain.Sucursales, new Presentation.Query.Sucursal());
+
                     if (this.Id != null)
                     {
-                        Sucursales = new SucursalesQuery(Domain.Sucursales, new Presentation.Query.Sucursal());
                         _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
-
                         _sucursales.Refresh();
                     }
                 }
@@ -135,8 +136,6 @@ namespace Presentation.Table
                 {
                     _sucursales = value;
 
-                    //Domain.Sucursales = (_sucursales != null) ? (Business.Table.Sucursales)new Business.Table.Sucursales().Load(_sucursales?.Domains) : null;
- 
                     OnPropertyChanged(nameof(Sucursales));
                 }
             }

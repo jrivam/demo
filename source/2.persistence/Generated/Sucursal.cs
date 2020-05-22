@@ -27,9 +27,6 @@ namespace Persistence.Table
             Columns.Add(new ColumnTable<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
             Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
             Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
-
-            //if (Entity?.Empresa == null)
-            //    Entity.Empresa = new Entities.Table.Empresa();
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
@@ -66,20 +63,6 @@ namespace Persistence.Table
             : this(new Entities.Table.Sucursal())
         {
         }
-
-        //public override Entities.Table.Sucursal Entity
-        //{
-        //    get
-        //    {
-        //        return base.Entity;
-        //    }
-        //    set
-        //    {
-        //        base.Entity = value;
-
-        //        _empresa = null;
-        //    }
-        //}
 
         public virtual int? Id
         {
@@ -149,9 +132,9 @@ namespace Persistence.Table
                     {
                         Entity.Empresa = new Entities.Table.Empresa();
                     }
-                    _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+                    Empresa = new Persistence.Table.Empresa(Entity?.Empresa);
 
-                    if (_empresa.Id == null)
+                    if (_empresa.Id == null && this.IdEmpresa != null)
                     {
                         _empresa.Id = this.IdEmpresa;
                         _empresa.Select();
@@ -165,8 +148,6 @@ namespace Persistence.Table
                 if (_empresa != value)
                 {
                     _empresa = value;
-
-                    //Entity.Empresa = _empresa?.Entity;
                 }
             }
         }

@@ -64,20 +64,6 @@ namespace Presentation.Table
         {
         }
 
-        //public override Business.Table.Sucursal Domain
-        //{
-        //    get
-        //    {
-        //        return base.Domain;
-        //    }
-        //    set
-        //    {
-        //        base.Domain = value;
-
-        //        _empresa = null;
-        //    }
-        //}
-
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged(nameof(Id)); } } }
         public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged(nameof(Codigo)); } } }
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged(nameof(Nombre)); } } }
@@ -109,7 +95,7 @@ namespace Presentation.Table
             {
                 if (_empresa?.Id != this.IdEmpresa)
                 {
-                    _empresa = new Presentation.Table.Empresa(Domain?.Empresa);
+                    Empresa = new Presentation.Table.Empresa(Domain?.Empresa);
                 }
 
                 return _empresa;
@@ -119,8 +105,6 @@ namespace Presentation.Table
                 if (_empresa != value)
                 {
                     _empresa = value;
-
-                    //Domain.Empresa = _empresa?.Domain;
 
                     OnPropertyChanged(nameof(Empresa));
                 }

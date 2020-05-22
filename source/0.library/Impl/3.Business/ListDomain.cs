@@ -78,26 +78,31 @@ namespace Library.Impl.Business
         }
         public virtual bool ItemAdd(V domain)
         {
-            if (!domain.Deleted)
+            if (domain != null)
             {
-                if (Datas.ItemAdd(domain.Data))
+                if (!domain.Deleted)
                 {
-                    this.Add(domain);
+                    if (Datas.ItemAdd(domain.Data))
+                    {
+                        this.Add(domain);
 
-                    return true;
+                        return true;
+                    }
                 }
             }
 
             return false;
         }
-
         public virtual bool ItemRemove(V domain)
         {
-            if (Datas.ItemRemove(domain.Data))
+            if (domain != null)
             {
-                this.Remove(domain);
+                if (Datas.ItemRemove(domain.Data))
+                {
+                    this.Remove(domain);
 
-                return true;
+                    return true;
+                }
             }
 
             return false;

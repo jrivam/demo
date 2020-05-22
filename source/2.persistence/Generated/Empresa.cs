@@ -24,9 +24,6 @@ namespace Persistence.Table
             Columns.Add(new ColumnTable<string>(this, nameof(Ruc), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Ruc))?.Name ?? nameof(Ruc).ToUnderscoreCase().ToLower()));
             Columns.Add(new ColumnTable<string>(this, nameof(RazonSocial), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(RazonSocial))?.Name ?? nameof(RazonSocial).ToUnderscoreCase().ToLower()));
             Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
-
-            if (Entity?.Sucursales == null)
-                Entity.Sucursales = new Collection<Entities.Table.Sucursal>();
         }
 
         public Empresa(Entities.Table.Empresa entity,
@@ -64,20 +61,6 @@ namespace Persistence.Table
         {
         }
 
-        //public override Entities.Table.Empresa Entity
-        //{
-        //    get
-        //    {
-        //        return base.Entity;
-        //    }
-        //    set
-        //    {
-        //        base.Entity = value;
-
-        //        _sucursales = null;
-        //    }
-        //}
-
         public virtual int? Id
         {
             get { return Entity?.Id; }
@@ -98,13 +81,31 @@ namespace Persistence.Table
         protected Persistence.Table.SucursalesQuery _sucursales;
         public virtual Persistence.Table.SucursalesQuery Sucursales
         {
+            //get
+            //{
+            //    if (_sucursales == null)
+            //    {
+            //        if (this.Id != null)
+            //        {
+            //            Sucursales = new SucursalesQuery(Entity?.Sucursales, new Persistence.Query.Sucursal());
+            //            _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
+            //        }
+            //    }
+
+            //    return _sucursales;
+            //}
             get
             {
                 if (_sucursales == null)
                 {
+                    if (Entity?.Sucursales == null)
+                    {
+                        Entity.Sucursales = new Collection<Entities.Table.Sucursal>();
+                    }
+                    Sucursales = new SucursalesQuery(Entity?.Sucursales, new Persistence.Query.Sucursal());
+
                     if (this.Id != null)
                     {
-                        Sucursales = new SucursalesQuery(Entity?.Sucursales, new Persistence.Query.Sucursal());
                         _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
                     }
                 }
@@ -116,8 +117,6 @@ namespace Persistence.Table
                 if (_sucursales != value)
                 {
                     _sucursales = value;
-
-                    //Entity.Sucursales = _sucursales?.Entities;
                 }
             }
         }

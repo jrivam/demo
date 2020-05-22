@@ -116,12 +116,15 @@ namespace Library.Impl.Presentation
 
         public virtual bool ItemAdd(W model)
         {
-            if (Domains.ItemAdd(model.Domain))
+            if (model != null)
             {
-                this.Add(model);
+                if (Domains.ItemAdd(model.Domain))
+                {
+                    this.Add(model);
 
-                TotalRecords();
-                return true;
+                    TotalRecords();
+                    return true;
+                }
             }
 
             return false;
@@ -129,12 +132,15 @@ namespace Library.Impl.Presentation
 
         public virtual bool ItemRemove(W model)
         {
-            if (Domains.ItemRemove(model.Domain))
+            if (model != null)
             {
-                this.Remove(model);
+                if (Domains.ItemRemove(model.Domain))
+                {
+                    this.Remove(model);
 
-                TotalRecords();
-                return true;
+                    TotalRecords();
+                    return true;
+                }
             }
 
             return false;
