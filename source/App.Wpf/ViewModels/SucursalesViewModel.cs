@@ -50,7 +50,12 @@ namespace WpfApp.ViewModels
         public SucursalesViewModel(Presentation.Table.SucursalesQuery sucursalesquery = null)
             : base()
         {
-            SucursalesQuery = sucursalesquery ?? new Presentation.Table.SucursalesQuery(maxdepth: 2);
+            SucursalesQuery = sucursalesquery;
+        }
+
+        public SucursalesViewModel()
+            : this(new Presentation.Table.SucursalesQuery(maxdepth: 2))
+        {
         }
     }
 }

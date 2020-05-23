@@ -47,10 +47,15 @@ namespace WpfApp.ViewModels
             }
         }
 
-        public SucursalViewModel(Presentation.Table.Sucursal sucursal = null)
+        public SucursalViewModel(Presentation.Table.Sucursal sucursal)
             : base()
         {
-            Sucursal = sucursal ?? new Presentation.Table.Sucursal();
+            Sucursal = sucursal;
+        }
+
+        public SucursalViewModel()
+            : this(new Presentation.Table.Sucursal())
+        {
         }
     }
 }

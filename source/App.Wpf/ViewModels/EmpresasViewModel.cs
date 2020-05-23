@@ -21,10 +21,15 @@ namespace WpfApp.ViewModels
             }
         }
 
-        public EmpresasViewModel(Presentation.Table.EmpresasQuery empresasquery = null)
+        public EmpresasViewModel(Presentation.Table.EmpresasQuery empresasquery)
             : base()
         {
-            EmpresasQuery = empresasquery ?? new Presentation.Table.EmpresasQuery();
+            EmpresasQuery = empresasquery;
+        }
+
+        public EmpresasViewModel()
+            : this(new Presentation.Table.EmpresasQuery())
+        {
         }
     }
 }
