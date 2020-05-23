@@ -25,7 +25,7 @@ namespace Business.Table
 
         public Empresa(Persistence.Table.Empresa data,
             ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
-            : base(data, 
+            : base(data,
                   logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
         {
         }
@@ -122,12 +122,8 @@ namespace Business.Table
         {
         }
 
-        public Empresas(ICollection<Entities.Table.Empresa> entities)
-           : this(new Persistence.Table.Empresas(entities))
-        {
-        }
-        public Empresas()
-            : this(new Collection<Entities.Table.Empresa>())
+        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
+           : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()))
         {
         }
     }

@@ -8,7 +8,7 @@ namespace Library.Impl.Business.Table
 {
     public abstract class AbstractTableDomain<T, U, V> : ITableDomain<T, U, V>
         where T : IEntity
-        where U : ITableData<T, U>, new()
+        where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
     {
         protected U _data;
@@ -38,7 +38,7 @@ namespace Library.Impl.Business.Table
 
         protected readonly ILogicTable<T, U, V> _logic;
 
-        public AbstractTableDomain(U data, 
+        public AbstractTableDomain(U data,
             ILogicTable<T, U, V> logic)
         {
             _logic = logic;

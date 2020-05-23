@@ -6,7 +6,7 @@ namespace Persistence.Table
     public partial class Sucursal
     {
         public Sucursal(Entities.Table.Sucursal entity)
-            : this(entity, "test.connectionstring.name")
+            : this("test.connectionstring.name", entity)
         {
         }
 

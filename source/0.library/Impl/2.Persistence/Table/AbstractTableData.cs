@@ -57,9 +57,9 @@ namespace Library.Impl.Persistence.Table
 
         protected readonly IQueryData<T, U> _query;
 
-        public AbstractTableData(T entity,
-            IRepositoryTable<T, U> repository,
+        public AbstractTableData(IRepositoryTable<T, U> repository,
             IQueryData<T, U> query,
+            T entity,
             string name, string dbname)
         {
             Description = new Description(name, dbname);

@@ -151,12 +151,8 @@ namespace Presentation.Table
            : this(new Business.Table.Empresas(datas))
         {
         }
-        public Empresas(ICollection<Entities.Table.Empresa> entities)
-           : this(new Persistence.Table.Empresas(entities))
-        {
-        }
-        public Empresas()
-            : this(new Collection<Entities.Table.Empresa>())
+        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
+           : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()))
         {
         }
     }

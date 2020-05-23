@@ -6,7 +6,7 @@ namespace Persistence.Table
     public partial class Empresa
     {
         public Empresa(Entities.Table.Empresa entity)
-            : this(entity, "test.connectionstring.name")
+            : this("test.connectionstring.name", entity)
         {
         }
 

@@ -121,12 +121,8 @@ namespace Presentation.Table
            : this(new Business.Table.Sucursales(datas))
         {
         }
-        public Sucursales(ICollection<Entities.Table.Sucursal> entities)
-           : this(new Persistence.Table.Sucursales(entities))
-        {
-        }
-        public Sucursales()
-            : this(new Collection<Entities.Table.Sucursal>())
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
+           : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()))
         {
         }
     }

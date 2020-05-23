@@ -96,12 +96,8 @@ namespace Business.Table
         {
         }
 
-        public Sucursales(ICollection<Entities.Table.Sucursal> entities)
-           : this(new Persistence.Table.Sucursales(entities))
-        {
-        }
-        public Sucursales()
-            : this(new Collection<Entities.Table.Sucursal>())
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
+           : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()))
         {
         }
     }

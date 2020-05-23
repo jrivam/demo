@@ -29,30 +29,26 @@ namespace Persistence.Table
             Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
         }
 
-        public Sucursal(Entities.Table.Sucursal entity,
-            IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
+        public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
+            Entities.Table.Sucursal entity = null,
             IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query = null)
-            : base(entity, 
-                  repository,
+            : base(repository,
                   query ?? new Persistence.Query.Sucursal(),
+                  entity ?? new Entities.Table.Sucursal(),
                   nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
         {
         }
 
-        public Sucursal(Entities.Table.Sucursal entity,
-            ConnectionStringSettings connectionstringsettings)
-            : this(entity,
-                  new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
+        public Sucursal(ConnectionStringSettings connectionstringsettings,
+            Entities.Table.Sucursal entity = null)
+            : this(new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings),
+                  entity ?? new Entities.Table.Sucursal())
         {
         }
-        public Sucursal(Entities.Table.Sucursal entity,
-            string appsettingsconnectionstringname)
-            : this(entity, 
-                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
-        {
-        }
-        public Sucursal()
-            : this(new Entities.Table.Sucursal())
+        public Sucursal(string appsettingsconnectionstringname,
+            Entities.Table.Sucursal entity = null)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  entity ?? new Entities.Table.Sucursal())
         {
         }
 
@@ -147,32 +143,19 @@ namespace Persistence.Table
 
     public partial class Sucursales : ListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursales(ICollection<Entities.Table.Sucursal> entities)
-            : base(entities)
-        {
-        }
-
-        public Sucursales()
-            : this(new Collection<Entities.Table.Sucursal>())
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
+            : base(entities ?? new Collection<Entities.Table.Sucursal>())
         {
         }
     }
 
     public partial class SucursalesQuery : ListDataQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, 
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities = null, 
             Persistence.Query.Sucursal query = null, 
             int maxdepth = 1)
-            : base(entities, 
+            : base(entities ?? new Collection<Entities.Table.Sucursal>(), 
                   query ?? new Persistence.Query.Sucursal(), 
-                  maxdepth)
-        {
-        }
-
-        public SucursalesQuery(Persistence.Query.Sucursal query = null, 
-            int maxdepth = 1)
-            : this(new Collection<Entities.Table.Sucursal>(), 
-                  query ?? new Persistence.Query.Sucursal(),
                   maxdepth)
         {
         }
