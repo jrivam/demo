@@ -47,15 +47,10 @@ namespace WpfApp.ViewModels
             }
         }
 
-        public SucursalesViewModel(Presentation.Table.SucursalesQuery sucursalesquery)
+        public SucursalesViewModel(Presentation.Table.SucursalesQuery sucursalesquery = null)
             : base()
         {
-            SucursalesQuery = sucursalesquery;
-        }
-
-        public SucursalesViewModel()
-            : this(new Presentation.Table.SucursalesQuery(new Presentation.Query.Sucursal(), 2))
-        {
+            SucursalesQuery = sucursalesquery ?? new Presentation.Table.SucursalesQuery(maxdepth: 2);
         }
     }
 }

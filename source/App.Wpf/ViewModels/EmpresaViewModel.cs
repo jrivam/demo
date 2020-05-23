@@ -21,15 +21,10 @@ namespace WpfApp.ViewModels
             }
         }
 
-        public EmpresaViewModel(Presentation.Table.Empresa empresa)
+        public EmpresaViewModel(Presentation.Table.Empresa empresa = null)
             : base()
         {
-            Empresa = empresa;
-        }
-
-        public EmpresaViewModel()
-            : this(new Presentation.Table.Empresa())
-        {
+            Empresa = empresa ?? new Presentation.Table.Empresa();
         }
     }
 }
