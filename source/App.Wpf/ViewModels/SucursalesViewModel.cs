@@ -47,7 +47,7 @@ namespace WpfApp.ViewModels
             }
         }
 
-        public SucursalesViewModel(Presentation.Table.SucursalesQuery sucursalesquery = null)
+        public SucursalesViewModel(Presentation.Table.SucursalesQuery sucursalesquery)
             : base()
         {
             SucursalesQuery = sucursalesquery;

@@ -22,7 +22,7 @@ namespace Library.Impl.Persistence.Database
 
             try
             {
-                var enumeration = default(ICollection<T>);
+                var enumeration = new Collection<T>();
                 var iterator = (entities ?? new Collection<T>()).GetEnumerator();
 
                 command.Connection.Open();
@@ -35,7 +35,6 @@ namespace Library.Impl.Persistence.Database
 
                         _reader.Read(entity, reader, new List<string>(), maxdepth, 0);
 
-                        enumeration = enumeration ?? new Collection<T>();
                         enumeration.Add(entity);
                     }
 
