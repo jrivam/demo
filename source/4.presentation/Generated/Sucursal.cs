@@ -147,19 +147,12 @@ namespace Presentation.Table
                  maxdepth)
         {
         }
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, 
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities = null, 
             Presentation.Query.Sucursal query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Sucursales(entities), 
+            : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()), 
                   query ?? new Presentation.Query.Sucursal(),
                  maxdepth)
-        {
-        }
-        public SucursalesQuery(Presentation.Query.Sucursal query = null, 
-            int maxdepth = 1)
-            : this(new Collection<Entities.Table.Sucursal>(), 
-                  query ?? new Presentation.Query.Sucursal(),
-                  maxdepth)
         {
         }
     }

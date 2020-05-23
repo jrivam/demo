@@ -113,19 +113,12 @@ namespace Business.Table
         {
         }
 
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities, 
+        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities = null, 
             Business.Query.Sucursal query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Sucursales(entities), 
+            : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()), 
                   query ?? new Business.Query.Sucursal(),
                  maxdepth)
-        {
-        }
-        public SucursalesQuery(Business.Query.Sucursal query = null, 
-            int maxdepth = 1)
-            : this(new Collection<Entities.Table.Sucursal>(), 
-                  query ?? new Business.Query.Sucursal(),
-                  maxdepth)
         {
         }
     }

@@ -177,19 +177,12 @@ namespace Presentation.Table
                  maxdepth)
         {
         }
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, 
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities = null, 
             Presentation.Query.Empresa query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Empresas(entities), 
+            : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()), 
                   query ?? new Presentation.Query.Empresa(),
                  maxdepth)
-        {
-        }
-        public EmpresasQuery(Presentation.Query.Empresa query = null, 
-            int maxdepth = 1)
-            : this(new Collection<Entities.Table.Empresa>(), 
-                  query ?? new Presentation.Query.Empresa(),
-                  maxdepth)
         {
         }
     }

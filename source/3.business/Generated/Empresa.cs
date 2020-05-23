@@ -139,19 +139,12 @@ namespace Business.Table
         {
         }
 
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities, 
+        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities = null, 
             Business.Query.Empresa query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Empresas(entities), 
+            : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()), 
                   query ?? new Business.Query.Empresa(),
                  maxdepth)
-        {
-        }
-        public EmpresasQuery(Business.Query.Empresa query = null, 
-            int maxdepth = 1)
-            : this(new Collection<Entities.Table.Empresa>(),
-                  query ?? new Business.Query.Empresa(),
-                  maxdepth)
         {
         }
     }
