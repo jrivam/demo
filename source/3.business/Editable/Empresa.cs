@@ -18,14 +18,3 @@ namespace Business.Query
     {
     }
 }
-
-namespace Business.Mapper
-{
-    public partial class Empresa
-    {
-        public override Business.Table.Empresa LoadX(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
-        {
-            return base.LoadX(domain, maxdepth, depth);
-        }
-    }
-}

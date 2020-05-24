@@ -14,18 +14,15 @@ namespace Library.Impl.Business.Loader
         {
         }
 
-        public virtual V Clear(V domain)
+        public virtual void Clear(V domain)
         {
-            return domain;
         }
 
-        public virtual V Load(V domain, int maxdepth = 1, int depth = 0)
+        public virtual void Load(V domain, int maxdepth = 1, int depth = 0)
         {
-            return domain;
         }
-        public virtual V LoadX(V domain, int maxdepth = 1, int depth = 0)
+        public virtual void LoadX(V domain, int maxdepth = 1, int depth = 0)
         {
-            return domain;
         }
     }
 }

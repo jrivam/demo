@@ -14,17 +14,6 @@ namespace Presentation.Table
 {
     public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        //protected override void Init()
-        //{
-        //    base.Init();
-
-        //    //Elements.Add(new Element(nameof(Id)));
-        //    //Elements.Add(new Element(nameof(Ruc)));
-        //    //Elements.Add(new Element(nameof(RazonSocial)));
-        //    //Elements.Add(new Element(nameof(Activo)));
-        //    //Elements.Add(new Element(nameof(Sucursales)));
-        //}
-
         public Empresa(Business.Table.Empresa domain,
             IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null,
             int maxdepth = 1)
@@ -209,13 +198,9 @@ namespace Presentation.Raiser
 {
     public partial class Empresa : BaseRaiser<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public override Presentation.Table.Empresa Raise(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
+        public override void Raise(Presentation.Table.Empresa model, int maxdepth = 1, int depth = 0)
         {
-            model = base.Raise(model, maxdepth, depth);
-
-            //model.OnPropertyChanged("Sucursales");
-
-            return model;
+            base.Raise(model, maxdepth, depth);
         }
     }
 }

@@ -11,9 +11,9 @@ namespace Library.Interface.Presentation.Raiser
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        W Clear(W model);
+        void Clear(W model);
 
-        W Raise(W model, int maxdepth = 1, int depth = 0);
-        W RaiseX(W model, int maxdepth = 1, int depth = 0);
+        void Raise(W model, int maxdepth = 1, int depth = 0);
+        void RaiseX(W model, int maxdepth = 1, int depth = 0);
     }
 }

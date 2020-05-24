@@ -26,20 +26,20 @@ namespace Business.Table
         public Empresa(Persistence.Table.Empresa data,
             ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
             : base(data,
-                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
+                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
         {
         }
 
         public Empresa(Entities.Table.Empresa entity,
             ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
             : this(new Persistence.Table.Empresa(entity),
-                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
+                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
 
         {
         }
         public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
             : this(new Entities.Table.Empresa(),
-                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
+                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
         {
         }
 
@@ -157,7 +157,7 @@ namespace Business.Query
         public Empresa(Persistence.Query.Empresa data = null,
             ILogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
             : base(data ?? new Persistence.Query.Empresa(), 
-                  logic ?? new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Mapper.Empresa()))
+                  logic ?? new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
         {
         }
 
@@ -198,15 +198,13 @@ namespace Business.Query
     }
 }
 
-namespace Business.Mapper
+namespace Business.Loader
 {
     public partial class Empresa : BaseLoader<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public override Business.Table.Empresa Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
+        public override void Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
         {
-            domain = base.Load(domain, maxdepth, depth);
-
-            return domain;
+            base.Load(domain, maxdepth, depth);
         }
     }
 }

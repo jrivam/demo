@@ -13,28 +13,23 @@ namespace Library.Impl.Persistence.Mapper
         {
         }
 
-        public virtual U Clear(U data)
+        public virtual void Clear(U data)
         {
             foreach (var column in data.Columns)
             {
                 data[column.Description.Name].DbValue = null;
             }
-
-            return data;
         }
 
-        public virtual U Map(U data, int maxdepth = 1, int depth = 0)
+        public virtual void Map(U data, int maxdepth = 1, int depth = 0)
         {
             foreach (var property in data.Entity.GetProperties(isprimitive: true))
             {
                 data[property.info.Name].DbValue = property.info.GetValue(data.Entity);
             }
-
-            return data;
         }
-        public virtual U MapX(U data, int maxdepth = 1, int depth = 0)
+        public virtual void MapX(U data, int maxdepth = 1, int depth = 0)
         {
-            return data;
         }
     }
 }

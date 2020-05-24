@@ -26,19 +26,19 @@ namespace Business.Table
         public Sucursal(Persistence.Table.Sucursal data,
             ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
             : base(data, 
-                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
+                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
         {
         }
 
         public Sucursal(Entities.Table.Sucursal entity,
             ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
             : this(new Persistence.Table.Sucursal(entity),
-                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
+                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
         {
         }
         public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
             : this (new Entities.Table.Sucursal(),
-                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
+                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
         {
         }
 
@@ -131,7 +131,7 @@ namespace Business.Query
         public Sucursal(Persistence.Query.Sucursal data = null,
             ILogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
             : base(data ?? new Persistence.Query.Sucursal(), 
-                  logic ?? new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Mapper.Sucursal()))
+                  logic ?? new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
         {
         }
 
@@ -186,15 +186,19 @@ namespace Business.Query
     }
 }
 
-namespace Business.Mapper
+namespace Business.Loader
 {
     public partial class Sucursal : BaseLoader<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public override Business.Table.Sucursal Load(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
+        public override void Load(Business.Table.Sucursal domain, int maxdepth = 1, int depth = 0)
         {
-            domain = base.Load(domain, maxdepth, depth);
+            base.Load(domain, maxdepth, depth);
 
-            return domain;
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                new Business.Loader.Empresa().Load(domain.Empresa, maxdepth, depth);
+            }
         }
     }
 }

@@ -3,7 +3,6 @@ using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
-using System.Collections.Generic;
 
 namespace Library.Impl.Presentation.Raiser
 {
@@ -13,27 +12,22 @@ namespace Library.Impl.Presentation.Raiser
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        public virtual W Clear(W model)
+        public virtual void Clear(W model)
         {
            //model.Validations = new Dictionary<string, string>();
 
             model.OnPropertyChanged("Validations");
-
-            return model;
         }
 
-        public virtual W Raise(W model, int maxdepth = 1, int depth = 0)
+        public virtual void Raise(W model, int maxdepth = 1, int depth = 0)
         {
             foreach (var element in model.Elements)
             {
                 model.OnPropertyChanged(element.Name);
             }
-
-            return model;
         }
-        public virtual W RaiseX(W model, int maxdepth = 1, int depth = 0)
+        public virtual void RaiseX(W model, int maxdepth = 1, int depth = 0)
         {
-            return model;
         }
     }
 }

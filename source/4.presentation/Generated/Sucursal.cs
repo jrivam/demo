@@ -15,19 +15,6 @@ namespace Presentation.Table
 {
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        //protected override void Init()
-        //{
-        //    base.Init();
-
-        //    //Elements.Add(new Element(nameof(Id)));
-        //    //Elements.Add(new Element(nameof(Codigo)));
-        //    //Elements.Add(new Element(nameof(Nombre)));
-        //    //Elements.Add(new Element(nameof(Fecha)));
-        //    //Elements.Add(new Element(nameof(Activo)));
-        //    //Elements.Add(new Element(nameof(IdEmpresa)));
-        //    //Elements.Add(new Element(nameof(Empresa)));
-        //}
-
         public Sucursal(Business.Table.Sucursal domain,
             IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactive = null,
             int maxdepth = 1)
@@ -224,17 +211,15 @@ namespace Presentation.Raiser
 {
     public partial class Sucursal : BaseRaiser<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public override Presentation.Table.Sucursal Raise(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
+        public override void Raise(Presentation.Table.Sucursal model, int maxdepth = 1, int depth = 0)
         {
-            model = base.Raise(model);
+            base.Raise(model);
 
-            //depth++;
-            //if (depth < maxdepth)
-            //{
-            //    model.OnPropertyChanged(nameof(Empresa));
-            //}
-
-            return model;
+            depth++;
+            if (depth < maxdepth || maxdepth == 0)
+            {
+                new Presentation.Raiser.Empresa().Raise(model.Empresa, maxdepth, depth);
+            }
         }
     }
 }

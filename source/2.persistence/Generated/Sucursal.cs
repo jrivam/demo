@@ -17,16 +17,6 @@ namespace Persistence.Table
 {
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        //protected override void Init()
-        //{
-        ////    Columns.Add(new ColumnTable<int?>(this, nameof(Id), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), isprimarykey: true, isidentity: true));
-        ////    Columns.Add(new ColumnTable<string>(this, nameof(Codigo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower()));
-        ////    Columns.Add(new ColumnTable<string>(this, nameof(Nombre), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower()));
-        ////    Columns.Add(new ColumnTable<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
-        ////    Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
-        ////    Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
-        //}
-
         public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
             Entities.Table.Sucursal entity = null,
             IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query = null)
@@ -90,26 +80,6 @@ namespace Persistence.Table
         protected Persistence.Table.Empresa _empresa;
         public virtual Persistence.Table.Empresa Empresa
         {
-            //get
-            //{
-            //    bool lazyload = false;
-
-            //    if (_empresa == null)
-            //    {
-            //        if (Entity?.Empresa == null)
-            //        {
-            //            Entity.Empresa = new Entities.Table.Empresa();
-            //            lazyload = true;
-            //        }
-            //        _empresa = new Persistence.Table.Empresa(Entity?.Empresa);
-            //    }
-
-            //    _empresa.Id = this.IdEmpresa;
-            //    if (lazyload)
-            //        _empresa.Select();
-
-            //    return _empresa;
-            //}
             get
             {
                 if (_empresa?.Id != this.IdEmpresa)
@@ -258,17 +228,15 @@ namespace Persistence.Mapper
 {
     public partial class Sucursal : BaseMapper<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public override Persistence.Table.Sucursal Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
+        public override void Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
         {
-            data = base.Map(data, maxdepth, depth);
+            base.Map(data, maxdepth, depth);
 
             depth++;
             if (depth < maxdepth || maxdepth == 0)
             {
-                data.Empresa = new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
+                new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
             }
-
-            return data;
         }
     }
 }

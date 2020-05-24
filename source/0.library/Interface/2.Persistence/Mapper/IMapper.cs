@@ -7,9 +7,9 @@ namespace Library.Interface.Persistence.Mapper
         where T : IEntity
         where U : ITableData<T, U>
     {
-        U Clear(U data);
+        void Clear(U data);
 
-        U Map(U data, int maxdepth = 1, int depth = 0);
-        U MapX(U data, int maxdepth = 1, int depth = 0);
+        void Map(U data, int maxdepth = 1, int depth = 0);
+        void MapX(U data, int maxdepth = 1, int depth = 0);
     }
 }

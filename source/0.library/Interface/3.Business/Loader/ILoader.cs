@@ -9,9 +9,9 @@ namespace Library.Interface.Business.Loader
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        V Clear(V domain);
+        void Clear(V domain);
 
-        V Load(V domain, int maxdepth = 1, int depth = 0);
-        V LoadX(V domain, int maxdepth = 1, int depth = 0);
+        void Load(V domain, int maxdepth = 1, int depth = 0);
+        void LoadX(V domain, int maxdepth = 1, int depth = 0);
     }
 }
