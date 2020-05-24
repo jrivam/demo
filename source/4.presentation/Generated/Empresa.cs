@@ -56,21 +56,6 @@ namespace Presentation.Table
         protected Presentation.Table.SucursalesQuery _sucursales;
         public virtual Presentation.Table.SucursalesQuery Sucursales
         {
-            //get
-            //{
-            //    if (_sucursales == null)
-            //    {
-            //        if (this.Id != null)
-            //        {
-            //            Sucursales = new SucursalesQuery(Domain.Sucursales, new Presentation.Query.Sucursal());
-            //            _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
-
-            //            _sucursales.Refresh();
-            //        }
-            //    }
-
-            //    return _sucursales;
-            //}
             get
             {
                 if (_sucursales == null)
