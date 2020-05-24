@@ -4,7 +4,6 @@ using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Library.Impl.Entities.Reader
 {
@@ -19,11 +18,9 @@ namespace Library.Impl.Entities.Reader
 
         public virtual T Clear(T entity)
         {
-            var props = entity?.GetType().GetProperties();
-
-            foreach (var prop in props)
+            foreach (var property in entity.GetProperties(isprimitive: true))
             {
-                prop?.SetValue(entity, null, null);
+                property?.SetValue(entity, null);
             }
 
             return entity;
