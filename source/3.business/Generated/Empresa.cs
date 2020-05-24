@@ -68,7 +68,7 @@ namespace Business.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = new SucursalesQuery(Data.Sucursales);
+                    Sucursales = new SucursalesQuery(Data?.Sucursales);
 
                     if (this.Id != null)
                     {

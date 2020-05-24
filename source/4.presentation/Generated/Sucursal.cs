@@ -15,18 +15,18 @@ namespace Presentation.Table
 {
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        protected override void Init()
-        {
-            base.Init();
+        //protected override void Init()
+        //{
+        //    base.Init();
 
-            Elements.Add(new Element(nameof(Id)));
-            Elements.Add(new Element(nameof(Codigo)));
-            Elements.Add(new Element(nameof(Nombre)));
-            Elements.Add(new Element(nameof(Fecha)));
-            Elements.Add(new Element(nameof(Activo)));
-            Elements.Add(new Element(nameof(IdEmpresa)));
-            Elements.Add(new Element(nameof(Empresa)));
-        }
+        //    //Elements.Add(new Element(nameof(Id)));
+        //    //Elements.Add(new Element(nameof(Codigo)));
+        //    //Elements.Add(new Element(nameof(Nombre)));
+        //    //Elements.Add(new Element(nameof(Fecha)));
+        //    //Elements.Add(new Element(nameof(Activo)));
+        //    //Elements.Add(new Element(nameof(IdEmpresa)));
+        //    //Elements.Add(new Element(nameof(Empresa)));
+        //}
 
         public Sucursal(Business.Table.Sucursal domain,
             IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactive = null,

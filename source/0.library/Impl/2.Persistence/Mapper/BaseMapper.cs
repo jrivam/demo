@@ -1,4 +1,5 @@
-﻿using Library.Interface.Entities;
+﻿using Library.Extension;
+using Library.Interface.Entities;
 using Library.Interface.Persistence.Mapper;
 using Library.Interface.Persistence.Table;
 
@@ -16,9 +17,7 @@ namespace Library.Impl.Persistence.Mapper
         {
             foreach (var column in data.Columns)
             {
-                var name = column.Description.Name;
-
-                data[name].DbValue = null;
+                data[column.Description.Name].DbValue = null;
             }
 
             return data;
@@ -26,9 +25,9 @@ namespace Library.Impl.Persistence.Mapper
 
         public virtual U Map(U data, int maxdepth = 1, int depth = 0)
         {
-            foreach (var column in Persistence.HelperTableRepository<T, U>.GetPropertiesValue(data))
+            foreach (var property in data.Entity.GetProperties(isprimitive: true))
             {
-                data[column.name].DbValue = column.value;
+                data[property.Name].DbValue = property.GetValue(data.Entity);
             }
 
             return data;

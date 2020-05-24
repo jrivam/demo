@@ -17,17 +17,15 @@ namespace Persistence.Table
 {
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        protected override void Init()
-        {
-            base.Init();
-
-            Columns.Add(new ColumnTable<int?>(this, nameof(Id), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), isprimarykey: true, isidentity: true));
-            Columns.Add(new ColumnTable<string>(this, nameof(Codigo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnTable<string>(this, nameof(Nombre), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnTable<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
-        }
+        //protected override void Init()
+        //{
+        ////    Columns.Add(new ColumnTable<int?>(this, nameof(Id), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower(), isprimarykey: true, isidentity: true));
+        ////    Columns.Add(new ColumnTable<string>(this, nameof(Codigo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Codigo))?.Name ?? nameof(Codigo).ToUnderscoreCase().ToLower()));
+        ////    Columns.Add(new ColumnTable<string>(this, nameof(Nombre), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Nombre))?.Name ?? nameof(Nombre).ToUnderscoreCase().ToLower()));
+        ////    Columns.Add(new ColumnTable<DateTime?>(this, nameof(Fecha), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Fecha))?.Name ?? nameof(Fecha).ToUnderscoreCase().ToLower()));
+        ////    Columns.Add(new ColumnTable<bool?>(this, nameof(Activo), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
+        ////    Columns.Add(new ColumnTable<int?>(this, nameof(IdEmpresa), typeof(Entities.Table.Sucursal).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(IdEmpresa))?.Name ?? nameof(IdEmpresa).ToUnderscoreCase().ToLower()));
+        //}
 
         public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
             Entities.Table.Sucursal entity = null,

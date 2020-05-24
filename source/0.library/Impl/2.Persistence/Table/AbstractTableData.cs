@@ -1,8 +1,12 @@
-﻿using Library.Impl.Persistence.Sql;
+﻿using Library.Extension;
+using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Sql;
 using Library.Interface.Persistence.Table;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Library.Impl.Persistence.Table
@@ -21,11 +25,6 @@ namespace Library.Impl.Persistence.Table
             set
             {
                 _entity = value;
-
-                foreach (var column in Persistence.HelperTableRepository<T, U>.GetPropertiesValue(this as U))
-                {
-                    Columns[column.name].Value = column.value;
-                }
             }
         }
 
@@ -48,6 +47,23 @@ namespace Library.Impl.Persistence.Table
 
         protected virtual void Init()
         {
+            Columns.Clear();
+
+            foreach (var property in this.Entity.GetProperties(isprimitive: true))
+            {
+                var attributes = typeof(T).GetAttributesFromTypeProperty(property.Name);
+
+                var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.Name.ToUnderscoreCase().ToLower();
+                var iskey = ((KeyAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(KeyAttribute))) != null;
+                var isforeignkey = ((ForeignKeyAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ForeignKeyAttribute))) != null;
+                var isidentity = ((DatabaseGeneratedAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(DatabaseGeneratedAttribute)))?.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity;
+
+                var column = (IColumnTable)Activator.CreateInstance(typeof(ColumnTable<>).MakeGenericType(property.PropertyType),
+                                    new object[] { this, property.Name, dbname, iskey, isidentity, isforeignkey });
+                column.Value = property.GetValue(this.Entity);
+
+                Columns.Add(column);
+            }
         }
         protected virtual void InitX()
         {

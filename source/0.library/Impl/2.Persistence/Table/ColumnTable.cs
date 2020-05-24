@@ -24,6 +24,7 @@ namespace Library.Impl.Persistence.Table
 
         public virtual bool IsPrimaryKey { get; }
         public virtual bool IsIdentity { get; }
+        public virtual bool IsForeignKey { get; }
 
         public ColumnTable(IBuilderTableData table,
             string name, string dbname)
@@ -34,12 +35,14 @@ namespace Library.Impl.Persistence.Table
 
         public ColumnTable(IBuilderTableData table,
             string name, string dbname, 
-            bool isprimarykey = false, bool isidentity = false)
+            bool isprimarykey = false, bool isidentity = false,
+            bool isforeignkey = false)
             : this(table,
                 name, dbname)
         {
             IsPrimaryKey = isprimarykey;
             IsIdentity = isidentity;
+            IsForeignKey = isforeignkey;
         }
     }
 }

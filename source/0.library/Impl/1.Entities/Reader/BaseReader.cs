@@ -1,4 +1,5 @@
-﻿using Library.Interface.Entities.Reader;
+﻿using Library.Extension;
+using Library.Interface.Entities.Reader;
 using Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
@@ -35,17 +36,15 @@ namespace Library.Impl.Entities.Reader
             var prefix = string.Join(_sqlsyntaxsign.AliasSeparatorColumn, prefixname);
             prefix += (prefix == string.Empty ? prefix : _sqlsyntaxsign.AliasSeparatorColumn);
 
-            var props = entity?.GetType().GetProperties().Where(x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || (x.PropertyType == typeof(string)));
-
-            foreach (var prop in props)
+            foreach (var property in entity.GetProperties(isprimitive: true))
             {
-                var value = reader[$"{prefix}{prop.Name}"];
+                var value = reader[$"{prefix}{property.Name}"];
 
-                Type t = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                Type t = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
                 object converted = (value == null) ? null : Convert.ChangeType(value, t);
 
-                prop?.SetValue(entity, converted, null);
+                property.SetValue(entity, converted, null);
             }
 
             return entity;

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Library.Impl.Entities
 {
-    public class HelperTableEntities<T>
+    public class HelperEntities<T>
     {
         public static T CreateEntity()
         {

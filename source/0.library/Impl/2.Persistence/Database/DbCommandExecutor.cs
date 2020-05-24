@@ -31,7 +31,7 @@ namespace Library.Impl.Persistence.Database
                 {
                     while (reader.Read())
                     {
-                        var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperTableEntities<T>.CreateEntity();
+                        var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateEntity();
 
                         _reader.Read(entity, reader, new List<string>(), maxdepth, 0);
 

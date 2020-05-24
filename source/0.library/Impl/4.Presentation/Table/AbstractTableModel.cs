@@ -1,13 +1,14 @@
-﻿using Library.Interface.Business.Table;
+﻿using Library.Extension;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
+using Library.Interface.Presentation;
 using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using System.Linq;
-using Library.Interface.Presentation;
 
 namespace Library.Impl.Presentation.Table
 {
@@ -41,6 +42,12 @@ namespace Library.Impl.Presentation.Table
 
         protected virtual void Init()
         {
+            Elements.Clear();
+
+            foreach (var property in this.Domain.Data.Entity.GetProperties(isprimitive: true, iscollection: true, isforeign: true))
+            {
+                Elements.Add(new Element(property.Name));
+            }
         }
         protected virtual void InitX()
         {

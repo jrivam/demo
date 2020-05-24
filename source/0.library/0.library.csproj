@@ -73,13 +73,11 @@
     <Compile Include="Extension\ListExtensions.cs" />
     <Compile Include="Extension\ObjectExtensions.cs" />
     <Compile Include="Extension\StringExtensions.cs" />
-    <Compile Include="Impl\1.Entities\Helper.cs" />
-    <Compile Include="Impl\1.Entities\HelperTableEntities.cs" />
+    <Compile Include="Impl\1.Entities\HelperEntities.cs" />
     <Compile Include="Impl\1.Entities\Reader\BaseReader.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbCommandExecutor.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbCommandExecutorBulk.cs" />
     <Compile Include="Impl\2.Persistence\Helper.cs" />
-    <Compile Include="Impl\2.Persistence\HelperQueryRepository.cs" />
     <Compile Include="Impl\2.Persistence\HelperTableRepository.cs" />
     <Compile Include="Impl\2.Persistence\Column.cs" />
     <Compile Include="Impl\2.Persistence\ListDataQuery.cs" />
@@ -88,7 +86,6 @@
     <Compile Include="Impl\2.Persistence\Repository.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Repository\SqlCommandExecutorBulk.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlCommand.cs" />
-    <Compile Include="Impl\3.Business\HelperQueryLogic.cs" />
     <Compile Include="Impl\3.Business\ListDomainQuery.cs" />
     <Compile Include="Impl\3.Business\Validator\ColumnValidator.cs" />
     <Compile Include="Impl\3.Business\Validator\EmptyValidator.cs" />
@@ -98,7 +95,6 @@
     <Compile Include="Impl\3.Business\HelperTableLogic.cs" />
     <Compile Include="Impl\3.Business\LogicLoader.cs" />
     <Compile Include="Impl\4.Presentation\Element.cs" />
-    <Compile Include="Impl\4.Presentation\HelperQueryInteractive.cs" />
     <Compile Include="Impl\4.Presentation\HelperTableInteractive.cs" />
     <Compile Include="Impl\4.Presentation\InteractiveRaiser.cs" />
     <Compile Include="Impl\4.Presentation\ListElements.cs" />

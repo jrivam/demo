@@ -14,16 +14,16 @@ namespace Presentation.Table
 {
     public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        protected override void Init()
-        {
-            base.Init();
+        //protected override void Init()
+        //{
+        //    base.Init();
 
-            Elements.Add(new Element(nameof(Id)));
-            Elements.Add(new Element(nameof(Ruc)));
-            Elements.Add(new Element(nameof(RazonSocial)));
-            Elements.Add(new Element(nameof(Activo)));
-            Elements.Add(new Element(nameof(Sucursales)));
-        }
+        //    //Elements.Add(new Element(nameof(Id)));
+        //    //Elements.Add(new Element(nameof(Ruc)));
+        //    //Elements.Add(new Element(nameof(RazonSocial)));
+        //    //Elements.Add(new Element(nameof(Activo)));
+        //    //Elements.Add(new Element(nameof(Sucursales)));
+        //}
 
         public Empresa(Business.Table.Empresa domain,
             IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactive = null,
@@ -59,40 +59,9 @@ namespace Presentation.Table
         {
         }
 
-        public virtual int? Id 
-        { 
-            get 
-            { 
-                return Domain?.Id; 
-            } 
-            set 
-            { 
-                if (Domain?.Id != value) 
-                { 
-                    Domain.Id = value;
-
-                    ValidateProperty(value); 
-                    OnPropertyChanged(nameof(Id)); 
-                } 
-            } 
-        }
+        public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; ValidateProperty(value); OnPropertyChanged(nameof(Id)); } } }
         public virtual string Ruc { get { return Domain?.Ruc; } set { if (Domain?.Ruc != value) { Domain.Ruc = value; ValidateProperty(value); OnPropertyChanged(nameof(Ruc)); } } }
-        public virtual string RazonSocial
-        {
-            get
-            {
-                return Domain?.RazonSocial;
-            }
-            set
-            {
-                if (Domain?.RazonSocial != value)
-                {
-                    Domain.RazonSocial = value;
-                    ValidateProperty(value);
-                    OnPropertyChanged(nameof(RazonSocial));
-                }
-            }
-        }
+        public virtual string RazonSocial { get { return Domain?.RazonSocial; } set { if (Domain?.RazonSocial != value) { Domain.RazonSocial = value; ValidateProperty(value); OnPropertyChanged(nameof(RazonSocial)); } } }
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; ValidateProperty(value); OnPropertyChanged(nameof(Activo)); } } }
 
         protected Presentation.Table.SucursalesQuery _sucursales;
@@ -117,7 +86,7 @@ namespace Presentation.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = new SucursalesQuery(Domain.Sucursales);
+                    Sucursales = new SucursalesQuery(Domain?.Sucursales);
 
                     if (this.Id != null)
                     {

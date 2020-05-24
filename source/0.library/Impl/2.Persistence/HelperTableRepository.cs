@@ -26,20 +26,5 @@ namespace Library.Impl.Persistence
         {
             return entities.Select(x => CreateData(x));
         }
-
-        public static IEnumerable<(string name, object value)> GetPropertiesValue(U data)
-        {
-            foreach (var column in data.Columns)
-            {
-                var name = column.Description.Name;
-
-                var prop = data.GetType().GetProperty(name);
-
-                if (prop != null)
-                {
-                    yield return (name, prop.GetValue(data));
-                }
-            }
-        }
     }
 }
