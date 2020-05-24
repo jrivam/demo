@@ -41,7 +41,7 @@ namespace Library.Impl.Entities.Reader
 
                 object converted = (value == null) ? null : Convert.ChangeType(value, t);
 
-                property.SetValue(entity, converted, null);
+                property.SetValue(entity, converted);
             }
 
             return entity;
