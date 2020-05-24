@@ -43,7 +43,7 @@ namespace Library.Impl.Business.Query
         }
         public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<S, T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
         {
-            var selectmultiple = query.Data.Select(maxdepth, top, (domains?.Datas != null ? domains?.Datas : new ListData<T, U>()));
+            var selectmultiple = query.Data.Select(maxdepth, top, domains?.Datas ?? new ListData<T, U>());
             if (selectmultiple.result.Success)
             {
                 var enumeration = new List<V>();

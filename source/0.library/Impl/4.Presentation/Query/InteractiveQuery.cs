@@ -56,7 +56,7 @@ namespace Library.Impl.Presentation.Query
         {
             query.Status = "Listing...";
 
-            var list = query.Domain.List(maxdepth, top, (models?.Domains != null ? models?.Domains : new ListDomain<T, U, V>()));
+            var list = query.Domain.List(maxdepth, top, models?.Domains ?? new ListDomain<T, U, V>());
             if (list.result.Success)
             {
                 var enumeration = new List<W>();
