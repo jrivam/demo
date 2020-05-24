@@ -27,7 +27,7 @@ namespace Library.Impl.Persistence.Mapper
         {
             foreach (var property in data.Entity.GetProperties(isprimitive: true))
             {
-                data[property.Name].DbValue = property.GetValue(data.Entity);
+                data[property.info.Name].DbValue = property.info.GetValue(data.Entity);
             }
 
             return data;

@@ -46,7 +46,7 @@ namespace Library.Impl.Presentation.Table
 
             foreach (var property in this.Domain.Data.Entity.GetProperties(isprimitive: true, iscollection: true, isforeign: true))
             {
-                Elements.Add(new Element(property.Name));
+                Elements.Add(new Element(property.info.Name));
             }
         }
         protected virtual void InitX()

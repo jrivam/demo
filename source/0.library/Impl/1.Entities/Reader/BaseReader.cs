@@ -20,7 +20,7 @@ namespace Library.Impl.Entities.Reader
         {
             foreach (var property in entity.GetProperties(isprimitive: true))
             {
-                property?.SetValue(entity, null);
+                property.info?.SetValue(entity, null);
             }
 
             return entity;
@@ -35,13 +35,13 @@ namespace Library.Impl.Entities.Reader
 
             foreach (var property in entity.GetProperties(isprimitive: true))
             {
-                var value = reader[$"{prefix}{property.Name}"];
+                var value = reader[$"{prefix}{property.info.Name}"];
 
-                Type t = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+                Type t = Nullable.GetUnderlyingType(property.info.PropertyType) ?? property.info.PropertyType;
 
                 object converted = (value == null) ? null : Convert.ChangeType(value, t);
 
-                property.SetValue(entity, converted);
+                property.info.SetValue(entity, converted);
             }
 
             return entity;

@@ -51,16 +51,16 @@ namespace Library.Impl.Persistence.Table
 
             foreach (var property in this.Entity.GetProperties(isprimitive: true))
             {
-                var attributes = typeof(T).GetAttributesFromTypeProperty(property.Name);
+                var attributes = typeof(T).GetAttributesFromTypeProperty(property.info.Name);
 
-                var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.Name.ToUnderscoreCase().ToLower();
+                var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.info.Name.ToUnderscoreCase().ToLower();
                 var iskey = ((KeyAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(KeyAttribute))) != null;
                 var isforeignkey = ((ForeignKeyAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ForeignKeyAttribute))) != null;
                 var isidentity = ((DatabaseGeneratedAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(DatabaseGeneratedAttribute)))?.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity;
 
-                var column = (IColumnTable)Activator.CreateInstance(typeof(ColumnTable<>).MakeGenericType(property.PropertyType),
-                                    new object[] { this, property.Name, dbname, iskey, isidentity, isforeignkey });
-                column.Value = property.GetValue(this.Entity);
+                var column = (IColumnTable)Activator.CreateInstance(typeof(ColumnTable<>).MakeGenericType(property.info.PropertyType),
+                                    new object[] { this, property.info.Name, dbname, iskey, isidentity, isforeignkey });
+                column.Value = property.info.GetValue(this.Entity);
 
                 Columns.Add(column);
             }

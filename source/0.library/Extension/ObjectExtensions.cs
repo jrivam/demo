@@ -1,6 +1,7 @@
 ﻿using Library.Impl.Entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
@@ -43,13 +44,14 @@ namespace Library.Extension
             return t.GetProperty(propertyName).GetCustomAttributes(false);
         }
 
-        public static IEnumerable<PropertyInfo> GetProperties<T>(this T t, bool isprimitive = false, bool iscollection = false, bool isforeign = false)
+        public static IEnumerable<(PropertyInfo info, bool isprimitive, bool iscollection, bool isforeign)> GetProperties<T>(this T t, bool isprimitive = false, bool iscollection = false, bool isforeign = false)
         {
             Func<PropertyInfo, bool> primitive = x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || x.PropertyType == typeof(string);
             Func<PropertyInfo, bool> collection = x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>);
 
-            var properties = t?.GetType().GetProperties().Where(x =>
-            ((isprimitive && primitive(x)) || (iscollection && collection(x)) || (isforeign && !(primitive(x) || collection(x)))));
+            var properties = t?.GetType().GetProperties()
+                .Select(x => (info: x, isprimitive: primitive(x), iscollection: collection(x), isforeign: !(primitive(x) || collection(x))))
+                .Where(x => (x.isprimitive && isprimitive) || (x.iscollection && iscollection) || (x.isforeign && isforeign));
 
             foreach (var property in properties)
             {
@@ -61,11 +63,11 @@ namespace Library.Extension
         {
             var propsto = to?.GetType().GetProperties();
 
-            foreach (var propfrom in GetProperties<A>(from, isprimitive, iscollection, isforeign))
+            foreach (var propfrom in from.GetProperties(isprimitive, iscollection, isforeign))
             {
-                var propto = propsto?.Where(x => x.Name == propfrom.Name).SingleOrDefault();
+                var propto = propsto?.Where(x => x.Name == propfrom.info.Name).SingleOrDefault();
 
-                var value = propfrom.GetValue(from);
+                var value = propfrom.info.GetValue(from);
                 if (value != null || nulls)
                 {
                     propto?.SetValue(to, value, null);
