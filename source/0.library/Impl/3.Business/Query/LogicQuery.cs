@@ -23,7 +23,7 @@ namespace Library.Impl.Business.Query
 
         public virtual (Result result, V domain) Retrieve(IQueryDomain<S, T, U, V> query, int maxdepth = 1, V domain = default(V))
         {
-            var selectsingle = query.Data.SelectSingle(maxdepth, (domain != null ? domain.Data : default(U)));
+            var selectsingle = query.Data.SelectSingle(maxdepth, domain != null ? domain.Data : default(U));
             if (selectsingle.result.Success)
             {
                 if (selectsingle.data != null)

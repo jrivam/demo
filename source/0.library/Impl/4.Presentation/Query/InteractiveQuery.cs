@@ -30,7 +30,7 @@ namespace Library.Impl.Presentation.Query
         {
             query.Status = "Retrieving...";
 
-            var retrieve = query.Domain.Retrieve(maxdepth, (model != null ? model.Domain : default(V)));
+            var retrieve = query.Domain.Retrieve(maxdepth, model != null ? model.Domain : default(V));
             if (retrieve.result.Success)
             {
                 if (retrieve.domain != null)

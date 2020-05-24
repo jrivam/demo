@@ -79,7 +79,7 @@ namespace Library.Impl.Persistence.Query
             (IQueryData<T, U> query,
             int maxdepth = 1, U data = default(U))
         {
-            var select = Select(query, maxdepth, 1, (data != null ? new ListData<T, U>() { data } : null));
+            var select = Select(query, maxdepth, 1, data != null ? new ListData<T, U>() { data } : null);
 
             return (select.result, select.datas != null ? select.datas.FirstOrDefault() : default(U));
         }
