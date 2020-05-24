@@ -2,13 +2,6 @@
 {
     public partial class Sucursal
     {
-        public virtual string Descripcion
-        {
-            get
-            {
-                return $"{Codigo} - {Nombre}";
-            }
-        }
     }
 }
 

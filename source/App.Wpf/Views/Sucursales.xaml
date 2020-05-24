@@ -69,14 +69,38 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Label x:Name="lblEmpresa" Content="{Binding Empresa.Domain.Descripcion}"/>
+                                <Label>
+                                    <Label.Content>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Empresa.Ruc"/>
+                                                    <Binding Path="Empresa.RazonSocial"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Label.Content>
+                                </Label>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Path=DataContext.Empresas, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"  SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="Domain.Descripcion"/>
+                            <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Path=DataContext.Empresas, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"  SelectedValue="{Binding IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" >
+                                <!--DisplayMemberPath="RazonSocial"-->
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} - {1}">
+                                                    <Binding Path="Ruc"/>
+                                                    <Binding Path="RazonSocial"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>

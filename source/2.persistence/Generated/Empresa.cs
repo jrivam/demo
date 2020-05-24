@@ -48,7 +48,7 @@ namespace Persistence.Table
                 {
                     Columns[nameof(Id)].Value = Entity.Id = value;
 
-                    //Sucursales?.ForEach(x => x.IdEmpresa = value);
+                    Sucursales?.ForEach(x => x.IdEmpresa = value);
                 }
             }
         }

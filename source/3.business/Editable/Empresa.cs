@@ -2,13 +2,6 @@
 {
     public partial class Empresa
     {
-        public virtual string Descripcion
-        {
-            get
-            {
-                return $"{Ruc} - {RazonSocial}";
-            }
-        }
     }
 }
 

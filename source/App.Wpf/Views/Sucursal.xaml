@@ -24,8 +24,22 @@
         <Label x:Name="txtId" Content="{Binding Sucursal.Id}" HorizontalAlignment="Left" Margin="92,45,0,0" VerticalAlignment="Top" Width="120" Height="26" />
 
         <Label x:Name="lblEmpresa" Content="Empresa" HorizontalAlignment="Left" Margin="31,73,0,0" VerticalAlignment="Top" Width="56"/>
-        <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding Sucursal.IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" DisplayMemberPath="Domain.Descripcion"  Margin="92,76,10,0" VerticalAlignment="Top"/>
-        
+        <ComboBox x:Name="cboEmpresa" ItemsSource="{Binding Empresas}" SelectedValue="{Binding Sucursal.IdEmpresa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Id" Margin="92,76,10,0" VerticalAlignment="Top">
+            <!--DisplayMemberPath="RazonSocial"-->
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} - {1}">
+                                <Binding Path="Ruc"/>
+                                <Binding Path="RazonSocial"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
         <Label x:Name="lblCodigo" Content="Codigo" HorizontalAlignment="Left" Margin="31,104,0,0" VerticalAlignment="Top" Width="56"/>
         <TextBox x:Name="txtCodigo" Text="{Binding Sucursal.Codigo, UpdateSourceTrigger=LostFocus}" Height="22" Margin="92,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="102"/>
         <Label x:Name="lblValidateCodigo" Content="{Binding Sucursal.Validations, Converter={StaticResource converterhelper}, ConverterParameter=Codigo, UpdateSourceTrigger=PropertyChanged}" Margin="199,103,10,0" VerticalAlignment="Top"  Height="26" FontWeight="Bold" Foreground="Red"/>
