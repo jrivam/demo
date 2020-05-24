@@ -9,7 +9,6 @@ using Library.Interface.Presentation.Query;
 using Library.Interface.Presentation.Raiser;
 using Library.Interface.Presentation.Table;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Library.Impl.Presentation.Query
 {
