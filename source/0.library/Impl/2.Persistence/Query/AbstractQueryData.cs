@@ -1,14 +1,18 @@
-﻿using Library.Impl.Persistence.Sql;
+﻿using Library.Extension;
+using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using Library.Interface.Persistence;
 using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Library.Impl.Persistence.Query
 {
     public abstract class AbstractQueryData<T, U> : IQueryData<T, U>
-        where T : IEntity, new()
+        where T : class, IEntity, new()
         where U : ITableData<T, U>
     {
         public virtual Description Description { get; protected set; }
@@ -36,6 +40,18 @@ namespace Library.Impl.Persistence.Query
 
         public virtual void Init()
         {
+            Columns.Clear();
+
+            foreach (var property in Activator.CreateInstance(typeof(T)).GetProperties(isprimitive: true))
+            {
+                var attributes = typeof(T).GetAttributesFromTypeProperty(property.info.Name);
+
+                var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.info.Name.ToUnderscoreCase().ToLower();
+
+                var column = (IColumnQuery)Activator.CreateInstance(typeof(ColumnQuery<>).MakeGenericType(property.info.PropertyType),
+                                    new object[] { this, property.info.Name, dbname });
+                Columns.Add(column);
+            }
         }
         public virtual void InitX()
         {

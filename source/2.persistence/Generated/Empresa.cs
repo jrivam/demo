@@ -112,14 +112,6 @@ namespace Persistence.Query
 {
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public override void Init()
-        {
-            Columns.Add(new ColumnQuery<int?>(this, nameof(Id), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Id))?.Name ?? nameof(Id).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnQuery<string>(this, nameof(Ruc), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Ruc))?.Name ?? nameof(Ruc).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnQuery<string>(this, nameof(RazonSocial), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(RazonSocial))?.Name ?? nameof(RazonSocial).ToUnderscoreCase().ToLower()));
-            Columns.Add(new ColumnQuery<bool?>(this, nameof(Activo), typeof(Entities.Table.Empresa).GetAttributeFromTypeProperty<ColumnAttribute>(nameof(Activo))?.Name ?? nameof(Activo).ToUnderscoreCase().ToLower()));
-        }
-
         public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
             : base(repository,
                   nameof(Empresa), typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Empresa).ToUnderscoreCase().ToLower())
