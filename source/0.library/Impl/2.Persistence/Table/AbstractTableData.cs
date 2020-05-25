@@ -76,9 +76,10 @@ namespace Library.Impl.Persistence.Table
         public AbstractTableData(IRepositoryTable<T, U> repository,
             IQueryData<T, U> query,
             T entity,
-            string name, string dbname)
+            string name = null, 
+            string dbname = null)
         {
-            Description = new Description(name, dbname);
+            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name.ToUnderscoreCase().ToLower());
 
             _repository = repository;
 

@@ -61,9 +61,10 @@ namespace Library.Impl.Persistence.Query
         protected readonly IRepositoryQuery<T, U> _repository;
 
         public AbstractQueryData(IRepositoryQuery<T, U> repository,
-            string name, string dbname)
+            string name = null, 
+            string dbname = null)
         {
-            Description = new Description(name, dbname);
+            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name.ToUnderscoreCase().ToLower());
 
             _repository = repository;
 

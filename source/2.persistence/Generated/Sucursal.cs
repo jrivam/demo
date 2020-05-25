@@ -22,8 +22,7 @@ namespace Persistence.Table
             IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query = null)
             : base(repository,
                   query ?? new Persistence.Query.Sucursal(),
-                  entity ?? new Entities.Table.Sucursal(),
-                  nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
+                  entity ?? new Entities.Table.Sucursal())
         {
         }
 
@@ -146,9 +145,8 @@ namespace Persistence.Query
             return joins;
         }
 
-        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository = null)
-            : base(repository,
-                  nameof(Sucursal), typeof(Entities.Table.Sucursal).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Sucursal).ToUnderscoreCase().ToLower())
+        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
+            : base(repository)
         {
         }
 

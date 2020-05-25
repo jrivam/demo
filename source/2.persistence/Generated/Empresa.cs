@@ -21,8 +21,7 @@ namespace Persistence.Table
             IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query = null)
             : base(repository,
                   query ?? new Persistence.Query.Empresa(),
-                  entity ?? new Entities.Table.Empresa(),                  
-                  nameof(Empresa), typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Empresa).ToUnderscoreCase().ToLower())
+                  entity ?? new Entities.Table.Empresa())
         {
         }
 
@@ -110,8 +109,7 @@ namespace Persistence.Query
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
-            : base(repository,
-                  nameof(Empresa), typeof(Entities.Table.Empresa).GetAttributeFromType<TableAttribute>()?.Name ?? nameof(Empresa).ToUnderscoreCase().ToLower())
+            : base(repository)
         {
         }
 
