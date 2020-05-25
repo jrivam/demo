@@ -94,6 +94,8 @@ namespace Persistence.Table
                     }
                 }
 
+                _empresa.Id = this.IdEmpresa;
+
                 return _empresa;
             }
             set

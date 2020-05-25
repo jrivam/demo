@@ -83,6 +83,8 @@ namespace Presentation.Table
                     Empresa = new Presentation.Table.Empresa(Domain?.Empresa);
                 }
 
+                _empresa.Id = this.IdEmpresa;
+
                 return _empresa;
             }
             set

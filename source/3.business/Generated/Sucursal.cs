@@ -77,6 +77,8 @@ namespace Business.Table
                     Empresa = new Business.Table.Empresa(Data?.Empresa);
                 }
 
+                _empresa.Id = this.IdEmpresa;
+
                 return _empresa;
             }
             set
