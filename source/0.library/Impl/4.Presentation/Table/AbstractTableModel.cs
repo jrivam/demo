@@ -44,7 +44,7 @@ namespace Library.Impl.Presentation.Table
         {
             Elements.Clear();
 
-            foreach (var property in this.Domain.Data.Entity.GetProperties(isprimitive: true, iscollection: true, isforeign: true))
+            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true, iscollection: true, isforeign: true))
             {
                 Elements.Add(new Element(property.info.Name));
             }

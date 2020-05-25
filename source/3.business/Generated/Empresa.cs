@@ -106,7 +106,7 @@ namespace Business.Table
 
             if (erasechildren.Success)
             {
-                var eraseall = Sucursales?.EraseAll();
+                var eraseall = Sucursales?.Refresh().domains?.EraseAll();
 
                 erasechildren.Append(eraseall);
             }

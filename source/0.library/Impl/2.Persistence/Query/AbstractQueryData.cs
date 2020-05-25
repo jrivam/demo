@@ -42,7 +42,7 @@ namespace Library.Impl.Persistence.Query
         {
             Columns.Clear();
 
-            foreach (var property in Activator.CreateInstance(typeof(T)).GetProperties(isprimitive: true))
+            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
             {
                 var attributes = typeof(T).GetAttributesFromTypeProperty(property.info.Name);
 
@@ -50,6 +50,7 @@ namespace Library.Impl.Persistence.Query
 
                 var column = (IColumnQuery)Activator.CreateInstance(typeof(ColumnQuery<>).MakeGenericType(property.info.PropertyType),
                                     new object[] { this, property.info.Name, dbname });
+
                 Columns.Add(column);
             }
         }

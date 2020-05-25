@@ -22,7 +22,7 @@ namespace Library.Impl.Persistence.Query
 {
     public class RepositoryQuery<T, U> : RepositoryMapper<T, U>, IRepositoryQuery<T, U> 
         where T : IEntity
-        where U : ITableData<T, U>
+        where U : class, ITableData<T, U>
     {
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderQuery _sqlbuilder;
@@ -81,7 +81,7 @@ namespace Library.Impl.Persistence.Query
         {
             var select = Select(query, maxdepth, 1, data != null ? new ListData<T, U>() { data } : null);
 
-            return (select.result, select.datas != null ? select.datas.FirstOrDefault() : default(U));
+            return (select.result, select.datas?.FirstOrDefault());
         }
 
         public virtual (Result result, IEnumerable<U> datas)

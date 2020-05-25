@@ -49,7 +49,7 @@ namespace Library.Impl.Persistence.Table
         {
             Columns.Clear();
 
-            foreach (var property in this.Entity.GetProperties(isprimitive: true))
+            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
             {
                 var attributes = typeof(T).GetAttributesFromTypeProperty(property.info.Name);
 
@@ -110,9 +110,9 @@ namespace Library.Impl.Persistence.Table
 
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
-            var selectsingle = _repository.Select(this as U, usedbcommand);
+            var select = _repository.Select(this as U, usedbcommand);
 
-            return selectsingle;
+            return select;
         }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
