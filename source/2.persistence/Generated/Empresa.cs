@@ -1,5 +1,4 @@
-﻿using Library.Extension;
-using Library.Impl.Persistence;
+﻿using Library.Impl.Persistence;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
 using Library.Impl.Persistence.Sql;
@@ -9,7 +8,6 @@ using Library.Interface.Persistence.Query;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 
 namespace Persistence.Table
