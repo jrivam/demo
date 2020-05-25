@@ -31,13 +31,12 @@ namespace Library.Extension
         public static T GetAttributeFromType<T>(this Type t)
             where T : Attribute
         {
-            return (T)t.GetCustomAttributes(typeof(T), false).FirstOrDefault();
+            return (T)ReflectionCache.FindPropertyInfoAttributes(t).FirstOrDefault();
         }
 
         public static object[] GetAttributesFromTypeProperty(this Type t, string propertyName)
         {
-            //return t.GetProperty(propertyName).GetCustomAttributes(false);
-            return ReflectionCache.FindClassProperties(t).Where(x => x.Name == propertyName).FirstOrDefault()?.GetCustomAttributes(false);
+            return ReflectionCache.FindPropertyInfoAttributes(ReflectionCache.FindTypeProperties(t).Where(x => x.Name == propertyName).FirstOrDefault());
         }
 
         public static IEnumerable<(PropertyInfo info, bool isprimitive, bool iscollection, bool isforeign)> GetTypeProperties(this Type t, bool isprimitive = false, bool iscollection = false, bool isforeign = false)
@@ -45,7 +44,7 @@ namespace Library.Extension
             Func<PropertyInfo, bool> primitive = x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || x.PropertyType == typeof(string);
             Func<PropertyInfo, bool> collection = x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>);
 
-            var properties = ReflectionCache.FindClassProperties(t)
+            var properties = ReflectionCache.FindTypeProperties(t)
                 .Select(x => (info: x, isprimitive: primitive(x), iscollection: collection(x), isforeign: !(primitive(x) || collection(x))))
                 .Where(x => (x.isprimitive && isprimitive) || (x.iscollection && iscollection) || (x.isforeign && isforeign));
 
@@ -77,17 +76,45 @@ namespace Library.Extension
 
     public static class ReflectionCache
     {
-        private static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> reflectionPropertyCache = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
-        public static List<PropertyInfo> FindClassProperties(Type objectType)
+        private static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> PropertyInfoCache = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
+        
+        public static List<PropertyInfo> FindTypeProperties(Type type)
         {
-            if (reflectionPropertyCache.ContainsKey(objectType))
-                return reflectionPropertyCache[objectType].Values.ToList();
+            if (PropertyInfoCache.ContainsKey(type))
+                return PropertyInfoCache[type].Values.ToList();
 
-            var result = objectType.GetProperties().ToDictionary(p => p.Name, p => p);
+            var result = type.GetProperties().ToDictionary(p => p.Name, p => p);
 
-            reflectionPropertyCache.TryAdd(objectType, result);
+            PropertyInfoCache.TryAdd(type, result);
 
             return result.Values.ToList();
+        }
+
+        private static ConcurrentDictionary<PropertyInfo, object[]> PropertyInfoCustomAttributeCache = new ConcurrentDictionary<PropertyInfo, object[]>();
+
+        public static object[] FindPropertyInfoAttributes(PropertyInfo propertyinfo)
+        {
+            if (PropertyInfoCustomAttributeCache.ContainsKey(propertyinfo))
+                return PropertyInfoCustomAttributeCache[propertyinfo];
+
+            var result = propertyinfo?.GetCustomAttributes(false);
+
+            PropertyInfoCustomAttributeCache.TryAdd(propertyinfo, result);
+
+            return result;
+        }
+
+        private static ConcurrentDictionary<Type, object[]> TypeCustomAttributeCache = new ConcurrentDictionary<Type, object[]>();
+        public static object[] FindPropertyInfoAttributes(Type propertyinfo)
+        {
+            if (TypeCustomAttributeCache.ContainsKey(propertyinfo))
+                return TypeCustomAttributeCache[propertyinfo];
+
+            var result = propertyinfo?.GetCustomAttributes(propertyinfo, false);
+
+            TypeCustomAttributeCache.TryAdd(propertyinfo, result);
+
+            return result;
         }
     }
 }

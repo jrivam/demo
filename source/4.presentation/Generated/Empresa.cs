@@ -69,6 +69,8 @@ namespace Presentation.Table
                     }
                 }
 
+                _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
+
                 return _sucursales;
             }
             set

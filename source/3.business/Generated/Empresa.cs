@@ -56,12 +56,9 @@ namespace Business.Table
                 if (_sucursales == null)
                 {
                     Sucursales = new SucursalesQuery(Data?.Sucursales);
-
-                    if (this.Id != null)
-                    {
-                        _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
-                    }
                 }
+
+                _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
                 return _sucursales;
             }

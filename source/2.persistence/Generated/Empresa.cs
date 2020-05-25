@@ -68,12 +68,9 @@ namespace Persistence.Table
                         Entity.Sucursales = new Collection<Entities.Table.Sucursal>();
                     }
                     Sucursales = new SucursalesQuery(Entity?.Sucursales);
-
-                    if (this.Id != null)
-                    {
-                        _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
-                    }
                 }
+
+                _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
                 return _sucursales;
             }
