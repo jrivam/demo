@@ -51,19 +51,6 @@ namespace Business.Table
         protected Business.Table.SucursalesQuery _sucursales;
         public virtual Business.Table.SucursalesQuery Sucursales
         {
-            //get
-            //{
-            //    if (_sucursales == null)
-            //    {
-            //        if (this.Id != null)
-            //        {
-            //            Sucursales = new SucursalesQuery(Data.Sucursales, new Business.Query.Sucursal());
-            //            _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
-            //        }
-            //    }
-
-            //    return _sucursales;
-            //}
             get
             {
                 if (_sucursales == null)
