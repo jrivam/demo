@@ -93,8 +93,10 @@ namespace Persistence.Table
                         _empresa.Select();
                     }
                 }
-
-                _empresa.Id = this.IdEmpresa;
+                else
+                {
+                    _empresa.Id = this.IdEmpresa;
+                }
 
                 return _empresa;
             }

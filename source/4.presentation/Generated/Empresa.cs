@@ -68,8 +68,11 @@ namespace Presentation.Table
                         _sucursales.Refresh();
                     }
                 }
+                else
+                {
+                    _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
-                _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
+                }
 
                 return _sucursales;
             }
