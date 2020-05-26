@@ -37,11 +37,7 @@ namespace Library.Impl.Entities.Reader
             {
                 var value = reader[$"{prefix}{property.info.Name}"];
 
-                Type t = Nullable.GetUnderlyingType(property.info.PropertyType) ?? property.info.PropertyType;
-
-                object converted = (value == null) ? null : Convert.ChangeType(value, t);
-
-                property.info.SetValue(entity, converted);
+                property.info.SetValue(entity, value ?? Convert.ChangeType(value, Nullable.GetUnderlyingType(property.info.PropertyType) ?? property.info.PropertyType));
             }
 
             return entity;
