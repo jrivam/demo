@@ -1,4 +1,5 @@
 ﻿using Library.Impl.Business;
+using Library.Impl.Business.Attributes;
 using Library.Impl.Business.Loader;
 using Library.Impl.Business.Query;
 using Library.Impl.Business.Table;
@@ -42,13 +43,19 @@ namespace Business.Table
         {
         }
 
+        [Domain]
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
+        [Domain]
         public virtual string Codigo { get { return Data?.Codigo; } set { if (Data?.Codigo != value) { Data.Codigo = value; Changed = true; } } }
+        [Domain]
         public virtual string Nombre { get { return Data?.Nombre; } set { if (Data?.Nombre != value) { Data.Nombre = value; Changed = true; } } }
+        [Domain]
         public virtual DateTime? Fecha { get { return Data?.Fecha; } set { if (Data?.Fecha != value) { Data.Fecha = value; Changed = true; } } }
+        [Domain]
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
-        public virtual int? IdEmpresa
+        [Domain]
+        public virtual int? IdEmpresa 
         {
             get
             {
@@ -66,8 +73,8 @@ namespace Business.Table
                 }
             }
         }
-
         protected Business.Table.Empresa _empresa;
+        [Domain]
         public virtual Business.Table.Empresa Empresa
         {
             get

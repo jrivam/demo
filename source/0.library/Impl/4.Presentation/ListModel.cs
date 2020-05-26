@@ -59,9 +59,9 @@ namespace Library.Impl.Presentation
 
         public virtual ICommand AddCommand { get; protected set; }
 
-        public ListModel(string name)
+        public ListModel(string name = null)
         {
-            Name = name;
+            Name = name ?? this.GetType().Name;
 
             AddCommand = new RelayCommand(delegate (object parameter)
             {
@@ -69,7 +69,7 @@ namespace Library.Impl.Presentation
             }, delegate (object parameter) { return this != null; });
         }
 
-        public ListModel(string name, IListDomain<T, U, V> domains)
+        public ListModel(IListDomain<T, U, V> domains, string name = null)
             : this(name)
         {
             _domains = domains;

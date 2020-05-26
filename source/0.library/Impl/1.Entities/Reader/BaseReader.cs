@@ -18,7 +18,7 @@ namespace Library.Impl.Entities.Reader
 
         public virtual T Clear(T entity)
         {
-            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
+            foreach (var property in typeof(T).GetPropertiesFromType(isprimitive: true))
             {
                 property.info?.SetValue(entity, null);
             }
@@ -33,7 +33,7 @@ namespace Library.Impl.Entities.Reader
             var prefix = string.Join(_sqlsyntaxsign.AliasSeparatorColumn, prefixname);
             prefix += (prefix == string.Empty ? prefix : _sqlsyntaxsign.AliasSeparatorColumn);
 
-            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
+            foreach (var property in typeof(T).GetPropertiesFromType(isprimitive: true))
             {
                 var value = reader[$"{prefix}{property.info.Name}"];
 

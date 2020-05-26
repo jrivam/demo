@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +77,7 @@
     <Compile Include="Extension\StringExtensions.cs" />
     <Compile Include="Impl\1.Entities\HelperEntities.cs" />
     <Compile Include="Impl\1.Entities\Reader\BaseReader.cs" />
+    <Compile Include="Impl\2.Persistence\Attributes\DataAttribute.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbCommandExecutor.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbCommandExecutorBulk.cs" />
     <Compile Include="Impl\2.Persistence\Helper.cs" />
@@ -86,6 +89,7 @@
     <Compile Include="Impl\2.Persistence\Repository.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Repository\SqlCommandExecutorBulk.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlCommand.cs" />
+    <Compile Include="Impl\3.Business\Attributes\DomainAttribute.cs" />
     <Compile Include="Impl\3.Business\ListDomainQuery.cs" />
     <Compile Include="Impl\3.Business\Validator\ColumnValidator.cs" />
     <Compile Include="Impl\3.Business\Validator\EmptyValidator.cs" />
@@ -94,6 +98,7 @@
     <Compile Include="Impl\3.Business\Validator\UniqueValidator.cs" />
     <Compile Include="Impl\3.Business\HelperTableLogic.cs" />
     <Compile Include="Impl\3.Business\LogicLoader.cs" />
+    <Compile Include="Impl\4.Presentation\Attributes\ModelAttribute.cs" />
     <Compile Include="Impl\4.Presentation\Element.cs" />
     <Compile Include="Impl\4.Presentation\HelperTableInteractive.cs" />
     <Compile Include="Impl\4.Presentation\InteractiveRaiser.cs" />

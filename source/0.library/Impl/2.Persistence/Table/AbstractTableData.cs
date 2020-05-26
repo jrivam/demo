@@ -1,4 +1,5 @@
 ﻿using Library.Extension;
+using Library.Impl.Persistence.Attributes;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Query;
@@ -49,9 +50,9 @@ namespace Library.Impl.Persistence.Table
         {
             Columns.Clear();
 
-            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
+            foreach (var property in typeof(U).GetPropertiesFromType(isprimitive: true, attributetypes: new System.Type[] { typeof(DataAttribute) }))
             {
-                var attributes = typeof(T).GetAttributesFromTypeProperty(property.info.Name);
+                var attributes = typeof(T).GetAttributesFromProperty(property.info.Name);
 
                 var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.info.Name.ToUnderscoreCase().ToLower();
                 var iskey = ((KeyAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(KeyAttribute))) != null;
@@ -60,7 +61,9 @@ namespace Library.Impl.Persistence.Table
 
                 var column = (IColumnTable)Activator.CreateInstance(typeof(ColumnTable<>).MakeGenericType(property.info.PropertyType),
                                     new object[] { this, property.info.Name, dbname, iskey, isidentity, isforeignkey });
-                column.Value = property.info.GetValue(this.Entity);
+
+                var entityproperty = typeof(T).GetPropertyFromType(property.info.Name);
+                column.Value = entityproperty.GetValue(this.Entity);
 
                 Columns.Add(column);
             }

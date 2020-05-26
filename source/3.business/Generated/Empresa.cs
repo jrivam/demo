@@ -1,5 +1,5 @@
-﻿using Library.Impl;
-using Library.Impl.Business;
+﻿using Library.Impl.Business;
+using Library.Impl.Business.Attributes;
 using Library.Impl.Business.Loader;
 using Library.Impl.Business.Query;
 using Library.Impl.Business.Table;
@@ -43,12 +43,17 @@ namespace Business.Table
         {
         }
 
+        [Domain]
         public virtual int? Id { get { return Data?.Id; } set { if (Data?.Id != value) { Data.Id = value; Changed = true; } } }
+        [Domain]
         public virtual string Ruc { get { return Data?.Ruc; } set { if (Data?.Ruc != value) { Data.Ruc = value; Changed = true; } } }
+        [Domain]
         public virtual string RazonSocial { get { return Data?.RazonSocial; } set { if (Data?.RazonSocial != value) { Data.RazonSocial = value; Changed = true; } } }
+        [Domain]
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
         protected Business.Table.SucursalesQuery _sucursales;
+        [Domain]
         public virtual Business.Table.SucursalesQuery Sucursales
         {
             get
@@ -71,32 +76,32 @@ namespace Business.Table
             }
         }
 
-        protected override Result SaveChildren()
-        {
-            var savechildren = base.SaveChildren();
+        //protected override Result SaveChildren()
+        //{
+        //    var savechildren = base.SaveChildren();
 
-            if (savechildren.Success)
-            {
-                var saveall = _sucursales?.SaveAll();
+        //    if (savechildren.Success)
+        //    {
+        //        var saveall = _sucursales?.SaveAll();
 
-                savechildren.Append(saveall);
-            }
+        //        savechildren.Append(saveall);
+        //    }
 
-            return savechildren;
-        }
-        protected override Result EraseChildren()
-        {
-            var erasechildren = base.EraseChildren();
+        //    return savechildren;
+        //}
+        //protected override Result EraseChildren()
+        //{
+        //    var erasechildren = base.EraseChildren();
 
-            if (erasechildren.Success)
-            {
-                var eraseall = Sucursales?.Refresh().domains?.EraseAll();
+        //    if (erasechildren.Success)
+        //    {
+        //        var eraseall = Sucursales?.Refresh().domains?.EraseAll();
 
-                erasechildren.Append(eraseall);
-            }
+        //        erasechildren.Append(eraseall);
+        //    }
 
-            return erasechildren;
-        }
+        //    return erasechildren;
+        //}
     }
 
     public partial class Empresas : ListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>

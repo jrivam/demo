@@ -1,4 +1,5 @@
 ﻿using Library.Impl.Persistence;
+using Library.Impl.Persistence.Attributes;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
 using Library.Impl.Persistence.Sql;
@@ -36,6 +37,7 @@ namespace Persistence.Table
         {
         }
 
+        [Data]
         public virtual int? Id
         {
             get { return Entity?.Id; }
@@ -49,11 +51,15 @@ namespace Persistence.Table
                 }
             }
         }
+        [Data]
         public virtual string Ruc { get { return Entity?.Ruc; } set { if (Entity?.Ruc != value) { Columns[nameof(Ruc)].Value = Entity.Ruc = value; } } }
+        [Data]
         public virtual string RazonSocial { get { return Entity?.RazonSocial; } set { if (Entity?.RazonSocial != value) { Columns[nameof(RazonSocial)].Value = Entity.RazonSocial = value; } } }
+        [Data]
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns[nameof(Activo)].Value = Entity.Activo = value; } } }
 
         protected Persistence.Table.SucursalesQuery _sucursales;
+        [Data]
         public virtual Persistence.Table.SucursalesQuery Sucursales
         {
             get

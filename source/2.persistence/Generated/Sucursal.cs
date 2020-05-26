@@ -1,4 +1,5 @@
 ﻿using Library.Impl.Persistence;
+using Library.Impl.Persistence.Attributes;
 using Library.Impl.Persistence.Mapper;
 using Library.Impl.Persistence.Query;
 using Library.Impl.Persistence.Sql;
@@ -37,6 +38,7 @@ namespace Persistence.Table
         {
         }
 
+        [Data]
         public virtual int? Id
         {
             get
@@ -47,15 +49,20 @@ namespace Persistence.Table
             {
                 if (Entity?.Id != value)
                 {
-                    Columns["Id"].Value = Entity.Id = value;
+                    Columns[nameof(Id)].Value = Entity.Id = value;
                 }
             }
         }
+        [Data]
         public virtual string Codigo { get { return Entity?.Codigo; } set { if (Entity?.Codigo != value) { Columns[nameof(Codigo)].Value = Entity.Codigo = value; } } }
+        [Data]
         public virtual string Nombre { get { return Entity?.Nombre; } set { if (Entity?.Nombre != value) { Columns[nameof(Nombre)].Value = Entity.Nombre = value; } } }
+        [Data]
         public virtual DateTime? Fecha { get { return Entity?.Fecha; } set { if (Entity?.Fecha != value) { Columns[nameof(Fecha)].Value = Entity.Fecha = value; } } }
+        [Data]
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns[nameof(Activo)].Value = Entity.Activo = value; } } }
-
+        
+        [Data]
         public virtual int? IdEmpresa
         {
             get
@@ -73,8 +80,8 @@ namespace Persistence.Table
                 }
             }
         }
-
         protected Persistence.Table.Empresa _empresa;
+        [Data]
         public virtual Persistence.Table.Empresa Empresa
         {
             get
@@ -86,6 +93,7 @@ namespace Persistence.Table
                         Entity.Empresa = new Entities.Table.Empresa();
                     }
                     Empresa = new Persistence.Table.Empresa(Entity?.Empresa);
+                    //Empresa = new Persistence.Table.Empresa(Entity?.Empresa ??= new Entities.Table.Empresa());
 
                     if (_empresa.Id == null && this.IdEmpresa != null)
                     {

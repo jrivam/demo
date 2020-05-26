@@ -1,4 +1,5 @@
 ﻿using Library.Extension;
+using Library.Impl.Persistence.Attributes;
 using Library.Impl.Persistence.Sql;
 using Library.Interface.Entities;
 using Library.Interface.Persistence;
@@ -42,9 +43,9 @@ namespace Library.Impl.Persistence.Query
         {
             Columns.Clear();
 
-            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
+            foreach (var property in typeof(U).GetPropertiesFromType(isprimitive: true, attributetypes: new System.Type[] { typeof(DataAttribute) }))
             {
-                var attributes = typeof(T).GetAttributesFromTypeProperty(property.info.Name);
+                var attributes = typeof(T).GetAttributesFromProperty(property.info.Name);
 
                 var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.info.Name.ToUnderscoreCase().ToLower();
 

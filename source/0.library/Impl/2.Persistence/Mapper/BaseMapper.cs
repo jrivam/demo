@@ -23,7 +23,7 @@ namespace Library.Impl.Persistence.Mapper
 
         public virtual void Map(U data, int maxdepth = 1, int depth = 0)
         {
-            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true))
+            foreach (var property in typeof(T).GetPropertiesFromType(isprimitive: true))
             {
                 data[property.info.Name].DbValue = property.info.GetValue(data.Entity);
             }

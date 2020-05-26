@@ -31,6 +31,8 @@ namespace Library.Impl.Presentation.Table
             }
         }
 
+        public virtual string Name { get; protected set; }
+
         public virtual IElement this[string name]
         {
             get
@@ -44,7 +46,7 @@ namespace Library.Impl.Presentation.Table
         {
             Elements.Clear();
 
-            foreach (var property in typeof(T).GetTypeProperties(isprimitive: true, iscollection: true, isforeign: true))
+            foreach (var property in typeof(T).GetPropertiesFromType(isprimitive: true, iscollection: true, isforeign: true))
             {
                 Elements.Add(new Element(property.info.Name));
             }
@@ -96,29 +98,31 @@ namespace Library.Impl.Presentation.Table
         protected readonly IInteractiveTable<T, U, V, W> _interactive;
         protected readonly int _maxdepth;
 
-        public AbstractTableModel(string name, 
-            V domain, IInteractiveTable<T, U, V, W> interactive,
-            int maxdepth = 1)
+        public AbstractTableModel(V domain, IInteractiveTable<T, U, V, W> interactive,
+            int maxdepth = 1,
+            string name = null)
         {
             _interactive = interactive;
             _maxdepth = maxdepth;
 
+            Name = name ?? typeof(T).Name;
+
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{name}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, Save()), $"{name}Save");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, Save()), $"{Name}Save");
             }, delegate (object parameter) { return this.Domain.Changed; });
             EraseCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, Erase()), $"{name}Erase");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, Erase()), $"{Name}Erase");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<W>(this as W, $"{name}Edit");
+                Messenger.Default.Send<W>(this as W, $"{Name}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
             Domain = domain;

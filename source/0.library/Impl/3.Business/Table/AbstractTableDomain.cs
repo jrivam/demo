@@ -1,4 +1,6 @@
-﻿using Library.Interface.Business.Table;
+﻿using Library.Extension;
+using Library.Impl.Business.Attributes;
+using Library.Interface.Business.Table;
 using Library.Interface.Entities;
 using Library.Interface.Persistence.Table;
 using System.Collections.Generic;
@@ -108,11 +110,34 @@ namespace Library.Impl.Business.Table
         {
             var savechildren = new Result() { Success = true };
 
+            foreach (var property in typeof(V).GetPropertiesFromType(iscollection: true, attributetypes: new System.Type[] { typeof(DomainAttribute) }))
+            {
+                var collection = property.info.GetValue(this);
+                if (collection != null)
+                {
+                    savechildren.Append((Result)collection.GetType().GetMethod("SaveAll").Invoke(collection, null));
+                }
+            }
+
             return savechildren;
         }
         protected virtual Result EraseChildren()
         {
             var erasechildren = new Result() { Success = true };
+
+            foreach (var property in typeof(V).GetPropertiesFromType(iscollection: true, attributetypes: new System.Type[] { typeof(DomainAttribute) }))
+            {
+                var collection = property.info.GetValue(this);
+                if (collection != null)
+                {
+                    var refresh = collection.GetType().GetMethod("Refresh").Invoke(collection, new object[] { null });
+                    var item2 = refresh.GetType().GetField("Item2").GetValue(refresh);
+                    if (item2 != null)
+                    {
+                        erasechildren.Append((Result)item2.GetType().GetMethod("EraseAll").Invoke(item2, null));
+                    }
+                }
+            }
 
             return erasechildren;
         }

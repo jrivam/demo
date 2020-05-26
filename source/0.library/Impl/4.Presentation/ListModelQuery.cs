@@ -25,12 +25,11 @@ namespace Library.Impl.Presentation
 
         public virtual ICommand RefreshCommand { get; protected set; }
 
-        public ListModelQuery(string name, 
-            IListDomain<T, U, V> domains,
+        public ListModelQuery(IListDomain<T, U, V> domains,
             Q query,
-            int maxdepth = 1, int top = 0)
-            : base(name, 
-                  domains)
+            int maxdepth = 1, int top = 0,
+            string name = null)
+            : base(domains, name)
         {
             Query = query;
             _maxdepth = maxdepth;

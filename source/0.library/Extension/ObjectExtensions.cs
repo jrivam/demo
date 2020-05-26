@@ -9,6 +9,38 @@ namespace Library.Extension
 {
     public static class ObjectExtensions
     {
+        public static IEnumerable<(PropertyInfo info, bool isprimitive, bool iscollection, bool isforeign)> GetPropertiesFromType(this Type t, bool isprimitive = false, bool iscollection = false, bool isforeign = false, Type[] attributetypes = null)
+        {
+            Func<PropertyInfo, bool> filtercustom = x => x.CustomAttributes.Any(i => (attributetypes != null && attributetypes.Contains(i.AttributeType)) || attributetypes == null);
+            Func<PropertyInfo, bool> filterprimitive = x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || x.PropertyType == typeof(string);
+            Func<PropertyInfo, bool> filtercollection = x => x.PropertyType != typeof(string) && x.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            Func<PropertyInfo, bool> filterforeign = x => !filterprimitive(x) && !filtercollection(x);
+
+            var properties = ReflectionCache.FindTypeProperties(t);
+            var filteredcustom = properties.Where(x => filtercustom(x));
+            var proyection = filteredcustom.Select(x => (info: x, isprimitive: filterprimitive(x), iscollection: filtercollection(x), isforeign: filterforeign(x)));
+            var filtered = proyection.Where(x => (x.isprimitive && isprimitive) || (x.iscollection && iscollection) || (x.isforeign && isforeign));
+
+            foreach (var property in filtered)
+            {
+                yield return property;
+            }
+        }
+        public static PropertyInfo GetPropertyFromType(this Type t, string propertyName)
+        {
+            return ReflectionCache.FindTypeProperties(t).Where(x => x.Name == propertyName).FirstOrDefault();
+        }
+
+        public static T GetAttributeFromType<T>(this Type t)
+            where T : Attribute
+        {
+            return (T)ReflectionCache.FindPropertyInfoAttributes(t).FirstOrDefault();
+        }
+        public static object[] GetAttributesFromProperty(this Type t, string propertyName)
+        {
+            return ReflectionCache.FindPropertyInfoAttributes(ReflectionCache.FindTypeProperties(t).Where(x => x.Name == propertyName).FirstOrDefault());
+        }
+
         public static T ForceType<T>(this object o)
         {
             T res = HelperEntities<T>.CreateEntity();
@@ -27,38 +59,11 @@ namespace Library.Extension
 
             return res;
         }
-
-        public static T GetAttributeFromType<T>(this Type t)
-            where T : Attribute
-        {
-            return (T)ReflectionCache.FindPropertyInfoAttributes(t).FirstOrDefault();
-        }
-
-        public static object[] GetAttributesFromTypeProperty(this Type t, string propertyName)
-        {
-            return ReflectionCache.FindPropertyInfoAttributes(ReflectionCache.FindTypeProperties(t).Where(x => x.Name == propertyName).FirstOrDefault());
-        }
-
-        public static IEnumerable<(PropertyInfo info, bool isprimitive, bool iscollection, bool isforeign)> GetTypeProperties(this Type t, bool isprimitive = false, bool iscollection = false, bool isforeign = false)
-        {
-            Func<PropertyInfo, bool> primitive = x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || x.PropertyType == typeof(string);
-            Func<PropertyInfo, bool> collection = x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>);
-
-            var properties = ReflectionCache.FindTypeProperties(t)
-                .Select(x => (info: x, isprimitive: primitive(x), iscollection: collection(x), isforeign: !(primitive(x) || collection(x))))
-                .Where(x => (x.isprimitive && isprimitive) || (x.iscollection && iscollection) || (x.isforeign && isforeign));
-
-            foreach (var property in properties)
-            {
-                yield return property;
-            }
-        }
-
         public static B SetProperties<A, B>(this A from, B to, bool nulls = false, bool isprimitive = false, bool iscollection = false, bool isforeign = false)
         {
             var propsto = to?.GetType().GetProperties();
 
-            foreach (var propfrom in typeof(A).GetTypeProperties(isprimitive, iscollection, isforeign))
+            foreach (var propfrom in typeof(A).GetPropertiesFromType(isprimitive, iscollection, isforeign))
             {
                 var propto = propsto?.Where(x => x.Name == propfrom.info.Name).SingleOrDefault();
 
@@ -71,13 +76,11 @@ namespace Library.Extension
 
             return to;
         }
-
     }
 
     public static class ReflectionCache
     {
-        private static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> PropertyInfoCache = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();
-        
+        private static ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> PropertyInfoCache = new ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>>();     
         public static List<PropertyInfo> FindTypeProperties(Type type)
         {
             if (PropertyInfoCache.ContainsKey(type))
@@ -91,7 +94,6 @@ namespace Library.Extension
         }
 
         private static ConcurrentDictionary<PropertyInfo, object[]> PropertyInfoCustomAttributeCache = new ConcurrentDictionary<PropertyInfo, object[]>();
-
         public static object[] FindPropertyInfoAttributes(PropertyInfo propertyinfo)
         {
             if (PropertyInfoCustomAttributeCache.ContainsKey(propertyinfo))

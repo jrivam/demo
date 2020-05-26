@@ -1,5 +1,6 @@
 ﻿using Library.Impl.Persistence.Sql;
 using Library.Impl.Presentation;
+using Library.Impl.Presentation.Attributes;
 using Library.Impl.Presentation.Query;
 using Library.Impl.Presentation.Raiser;
 using Library.Impl.Presentation.Table;
@@ -18,8 +19,7 @@ namespace Presentation.Table
         public Sucursal(Business.Table.Sucursal domain,
             IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactive = null,
             int maxdepth = 1)
-            : base(nameof(Sucursal),
-                  domain,
+            : base(domain,
                   interactive ?? new InteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>(new Presentation.Raiser.Sucursal()),
                 maxdepth)
         {
@@ -49,12 +49,18 @@ namespace Presentation.Table
         {
         }
 
+        [Model]
         public virtual int? Id { get { return Domain?.Id; } set { if (Domain?.Id != value) { Domain.Id = value; OnPropertyChanged(nameof(Id)); } } }
+        [Model]
         public virtual string Codigo { get { return Domain?.Codigo; } set { if (Domain?.Codigo != value) { Domain.Codigo = value; OnPropertyChanged(nameof(Codigo)); } } }
+        [Model]
         public virtual string Nombre { get { return Domain?.Nombre; } set { if (Domain?.Nombre != value) { Domain.Nombre = value; OnPropertyChanged(nameof(Nombre)); } } }
+        [Model]
         public virtual DateTime? Fecha { get { return Domain?.Fecha; } set { if (Domain?.Fecha != value) { Domain.Fecha = value; OnPropertyChanged(nameof(Fecha)); } } }
+        [Model]
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; OnPropertyChanged(nameof(Activo)); } } }
 
+        [Model]
         public virtual int? IdEmpresa
         {
             get
@@ -72,8 +78,8 @@ namespace Presentation.Table
                 }
             }
         }
-
         protected Presentation.Table.Empresa _empresa;
+        [Model]
         public virtual Presentation.Table.Empresa Empresa
         {
             get
@@ -102,7 +108,7 @@ namespace Presentation.Table
     public partial class Sucursales : ListModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
         public Sucursales(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
-            : base(nameof(Sucursales), domains)
+            : base(domains)
         {
         }
 
@@ -121,8 +127,7 @@ namespace Presentation.Table
         public SucursalesQuery(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains, 
             Presentation.Query.Sucursal query = null, 
             int maxdepth = 1, int top = 0)
-            : base(nameof(Sucursales),
-                  domains, 
+            : base(domains, 
                   query ?? new Presentation.Query.Sucursal(),
                   maxdepth, top)
         {
