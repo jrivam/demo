@@ -19,14 +19,10 @@ namespace WpfApp.Views
             }
         }
 
-        public Sucursal()
+        public Sucursal(Presentation.Table.Sucursal entity = null)
         {
             InitializeComponent();
-        }
-        public Sucursal(Presentation.Table.Sucursal entity)
-            : this()
-        {
-            DataContext = new SucursalViewModel(entity);
+            DataContext = new SucursalViewModel(entity ?? new Presentation.Table.Sucursal());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

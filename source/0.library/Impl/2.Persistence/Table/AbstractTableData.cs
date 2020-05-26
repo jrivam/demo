@@ -68,9 +68,6 @@ namespace Library.Impl.Persistence.Table
                 Columns.Add(column);
             }
         }
-        protected virtual void InitX()
-        {
-        }
 
         protected readonly IRepositoryTable<T, U> _repository;
 
@@ -91,7 +88,6 @@ namespace Library.Impl.Persistence.Table
             Entity = entity;
 
             Init();
-            InitX();
         }
 
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)

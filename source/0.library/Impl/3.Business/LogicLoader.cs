@@ -22,7 +22,6 @@ namespace Library.Impl.Business
         protected virtual V Load(V domain, int maxdepth = 1)
         {
             _loader.Load(domain, maxdepth, 0);
-            _loader.LoadX(domain, maxdepth, 0);
 
             return domain;
         }

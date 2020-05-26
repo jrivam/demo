@@ -34,9 +34,6 @@ namespace Library.Impl.Business.Table
         protected virtual void Init()
         {
         }
-        protected virtual void InitX()
-        {
-        }
 
         protected readonly ILogicTable<T, U, V> _logic;
 
@@ -48,7 +45,6 @@ namespace Library.Impl.Business.Table
             Data = data;
 
             Init();
-            InitX();
         }
 
         public virtual Result Validate()

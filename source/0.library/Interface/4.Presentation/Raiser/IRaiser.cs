@@ -14,6 +14,5 @@ namespace Library.Interface.Presentation.Raiser
         void Clear(W model);
 
         void Raise(W model, int maxdepth = 1, int depth = 0);
-        void RaiseX(W model, int maxdepth = 1, int depth = 0);
     }
 }

@@ -22,7 +22,6 @@ namespace Library.Impl.Persistence
         protected virtual U Map(U data, int maxdepth = 1)
         {
             _mapper.Map(data, maxdepth, 0);
-            _mapper.MapX(data, maxdepth, 0);
 
             return data;
         }

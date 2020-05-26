@@ -28,8 +28,5 @@ namespace Library.Impl.Persistence.Mapper
                 data[property.info.Name].DbValue = property.info.GetValue(data.Entity);
             }
         }
-        public virtual void MapX(U data, int maxdepth = 1, int depth = 0)
-        {
-        }
     }
 }

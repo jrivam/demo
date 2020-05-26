@@ -10,6 +10,5 @@ namespace Library.Interface.Persistence.Mapper
         void Clear(U data);
 
         void Map(U data, int maxdepth = 1, int depth = 0);
-        void MapX(U data, int maxdepth = 1, int depth = 0);
     }
 }

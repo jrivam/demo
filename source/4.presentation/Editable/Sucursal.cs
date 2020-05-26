@@ -58,10 +58,3 @@ namespace Presentation.Query
     {
     }
 }
-
-namespace Presentation.Raiser
-{
-    public partial class Sucursal
-    {
-    }
-}

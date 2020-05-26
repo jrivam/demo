@@ -94,16 +94,18 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
-            {
-                Id = Entity.Id
-            },
+            return new Persistence.Table.Sucursal(
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object,
-                mockDatabase.mockCreator.Object));
+                mockDatabase.mockCreator.Object),
+                new Entities.Table.Sucursal()
+                {
+                    Id = Entity.Id
+                }
+                );
         }
         public Persistence.Table.Sucursal Data_Table_Select_NonDbCommand()
         {
@@ -162,20 +164,21 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
-            {
-                Nombre = Entity.Nombre,
-                Codigo = Entity.Codigo,
-                Fecha = Entity.Fecha,
-                Activo = Entity.Activo,
-                IdEmpresa = Entity.IdEmpresa
-            },
+            return new Persistence.Table.Sucursal(
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object,
                 mockDatabase.mockCreator.Object),
+                new Entities.Table.Sucursal()
+                {
+                    Nombre = Entity.Nombre,
+                    Codigo = Entity.Codigo,
+                    Fecha = Entity.Fecha,
+                    Activo = Entity.Activo,
+                    IdEmpresa = Entity.IdEmpresa
+                },
             new Persistence.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -234,20 +237,22 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
-            {
-                Id = Entity.Id,
-                Nombre = Entity.Nombre,
-                Fecha = Entity.Fecha,
-                Activo = Entity.Activo,
-                IdEmpresa = Entity.IdEmpresa,
-            },
+            return new Persistence.Table.Sucursal(
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object,
-                mockDatabase.mockCreator.Object));
+                mockDatabase.mockCreator.Object),
+                new Entities.Table.Sucursal()
+                {
+                    Id = Entity.Id,
+                    Nombre = Entity.Nombre,
+                    Fecha = Entity.Fecha,
+                    Activo = Entity.Activo,
+                    IdEmpresa = Entity.IdEmpresa,
+                }
+                );
         }
         public Persistence.Query.Sucursal Data_Query_Update()
         {
@@ -317,20 +322,22 @@ namespace test.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new Persistence.Table.Sucursal(new Entities.Table.Sucursal()
-            {
-                Id = Entity.Id,
-                Nombre = Entity.Nombre,
-                Fecha = Entity.Fecha,
-                Activo = Entity.Activo,
-                IdEmpresa = Entity.IdEmpresa
-            },
+            return new Persistence.Table.Sucursal(
             new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object,
-                mockDatabase.mockCreator.Object));
+                mockDatabase.mockCreator.Object),
+                new Entities.Table.Sucursal()
+                {
+                    Id = Entity.Id,
+                    Nombre = Entity.Nombre,
+                    Fecha = Entity.Fecha,
+                    Activo = Entity.Activo,
+                    IdEmpresa = Entity.IdEmpresa
+                }
+                );
         }
         public Persistence.Query.Sucursal Data_Query_Delete()
         {

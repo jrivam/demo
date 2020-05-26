@@ -12,6 +12,5 @@ namespace Library.Interface.Business.Loader
         void Clear(V domain);
 
         void Load(V domain, int maxdepth = 1, int depth = 0);
-        void LoadX(V domain, int maxdepth = 1, int depth = 0);
     }
 }

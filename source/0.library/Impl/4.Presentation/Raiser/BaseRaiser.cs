@@ -26,8 +26,5 @@ namespace Library.Impl.Presentation.Raiser
                 model.OnPropertyChanged(element.Name);
             }
         }
-        public virtual void RaiseX(W model, int maxdepth = 1, int depth = 0)
-        {
-        }
     }
 }

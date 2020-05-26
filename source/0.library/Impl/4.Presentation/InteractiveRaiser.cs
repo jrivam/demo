@@ -24,7 +24,6 @@ namespace Library.Impl.Presentation
         protected virtual W Raise(W model, int maxdepth = 1)
         {
             _raiser.Raise(model, maxdepth, 0);
-            _raiser.RaiseX(model, maxdepth, 0);
 
             return model;
         }

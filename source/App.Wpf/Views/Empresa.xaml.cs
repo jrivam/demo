@@ -25,14 +25,11 @@ namespace WpfApp.Views
         //    set { Resources["ViewModel"] = value; }
         //}
 
-        public Empresa()
+        public Empresa(Presentation.Table.Empresa entity = null)
         {
             InitializeComponent();
-        }
-        public Empresa(Presentation.Table.Empresa entity)
-            : this()
-        {
-            DataContext = new EmpresaViewModel(entity); 
+            DataContext = new EmpresaViewModel(entity ?? new Presentation.Table.Empresa());
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

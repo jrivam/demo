@@ -10,9 +10,9 @@ namespace Persistence.Table
         {
         }
 
-        protected override void InitX()
+        protected override void Init()
         {
-            base.InitX();
+            base.Init();
 
             SelectDbCommand = (false, new SqlCommand() { Text = "gsp_sucursal_select", Type = CommandType.StoredProcedure });
             InsertDbCommand = (false, new SqlCommand() { Text = "gsp_sucursal_insert", Type = CommandType.StoredProcedure });

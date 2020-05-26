@@ -51,9 +51,6 @@ namespace Library.Impl.Presentation.Table
                 Elements.Add(new Element(property.info.Name));
             }
         }
-        protected virtual void InitX()
-        {
-        }
 
         public override void OnPropertyChanged(string propertyName)
         {
@@ -128,7 +125,6 @@ namespace Library.Impl.Presentation.Table
             Domain = domain;
 
             Init();
-            InitX();
         }
 
         public virtual (Result result, W model) Load(bool usedbcommand = false)
