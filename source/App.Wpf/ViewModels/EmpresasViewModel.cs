@@ -25,6 +25,7 @@ namespace WpfApp.ViewModels
             : base()
         {
             EmpresasQuery = empresasquery;
+            EmpresasQuery.Refresh();
         }
 
         public EmpresasViewModel()

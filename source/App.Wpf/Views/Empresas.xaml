@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="Empresas" Height="378" Width="704" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <viewmodels:EmpresasViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Window.Resources>
         <ResourceDictionary Source="../Styles.xaml" />

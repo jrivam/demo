@@ -51,6 +51,7 @@ namespace WpfApp.ViewModels
             : base()
         {
             SucursalesQuery = sucursalesquery;
+            SucursalesQuery.Refresh();
         }
 
         public SucursalesViewModel()

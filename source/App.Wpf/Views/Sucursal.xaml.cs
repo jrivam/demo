@@ -26,7 +26,7 @@ namespace WpfApp.Views
         public Sucursal(Presentation.Table.Sucursal entity)
             : this()
         {
-            ViewModel.Sucursal = entity;
+            DataContext = new SucursalViewModel(entity);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

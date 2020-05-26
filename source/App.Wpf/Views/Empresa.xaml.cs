@@ -32,7 +32,7 @@ namespace WpfApp.Views
         public Empresa(Presentation.Table.Empresa entity)
             : this()
         {
-            ViewModel.Empresa = entity;
+            DataContext = new EmpresaViewModel(entity); 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

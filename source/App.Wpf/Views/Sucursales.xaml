@@ -7,9 +7,10 @@
         xmlns:viewmodels="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
         Title="Sucursales" Height="362" Width="746" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
-    <Window.DataContext>
+    
+    <!--<Window.DataContext>
         <viewmodels:SucursalesViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Window.Resources>
         <ResourceDictionary Source="../Styles.xaml" />

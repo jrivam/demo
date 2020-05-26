@@ -23,7 +23,7 @@ namespace WpfApp.Views
         public Sucursales()
         {
             InitializeComponent();
-            ViewModel.SucursalesQuery.Refresh();
+            DataContext = new SucursalesViewModel();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

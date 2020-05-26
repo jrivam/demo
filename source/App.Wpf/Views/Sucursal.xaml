@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="Sucursal" Height="307" Width="639" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <viewmodels:SucursalViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Window.Resources>
         <ResourceDictionary Source="../Styles.xaml" />

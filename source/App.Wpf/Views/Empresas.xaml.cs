@@ -22,7 +22,7 @@ namespace WpfApp.Views
         public Empresas()
         {
             InitializeComponent();
-            ViewModel.EmpresasQuery.Refresh();
+            DataContext = new EmpresasViewModel();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
