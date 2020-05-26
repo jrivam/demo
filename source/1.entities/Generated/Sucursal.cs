@@ -29,7 +29,7 @@ namespace Entities.Table
         public virtual bool? Activo { get; set; }
 
         [Column("id_empresa")]
-        [ForeignKey("empresa")]
+        [ForeignKey(nameof(Empresa))]
         public virtual int? IdEmpresa { get; set; }
         public virtual Entities.Table.Empresa Empresa { get; set; }
     }
