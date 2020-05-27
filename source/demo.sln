@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Wpf", "App.Wpf\App.Wpf.csproj", "{CEC9083C-D737-40D7-8A5A-29F7B136639D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.App.Wpf", "demo.App.Wpf\demo.App.Wpf.csproj", "{CEC9083C-D737-40D7-8A5A-29F7B136639D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Api", "Web.Api\Web.Api.csproj", "{A38D5168-7AEE-4020-BF0F-6C9BD5AFA4E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.Web.Api", "demo.Web.Api\demo.Web.Api.csproj", "{A38D5168-7AEE-4020-BF0F-6C9BD5AFA4E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0.library", "0.library\0.library.csproj", "{FCAD1ABF-269F-4027-8567-A0F7F12B9BBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jrivam.Library", "jrivam.Library\jrivam.Library.csproj", "{FCAD1ABF-269F-4027-8567-A0F7F12B9BBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.presentation", "4.presentation\4.presentation.csproj", "{86BEC387-F29C-4E3A-8F81-BF30EE30F1A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.Presentation", "demo.presentation\demo.Presentation.csproj", "{86BEC387-F29C-4E3A-8F81-BF30EE30F1A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1.entities", "1.entities\1.entities.csproj", "{C6AC5BB1-29CD-4E8D-865C-902F54833A06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.Entities", "demo.entities\demo.Entities.csproj", "{C6AC5BB1-29CD-4E8D-865C-902F54833A06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "99.test", "99.test\99.test.csproj", "{50CE807E-2ECF-4B47-A800-48A6EAC48789}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.Tests", "demo.tests\demo.Tests.csproj", "{50CE807E-2ECF-4B47-A800-48A6EAC48789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2.persistence", "2.persistence\2.persistence.csproj", "{5C9F70FF-24C2-4630-B5B0-FE2731A06803}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.Persistence", "demo.persistence\demo.Persistence.csproj", "{5C9F70FF-24C2-4630-B5B0-FE2731A06803}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.business", "3.business\3.business.csproj", "{175C8652-8E2E-4285-8BFB-94A430E8BC72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.Business", "demo.business\demo.Business.csproj", "{175C8652-8E2E-4285-8BFB-94A430E8BC72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
