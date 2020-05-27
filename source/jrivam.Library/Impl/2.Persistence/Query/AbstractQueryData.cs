@@ -47,7 +47,7 @@ namespace jrivam.Library.Impl.Persistence.Query
             {
                 var attributes = typeof(T).GetAttributesFromProperty(property.info.Name);
 
-                var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.info.Name.ToUnderscoreCase().ToLower();
+                var dbname = ((ColumnAttribute)attributes.FirstOrDefault(x => x.GetType() == typeof(ColumnAttribute)))?.Name ?? property.info.Name;
 
                 var column = (IColumnQuery)Activator.CreateInstance(typeof(ColumnQuery<>).MakeGenericType(property.info.PropertyType),
                                     new object[] { this, property.info.Name, dbname });
@@ -65,7 +65,7 @@ namespace jrivam.Library.Impl.Persistence.Query
             string name = null, 
             string dbname = null)
         {
-            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name.ToUnderscoreCase().ToLower());
+            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
 
             _repository = repository;
 
