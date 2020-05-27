@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 
-namespace Persistence.Table
+namespace demo.Persistence.Table
 {
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
@@ -108,7 +108,7 @@ namespace Persistence.Table
     }
 }
 
-namespace Persistence.Query
+namespace demo.Persistence.Query
 {
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
@@ -163,7 +163,7 @@ namespace Persistence.Query
     }
 }
 
-namespace Persistence.Mapper
+namespace demo.Persistence.Mapper
 {
     public partial class Empresa : BaseMapper<Entities.Table.Empresa, Persistence.Table.Empresa>
     {

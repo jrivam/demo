@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
-namespace Entities.Table
+namespace demo.Entities.Table
 {
     [MetadataType(typeof(EmpresaMetadata))]
     [Table("empresa")]
@@ -27,7 +27,7 @@ namespace Entities.Table
     }
 }
 
-namespace Entities.Reader
+namespace demo.Entities.Reader
 {
     public partial class Empresa : BaseReader<Entities.Table.Empresa>
     {

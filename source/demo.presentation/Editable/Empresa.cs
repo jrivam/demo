@@ -1,4 +1,4 @@
-﻿namespace Presentation.Table
+﻿namespace demo.Presentation.Table
 {
     public partial class Empresa
     {
@@ -50,7 +50,7 @@
     }
 }
 
-namespace Presentation.Query
+namespace demo.Presentation.Query
 {
     public partial class Empresa
     {

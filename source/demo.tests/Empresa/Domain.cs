@@ -3,19 +3,19 @@ using jrivam.Library.Interface.Persistence.Sql.Builder;
 using jrivam.Library.Interface.Persistence.Sql.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace test.Empresa
+namespace demo.Tests.Empresa
 {
     [TestClass]
     public class Domain
     {
-        public static test.Empresa.Data Data;
+        public static Tests.Empresa.Data Data;
 
-        public Domain(test.Empresa.Data data)
+        public Domain(Tests.Empresa.Data data)
         {
             Data = data;
         }
         public Domain()
-            : this(new test.Empresa.Data())
+            : this(new Tests.Empresa.Data())
         {
         }
 

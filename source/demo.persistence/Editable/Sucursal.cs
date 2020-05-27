@@ -1,7 +1,7 @@
 ﻿using jrivam.Library.Impl.Persistence.Sql;
 using System.Data;
 
-namespace Persistence.Table
+namespace demo.Persistence.Table
 {
     public partial class Sucursal
     {
@@ -22,7 +22,7 @@ namespace Persistence.Table
     }
 }
 
-namespace Persistence.Query
+namespace demo.Persistence.Query
 {
     public partial class Sucursal
     {

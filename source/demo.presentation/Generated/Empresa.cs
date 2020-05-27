@@ -11,7 +11,7 @@ using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Presentation.Table
+namespace demo.Presentation.Table
 {
     public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
@@ -140,7 +140,7 @@ namespace Presentation.Table
     }
 }
 
-namespace Presentation.Query
+namespace demo.Presentation.Query
 {
     public partial class Empresa : AbstractQueryModel<Presentation.Query.Empresa, Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
@@ -188,7 +188,7 @@ namespace Presentation.Query
     }
 }
 
-namespace Presentation.Raiser
+namespace demo.Presentation.Raiser
 {
     public partial class Empresa : BaseRaiser<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {

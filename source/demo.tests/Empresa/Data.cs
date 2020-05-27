@@ -10,7 +10,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Data;
 
-namespace test.Empresa
+namespace demo.Tests.Empresa
 {
     [TestClass]
     public class Data

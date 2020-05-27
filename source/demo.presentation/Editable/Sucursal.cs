@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Presentation.Table
+namespace demo.Presentation.Table
 {
     public partial class Sucursal
     {
@@ -52,7 +52,7 @@ namespace Presentation.Table
     }
 }
 
-namespace Presentation.Query
+namespace demo.Presentation.Query
 {
     public partial class Sucursal
     {

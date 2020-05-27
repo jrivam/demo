@@ -10,7 +10,7 @@ using jrivam.Library.Interface.Persistence;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Business.Table
+namespace demo.Business.Table
 {
     public partial class Empresa : AbstractTableDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
@@ -139,7 +139,7 @@ namespace Business.Table
     }
 }
 
-namespace Business.Query
+namespace demo.Business.Query
 {
     public partial class Empresa : AbstractQueryDomain<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
@@ -187,7 +187,7 @@ namespace Business.Query
     }
 }
 
-namespace Business.Loader
+namespace demo.Business.Loader
 {
     public partial class Empresa : BaseLoader<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {

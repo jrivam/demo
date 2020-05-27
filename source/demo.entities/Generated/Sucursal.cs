@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
-namespace Entities.Table
+namespace demo.Entities.Table
 {
     [MetadataType(typeof(SucursalMetadata))]
     [Table("sucursal")]
@@ -35,7 +35,7 @@ namespace Entities.Table
     }
 }
 
-namespace Entities.Reader
+namespace demo.Entities.Reader
 {
     public partial class Sucursal : BaseReader<Entities.Table.Sucursal>
     {

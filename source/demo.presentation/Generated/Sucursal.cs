@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Presentation.Table
+namespace demo.Presentation.Table
 {
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
@@ -152,7 +152,7 @@ namespace Presentation.Table
     }
 }
 
-namespace Presentation.Query
+namespace demo.Presentation.Query
 {
     public partial class Sucursal : AbstractQueryModel<Presentation.Query.Sucursal, Business.Query.Sucursal, Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
@@ -214,7 +214,7 @@ namespace Presentation.Query
     }
 }
 
-namespace Presentation.Raiser
+namespace demo.Presentation.Raiser
 {
     public partial class Sucursal : BaseRaiser<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {

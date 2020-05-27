@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Table
+namespace demo.Entities.Table
 {
     public abstract partial class SucursalMetadata
     {

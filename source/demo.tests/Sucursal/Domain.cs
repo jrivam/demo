@@ -1,18 +1,18 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace test.Sucursal
+namespace demo.Tests.Sucursal
 {
     [TestClass]
     public class Domain
     {
-        public static test.Sucursal.Data Data;
+        public static Tests.Sucursal.Data Data;
 
-        public Domain(test.Sucursal.Data data)
+        public Domain(Tests.Sucursal.Data data)
         {
             Data = data;
         }
         public Domain()
-            : this(new test.Sucursal.Data())
+            : this(new Tests.Sucursal.Data())
         {
         }
 

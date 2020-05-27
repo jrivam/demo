@@ -1,11 +1,11 @@
-﻿namespace Business.Table
+﻿namespace demo.Business.Table
 {
     public partial class Sucursal
     {
     }
 }
 
-namespace Business.Query
+namespace demo.Business.Query
 {
     public partial class Sucursal
     {

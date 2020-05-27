@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Business.Table
+namespace demo.Business.Table
 {
     public partial class Sucursal : AbstractTableDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
@@ -133,7 +133,7 @@ namespace Business.Table
     }
 }
 
-namespace Business.Query
+namespace demo.Business.Query
 {
     public partial class Sucursal : AbstractQueryDomain<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
@@ -195,7 +195,7 @@ namespace Business.Query
     }
 }
 
-namespace Business.Loader
+namespace demo.Business.Loader
 {
     public partial class Sucursal : BaseLoader<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {

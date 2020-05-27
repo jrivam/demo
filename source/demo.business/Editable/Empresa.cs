@@ -1,11 +1,11 @@
-﻿namespace Business.Table
+﻿namespace demo.Business.Table
 {
     public partial class Empresa
     {
     }
 }
 
-namespace Business.Query
+namespace demo.Business.Query
 {
     public partial class Empresa
     {

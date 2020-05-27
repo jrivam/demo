@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace test.Sucursal
+namespace demo.Tests.Sucursal
 {
     [TestClass]
     public class Data
