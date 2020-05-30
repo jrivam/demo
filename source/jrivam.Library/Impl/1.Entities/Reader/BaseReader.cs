@@ -42,9 +42,5 @@ namespace jrivam.Library.Impl.Entities.Reader
 
             return entity;
         }
-        public virtual T ReadX(T entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
-        {
-            return entity;
-        }
     }
 }

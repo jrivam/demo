@@ -3,6 +3,7 @@ using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
+using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
@@ -12,7 +13,7 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Query
 {
-    public abstract class AbstractQueryData<T, U> : IQueryData<T, U>
+    public abstract class AbstractQueryData<T, U> : IQueryData<T, U>, IMapper<T, U>
         where T : class, IEntity, new()
         where U : ITableData<T, U>
     {
@@ -97,6 +98,38 @@ namespace jrivam.Library.Impl.Persistence.Query
             var delete = _repository.Delete(this, maxdepth);
 
             return delete;
+        }
+
+        public virtual void Clear(U data)
+        {
+            foreach (var column in data.Columns)
+            {
+                data[column.Description.Name].DbValue = null;
+            }
+        }
+        public virtual void Map(U data, int maxdepth = 1, int depth = 0)
+        {
+            foreach (var property in typeof(U).GetPropertiesFromType(isprimitive: true, isforeign: true, attributetypes: new System.Type[] { typeof(DataAttribute) }))
+            {
+                if (property.isprimitive)
+                {
+                    var entityproperty = typeof(T).GetPropertyFromType(property.info.Name);
+                    data[property.info.Name].DbValue = entityproperty.GetValue(data.Entity);
+                }
+
+                if (property.isforeign)
+                {
+                    depth++;
+                    if (depth < maxdepth || maxdepth == 0)
+                    {
+                        var foreign = property.info.GetValue(this);
+                        if (foreign != null)
+                        {
+                            foreign.GetType().GetMethod("Map").Invoke(foreign, new object[] { foreign, maxdepth, depth });
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Impl.Persistence.Attributes;
-using jrivam.Library.Impl.Persistence.Mapper;
 using jrivam.Library.Impl.Persistence.Query;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Impl.Persistence.Sql.Factory;
@@ -27,7 +26,7 @@ namespace demo.Persistence.Table
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
             Entities.Table.Sucursal entity = null)
-            : this(new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings),
+            : this(new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
                   entity ?? new Entities.Table.Sucursal())
         {
         }
@@ -161,7 +160,7 @@ namespace demo.Persistence.Query
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings)
-            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Sucursal(), connectionstringsettings))
+            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings))
         {
         }
         public Sucursal(string appsettingsconnectionstringname)
@@ -217,23 +216,6 @@ namespace demo.Persistence.Query
         public virtual Persistence.Query.Empresa Empresa(Persistence.Query.Empresa query = null)
         {
             return _empresa = query ?? _empresa ?? new Persistence.Query.Empresa();
-        }
-    }
-}
-
-namespace demo.Persistence.Mapper
-{
-    public partial class Sucursal : BaseMapper<Entities.Table.Sucursal, Persistence.Table.Sucursal>
-    {
-        public override void Map(Persistence.Table.Sucursal data, int maxdepth = 1, int depth = 0)
-        {
-            base.Map(data, maxdepth, depth);
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                new Persistence.Mapper.Empresa().Map(data.Empresa, maxdepth, depth);
-            }
         }
     }
 }

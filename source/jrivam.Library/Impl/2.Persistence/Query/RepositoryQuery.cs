@@ -20,56 +20,51 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Query
 {
-    public class RepositoryQuery<T, U> : RepositoryMapper<T, U>, IRepositoryQuery<T, U> 
+    public class RepositoryQuery<T, U> : Repository<T>, IRepositoryQuery<T, U> 
         where T : IEntity
-        where U : class, ITableData<T, U>
+        where U : class, ITableData<T, U>, IMapper<T, U>
     {
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderQuery _sqlbuilder;
 
         public RepositoryQuery(ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk,
-            IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlBuilderQuery sqlbuilder)
-            : base(sqlcommandexecutor, sqlcommandexecutorbulk,
-                  mapper)
+            : base(sqlcommandexecutor, sqlcommandexecutorbulk)
         {
             _sqlcommandbuilder = sqlcommandbuilder;
             _sqlbuilder = sqlbuilder;
         }
 
         public RepositoryQuery(ISqlSyntaxSign sqlsyntaxsign, 
-            IMapper<T, U> mapper, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk)
             : this(sqlcommandexecutor, sqlcommandexecutorbulk,
-                  mapper, 
                   sqlcommandbuilder,
                   new SqlBuilderQuery(sqlsyntaxsign))
         {
         }
-        public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper,
+        public RepositoryQuery(IReader<T> reader, 
             ISqlSyntaxSign sqlsyntaxsign, 
             ISqlCommandBuilder sqlcommandbuilder,
             ISqlCreator sqlcreator)
             : this(sqlsyntaxsign, 
-                  mapper, 
                   sqlcommandbuilder,
                   new SqlCommandExecutor<T>(sqlcreator, reader), new SqlCommandExecutorBulk(sqlcreator))
         {
         }
-        public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper, 
+        public RepositoryQuery(IReader<T> reader, 
             ConnectionStringSettings connectionstringsettings)
-            : this(reader, mapper,
+            : this(reader, 
                   SqlSyntaxSignFactory.Create(connectionstringsettings),
                   SqlCommandBuilderFactory.Create(connectionstringsettings),
                   new SqlCreator(connectionstringsettings))
         {
         }
 
-        public RepositoryQuery(IReader<T> reader, IMapper<T, U> mapper, 
+        public RepositoryQuery(IReader<T> reader, 
             string appconnectionstringname)
-            : this(reader, mapper, 
+            : this(reader, 
                   ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
         {
         }
@@ -113,8 +108,13 @@ namespace jrivam.Library.Impl.Persistence.Query
 
                 if (select.entities?.Count() > 0)
                 {
-                    foreach (var instance in MapEntities(select.entities, maxdepth))
+                    foreach (var entity in select.entities)
                     {
+                        var instance = HelperTableRepository<T, U>.CreateData(entity);
+
+                        instance.Clear(instance);
+                        instance.Map(instance, maxdepth);
+
                         enumeration.Add(instance);
                     }
                 }

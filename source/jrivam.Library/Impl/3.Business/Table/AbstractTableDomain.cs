@@ -1,5 +1,6 @@
 ﻿using jrivam.Library.Extension;
 using jrivam.Library.Impl.Business.Attributes;
+using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
@@ -111,7 +112,7 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    savechildren.Append((Result)collection.GetType().GetMethod("SaveAll").Invoke(collection, null));
+                    savechildren.Append((Result)collection.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.SaveAll)).Invoke(collection, null));
                 }
             }
 
@@ -126,11 +127,11 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    var refresh = collection.GetType().GetMethod("Refresh").Invoke(collection, new object[] { null });
+                    var refresh = collection.GetType().GetMethod(nameof(IListDomainRefresh<T, U, V>.Refresh)).Invoke(collection, new object[] { null });
                     var item2 = refresh.GetType().GetField("Item2").GetValue(refresh);
                     if (item2 != null)
                     {
-                        erasechildren.Append((Result)item2.GetType().GetMethod("EraseAll").Invoke(item2, null));
+                        erasechildren.Append((Result)item2.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.EraseAll)).Invoke(item2, null));
                     }
                 }
             }

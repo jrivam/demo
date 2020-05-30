@@ -1,6 +1,5 @@
 ﻿using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Impl.Persistence.Attributes;
-using jrivam.Library.Impl.Persistence.Mapper;
 using jrivam.Library.Impl.Persistence.Query;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Impl.Persistence.Sql.Factory;
@@ -26,7 +25,7 @@ namespace demo.Persistence.Table
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
             Entities.Table.Empresa entity = null)
-            : this(new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Empresa(), connectionstringsettings),
+            : this(new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
                   entity ?? new Entities.Table.Empresa())
         {
         }
@@ -118,7 +117,7 @@ namespace demo.Persistence.Query
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings)
-            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), new Persistence.Mapper.Empresa(), connectionstringsettings))
+            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings))
         {
         }
         public Empresa(string appsettingsconnectionstringname)
@@ -159,17 +158,6 @@ namespace demo.Persistence.Query
         public virtual Persistence.Query.Sucursal Sucursal(Persistence.Query.Sucursal query = null)
         {
             return _sucursal = query ?? _sucursal ?? new Persistence.Query.Sucursal();
-        }
-    }
-}
-
-namespace demo.Persistence.Mapper
-{
-    public partial class Empresa : BaseMapper<Entities.Table.Empresa, Persistence.Table.Empresa>
-    {
-        public override void Map(Persistence.Table.Empresa data, int maxdepth = 1, int depth = 0)
-        {
-            base.Map(data, maxdepth, depth);
         }
     }
 }

@@ -3,7 +3,6 @@ using Autofac.Features.ResolveAnything;
 using Autofac.Integration.WebApi;
 using jrivam.Library.Impl.Business.Loader;
 using jrivam.Library.Impl.Entities.Reader;
-using jrivam.Library.Impl.Persistence.Mapper;
 using jrivam.Library.Impl.Presentation.Raiser;
 using System.Reflection;
 using System.Web.Http;
@@ -32,11 +31,6 @@ namespace demo.Web.Api.App_Start
 
             builder.RegisterGeneric(typeof(BaseReader<>))
                      .As(typeof(jrivam.Library.Interface.Entities.Reader.IReader<>))
-                     .InstancePerRequest();
-
-
-            builder.RegisterGeneric(typeof(BaseMapper<,>))
-                     .As(typeof(jrivam.Library.Interface.Persistence.Mapper.IMapper<,>))
                      .InstancePerRequest();
 
             builder.RegisterGeneric(typeof(jrivam.Library.Impl.Persistence.Table.RepositoryTable<,>))

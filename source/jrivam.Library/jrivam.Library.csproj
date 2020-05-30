@@ -85,7 +85,6 @@
     <Compile Include="Impl\2.Persistence\Column.cs" />
     <Compile Include="Impl\2.Persistence\ListDataQuery.cs" />
     <Compile Include="Impl\2.Persistence\Parameter.cs" />
-    <Compile Include="Impl\2.Persistence\RepositoryMapper.cs" />
     <Compile Include="Impl\2.Persistence\Repository.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Repository\SqlCommandExecutorBulk.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlCommand.cs" />
@@ -145,7 +144,6 @@
     <Compile Include="Impl\2.Persistence\Sql\OrderDirection.cs" />
     <Compile Include="Impl\2.Persistence\Sql\WhereOperator.cs" />
     <Compile Include="Impl\3.Business\Logic.cs" />
-    <Compile Include="Impl\2.Persistence\Mapper\BaseMapper.cs" />
     <Compile Include="Impl\4.Presentation\ListModel.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryModel.cs" />
     <Compile Include="Impl\4.Presentation\CommandAction.cs" />
