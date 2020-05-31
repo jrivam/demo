@@ -15,25 +15,32 @@ namespace demo.Persistence.Table
 {
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository,
+        public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositorytable,
+            IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositoryquery,
             Entities.Table.Sucursal entity = null,
-            IQueryData<Entities.Table.Sucursal, Persistence.Table.Sucursal> query = null)
-            : base(repository,
-                  query ?? new Persistence.Query.Sucursal(),
-                  entity ?? new Entities.Table.Sucursal())
+            string name = null, string dbname = null)
+            : base(repositorytable,
+                  repositoryquery,
+                  entity,
+                  name, dbname)
         {
         }
 
         public Sucursal(ConnectionStringSettings connectionstringsettings,
-            Entities.Table.Sucursal entity = null)
+            Entities.Table.Sucursal entity = null,
+            string name = null, string dbname = null)
             : this(new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
-                  entity ?? new Entities.Table.Sucursal())
+                  new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
+                  entity,
+                  name: name, dbname: dbname)
         {
         }
         public Sucursal(string appsettingsconnectionstringname,
-            Entities.Table.Sucursal entity = null)
+            Entities.Table.Sucursal entity = null,
+            string name = null, string dbname = null)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  entity ?? new Entities.Table.Sucursal())
+                  entity,
+                  name: name, dbname: dbname)
         {
         }
 
@@ -154,17 +161,23 @@ namespace demo.Persistence.Query
             return joins;
         }
 
-        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repository)
-            : base(repository)
+        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositoryquery,
+             string name = null, string dbname = null)
+            : base(repositoryquery,
+                  name, dbname)
         {
         }
 
-        public Sucursal(ConnectionStringSettings connectionstringsettings)
-            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings))
+        public Sucursal(ConnectionStringSettings connectionstringsettings,
+            string name = null, string dbname = null)
+            : this(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
+                  name: name, dbname: dbname)
         {
         }
-        public Sucursal(string appsettingsconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
+        public Sucursal(string appsettingsconnectionstringname,
+            string name = null, string dbname = null)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  name: name, dbname: dbname)
         {
         }
 

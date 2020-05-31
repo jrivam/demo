@@ -14,25 +14,32 @@ namespace demo.Persistence.Table
 {
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repository,
-            Entities.Table.Empresa entity = null, 
-            IQueryData<Entities.Table.Empresa, Persistence.Table.Empresa> query = null)
-            : base(repository,
-                  query ?? new Persistence.Query.Empresa(),
-                  entity ?? new Entities.Table.Empresa())
+        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable,
+            IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
+            Entities.Table.Empresa entity = null,
+            string name = null, string dbname = null)
+            : base(repositorytable,
+                  repositoryquery,
+                  entity,
+                  name, dbname)
         {
         }
 
         public Empresa(ConnectionStringSettings connectionstringsettings,
-            Entities.Table.Empresa entity = null)
+            Entities.Table.Empresa entity = null,
+            string name = null, string dbname = null)
             : this(new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
-                  entity ?? new Entities.Table.Empresa())
+                new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
+                  entity,
+                  name: name, dbname: dbname)
         {
         }
         public Empresa(string appsettingsconnectionstringname,
-            Entities.Table.Empresa entity = null)
+            Entities.Table.Empresa entity = null,
+            string name = null, string dbname = null)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  entity ?? new Entities.Table.Empresa())
+                  entity,
+                  name: name, dbname: dbname)
         {
         }
 
@@ -111,17 +118,23 @@ namespace demo.Persistence.Query
 {
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repository)
-            : base(repository)
+        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
+            string name = null, string dbname = null)
+            : base(repositoryquery,
+                  name, dbname)
         {
         }
 
-        public Empresa(ConnectionStringSettings connectionstringsettings)
-            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings))
+        public Empresa(ConnectionStringSettings connectionstringsettings,
+            string name = null, string dbname = null)
+            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
+                  name: name, dbname: dbname)
         {
         }
-        public Empresa(string appsettingsconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]])
+        public Empresa(string appsettingsconnectionstringname,
+            string name = null, string dbname = null)
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
+                  name: name, dbname: dbname)
         {
         }
 

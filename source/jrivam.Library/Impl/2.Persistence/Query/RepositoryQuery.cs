@@ -22,7 +22,7 @@ namespace jrivam.Library.Impl.Persistence.Query
 {
     public class RepositoryQuery<T, U> : Repository<T>, IRepositoryQuery<T, U> 
         where T : IEntity
-        where U : class, ITableData<T, U>, IMapper<T, U>
+        where U : class, ITableData<T, U>
     {
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderQuery _sqlbuilder;

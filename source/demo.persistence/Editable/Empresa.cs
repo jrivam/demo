@@ -5,8 +5,11 @@ namespace demo.Persistence.Table
 {
     public partial class Empresa
     {
-        public Empresa(Entities.Table.Empresa entity)
-            : this("test.connectionstring.name", entity)
+        public Empresa(Entities.Table.Empresa entity = null,
+            string name = null, string dbname = null)
+            : this("test.connectionstring.name", 
+                  entity,
+                  name, dbname)
         {
         }
 
@@ -26,8 +29,9 @@ namespace demo.Persistence.Query
 {
     public partial class Empresa
     {
-        public Empresa()
-            : this("test.connectionstring.name")
+        public Empresa(string name = null, string dbname = null)
+            : this("test.connectionstring.name",
+                  name, dbname)
         {
         }
     }

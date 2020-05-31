@@ -6,6 +6,7 @@ using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
+using System;
 using System.Collections.Generic;
 
 namespace jrivam.Library.Impl.Presentation.Query
@@ -33,12 +34,16 @@ namespace jrivam.Library.Impl.Presentation.Query
 
         protected readonly IInteractiveQuery<R, S, T, U, V, W> _interactive;
 
-        public AbstractQueryModel(R domain,
-            IInteractiveQuery<R, S, T, U, V, W> interactive)
+        public AbstractQueryModel(IInteractiveQuery<R, S, T, U, V, W> interactive,
+            R domain = default(R))
         {
-            Domain = domain;
-
             _interactive = interactive;
+
+            if (domain == null)
+                Domain = (R)Activator.CreateInstance(typeof(R),
+                    null, new object[] { });
+            else
+                Domain = domain;
         }
 
         public virtual (Result result, W model) Retrieve(int maxdepth = 1, W model = default(W))

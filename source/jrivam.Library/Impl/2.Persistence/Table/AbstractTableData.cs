@@ -1,8 +1,8 @@
 ﻿using jrivam.Library.Extension;
+using jrivam.Library.Impl.Entities;
 using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Table;
@@ -13,8 +13,8 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Table
 {
-    public abstract class AbstractTableData<T, U> : ITableData<T, U>, IMapper<T, U>
-        where T : IEntity, new()
+    public abstract class AbstractTableData<T, U> : ITableData<T, U>
+        where T : IEntity
         where U : class, ITableData<T, U>
     {
         protected T _entity;
@@ -70,67 +70,79 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
         }
 
-        protected readonly IRepositoryTable<T, U> _repository;
+        protected readonly IRepositoryTable<T, U> _repositorytable;
+        protected readonly IRepositoryQuery<T, U> _repositoryquery;
 
-        protected readonly IQueryData<T, U> _query;
-
-        public AbstractTableData(IRepositoryTable<T, U> repository,
-            IQueryData<T, U> query,
-            T entity,
+        protected AbstractTableData(
+            IRepositoryTable<T, U> repositorytable,
+            IRepositoryQuery<T, U> repositoryquery, 
+            T entity = default(T),
             string name = null, 
             string dbname = null)
         {
+            _repositorytable = repositorytable;
+            _repositoryquery = repositoryquery;
+
+            if (entity == null)
+                Entity = HelperEntities<T>.CreateEntity();
+            else
+                Entity = entity;
+
             Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
-
-            _repository = repository;
-
-            _query = query;
-
-            Entity = entity;
 
             Init();
         }
 
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
         {
-            _query.Clear();
+            var query = (IQueryData<T, U>)Activator.CreateInstance(typeof(IQueryData<T, U>),
+                                new object[] {  });
+            //var query = (IQueryData<T, U>)Activator.CreateInstance(typeof(IQueryData<T, U>),
+            //        BindingFlags.CreateInstance |
+            //        BindingFlags.Public |
+            //        BindingFlags.Instance |
+            //        BindingFlags.OptionalParamBinding,
+            //        null, new object[] { _repositoryquery, null, null },
+            //        CultureInfo.CurrentCulture);
+
+            query.Clear();
 
             var primarykeycolumns = Columns?.Where(x => x.IsPrimaryKey);
             if (primarykeycolumns != null)
             {
                 foreach (var primarykeycolumn in primarykeycolumns)
                 {
-                    _query.Columns[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
+                    query.Columns[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
                 }
             }
 
-            var selectsingle = _query.SelectSingle(maxdepth);
+            var selectsingle = query.SelectSingle(maxdepth);
 
             return selectsingle;
         }          
 
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
-            var select = _repository.Select(this as U, usedbcommand);
+            var select = _repositorytable.Select(this as U, usedbcommand);
 
             return select;
         }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
         {
-            var insert = _repository.Insert(this as U, usedbcommand);
+            var insert = _repositorytable.Insert(this as U, usedbcommand);
 
             return insert;
         }
         public virtual (Result result, U data) Update(bool usedbcommand = false)
         {
-            var update = _repository.Update(this as U, usedbcommand);
+            var update = _repositorytable.Update(this as U, usedbcommand);
 
             return update;
         }
         public virtual (Result result, U data) Delete(bool usedbcommand = false)
         {
-            var delete = _repository.Delete(this as U, usedbcommand);
+            var delete = _repositorytable.Delete(this as U, usedbcommand);
 
             return delete;
         }

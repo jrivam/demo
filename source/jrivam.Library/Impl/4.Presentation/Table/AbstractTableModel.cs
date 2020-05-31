@@ -1,4 +1,7 @@
 ﻿using jrivam.Library.Extension;
+using jrivam.Library.Impl.Business;
+using jrivam.Library.Impl.Entities;
+using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
@@ -95,11 +98,18 @@ namespace jrivam.Library.Impl.Presentation.Table
         protected readonly IInteractiveTable<T, U, V, W> _interactive;
         protected readonly int _maxdepth;
 
-        public AbstractTableModel(V domain, IInteractiveTable<T, U, V, W> interactive,
+        public AbstractTableModel(IInteractiveTable<T, U, V, W> interactive,
+            V domain = default(V), 
             int maxdepth = 1,
             string name = null)
         {
             _interactive = interactive;
+
+            if (domain == null)
+                Domain = HelperTableLogic<T, U, V>.CreateDomain(HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity()));
+            else
+                Domain = domain;
+
             _maxdepth = maxdepth;
 
             Name = name ?? typeof(T).Name;
@@ -121,8 +131,6 @@ namespace jrivam.Library.Impl.Presentation.Table
             {
                 Messenger.Default.Send<W>(this as W, $"{Name}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
-
-            Domain = domain;
 
             Init();
         }

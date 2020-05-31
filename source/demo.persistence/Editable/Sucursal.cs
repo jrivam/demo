@@ -5,8 +5,11 @@ namespace demo.Persistence.Table
 {
     public partial class Sucursal
     {
-        public Sucursal(Entities.Table.Sucursal entity)
-            : this("test.connectionstring.name", entity)
+        public Sucursal(Entities.Table.Sucursal entity = null,
+            string name = null, string dbname = null)
+            : this("test.connectionstring.name", 
+                  entity,
+                  name, dbname)
         {
         }
 
@@ -26,8 +29,9 @@ namespace demo.Persistence.Query
 {
     public partial class Sucursal
     {
-        public Sucursal()
-            : this("test.connectionstring.name")
+        public Sucursal(string name = null, string dbname = null)
+            : this("test.connectionstring.name",
+                  name, dbname)
         {            
         }
     }

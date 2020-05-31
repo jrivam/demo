@@ -1,5 +1,7 @@
 ﻿using jrivam.Library.Extension;
 using jrivam.Library.Impl.Business.Attributes;
+using jrivam.Library.Impl.Entities;
+using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
@@ -38,12 +40,15 @@ namespace jrivam.Library.Impl.Business.Table
 
         protected readonly ILogicTable<T, U, V> _logic;
 
-        public AbstractTableDomain(U data,
-            ILogicTable<T, U, V> logic)
+        public AbstractTableDomain(ILogicTable<T, U, V> logic,
+            U data = default(U))
         {
             _logic = logic;
 
-            Data = data;
+            if (data == null)
+                Data = HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity());
+            else
+                Data = data;
 
             Init();
         }

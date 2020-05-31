@@ -24,22 +24,20 @@ namespace demo.Business.Table
             //Validations.Add(("NombreNotEmpty", new EmptyValidator(Data["Nombre"])));
         }
 
-        public Sucursal(Persistence.Table.Sucursal data,
-            ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
-            : base(data, 
-                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
+        public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic,
+            Persistence.Table.Sucursal data = null)
+            : base(logic,
+                  data)
         {
         }
 
-        public Sucursal(Entities.Table.Sucursal entity,
-            ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
-            : this(new Persistence.Table.Sucursal(entity),
-                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
+        public Sucursal(Persistence.Table.Sucursal data)
+            : this(new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()),
+                  data)
         {
         }
-        public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
-            : this (new Entities.Table.Sucursal(),
-                  logic ?? new LogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
+        public Sucursal(Entities.Table.Sucursal entity = null)
+            : this(new Persistence.Table.Sucursal(entity))
         {
         }
 
@@ -137,10 +135,10 @@ namespace demo.Business.Query
 {
     public partial class Sucursal : AbstractQueryDomain<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursal(Persistence.Query.Sucursal data = null,
-            ILogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null)
-            : base(data ?? new Persistence.Query.Sucursal(), 
-                  logic ?? new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()))
+        public Sucursal(ILogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logic = null,
+            Persistence.Query.Sucursal data = null)
+            : base(logic ?? new LogicQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>(new Business.Loader.Sucursal()),
+                data ?? new Persistence.Query.Sucursal())
         {
         }
 
@@ -190,7 +188,7 @@ namespace demo.Business.Query
         protected Business.Query.Empresa _empresa;
         public virtual Business.Query.Empresa Empresa(Business.Query.Empresa query = null)
         {
-            return _empresa = query ?? _empresa ?? new Business.Query.Empresa(Data?.Empresa());
+            return _empresa = query ?? _empresa ?? new Business.Query.Empresa(data: Data?.Empresa());
         }
     }
 }

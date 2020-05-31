@@ -23,23 +23,21 @@ namespace demo.Business.Table
             //Validations.Add(("RazonSocialNotEmpty", new EmptyValidator(Data["RazonSocial"])));
         }
 
-        public Empresa(Persistence.Table.Empresa data,
-            ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
-            : base(data,
-                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
+        public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic,
+            Persistence.Table.Empresa data = null)
+            : base(logic,
+                  data)
         {
         }
 
-        public Empresa(Entities.Table.Empresa entity,
-            ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
-            : this(new Persistence.Table.Empresa(entity),
-                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
-
+        public Empresa(Persistence.Table.Empresa data)
+            : this(new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()),
+                  data)
         {
         }
-        public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
-            : this(new Entities.Table.Empresa(),
-                  logic ?? new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
+        public Empresa(Entities.Table.Empresa entity = null)
+            : this(new Persistence.Table.Empresa(entity))
+
         {
         }
 
@@ -143,10 +141,10 @@ namespace demo.Business.Query
 {
     public partial class Empresa : AbstractQueryDomain<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresa(Persistence.Query.Empresa data = null,
-            ILogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null)
-            : base(data ?? new Persistence.Query.Empresa(), 
-                  logic ?? new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()))
+        public Empresa(ILogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null,
+            Persistence.Query.Empresa data = null)
+            : base(logic ?? new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()),
+                  data ?? new Persistence.Query.Empresa())
         {
         }
 
@@ -182,7 +180,7 @@ namespace demo.Business.Query
         protected Business.Query.Sucursal _sucursal;
         public virtual Business.Query.Sucursal Sucursal(Business.Query.Sucursal query = null)
         {
-            return _sucursal = query ?? _sucursal ?? new Business.Query.Sucursal(Data?.Sucursal());
+            return _sucursal = query ?? _sucursal ?? new Business.Query.Sucursal(data: Data?.Sucursal());
         }
     }
 }

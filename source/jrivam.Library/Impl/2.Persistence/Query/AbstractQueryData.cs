@@ -3,7 +3,6 @@ using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
-using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
@@ -13,8 +12,8 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Query
 {
-    public abstract class AbstractQueryData<T, U> : IQueryData<T, U>, IMapper<T, U>
-        where T : class, IEntity, new()
+    public abstract class AbstractQueryData<T, U> : IQueryData<T, U>
+        where T : IEntity
         where U : ITableData<T, U>
     {
         public virtual Description Description { get; protected set; }
@@ -56,46 +55,42 @@ namespace jrivam.Library.Impl.Persistence.Query
                 Columns.Add(column);
             }
         }
-        public virtual void InitX()
-        {
-        }
 
-        protected readonly IRepositoryQuery<T, U> _repository;
+        protected readonly IRepositoryQuery<T, U> _repositoryquery;
 
-        public AbstractQueryData(IRepositoryQuery<T, U> repository,
+        protected AbstractQueryData(IRepositoryQuery<T, U> repositoryquery,
             string name = null, 
             string dbname = null)
         {
+            _repositoryquery = repositoryquery;
+
             Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
 
-            _repository = repository;
-
             Init();
-            InitX();
         }
 
         public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))
         {
-            var selectsingle = _repository.SelectSingle(this, maxdepth, data);
+            var selectsingle = _repositoryquery.SelectSingle(this, maxdepth, data);
 
             return selectsingle;
         }
         public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
         {
-            var select = _repository.Select(this, maxdepth, top, datas);
+            var select = _repositoryquery.Select(this, maxdepth, top, datas);
 
             return select;
         }
 
         public virtual (Result result, int rows) Update(IList<IColumnTable> columns, int maxdepth = 1)
         {
-            var update = _repository.Update(this, columns, maxdepth);
+            var update = _repositoryquery.Update(this, columns, maxdepth);
 
             return update;
         }
         public virtual (Result result, int rows) Delete(int maxdepth = 1)
         {
-            var delete = _repository.Delete(this, maxdepth);
+            var delete = _repositoryquery.Delete(this, maxdepth);
 
             return delete;
         }

@@ -4,6 +4,7 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
+using System;
 using System.Collections.Generic;
 
 namespace jrivam.Library.Impl.Business.Query
@@ -26,11 +27,16 @@ namespace jrivam.Library.Impl.Business.Query
 
         protected readonly ILogicQuery<S, T, U, V> _logic;
 
-        public AbstractQueryDomain(S data, ILogicQuery<S, T, U, V> logic)
+        public AbstractQueryDomain(ILogicQuery<S, T, U, V> logic,
+            S data = default(S))
         {
-            Data = data;
-
             _logic = logic;
+
+            if (data == null)
+                Data = (S)Activator.CreateInstance(typeof(S),
+                    null, new object[] { });
+            else
+                Data = data;
         }
 
         public virtual (Result result, V domain) Retrieve(int maxdepth = 1, V domain = default(V))
