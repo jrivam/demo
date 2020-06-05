@@ -27,6 +27,11 @@ namespace jrivam.Library.Impl.Persistence.Table
             set
             {
                 _entity = value;
+
+                foreach (var column in Columns)
+                {
+                    Columns[column.Description.Name].Value = typeof(T).GetPropertyFromType(column.Description.Name).GetValue(_entity);
+                }
             }
         }
 
@@ -70,12 +75,12 @@ namespace jrivam.Library.Impl.Persistence.Table
         {
             _repositorytable = repositorytable;
 
-            Query = query;
+            _query = query;
 
             if (entity == null)
-                Entity = HelperEntities<T>.CreateEntity();
+                _entity = HelperEntities<T>.CreateEntity();
             else
-                Entity = entity;
+                _entity = entity;
 
             Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
 

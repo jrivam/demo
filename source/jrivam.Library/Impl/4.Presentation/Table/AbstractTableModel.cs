@@ -100,12 +100,12 @@ namespace jrivam.Library.Impl.Presentation.Table
         {
             _interactivetable = interactivetable;
             
-            Query = query;
+            _query = query;
 
             if (domain == null)
-                Domain = HelperTableLogic<T, U, V>.CreateDomain(HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity()));
+                _domain = HelperTableLogic<T, U, V>.CreateDomain(HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity()));
             else
-                Domain = domain;
+                _domain = domain;
 
             _maxdepth = maxdepth;
 

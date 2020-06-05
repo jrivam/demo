@@ -56,12 +56,12 @@ namespace jrivam.Library.Impl.Business.Table
         {
             _logictable = logictable;
 
-            Query = query;
+            _query = query;
 
             if (data == null)
-                Data = HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity());
+                _data = HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity());
             else
-                Data = data;
+                _data = data;
 
             Init();
         }
