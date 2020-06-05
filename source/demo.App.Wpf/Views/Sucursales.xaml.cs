@@ -28,23 +28,23 @@ namespace demo.App.Wpf.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalLoad, "SucursalLoad");
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalSave, "SucursalSave");
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
-            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, "SucursalEdit");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalLoad, nameof(SucursalLoad));
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalSave, nameof(SucursalSave));
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, nameof(SucursalErase));
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, nameof(SucursalEdit));
 
-            Messenger.Default.Register<(Result result, Presentation.Table.Sucursales list)>(this, SucursalesRefresh, "SucursalesQueryRefresh");
-            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesAdd, "SucursalesQueryAdd");
+            Messenger.Default.Register<(Result result, Presentation.Table.Sucursales list)>(this, SucursalesQueryRefresh, nameof(SucursalesQueryRefresh));
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesQueryAdd, nameof(SucursalesQueryAdd));
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Unregister(this, "SucursalLoad");
-            Messenger.Default.Unregister(this, "SucursalSave");
-            Messenger.Default.Unregister(this, "SucursalErase");
-            Messenger.Default.Unregister(this, "SucursalEdit");
+            Messenger.Default.Unregister(this, nameof(SucursalLoad));
+            Messenger.Default.Unregister(this, nameof(SucursalSave));
+            Messenger.Default.Unregister(this, nameof(SucursalErase));
+            Messenger.Default.Unregister(this, nameof(SucursalEdit));
 
-            Messenger.Default.Unregister(this, "SucursalesQueryRefresh");
-            Messenger.Default.Unregister(this, "SucursalesQueryAdd");
+            Messenger.Default.Unregister(this, nameof(SucursalesQueryRefresh));
+            Messenger.Default.Unregister(this, nameof(SucursalesQueryAdd));
         }
 
         public virtual void SucursalLoad((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
@@ -60,12 +60,12 @@ namespace demo.App.Wpf.Views
             ViewModel.SucursalesQuery.CommandErase(message);
         }
 
-        public virtual void SucursalesRefresh((Result result, Presentation.Table.Sucursales list) message)
+        public virtual void SucursalesQueryRefresh((Result result, Presentation.Table.Sucursales list) message)
         {
             ViewModel.SucursalesQuery.CommandRefresh(message);
         }
 
-        public virtual void SucursalesAdd(Presentation.Table.Sucursal entity)
+        public virtual void SucursalesQueryAdd(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
             view.ViewModel.Sucursal.Fecha = DateTime.Now.Date;

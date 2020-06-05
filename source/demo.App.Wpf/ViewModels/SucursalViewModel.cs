@@ -17,7 +17,7 @@ namespace demo.App.Wpf.ViewModels
                 if (_sucursal != value)
                 {
                     _sucursal = value;
-                    OnPropertyChanged("Sucursal");
+                    OnPropertyChanged(nameof(Sucursal));
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace demo.App.Wpf.ViewModels
                 if (_empresas != value)
                 {
                     _empresas = value;
-                    OnPropertyChanged("Empresas");
+                    OnPropertyChanged(nameof(Empresas));
                 }
             }
         }

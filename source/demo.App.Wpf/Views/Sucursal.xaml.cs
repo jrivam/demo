@@ -27,11 +27,11 @@ namespace demo.App.Wpf.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, "SucursalErase");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, nameof(SucursalErase));
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Unregister(this, "SucursalErase");
+            Messenger.Default.Unregister(this, nameof(SucursalErase));
         }
 
         public virtual void SucursalErase((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)

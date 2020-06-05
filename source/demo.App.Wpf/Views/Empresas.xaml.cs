@@ -27,23 +27,23 @@ namespace demo.App.Wpf.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaLoad, "EmpresaLoad");
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaSave, "EmpresaSave");
-            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaErase, "EmpresaErase");
-            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresaEdit, "EmpresaEdit");
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaLoad, nameof(EmpresaLoad));
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaSave, nameof(EmpresaSave));
+            Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Empresa entity) operation)>(this, EmpresaErase, nameof(EmpresaErase));
+            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresaEdit, nameof(EmpresaEdit));
 
-            Messenger.Default.Register<(Result result, Presentation.Table.Empresas list)>(this, EmpresasRefresh, "EmpresasQueryRefresh");
-            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresasAdd, "EmpresasQueryAdd");
+            Messenger.Default.Register<(Result result, Presentation.Table.Empresas list)>(this, EmpresasQueryRefresh, nameof(EmpresasQueryRefresh));
+            Messenger.Default.Register<Presentation.Table.Empresa>(this, EmpresasQueryAdd, nameof(EmpresasQueryAdd));
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Unregister(this, "EmpresaLoad");
-            Messenger.Default.Unregister(this, "EmpresaSave");
-            Messenger.Default.Unregister(this, "EmpresaErase");
-            Messenger.Default.Unregister(this, "EmpresaEdit");
+            Messenger.Default.Unregister(this, nameof(EmpresaLoad));
+            Messenger.Default.Unregister(this, nameof(EmpresaSave));
+            Messenger.Default.Unregister(this, nameof(EmpresaErase));
+            Messenger.Default.Unregister(this, nameof(EmpresaEdit));
 
-            Messenger.Default.Unregister(this, "EmpresasQueryRefresh");
-            Messenger.Default.Unregister(this, "EmpresasQueryAdd");
+            Messenger.Default.Unregister(this, nameof(EmpresasQueryRefresh));
+            Messenger.Default.Unregister(this, nameof(EmpresasQueryAdd));
         }
 
         public virtual void EmpresaLoad((CommandAction action, (Result result, Presentation.Table.Empresa entity) operation) message)
@@ -59,12 +59,12 @@ namespace demo.App.Wpf.Views
             ViewModel.EmpresasQuery.CommandErase(message);
         }
 
-        public virtual void EmpresasRefresh((Result result, Presentation.Table.Empresas list) message)
+        public virtual void EmpresasQueryRefresh((Result result, Presentation.Table.Empresas list) message)
         {
             ViewModel.EmpresasQuery.CommandRefresh(message);
         }
 
-        public virtual void EmpresasAdd(Presentation.Table.Empresa entity)
+        public virtual void EmpresasQueryAdd(Presentation.Table.Empresa entity)
         {
             var view = new Views.Empresa();
             view.ViewModel.Empresa.Activo = true;

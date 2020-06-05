@@ -16,7 +16,7 @@ namespace demo.App.Wpf.ViewModels
                 if (_empresa != value)
                 {
                     _empresa = value;
-                    OnPropertyChanged("Empresa");
+                    OnPropertyChanged(nameof(Empresa));
                 }
             }
         }
