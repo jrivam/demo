@@ -127,7 +127,6 @@ namespace jrivam.Library.Impl.Persistence.Sql.Providers.MySql
             }
         }
 
-
         public override bool UpdateWhereUseAlias
         {
             get

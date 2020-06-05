@@ -11,7 +11,7 @@ namespace jrivam.Library.Extension
     {
         public static IEnumerable<(PropertyInfo info, bool isprimitive, bool iscollection, bool isforeign)> GetPropertiesFromType(this Type t, bool isprimitive = false, bool iscollection = false, bool isforeign = false, Type[] attributetypes = null)
         {
-            Func<PropertyInfo, bool> filtercustom = x => x.CustomAttributes.Any(i => (attributetypes != null && attributetypes.Contains(i.AttributeType)) || attributetypes == null);
+            Func<PropertyInfo, bool> filtercustom = x => x.CustomAttributes.Any(i => (attributetypes != null && attributetypes.Contains(i.AttributeType))) || attributetypes == null;
             Func<PropertyInfo, bool> filterprimitive = x => x.PropertyType.IsPrimitive || x.PropertyType.IsValueType || x.PropertyType == typeof(string);
             Func<PropertyInfo, bool> filtercollection = x => x.PropertyType != typeof(string) && x.PropertyType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
             Func<PropertyInfo, bool> filterforeign = x => !filterprimitive(x) && !filtercollection(x);

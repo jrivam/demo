@@ -1,5 +1,4 @@
 ﻿using jrivam.Library.Impl.Persistence.Sql;
-using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Sql.Repository;
 using System.Collections.Generic;
@@ -8,19 +7,18 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class Repository<T> : IRepository<T>
-        where T : IEntity
+    public class Repository : IRepository
     {
-        protected readonly ISqlCommandExecutor<T> _sqlcommandexecutor;
+        protected readonly ISqlCommandExecutor _sqlcommandexecutor;
         protected readonly ISqlCommandExecutorBulk _sqlcommandexecutorbulk;
 
-        public Repository(ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk)
+        public Repository(ISqlCommandExecutor sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk)
         {
             _sqlcommandexecutor = sqlcommandexecutor;
             _sqlcommandexecutorbulk = sqlcommandexecutorbulk;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) Select(string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) Select<T>(string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
             var executequery = _sqlcommandexecutor.ExecuteQuery(commandtext, commandtype, parameters, maxdepth, entities);
             if (executequery.entities?.Count() == 0)

@@ -1,97 +1,101 @@
 ﻿using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
+using jrivam.Library.Interface.Presentation;
+using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Raiser;
 using jrivam.Library.Interface.Presentation.Table;
 
 namespace jrivam.Library.Impl.Presentation.Table
 {
-    public class InteractiveTable<T, U, V, W> : InteractiveRaiser<T, U, V, W>, IInteractiveTable<T, U, V, W> 
+    public class InteractiveTable<T, U, V, W> : IInteractiveTable<T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        public InteractiveTable(IRaiser<T, U, V, W> raiser)
-            : base(raiser)
+        protected readonly IInteractive<T, U, V> _interactive;
+
+        protected readonly IModelRaiser _raiser;
+
+        public InteractiveTable(IInteractive<T, U, V> interactive,
+            IModelRaiser raiser)
         {
+            _interactive = interactive;
+
+            _raiser = raiser;
         }
 
-        public virtual (Result result, W model) Load(W table, bool usedbcommand = false)
+        public virtual (Result result, W model) Load(W model, bool usedbcommand = false)
         {
-            table.Status = "Loading...";
+            model.Status = "Loading...";
 
-            var load = table.Domain.Load(usedbcommand);
+            var load = _interactive.Load(model.Domain, usedbcommand);
             if (load.result.Success && load.domain != null)
             {
-                table.Domain = load.domain;
+                model.Domain = load.domain;
 
-                _raiser.Clear(table);
-                Raise(table, 1);
+                _raiser.Raise<T, U, V, W>(model, 1);
 
-                table.Status = string.Empty;
+                model.Status = string.Empty;
 
-                return (load.result, table);
+                return (load.result, model);
             }
 
-            table.Status = load.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = load.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W model) LoadQuery(W table, int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(W model, IQueryModel<T, U, V, W> query, int maxdepth = 1)
         {
-            table.Status = "Loading...";
+            model.Status = "Loading...";
 
-            var loadquery = table.Domain.LoadQuery(maxdepth);
+            var loadquery = _interactive.LoadQuery(query.Domain, model.Domain, maxdepth);
             if (loadquery.result.Success && loadquery.domain != null)
             {
-                table.Domain = loadquery.domain;
+                model.Domain = loadquery.domain;
 
-                _raiser.Clear(table);
-                Raise(table, maxdepth);
+                _raiser.Raise<T, U, V, W>(model, maxdepth);
 
-                table.Status = string.Empty;
+                model.Status = string.Empty;
 
-                return (loadquery.result, table);
+                return (loadquery.result, model);
             }
 
-            table.Status = loadquery.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = loadquery.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (loadquery.result, default(W));
         }
-        public virtual (Result result, W model) Save(W table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        
+        public virtual (Result result, W model) Save(W model, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            table.Status = "Saving...";
+            model.Status = "Saving...";
 
-            var save = table.Domain.Save(useinsertdbcommand, useupdatedbcommand);
+            var save = _interactive.Save(model.Domain, useupdatedbcommand);
             if (save.result.Success)
             {
-                Raise(table);
+                model.Status = string.Empty;
 
-                table.Status = string.Empty;
-
-                return (save.result, table);
+                return (save.result, model);
             }
 
-            table.Status = save.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = save.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (save.result, default(W));
         }
-        public virtual (Result result, W model) Erase(W table, bool usedbcommand = false)
+        public virtual (Result result, W model) Erase(W model, bool usedbcommand = false)
         {
-            table.Status = "Deleting...";
+            model.Status = "Deleting...";
 
-            var erase = table.Domain.Erase(usedbcommand);
+            var erase = _interactive.Erase(model.Domain, usedbcommand);
             if (erase.result.Success)
             {
-                //Raise(table);
+                model.Status = string.Empty;
 
-                table.Status = string.Empty;
-
-                return (erase.result, table);
+                return (erase.result, model);
             }
 
-            table.Status = erase.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = erase.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
 
             return (erase.result, default(W));
         }

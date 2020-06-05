@@ -2,7 +2,6 @@
 using jrivam.Library.Interface.Persistence.Sql.Database;
 using jrivam.Library.Interface.Persistence.Sql.Repository;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 
 namespace jrivam.Library.Impl.Persistence.Sql.Repository
@@ -15,16 +14,6 @@ namespace jrivam.Library.Impl.Persistence.Sql.Repository
             : base()
         {
             _creator = creator;
-        }
-
-        public SqlCommandExecutorBulk(ConnectionStringSettings appconnectionstringsettings)
-            : this(new SqlCreator(appconnectionstringsettings))
-        {
-        }
-
-        public SqlCommandExecutorBulk(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
-        {
         }
 
         public virtual (Result result, int rows) ExecuteNonQuery(SqlCommand sqlcommand)

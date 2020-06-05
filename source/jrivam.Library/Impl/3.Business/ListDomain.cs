@@ -11,7 +11,7 @@ namespace jrivam.Library.Impl.Business
     public class ListDomain<T, U, V> : List<V>, IListDomain<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>
+        where V : class, ITableDomain<T, U, V>
     {
         protected IListData<T, U> _datas;
         public virtual IListData<T, U> Datas

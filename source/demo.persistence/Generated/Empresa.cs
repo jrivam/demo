@@ -1,45 +1,27 @@
-﻿using jrivam.Library.Impl.Persistence;
+﻿using Autofac;
+using jrivam.Library;
+using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Query;
 using jrivam.Library.Impl.Persistence.Sql;
-using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Impl.Persistence.Table;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
 
 namespace demo.Persistence.Table
 {
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable,
-            IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
+        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable = null, 
+            Persistence.Query.Empresa query = null,
             Entities.Table.Empresa entity = null,
             string name = null, string dbname = null)
-            : base(repositorytable,
-                  repositoryquery,
-                  entity,
+            : base(repositorytable ?? AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(),
+                  query ?? new Persistence.Query.Empresa(),
+                  entity ?? new Entities.Table.Empresa(),
                   name, dbname)
-        {
-        }
-
-        public Empresa(ConnectionStringSettings connectionstringsettings,
-            Entities.Table.Empresa entity = null,
-            string name = null, string dbname = null)
-            : this(new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
-                new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
-                  entity,
-                  name: name, dbname: dbname)
-        {
-        }
-        public Empresa(string appsettingsconnectionstringname,
-            Entities.Table.Empresa entity = null,
-            string name = null, string dbname = null)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  entity,
-                  name: name, dbname: dbname)
         {
         }
 
@@ -118,23 +100,10 @@ namespace demo.Persistence.Query
 {
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
+        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery = null,
             string name = null, string dbname = null)
-            : base(repositoryquery,
+            : base(repositoryquery ?? AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>>(),
                   name, dbname)
-        {
-        }
-
-        public Empresa(ConnectionStringSettings connectionstringsettings,
-            string name = null, string dbname = null)
-            : this(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(SqlSyntaxSignFactory.Create(connectionstringsettings)), connectionstringsettings),
-                  name: name, dbname: dbname)
-        {
-        }
-        public Empresa(string appsettingsconnectionstringname,
-            string name = null, string dbname = null)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appsettingsconnectionstringname]],
-                  name: name, dbname: dbname)
         {
         }
 

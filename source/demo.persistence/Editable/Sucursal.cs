@@ -5,14 +5,6 @@ namespace demo.Persistence.Table
 {
     public partial class Sucursal
     {
-        public Sucursal(Entities.Table.Sucursal entity = null,
-            string name = null, string dbname = null)
-            : this("test.connectionstring.name", 
-                  entity,
-                  name, dbname)
-        {
-        }
-
         protected override void Init()
         {
             base.Init();
@@ -29,10 +21,5 @@ namespace demo.Persistence.Query
 {
     public partial class Sucursal
     {
-        public Sucursal(string name = null, string dbname = null)
-            : this("test.connectionstring.name",
-                  name, dbname)
-        {            
-        }
     }
 }

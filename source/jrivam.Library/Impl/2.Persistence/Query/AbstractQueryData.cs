@@ -34,7 +34,19 @@ namespace jrivam.Library.Impl.Persistence.Query
 
         public virtual IList<(IColumnQuery column, OrderDirection flow)> Orders { get; } = new List<(IColumnQuery, OrderDirection)>();
 
-        public void Clear()
+        protected readonly IRepositoryQuery<T, U> _repositoryquery;
+
+        protected AbstractQueryData(IRepositoryQuery<T, U> repositoryquery,
+            string name = null, string dbname = null)
+        {
+            _repositoryquery = repositoryquery;
+
+            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
+
+            Init();
+        }
+
+        public void ClearConditions()
         {
             Columns.ForEach(x => x.Wheres.Clear());
         }
@@ -56,26 +68,15 @@ namespace jrivam.Library.Impl.Persistence.Query
             }
         }
 
-        protected readonly IRepositoryQuery<T, U> _repositoryquery;
-
-        protected AbstractQueryData(IRepositoryQuery<T, U> repositoryquery,
-            string name = null, 
-            string dbname = null)
-        {
-            _repositoryquery = repositoryquery;
-
-            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
-
-            Init();
-        }
-
-        public virtual (Result result, U data) SelectSingle(int maxdepth = 1, U data = default(U))
+        public virtual (Result result, U data) SelectSingle(int maxdepth = 1, 
+            U data = default(U))
         {
             var selectsingle = _repositoryquery.SelectSingle(this, maxdepth, data);
 
             return selectsingle;
         }
-        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, 
+            IListData<T, U> datas = null)
         {
             var select = _repositoryquery.Select(this, maxdepth, top, datas);
 
@@ -95,36 +96,36 @@ namespace jrivam.Library.Impl.Persistence.Query
             return delete;
         }
 
-        public virtual void Clear(U data)
-        {
-            foreach (var column in data.Columns)
-            {
-                data[column.Description.Name].DbValue = null;
-            }
-        }
-        public virtual void Map(U data, int maxdepth = 1, int depth = 0)
-        {
-            foreach (var property in typeof(U).GetPropertiesFromType(isprimitive: true, isforeign: true, attributetypes: new System.Type[] { typeof(DataAttribute) }))
-            {
-                if (property.isprimitive)
-                {
-                    var entityproperty = typeof(T).GetPropertyFromType(property.info.Name);
-                    data[property.info.Name].DbValue = entityproperty.GetValue(data.Entity);
-                }
+        //public virtual void Clear(U data)
+        //{
+        //    foreach (var column in data.Columns)
+        //    {
+        //        data[column.Description.Name].DbValue = null;
+        //    }
+        //}
+        //public virtual void Map(U data, int maxdepth = 1, int depth = 0)
+        //{
+        //    foreach (var property in typeof(U).GetPropertiesFromType(isprimitive: true, isforeign: true, attributetypes: new System.Type[] { typeof(DataAttribute) }))
+        //    {
+        //        if (property.isprimitive)
+        //        {
+        //            var entityproperty = typeof(T).GetPropertyFromType(property.info.Name);
+        //            data[property.info.Name].DbValue = entityproperty.GetValue(data.Entity);
+        //        }
 
-                if (property.isforeign)
-                {
-                    depth++;
-                    if (depth < maxdepth || maxdepth == 0)
-                    {
-                        var foreign = property.info.GetValue(this);
-                        if (foreign != null)
-                        {
-                            foreign.GetType().GetMethod("Map").Invoke(foreign, new object[] { foreign, maxdepth, depth });
-                        }
-                    }
-                }
-            }
-        }
+        //        if (property.isforeign)
+        //        {
+        //            depth++;
+        //            if (depth < maxdepth || maxdepth == 0)
+        //            {
+        //                var foreign = property.info.GetValue(this);
+        //                if (foreign != null)
+        //                {
+        //                    foreign.GetType().GetMethod("Map").Invoke(foreign, new object[] { foreign, maxdepth, depth });
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

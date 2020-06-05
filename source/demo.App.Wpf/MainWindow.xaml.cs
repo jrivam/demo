@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Autofac;
+using System.Windows;
 
 namespace demo.App.Wpf
 {
@@ -10,6 +11,8 @@ namespace demo.App.Wpf
         public MainWindow()
         {
             InitializeComponent();
+
+            DependencyInstaller.RegisterServices(new ContainerBuilder());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -11,20 +11,20 @@ namespace jrivam.Library.Interface.Persistence.Table
         where T : IEntity
         where U : ITableData<T, U>
     {
-        (Result result, U data) Select(U table, bool usedbcommand = false);
-        (Result result, U data) Select(U table, ISqlCommand dbcommand);
-        (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
+        (Result result, U data) Select(U data, bool usedbcommand = false);
+        (Result result, U data) Select(U data, ISqlCommand dbcommand);
+        (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
 
-        (Result result, U data) Insert(U table, bool usedbcommand = false);
-        (Result result, U data) Insert(U table, ISqlCommand dbcommand);
-        (Result result, U data) Insert(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
+        (Result result, U data) Insert(U data, bool usedbcommand = false);
+        (Result result, U data) Insert(U data, ISqlCommand dbcommand);
+        (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
 
-        (Result result, U data) Update(U table, bool usedbcommand = false);
-        (Result result, U data) Update(U table, ISqlCommand dbcommand);
-        (Result result, U data) Update(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
+        (Result result, U data) Update(U data, bool usedbcommand = false);
+        (Result result, U data) Update(U data, ISqlCommand dbcommand);
+        (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
 
-        (Result result, U data) Delete(U table, bool usedbcommand = false);
-        (Result result, U data) Delete(U table, ISqlCommand dbcommand);
-        (Result result, U data) Delete(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
+        (Result result, U data) Delete(U data, bool usedbcommand = false);
+        (Result result, U data) Delete(U data, ISqlCommand dbcommand);
+        (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null);
     }
 }

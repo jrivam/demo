@@ -13,10 +13,6 @@ namespace jrivam.Library.Impl.Persistence.Database
         {
             _connectionstringsettings = connectionstringsettings;
         }
-        public DbObjectCreator(string appconnectionstringname)
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
-        {
-        }
 
         public virtual DbProviderFactory ProviderFactory
         {

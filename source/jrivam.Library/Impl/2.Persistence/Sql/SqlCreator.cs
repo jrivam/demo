@@ -1,9 +1,7 @@
-﻿using jrivam.Library.Impl.Persistence.Database;
-using jrivam.Library.Interface.Persistence.Database;
+﻿using jrivam.Library.Interface.Persistence.Database;
 using jrivam.Library.Interface.Persistence.Sql.Database;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Linq;
 
@@ -17,10 +15,10 @@ namespace jrivam.Library.Impl.Persistence.Sql
         {
             _dbcreator = objectcreator;
         }
-        public SqlCreator(ConnectionStringSettings connectionstringsettings)
-            : this(new DbObjectCreator(connectionstringsettings))
-        {
-        }
+        //public SqlCreator(ConnectionStringSettings connectionstringsettings)
+        //    : this(new DbObjectCreator(connectionstringsettings))
+        //{
+        //}
 
         public virtual IDbDataParameter GetParameter(string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
         {

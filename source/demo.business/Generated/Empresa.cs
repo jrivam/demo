@@ -1,6 +1,7 @@
-﻿using jrivam.Library.Impl.Business;
+﻿using Autofac;
+using jrivam.Library;
+using jrivam.Library.Impl.Business;
 using jrivam.Library.Impl.Business.Attributes;
-using jrivam.Library.Impl.Business.Loader;
 using jrivam.Library.Impl.Business.Query;
 using jrivam.Library.Impl.Business.Table;
 using jrivam.Library.Impl.Persistence.Sql;
@@ -23,21 +24,12 @@ namespace demo.Business.Table
             //Validations.Add(("RazonSocialNotEmpty", new EmptyValidator(Data["RazonSocial"])));
         }
 
-        public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic,
+        public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logictable = null,
+            Business.Query.Empresa query = null,
             Persistence.Table.Empresa data = null)
-            : base(logic,
-                  data)
-        {
-        }
-
-        public Empresa(Persistence.Table.Empresa data)
-            : this(new LogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()),
-                  data)
-        {
-        }
-        public Empresa(Entities.Table.Empresa entity = null)
-            : this(new Persistence.Table.Empresa(entity))
-
+            : base(logictable ?? AutofacConfiguration.Container.Resolve<ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>>(),
+                  query ?? new Business.Query.Empresa(), 
+                  data ?? new Persistence.Table.Empresa())
         {
         }
 
@@ -73,33 +65,6 @@ namespace demo.Business.Table
                }
             }
         }
-
-        //protected override Result SaveChildren()
-        //{
-        //    var savechildren = base.SaveChildren();
-
-        //    if (savechildren.Success)
-        //    {
-        //        var saveall = _sucursales?.SaveAll();
-
-        //        savechildren.Append(saveall);
-        //    }
-
-        //    return savechildren;
-        //}
-        //protected override Result EraseChildren()
-        //{
-        //    var erasechildren = base.EraseChildren();
-
-        //    if (erasechildren.Success)
-        //    {
-        //        var eraseall = Sucursales?.Refresh().domains?.EraseAll();
-
-        //        erasechildren.Append(eraseall);
-        //    }
-
-        //    return erasechildren;
-        //}
     }
 
     public partial class Empresas : ListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
@@ -115,7 +80,7 @@ namespace demo.Business.Table
         }
     }
 
-    public partial class EmpresasQuery : ListDomainQuery<Business.Query.Empresa, Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    public partial class EmpresasQuery : ListDomainQuery<Business.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
         public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, 
             Business.Query.Empresa query = null, 
@@ -139,11 +104,11 @@ namespace demo.Business.Table
 
 namespace demo.Business.Query
 {
-    public partial class Empresa : AbstractQueryDomain<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    public partial class Empresa : AbstractQueryDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresa(ILogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logic = null,
+        public Empresa(ILogicQuery<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logicquery = null,
             Persistence.Query.Empresa data = null)
-            : base(logic ?? new LogicQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>(new Business.Loader.Empresa()),
+            : base(logicquery ?? AutofacConfiguration.Container.Resolve<ILogicQuery<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>>(),
                   data ?? new Persistence.Query.Empresa())
         {
         }
@@ -152,46 +117,35 @@ namespace demo.Business.Query
         {
             set
             {
-                Data.Id = (value.value, value.sign);
+                ((Persistence.Query.Empresa)Data).Id = (value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) Ruc
         {
             set
             {
-                Data.Ruc = (value.value, value.sign);
+                ((Persistence.Query.Empresa)Data).Ruc = (value.value, value.sign);
             }
         }
         public virtual (string value, WhereOperator? sign) RazonSocial
         {
             set
             {
-                Data.RazonSocial = (value.value, value.sign);
+                ((Persistence.Query.Empresa)Data).RazonSocial = (value.value, value.sign);
             }
         }
         public virtual (bool? value, WhereOperator? sign) Activo
         {
             set
             {
-                Data.Activo = (value.value, value.sign);
+                ((Persistence.Query.Empresa)Data).Activo = (value.value, value.sign);
             }
         }
 
         protected Business.Query.Sucursal _sucursal;
         public virtual Business.Query.Sucursal Sucursal(Business.Query.Sucursal query = null)
         {
-            return _sucursal = query ?? _sucursal ?? new Business.Query.Sucursal(data: Data?.Sucursal());
-        }
-    }
-}
-
-namespace demo.Business.Loader
-{
-    public partial class Empresa : BaseLoader<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
-    {
-        public override void Load(Business.Table.Empresa domain, int maxdepth = 1, int depth = 0)
-        {
-            base.Load(domain, maxdepth, depth);
+            return _sucursal = query ?? _sucursal ?? new Business.Query.Sucursal(data: ((Persistence.Query.Empresa)Data)?.Sucursal());
         }
     }
 }

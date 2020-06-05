@@ -1,4 +1,5 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using Autofac;
+using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
@@ -25,7 +26,7 @@ namespace jrivam.Library.Impl.Business.Validator
 
             if (validate.Success)
             {
-                _query.Clear();
+                _query.ClearConditions();
 
                 var primarykeycolumns = _column.Table.Columns?.Where(x => x.IsPrimaryKey);
                 if (primarykeycolumns != null)

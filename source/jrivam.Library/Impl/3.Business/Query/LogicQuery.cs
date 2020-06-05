@@ -4,54 +4,50 @@ using jrivam.Library.Interface.Business.Loader;
 using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace jrivam.Library.Impl.Business.Query
 {
-    public class LogicQuery<S, T, U, V> : LogicLoader<T, U, V>, ILogicQuery<S, T, U, V> 
+    public class LogicQuery<T, U, V> : ILogicQuery<T, U, V> 
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>
-        where S : IQueryData<T, U>
+        where V : class, ITableDomain<T, U, V>
     {
-        public LogicQuery(ILoader<T, U, V> loader)
-            : base(loader)
+        protected readonly ILogic<T, U> _logic;
+
+        protected readonly IDomainLoader _loader;
+
+        public LogicQuery(ILogic<T, U> logic,
+            IDomainLoader loader)
         {
+            _logic = logic;
+
+            _loader = loader;
         }
 
-        public virtual (Result result, V domain) Retrieve(IQueryDomain<S, T, U, V> query, int maxdepth = 1, V domain = default(V))
+        public virtual (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1, V domain = default(V))
         {
-            var selectsingle = query.Data.SelectSingle(maxdepth, domain != null ? domain.Data : default(U));
-            if (selectsingle.result.Success)
-            {
-                if (selectsingle.data != null)
-                {
-                    var instance = Business.HelperTableLogic<T, U, V>.CreateDomain(selectsingle.data);
+            var list = List(query, maxdepth, 1, domain != null ? new ListDomain<T, U, V>() { domain } : null);
 
-                    Load(instance, maxdepth);
-
-                    instance.Changed = false;
-                    instance.Deleted = false;
-
-                    return (selectsingle.result, instance);
-                }
-            }
-
-            return (selectsingle.result, default(V));
+            return (list.result, list.domains.FirstOrDefault());
         }
-        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<S, T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
         {
-            var selectmultiple = query.Data.Select(maxdepth, top, domains?.Datas ?? new ListData<T, U>());
-            if (selectmultiple.result.Success)
+            var select = query.Data.Select(maxdepth, top, domains?.Datas ?? new ListData<T, U>());
+            if (select.result.Success)
             {
                 var enumeration = new List<V>();
 
-                if (selectmultiple.datas != null)
+                if (select.datas != null)
                 {
-                    foreach (var instance in LoadDatas(selectmultiple.datas, maxdepth))
+                    foreach (var data in select.datas)
                     {
+                        var instance = Business.HelperTableLogic<T, U, V>.CreateDomain(data);
+
+                        _loader.Load<T, U, V>(instance, maxdepth, 0);
+
                         instance.Changed = false;
                         instance.Deleted = false;
 
@@ -59,10 +55,10 @@ namespace jrivam.Library.Impl.Business.Query
                     }
                 }
 
-                return (selectmultiple.result, enumeration);
+                return (select.result, enumeration);
             }
 
-            return (selectmultiple.result, default(IList<V>));
+            return (select.result, default(IList<V>));
         }
     }
 }

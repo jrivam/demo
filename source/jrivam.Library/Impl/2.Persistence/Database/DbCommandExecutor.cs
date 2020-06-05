@@ -7,16 +7,16 @@ using System.Data;
 
 namespace jrivam.Library.Impl.Persistence.Database
 {
-    public class DbCommandExecutor<T> : IDbCommandExecutor<T>
+    public class DbCommandExecutor : IDbCommandExecutor
     {
-        protected readonly IReader<T> _reader;
+        protected readonly IEntityReader _reader;
 
-        public DbCommandExecutor(IReader<T> reader)
+        public DbCommandExecutor(IEntityReader reader)
         {
             _reader = reader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
         {
             var result = new Result() { Success = true };
 
@@ -33,7 +33,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                     {
                         var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateEntity();
 
-                        _reader.Read(entity, reader, new List<string>(), maxdepth, 0);
+                        _reader.Read<T>(entity, reader, new List<string>(), maxdepth, 0);
 
                         enumeration.Add(entity);
                     }

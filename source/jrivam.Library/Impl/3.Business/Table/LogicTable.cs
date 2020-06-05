@@ -1,142 +1,97 @@
-﻿using jrivam.Library.Interface.Business.Loader;
+﻿using jrivam.Library.Interface.Business;
+using jrivam.Library.Interface.Business.Loader;
+using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace jrivam.Library.Impl.Business.Table
 {
-    public class LogicTable<T, U, V> : LogicLoader<T, U, V>, ILogicTable<T, U, V> 
+    public class LogicTable<T, U, V> : ILogicTable<T, U, V> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        public LogicTable(ILoader<T, U, V> loader)
-            : base(loader)
+        protected readonly ILogic<T, U> _logic;
+
+        protected readonly IDomainLoader _loader;
+
+        public LogicTable(ILogic<T, U> logic,
+            IDomainLoader loader)
         {
+            _logic = logic;
+
+            _loader = loader;
         }
 
-        public virtual (Result result, V domain) Load(V table, bool usedbcommand = false)
+        public virtual (Result result, V domain) Load(V domain, bool usedbcommand = false)
         {
-            var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-            if (primarykeycolumn != null)
+            var load = _logic.Load(domain.Data, usedbcommand);
+            if (load.result.Success && load.data != null)
             {
-                if (primarykeycolumn.Value != null)
-                {
-                    var select = table.Data.Select(usedbcommand);
-                    if (select.result.Success && select.data != null)
-                    {
-                        table.Data = select.data;
+                domain.Data = load.data;
 
-                        _loader.Clear(table);
-                        Load(table, 1);
+                _loader.Load<T, U, V>(domain, 1);
 
-                        table.Changed = false;
-                        table.Deleted = false;
+                domain.Changed = false;
+                domain.Deleted = false;
 
-                        return (select.result, table);
-                    }
-
-                    return (select.result, default(V));
-                }
-
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Load), $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
+                return (load.result, domain);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Load), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+            return (load.result, default(V));
         }
-        public virtual (Result result, V domain) LoadQuery(V table, int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(V domain, IQueryDomain<T, U, V> query, int maxdepth = 1)
         {
-            var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-            if (primarykeycolumn != null)
+            var loadquery = _logic.LoadQuery(query.Data, domain.Data, maxdepth);
+            if (loadquery.result.Success && loadquery.data != null)
             {
-                if (primarykeycolumn.Value != null)
-                {
-                    var selectquery = table.Data.SelectQuery(maxdepth);
-                    if (selectquery.result.Success && selectquery.data != null)
-                    {
-                        table.Data = selectquery.data;
+                domain.Data = loadquery.data;
 
-                        _loader.Clear(table);
-                        Load(table, maxdepth);
+                _loader.Load<T, U, V>(domain, maxdepth);
 
-                        table.Changed = false;
-                        table.Deleted = false;
+                domain.Changed = false;
+                domain.Deleted = false;
 
-                        return (selectquery.result, table);
-                    }
-
-                    return (selectquery.result, default(V));
-                }
-
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(LoadQuery), $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
+                return (loadquery.result, domain);
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(LoadQuery), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+            return (loadquery.result, default(V));
         }
 
-        public virtual (Result result, V domain) Save(V table, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            if (table.Changed)
+            if (domain.Changed)
             {
-                var validate = table.Validate();
+                var validate = domain.Validate();
 
                 if (validate.Success)
                 {
-                    var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-                    if (primarykeycolumn != null)
-                    {
-                        if (primarykeycolumn.DbValue != null)
-                        {
-                            var update = table.Data.Update(useupdatedbcommand);
+                    var save = _logic.Save(domain.Data, useupdatedbcommand);
 
-                            table.Changed = !update.result.Success;
+                    domain.Changed = !save.result.Success;
 
-                            return (update.result, table);
-                        }
-                        else
-                        {
-                            var insert = table.Data.Insert(useinsertdbcommand);
-
-                            table.Changed = !insert.result.Success;
-
-                            return (insert.result, table);
-                        }
-                    }
-
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Save), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
-
+                    return (save.result, domain);
                 }
 
                 return (validate, default(V));
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Save), $"No changes to persist in {table.Data.Description.DbName} with Id {table.Data.Entity.Id}") } }, default(V));
+            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Save), $"No changes to persist in {domain.Data.Description.DbName} with Id {domain.Data.Entity.Id}") } }, default(V));
         }
-        public virtual (Result result, V domain) Erase(V table, bool usedbcommand = false)
+        public virtual (Result result, V domain) Erase(V domain, bool usedbcommand = false)
         {
-            if (!table.Deleted)
+            if (!domain.Deleted)
             {
-                var primarykeycolumn = table.Data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-                if (primarykeycolumn != null)
-                {
-                    if (primarykeycolumn?.Value != null)
-                    {
-                        var delete = table.Data.Delete(usedbcommand);
+                var erase = _logic.Erase(domain.Data, usedbcommand);
 
-                         table.Deleted = delete.result.Success;
+                domain.Deleted = erase.result.Success;
 
-                        return (delete.result, table);
-                    }
-
-                    return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Erase), $"Id in {table.Data.Description.DbName} cannot be null") } }, default(V));
-                }
-
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Erase), $"Primary Key column in {table.Data.Description.DbName} not defined") } }, default(V));
+                return (erase.result, domain);
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Erase), $"{table.Data.Description.DbName} with Id {table.Data.Entity.Id} already deleted") } }, default(V));
+            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Erase), $"{domain.Data.Description.DbName} with Id {domain.Data.Entity.Id} already deleted") } }, default(V));
         }
     }
 }

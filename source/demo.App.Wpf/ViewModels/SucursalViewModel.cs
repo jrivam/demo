@@ -1,5 +1,4 @@
-﻿
-using jrivam.Library.Impl.Persistence.Sql;
+﻿using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Impl.Presentation;
 
 namespace demo.App.Wpf.ViewModels

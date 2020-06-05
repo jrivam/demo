@@ -30,6 +30,19 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
         }
 
+        protected IQueryData<T, U> _query;
+        public virtual IQueryData<T, U> Query
+        { 
+            get
+            {
+                return _query;
+            }
+            set 
+            {
+                _query = value;
+            }
+        }
+
         public virtual Description Description { get; protected set; }
 
         public virtual IColumnTable this[string name]
@@ -46,6 +59,28 @@ namespace jrivam.Library.Impl.Persistence.Table
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? InsertDbCommand { get; set; }
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? UpdateDbCommand { get; set; }
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? DeleteDbCommand { get; set; }
+
+        protected readonly IRepositoryTable<T, U> _repositorytable;
+
+        protected AbstractTableData(IRepositoryTable<T, U> repositorytable,
+            IQueryData<T, U> query,
+            T entity = default(T),
+            string name = null, 
+            string dbname = null)
+        {
+            _repositorytable = repositorytable;
+
+            Query = query;
+
+            if (entity == null)
+                Entity = HelperEntities<T>.CreateEntity();
+            else
+                Entity = entity;
+
+            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
+
+            Init();
+        }
 
         protected virtual void Init()
         {
@@ -70,57 +105,23 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
         }
 
-        protected readonly IRepositoryTable<T, U> _repositorytable;
-        protected readonly IRepositoryQuery<T, U> _repositoryquery;
-
-        protected AbstractTableData(
-            IRepositoryTable<T, U> repositorytable,
-            IRepositoryQuery<T, U> repositoryquery, 
-            T entity = default(T),
-            string name = null, 
-            string dbname = null)
-        {
-            _repositorytable = repositorytable;
-            _repositoryquery = repositoryquery;
-
-            if (entity == null)
-                Entity = HelperEntities<T>.CreateEntity();
-            else
-                Entity = entity;
-
-            Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
-
-            Init();
-        }
-
         public virtual (Result result, U data) SelectQuery(int maxdepth = 1)
         {
-            var query = (IQueryData<T, U>)Activator.CreateInstance(typeof(IQueryData<T, U>),
-                                new object[] {  });
-            //var query = (IQueryData<T, U>)Activator.CreateInstance(typeof(IQueryData<T, U>),
-            //        BindingFlags.CreateInstance |
-            //        BindingFlags.Public |
-            //        BindingFlags.Instance |
-            //        BindingFlags.OptionalParamBinding,
-            //        null, new object[] { _repositoryquery, null, null },
-            //        CultureInfo.CurrentCulture);
-
-            query.Clear();
+            _query.ClearConditions();
 
             var primarykeycolumns = Columns?.Where(x => x.IsPrimaryKey);
             if (primarykeycolumns != null)
             {
                 foreach (var primarykeycolumn in primarykeycolumns)
                 {
-                    query.Columns[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
+                    _query[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
                 }
             }
 
-            var selectsingle = query.SelectSingle(maxdepth);
+            var selectsingle = _query.SelectSingle(maxdepth);
 
             return selectsingle;
         }          
-
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
             var select = _repositorytable.Select(this as U, usedbcommand);
@@ -145,38 +146,6 @@ namespace jrivam.Library.Impl.Persistence.Table
             var delete = _repositorytable.Delete(this as U, usedbcommand);
 
             return delete;
-        }
-
-        public virtual void Clear(U data)
-        {
-            foreach (var column in data.Columns)
-            {
-                data[column.Description.Name].DbValue = null;
-            }
-        }
-        public virtual void Map(U data, int maxdepth = 1, int depth = 0)
-        {
-            foreach (var property in typeof(U).GetPropertiesFromType(isprimitive: true, isforeign: true, attributetypes: new System.Type[] { typeof(DataAttribute) }))
-            {
-                if (property.isprimitive)
-                {
-                    var entityproperty = typeof(T).GetPropertyFromType(property.info.Name);
-                    data[property.info.Name].DbValue = entityproperty.GetValue(this.Entity);
-                }
-
-                if (property.isforeign)
-                {
-                    depth++;
-                    if (depth < maxdepth || maxdepth == 0)
-                    {
-                        var foreign = property.info.GetValue(this);
-                        if (foreign != null)
-                        {
-                            foreign.GetType().GetMethod(nameof(Map)).Invoke(foreign, new object[] { foreign, maxdepth, depth });
-                        }
-                    }
-                }
-            }
         }
     }
 }

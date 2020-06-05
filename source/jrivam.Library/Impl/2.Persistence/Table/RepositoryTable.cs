@@ -1,15 +1,10 @@
 ﻿using jrivam.Library.Impl.Persistence.Sql;
-using jrivam.Library.Impl.Persistence.Sql.Builder;
-using jrivam.Library.Impl.Persistence.Sql.Factory;
-using jrivam.Library.Impl.Persistence.Sql.Repository;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Entities.Reader;
+using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
-using jrivam.Library.Interface.Persistence.Sql.Database;
 using jrivam.Library.Interface.Persistence.Sql.Providers;
-using jrivam.Library.Interface.Persistence.Sql.Repository;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
@@ -20,53 +15,27 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Table
 {
-    public class RepositoryTable<T, U> : Repository<T>, IRepositoryTable<T, U> 
+    public class RepositoryTable<T, U> : IRepositoryTable<T, U> 
         where T : IEntity
-        where U : ITableData<T, U>
+        where U : class, ITableData<T, U>
     {
+        protected readonly IRepository _repository;
+
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderTable _sqlbuilder;
 
-        public RepositoryTable(ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk,
-            ISqlCommandBuilder sqlcommandbuilder,
-            ISqlBuilderTable sqlbuilder)
-            : base(sqlcommandexecutor, sqlcommandexecutorbulk)
+        protected readonly IDataMapper _mapper;
+
+        public RepositoryTable(IRepository repository,
+            ISqlCommandBuilder sqlcommandbuilder, ISqlBuilderTable sqlbuilder,
+            IDataMapper mapper)
         {
+            _repository = repository;
+
             _sqlcommandbuilder = sqlcommandbuilder;
             _sqlbuilder = sqlbuilder;
-        }
 
-        public RepositoryTable(ISqlSyntaxSign sqlsyntaxsign,
-            ISqlCommandBuilder sqlcommandbuilder,
-            ISqlCommandExecutor<T> sqlcommandexecutor, ISqlCommandExecutorBulk sqlcommandexecutorbulk)
-            : this(sqlcommandexecutor, sqlcommandexecutorbulk,
-                  sqlcommandbuilder,
-                  new SqlBuilderTable(sqlsyntaxsign))
-        {
-        }
-        public RepositoryTable(IReader<T> reader,       
-            ISqlSyntaxSign sqlsyntaxsign,             
-            ISqlCommandBuilder sqlcommandbuilder,
-            ISqlCreator sqlcreator)
-            : this(sqlsyntaxsign, 
-                  sqlcommandbuilder,
-                  new SqlCommandExecutor<T>(sqlcreator, reader), new SqlCommandExecutorBulk(sqlcreator))
-        {
-        }
-        public RepositoryTable(IReader<T> reader,
-            ConnectionStringSettings connectionstringsettings)
-            : this(reader,                
-                  SqlSyntaxSignFactory.Create(connectionstringsettings),
-                  SqlCommandBuilderFactory.Create(connectionstringsettings),
-                  new SqlCreator(connectionstringsettings))
-        {
-        }
-
-        public RepositoryTable(IReader<T> reader,
-            string appconnectionstringname)
-            : this(reader,
-                  ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[appconnectionstringname]])
-        {
+            _mapper = mapper;
         }
 
         protected virtual bool UseDbCommand(bool classusedbcommand, bool propertyusedbcommand, bool methodusedbcommand)
@@ -76,13 +45,13 @@ namespace jrivam.Library.Impl.Persistence.Table
             return (methodusedbcommand || propertyusedbcommand || classusedbcommand || configusedbcommand);
         } 
 
-        public virtual (Result result, U data) Select(U table, bool usedbcommand = false)
+        public virtual (Result result, U data) Select(U data, bool usedbcommand = false)
         {
-            if (UseDbCommand(table?.UseDbCommand ?? false, table?.SelectDbCommand?.usedbcommand ?? false, usedbcommand))
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.SelectDbCommand?.usedbcommand ?? false, usedbcommand))
             {
-                if (table.SelectDbCommand != null)
+                if (data.SelectDbCommand != null)
                 {
-                    return Select(table, table.SelectDbCommand.Value.dbcommand);
+                    return Select(data, data.SelectDbCommand.Value.dbcommand);
                 }
 
                 return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Select), "No SelectDbCommand defined.") } }, default(U));
@@ -90,41 +59,40 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var selectcommandtext = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(table.Columns),
-                $"{table.Description.DbName}",
-                _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
+            var selectcommandtext = _sqlcommandbuilder.Select(_sqlbuilder.GetSelectColumns(data.Columns),
+                $"{data.Description.DbName}",
+                _sqlbuilder.GetWhere(data.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
 
-            return Select(table, selectcommandtext, CommandType.Text, parameters);
+            return Select(data, selectcommandtext, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Select(U table, ISqlCommand dbcommand)
+        public virtual (Result result, U data) Select(U data, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(data.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Select(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
+            return Select(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
-        public virtual (Result result, U data) Select(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
+        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var select = Select(commandtext, commandtype, parameters, 1, new Collection<T> { table.Entity });
+            var select = _repository.Select(commandtext, commandtype, parameters, 1, new Collection<T> { data.Entity });
             if (select.result.Success && select.entities?.Count() > 0)
             {
-                table.Entity = select.entities.FirstOrDefault();
+                data.Entity = select.entities.FirstOrDefault();
 
-                table.Clear(table);
-                table.Map(table, 1);
+                _mapper.Map<T, U>(data, 1);
 
-                return (select.result, table);
+                return (select.result, data);
             }
 
             return (select.result, default(U));
         }
 
-        public virtual (Result result, U data) Insert(U table, bool usedbcommand = false)
+        public virtual (Result result, U data) Insert(U data, bool usedbcommand = false)
         {
-            if (UseDbCommand(table?.UseDbCommand ?? false, table?.InsertDbCommand?.usedbcommand ?? false, usedbcommand))
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.InsertDbCommand?.usedbcommand ?? false, usedbcommand))
             {
-                if (table.InsertDbCommand != null)
+                if (data.InsertDbCommand != null)
                 {
-                    return Insert(table, table.InsertDbCommand.Value.dbcommand);
+                    return Insert(data, data.InsertDbCommand.Value.dbcommand);
                 }
 
                 return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Insert), "No InsertDbCommand defined.") } }, default(U));
@@ -134,46 +102,46 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             var output = string.Empty;
 
-            foreach (var c in table.Columns.Where(c => c.IsIdentity).ToList())
+            foreach (var c in data.Columns.Where(c => c.IsIdentity).ToList())
             {
                 output += $"{(string.IsNullOrWhiteSpace(output) ? " " : ", ")}";
             }
 
-            var insertcommandtext = _sqlcommandbuilder.Insert($"{table.Description.DbName}",
-                _sqlbuilder.GetInsertColumns(table.Columns.Where(c => !c.IsIdentity).ToList()),
-                _sqlbuilder.GetInsertValues(table.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
+            var insertcommandtext = _sqlcommandbuilder.Insert($"{data.Description.DbName}",
+                _sqlbuilder.GetInsertColumns(data.Columns.Where(c => !c.IsIdentity).ToList()),
+                _sqlbuilder.GetInsertValues(data.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
                 output);
 
-            return Insert(table, insertcommandtext, CommandType.Text, parameters);
+            return Insert(data, insertcommandtext, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Insert(U table, ISqlCommand dbcommand)
+        public virtual (Result result, U data) Insert(U data, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => !c.IsIdentity).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(data.Columns.Where(c => !c.IsIdentity).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Insert(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
+            return Insert(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
-        public virtual (Result result, U data) Insert(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
+        public virtual (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var insert = Insert(commandtext, commandtype, parameters);
+            var insert = _repository.Insert(commandtext, commandtype, parameters);
             if (insert.result.Success && insert.scalar != null)
             {
-                table.Entity.Id = Convert.ToInt32(insert.scalar);
+                data.Entity.Id = Convert.ToInt32(insert.scalar);
 
-                table.Map(table, 1);
+                _mapper.Map<T, U>(data, 1);
 
-                return (insert.result, table);
+                return (insert.result, data);
             }
 
             return (insert.result, default(U));
         }
 
-        public virtual (Result result, U data) Update(U table, bool usedbcommand = false)
+        public virtual (Result result, U data) Update(U data, bool usedbcommand = false)
         {
-            if (UseDbCommand(table?.UseDbCommand ?? false, table?.UpdateDbCommand?.usedbcommand ?? false, usedbcommand))
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.UpdateDbCommand?.usedbcommand ?? false, usedbcommand))
             {
-                if (table.UpdateDbCommand != null)
+                if (data.UpdateDbCommand != null)
                 {
-                    return Update(table, table.UpdateDbCommand.Value.dbcommand);
+                    return Update(data, data.UpdateDbCommand.Value.dbcommand);
                 }
 
                 return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Update), "No UpdateDbCommand defined.") } }, default(U));
@@ -181,39 +149,39 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var updatecommandtext = _sqlcommandbuilder.Update($"{table.Description.DbName}",
-                $"{table.Description.DbName}",
-                _sqlbuilder.GetUpdateSet(table.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
-                _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
+            var updatecommandtext = _sqlcommandbuilder.Update($"{data.Description.DbName}",
+                $"{data.Description.DbName}",
+                _sqlbuilder.GetUpdateSet(data.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
+                _sqlbuilder.GetWhere(data.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Update(table, updatecommandtext, CommandType.Text, parameters);
+            return Update(data, updatecommandtext, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Update(U table, ISqlCommand dbcommand)
+        public virtual (Result result, U data) Update(U data, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(data.Columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Update(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
+            return Update(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
-        public virtual (Result result, U data) Update(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
+        public virtual (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var update = Update(commandtext, commandtype, parameters);
+            var update = _repository.Update(commandtext, commandtype, parameters);
             if (update.result.Success && update.rows > 0)
             {
-                table.Map(table, 1);
+                _mapper.Map<T, U>(data, 1);
 
-                return (update.result, table);
+                return (update.result, data);
             }
 
             return (update.result, default(U));
         }
 
-        public virtual (Result result, U data) Delete(U table, bool usedbcommand = false)
+        public virtual (Result result, U data) Delete(U data, bool usedbcommand = false)
         {
-            if (UseDbCommand(table?.UseDbCommand ?? false, table?.DeleteDbCommand?.usedbcommand ?? false, usedbcommand))
+            if (UseDbCommand(data?.UseDbCommand ?? false, data?.DeleteDbCommand?.usedbcommand ?? false, usedbcommand))
             {
-                if (table.DeleteDbCommand != null)
+                if (data.DeleteDbCommand != null)
                 {
-                    return Delete(table, table.DeleteDbCommand.Value.dbcommand);
+                    return Delete(data, data.DeleteDbCommand.Value.dbcommand);
                 }
 
                 return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Delete), "No DeleteDbCommand defined.") } }, default(U));
@@ -221,24 +189,24 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var deletecommandtext = _sqlcommandbuilder.Delete($"{table.Description.DbName}",
-                $"{table.Description.DbName}",
-                _sqlbuilder.GetWhere(table.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
+            var deletecommandtext = _sqlcommandbuilder.Delete($"{data.Description.DbName}",
+                $"{data.Description.DbName}",
+                _sqlbuilder.GetWhere(data.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Delete(table, deletecommandtext, CommandType.Text, parameters);
+            return Delete(data, deletecommandtext, CommandType.Text, parameters);
         }
-        public virtual (Result result, U data) Delete(U table, ISqlCommand dbcommand)
+        public virtual (Result result, U data) Delete(U data, ISqlCommand dbcommand)
         {
-            foreach (var p in _sqlbuilder.GetParameters(table.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
+            foreach (var p in _sqlbuilder.GetParameters(data.Columns.Where(c => c.IsPrimaryKey).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), dbcommand.Parameters)) ;
 
-            return Delete(table, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
+            return Delete(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters);
         }
-        public virtual (Result result, U data) Delete(U table, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
+        public virtual (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var delete = Delete(commandtext, commandtype, parameters);
+            var delete = _repository.Delete(commandtext, commandtype, parameters);
             if (delete.result.Success && delete.rows > 0)
             {
-                return (delete.result, table);
+                return (delete.result, data);
             }
 
             return (delete.result, default(U));

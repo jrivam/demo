@@ -77,7 +77,7 @@ namespace demo.Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new Business.Table.Sucursal(entity).Save();
+                        var save = new Business.Table.Sucursal(data: new Persistence.Table.Sucursal(entity: entity)).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();

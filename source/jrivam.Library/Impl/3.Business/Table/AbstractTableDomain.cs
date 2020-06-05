@@ -3,6 +3,7 @@ using jrivam.Library.Impl.Business.Attributes;
 using jrivam.Library.Impl.Entities;
 using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Interface.Business;
+using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
@@ -29,21 +30,33 @@ namespace jrivam.Library.Impl.Business.Table
             }
         }
 
+        protected IQueryDomain<T, U, V> _query;
+        public virtual IQueryDomain<T, U, V> Query
+        {
+            get
+            {
+                return _query;
+            }
+            set
+            {
+                _query = value;
+            }
+        }
+
         public virtual bool Changed { get; set; }
         public virtual bool Deleted { get; set; }
 
         public IList<(string name, IColumnValidator validator)> Validations { get; set; } = new List<(string, IColumnValidator)>();
 
-        protected virtual void Init()
-        {
-        }
+        protected readonly ILogicTable<T, U, V> _logictable;
 
-        protected readonly ILogicTable<T, U, V> _logic;
-
-        public AbstractTableDomain(ILogicTable<T, U, V> logic,
+        public AbstractTableDomain(ILogicTable<T, U, V> logictable,
+            IQueryDomain<T, U, V> query, 
             U data = default(U))
         {
-            _logic = logic;
+            _logictable = logictable;
+
+            Query = query;
 
             if (data == null)
                 Data = HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity());
@@ -51,6 +64,10 @@ namespace jrivam.Library.Impl.Business.Table
                 Data = data;
 
             Init();
+        }
+
+        protected virtual void Init()
+        {
         }
 
         public virtual Result Validate()
@@ -71,19 +88,21 @@ namespace jrivam.Library.Impl.Business.Table
 
         public virtual (Result result, V domain) Load(bool usedbcommand = false)
         {
-            var load = _logic.Load(this as V, usedbcommand);
+            var load = _logictable.Load(this as V, usedbcommand);
 
             return load;
         }
-        public virtual (Result result, V domain) LoadQuery(int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(IQueryDomain<T, U, V> query, 
+            int maxdepth = 1)
         {
-            var load = _logic.LoadQuery(this as V, maxdepth);
+            var load = _logictable.LoadQuery(this as V, query, maxdepth);
 
             return load;
         }
+
         public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = _logic.Save(this as V, useinsertdbcommand, useupdatedbcommand);
+            var save = _logictable.Save(this as V, useinsertdbcommand, useupdatedbcommand);
 
             if (save.result.Success)
             {
@@ -98,7 +117,7 @@ namespace jrivam.Library.Impl.Business.Table
 
             if (erasechildren.result.Success)
             {
-                var erase = _logic.Erase(this as V, usedbcommand);
+                var erase = _logictable.Erase(this as V, usedbcommand);
 
                 erasechildren.result.Append(erase.result);
 
@@ -143,5 +162,13 @@ namespace jrivam.Library.Impl.Business.Table
 
             return erasechildren;
         }
+
+        //public virtual void Clear(V domain)
+        //{
+        //}
+
+        //public virtual void Load(V domain, int maxdepth = 1, int depth = 0)
+        //{
+        //}
     }
 }

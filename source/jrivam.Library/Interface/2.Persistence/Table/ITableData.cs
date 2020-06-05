@@ -1,11 +1,13 @@
 ﻿using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Mapper;
+using jrivam.Library.Interface.Persistence.Query;
 
 namespace jrivam.Library.Interface.Persistence.Table
 {
-    public interface ITableData<T, U> : IBuilderTableData, IEntityTable<T>, ITableDataMethods<T, U>, IMapper<T, U>
+    public interface ITableData<T, U> : IBuilderTableData, ITableDataMethods<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {
+        T Entity { get; set; }
+        IQueryData<T, U> Query { get; set; }
     }
 }

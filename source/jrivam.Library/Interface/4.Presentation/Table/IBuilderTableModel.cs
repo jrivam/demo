@@ -1,6 +1,6 @@
 ﻿namespace jrivam.Library.Interface.Presentation.Table
 {
-    public interface IBuilderTableModel : ITableModelElements, ITableModelCommands
+    public interface IBuilderTableModel : ITableModelCommands
     {
     }
 }

@@ -4,50 +4,38 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
-using System;
 using System.Collections.Generic;
 
 namespace jrivam.Library.Impl.Business.Query
 {
-    public abstract class AbstractQueryDomain<S, T, U, V> : IQueryDomain<S, T, U, V>
+    public abstract class AbstractQueryDomain<T, U, V> : IQueryDomain<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
-        where S : IQueryData<T, U>
     {
-        public virtual S Data { get; protected set; }
+        public IQueryData<T, U> Data { get; set; }
 
-        public virtual IColumnQuery this[string name]
+        protected readonly ILogicQuery<T, U, V> _logicquery;
+
+        public AbstractQueryDomain(ILogicQuery<T, U, V> logicquery, 
+            IQueryData<T, U> data)
         {
-            get
-            {
-                return Data[name];
-            }
+            _logicquery = logicquery;
+
+            Data = data;
         }
 
-        protected readonly ILogicQuery<S, T, U, V> _logic;
-
-        public AbstractQueryDomain(ILogicQuery<S, T, U, V> logic,
-            S data = default(S))
+        public virtual (Result result, V domain) Retrieve(int maxdepth = 1, 
+            V domain = default(V))
         {
-            _logic = logic;
-
-            if (data == null)
-                Data = (S)Activator.CreateInstance(typeof(S),
-                    null, new object[] { });
-            else
-                Data = data;
-        }
-
-        public virtual (Result result, V domain) Retrieve(int maxdepth = 1, V domain = default(V))
-        {
-            var retrieve = _logic.Retrieve(this, maxdepth, domain);
+            var retrieve = _logicquery.Retrieve(this, maxdepth, domain);
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, 
+            IListDomain<T, U, V> domains = null)
         {
-            var list = _logic.List(this, maxdepth, top, domains);
+            var list = _logicquery.List(this, maxdepth, top, domains);
 
             return list;
         }

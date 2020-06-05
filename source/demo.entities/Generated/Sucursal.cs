@@ -1,11 +1,7 @@
-﻿using jrivam.Library.Impl.Entities.Reader;
-using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Sql.Builder;
+﻿using jrivam.Library.Interface.Entities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
 
 namespace demo.Entities.Table
 {
@@ -32,29 +28,5 @@ namespace demo.Entities.Table
         [ForeignKey(nameof(Empresa))]
         public virtual int? IdEmpresa { get; set; }
         public virtual Entities.Table.Empresa Empresa { get; set; }
-    }
-}
-
-namespace demo.Entities.Reader
-{
-    public partial class Sucursal : BaseReader<Entities.Table.Sucursal>
-    {
-        public Sucursal(ISqlSyntaxSign sqlsyntaxsign)
-            : base(sqlsyntaxsign)
-        {
-        }
-
-        public override Entities.Table.Sucursal Read(Entities.Table.Sucursal entity, IDataReader reader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
-        {
-            entity = base.Read(entity, reader, prefixname, maxdepth, depth);
-
-            depth++;
-            if (depth < maxdepth || maxdepth == 0)
-            {
-                entity.Empresa = new Entities.Reader.Empresa(_sqlsyntaxsign).Read(new Entities.Table.Empresa(), reader, new List<string>(prefixname), maxdepth, depth);
-            }
-
-            return entity;
-        }
     }
 }

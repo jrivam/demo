@@ -4,8 +4,8 @@ using System.Data;
 
 namespace jrivam.Library.Interface.Persistence.Database
 {
-    public interface IDbCommandExecutor<T>
+    public interface IDbCommandExecutor
     {
-        (Result result, IEnumerable<T> entities) ExecuteQuery(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null);
+        (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null);
     }
 }

@@ -5,14 +5,6 @@ namespace demo.Persistence.Table
 {
     public partial class Empresa
     {
-        public Empresa(Entities.Table.Empresa entity = null,
-            string name = null, string dbname = null)
-            : this("test.connectionstring.name", 
-                  entity,
-                  name, dbname)
-        {
-        }
-
         protected override void Init()
         {
             base.Init();
@@ -29,10 +21,5 @@ namespace demo.Persistence.Query
 {
     public partial class Empresa
     {
-        public Empresa(string name = null, string dbname = null)
-            : this("test.connectionstring.name",
-                  name, dbname)
-        {
-        }
     }
 }

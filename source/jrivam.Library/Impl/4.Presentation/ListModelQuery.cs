@@ -1,8 +1,6 @@
 ﻿using jrivam.Library.Interface.Business;
-using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Query;
@@ -11,22 +9,20 @@ using System.Windows.Input;
 
 namespace jrivam.Library.Impl.Presentation
 {
-    public class ListModelQuery<Q, R, S, T, U, V, W> : ListModel<T, U, V, W>, IListModelQuery<Q, R, S, T, U, V, W>, IListModelRefresh<T, U, V, W>
+    public class ListModelQuery<S, T, U, V, W> : ListModel<T, U, V, W>, IListModelQuery<S, T, U, V, W>, IListModelRefresh<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
-        where S : IQueryData<T, U>
-        where R : IQueryDomain<S, T, U, V>
-        where Q : IQueryModel<R, S, T, U, V, W>
+        where S : IQueryModel<T, U, V, W>
     {
-        public Q Query { get; set; }
+        public S Query { get; set; }
         protected int _maxdepth = 1;
 
         public virtual ICommand RefreshCommand { get; protected set; }
 
         public ListModelQuery(IListDomain<T, U, V> domains,
-            Q query,
+            S query,
             int maxdepth = 1, int top = 0,
             string name = null)
             : base(domains, name)

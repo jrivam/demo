@@ -1,11 +1,10 @@
-﻿using jrivam.Library.Extension;
-using jrivam.Library.Impl.Business;
+﻿using jrivam.Library.Impl.Business;
 using jrivam.Library.Impl.Entities;
 using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
-using jrivam.Library.Interface.Presentation;
+using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,26 +33,20 @@ namespace jrivam.Library.Impl.Presentation.Table
             }
         }
 
-        public virtual string Name { get; protected set; }
-
-        public virtual IElement this[string name]
+        protected IQueryModel<T, U, V, W> _query;
+        public virtual IQueryModel<T, U, V, W> Query
         {
             get
             {
-                return Elements[name];
+                return _query;
             }
-        }
-        public virtual ListElements<IElement> Elements { get; set; } = new ListElements<IElement>();
-
-        protected virtual void Init()
-        {
-            Elements.Clear();
-
-            foreach (var property in typeof(T).GetPropertiesFromType(isprimitive: true, iscollection: true, isforeign: true))
+            set
             {
-                Elements.Add(new Element(property.info.Name));
+                _query = value;
             }
         }
+
+        public virtual string Name { get; protected set; }
 
         public override void OnPropertyChanged(string propertyName)
         {
@@ -95,15 +88,19 @@ namespace jrivam.Library.Impl.Presentation.Table
 
         public virtual ICommand EditCommand { get; protected set; }
 
-        protected readonly IInteractiveTable<T, U, V, W> _interactive;
         protected readonly int _maxdepth;
 
-        public AbstractTableModel(IInteractiveTable<T, U, V, W> interactive,
+        protected readonly IInteractiveTable<T, U, V, W> _interactivetable;
+
+        public AbstractTableModel(IInteractiveTable<T, U, V, W> interactivetable,
+            IQueryModel<T, U, V, W> query, 
             V domain = default(V), 
             int maxdepth = 1,
             string name = null)
         {
-            _interactive = interactive;
+            _interactivetable = interactivetable;
+            
+            Query = query;
 
             if (domain == null)
                 Domain = HelperTableLogic<T, U, V>.CreateDomain(HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity()));
@@ -116,7 +113,7 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Name}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(Query, _maxdepth)), $"{Name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
@@ -135,28 +132,33 @@ namespace jrivam.Library.Impl.Presentation.Table
             Init();
         }
 
+        protected virtual void Init()
+        {
+        }
+
         public virtual (Result result, W model) Load(bool usedbcommand = false)
         {
-            var load = _interactive.Load(this as W, usedbcommand);
+            var load = _interactivetable.Load(this as W, usedbcommand);
 
             return load;
         }
-        public virtual (Result result, W model) LoadQuery(int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(IQueryModel<T, U, V, W> query,
+            int maxdepth = 1)
         {
-            var loadquery = _interactive.LoadQuery(this as W, maxdepth);
+            var loadquery = _interactivetable.LoadQuery(this as W, query, maxdepth);
 
             return loadquery;
         }
 
         public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            var save = _interactive.Save(this as W, useinsertdbcommand, useupdatedbcommand);
+            var save = _interactivetable.Save(this as W, useinsertdbcommand, useupdatedbcommand);
 
             return save;
         }
         public virtual (Result result, W model) Erase(bool usedbcommand = false)
         {
-            var erase = _interactive.Erase(this as W, usedbcommand);
+            var erase = _interactivetable.Erase(this as W, usedbcommand);
 
             return erase;
         }
