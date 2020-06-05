@@ -10,7 +10,7 @@ namespace demo.Web.Api.Controllers
     public class SucursalController : ApiController
     {
         [HttpGet]
-        [Route("search")]
+        [Route(nameof(Search))]
         public IHttpActionResult Search(string nombre = null, bool? activo = null, string fecha = null)
         {
             try

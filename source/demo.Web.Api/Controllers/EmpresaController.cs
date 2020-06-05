@@ -10,7 +10,7 @@ namespace demo.Web.Api.Controllers
     public class EmpresaController : ApiController
     {
         [HttpGet]
-        [Route("search")]
+        [Route(nameof(Search))]
         public IHttpActionResult Search(string razonsocial = null, bool? activo = null)
         {
             try
