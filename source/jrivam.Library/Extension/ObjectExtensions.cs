@@ -34,7 +34,7 @@ namespace jrivam.Library.Extension
         public static T GetAttributeFromType<T>(this Type t)
             where T : Attribute
         {
-            return (T)ReflectionCache.FindPropertyInfoAttributes(t).FirstOrDefault();
+            return (T)ReflectionCache.FindTypeAttributes<T>(t).FirstOrDefault();
         }
         public static object[] GetAttributesFromProperty(this Type t, string propertyName)
         {
@@ -107,14 +107,15 @@ namespace jrivam.Library.Extension
         }
 
         private static ConcurrentDictionary<Type, object[]> TypeCustomAttributeCache = new ConcurrentDictionary<Type, object[]>();
-        public static object[] FindPropertyInfoAttributes(Type propertyinfo)
+        public static object[] FindTypeAttributes<T>(Type type)
+            where T : Attribute
         {
-            if (TypeCustomAttributeCache.ContainsKey(propertyinfo))
-                return TypeCustomAttributeCache[propertyinfo];
+            if (TypeCustomAttributeCache.ContainsKey(type))
+                return TypeCustomAttributeCache[type];
 
-            var result = propertyinfo?.GetCustomAttributes(propertyinfo, false);
+            var result = type?.GetCustomAttributes<T>().ToArray();
 
-            TypeCustomAttributeCache.TryAdd(propertyinfo, result);
+            TypeCustomAttributeCache.TryAdd(type, result);
 
             return result;
         }

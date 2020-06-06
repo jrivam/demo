@@ -4,6 +4,7 @@ GO
 -----------------------------
 
 CREATE TABLE [dbo].[empresa](
+	[ruc] [varchar](50) NOT NULL,
 	[razon_social] [varchar](100) NULL,
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[activo] [bit] NULL,
@@ -23,9 +24,10 @@ GO
 
 
 CREATE TABLE [dbo].[sucursal](
+	[codigo] [varchar](50) NOT NULL,
 	[nombre] [varchar](100) NULL,
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[id_empresa] [int] NULL,
+	[id_empresa] [int] NOT NULL,
 	[fecha] [datetime] NULL,
 	[activo] [bit] NULL,
  CONSTRAINT [PK_sucursal_1] PRIMARY KEY CLUSTERED 

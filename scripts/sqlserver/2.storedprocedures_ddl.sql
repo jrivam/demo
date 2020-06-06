@@ -11,6 +11,7 @@ GO
 
 
 CREATE PROCEDURE [dbo].[gsp_empresa_insert] 
+		@EmpresaRuc varchar(50), 
 		@EmpresaRazonSocial varchar(100), 
 		@EmpresaActivo bit
 AS
@@ -18,9 +19,11 @@ BEGIN
 
 	insert into empresa 
 	(
+		ruc,
 		razon_social,
 			activo
 		)values(
+		@EmpresaRuc,
 		@EmpresaRazonSocial,
 			@EmpresaActivo
 	);
@@ -41,6 +44,7 @@ BEGIN
 	
 	select
 	empresa.id as [Empresa.Id],
+	empresa.ruc as [Empresa.Ruc],
 	empresa.razon_social as [Empresa.RazonSocial],
 	empresa.activo as [Empresa.Activo]
 	from empresa
@@ -54,12 +58,14 @@ GO
 
 CREATE PROCEDURE [dbo].[gsp_empresa_update] 
 		@EmpresaId int,
+		@EmpresaRuc varchar(50), 
 		@EmpresaRazonSocial varchar(100), 
 		@EmpresaActivo bit
 AS
 BEGIN
 
 		update empresa set
+		ruc = @EmpresaRuc,
 		razon_social = @EmpresaRazonSocial,
 			activo = @EmpresaActivo
 		where id = @EmpresaId ;		
@@ -86,6 +92,7 @@ GO
 
 
 CREATE PROCEDURE [dbo].[gsp_sucursal_insert] 
+		@SucursalCodigo varchar(50), 
 		@SucursalNombre varchar(100), 
 		@SucursalActivo bit, 
 		@SucursalFecha datetime, 
@@ -95,11 +102,13 @@ BEGIN
 	
 	insert into sucursal 
 	(
+		codigo,
 		nombre,
 			activo,
 			fecha,
 			id_empresa
 		)values(
+		@SucursalCodigo,
 		@SucursalNombre,
 			@SucursalActivo,
 			@SucursalFecha,
@@ -122,6 +131,7 @@ BEGIN
 	
 	select
 	sucursal.id as [Sucursal.Id],
+	sucursal.codigo as [Sucursal.Codigo],
 	sucursal.nombre as [Sucursal.Nombre],
 	sucursal.id_empresa as [Sucursal.IdEmpresa],
 	sucursal.fecha as [Sucursal.Fecha],
@@ -137,6 +147,7 @@ GO
 
 CREATE PROCEDURE [dbo].[gsp_sucursal_update] 
 		@SucursalId int,
+		@SucursalCodigo varchar(50), 
 		@SucursalNombre varchar(100), 
 		@SucursalActivo bit, 
 		@SucursalFecha datetime, 
@@ -145,6 +156,7 @@ AS
 BEGIN
 
 		update sucursal set
+		codigo = @SucursalCodigo,
 		nombre = @SucursalNombre,
 			activo = @SucursalActivo,
 			fecha = @SucursalFecha,

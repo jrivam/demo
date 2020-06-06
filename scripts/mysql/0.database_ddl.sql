@@ -1,2 +1,2 @@
-CREATE SCHEMA 'test';
+CREATE SCHEMA test;
 
