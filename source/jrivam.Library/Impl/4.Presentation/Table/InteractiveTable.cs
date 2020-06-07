@@ -74,6 +74,8 @@ namespace jrivam.Library.Impl.Presentation.Table
             var save = _interactive.Save(model.Domain, useupdatedbcommand);
             if (save.result.Success)
             {
+                _raiser.Raise<T, U, V, W>(model);
+
                 model.Status = string.Empty;
 
                 return (save.result, model);
