@@ -4,23 +4,45 @@ using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Query;
 using jrivam.Library.Impl.Persistence.Sql;
+using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Impl.Persistence.Table;
+using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Query;
+using jrivam.Library.Interface.Persistence.Sql.Builder;
+using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 
 namespace demo.Persistence.Table
 {
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable = null, 
+        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable, 
             Persistence.Query.Empresa query = null,
             Entities.Table.Empresa entity = null,
             string name = null, string dbname = null)
-            : base(repositorytable ?? AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(new NamedParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings)),
+            : base(repositorytable,
                   query ?? new Persistence.Query.Empresa(),
                   entity ?? new Entities.Table.Empresa(),
+                  name, dbname)
+        {
+        }
+
+        public Empresa(ConnectionStringSettings connectionstringsettings,
+            Persistence.Query.Empresa query = null,
+            Entities.Table.Empresa entity = null,
+            string name = null, string dbname = null)
+            : this(AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(
+                        new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
+                                new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
+                        new TypedParameter(typeof(ISqlBuilderTable), AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),
+                        new TypedParameter(typeof(ISqlCommandBuilder), SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName)
+                        )
+                    ),
+                  query,
+                  entity,
                   name, dbname)
         {
         }
@@ -100,9 +122,21 @@ namespace demo.Persistence.Query
 {
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery = null,
+        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
             string name = null, string dbname = null)
-            : base(repositoryquery ?? AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>>(new NamedParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings)),
+            : base(repositoryquery,
+                  name, dbname)
+        {
+        }
+
+        public Empresa(ConnectionStringSettings connectionstringsettings,
+            string name = null, string dbname = null)
+            : base(AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>>(
+                        new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
+                                new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
+                        new TypedParameter(typeof(ISqlBuilderQuery), AutofacConfiguration.Container.Resolve<ISqlBuilderQuery>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),
+                        new TypedParameter(typeof(ISqlCommandBuilder), SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName))
+                    ),
                   name, dbname)
         {
         }

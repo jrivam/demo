@@ -8,7 +8,7 @@ namespace demo.Persistence
     {
         public static IContainer RegisterServices(ContainerBuilder builder)
         {
-            AutofacConfiguration.ConnectionStringSettings = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["test.connectionstring.name"]];
+            AutofacConfiguration.ConnectionStringSettings.Add("test.connectionstring.name", ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["test.connectionstring.name"]]);
 
             return demo.Entities.DependencyInstaller.RegisterServices(builder);
         }

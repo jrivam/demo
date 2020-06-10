@@ -1,12 +1,10 @@
 ﻿using Autofac;
 using jrivam.Library.Impl.Persistence.Sql;
-using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Database;
+using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
-using jrivam.Library.Interface.Persistence.Sql.Database;
 using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
@@ -18,26 +16,33 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Table
 {
-    public class RepositoryTable<T, U> : Repository, IRepositoryTable<T, U> 
+    public class RepositoryTable<T, U> : IRepositoryTable<T, U> 
         where T : IEntity
         where U : class, ITableData<T, U>
     {
+        protected readonly IRepository _repository;
+
         protected readonly ISqlBuilderTable _sqlbuilder;
         protected readonly ISqlCommandBuilder _sqlcommandbuilder;
 
         protected readonly IDataMapper _mapper;
 
-        public RepositoryTable(ConnectionStringSettings connectionstringsettings,
-            ISqlCreator creator,
-            IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk,
+        public RepositoryTable(IRepository repository,
+            //ConnectionStringSettings connectionstringsettings,
+            //ISqlCreator creator,
+            //IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk,
+            ISqlBuilderTable sqlbuilder, ISqlCommandBuilder sqlcommandbuilder,
             IDataMapper mapper)
-            : base(connectionstringsettings,
-                  creator,
-                  dbcommandexecutor, dbcommandexecutorbulk)
+            //: base(connectionstringsettings,
+            //      creator,
+            //      dbcommandexecutor, dbcommandexecutorbulk)
         {
-            _sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new NamedParameter("sqlsyntaxsign", SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)));
-            _sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName);
-            
+            _repository = repository;
+            //_sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)));
+            //_sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName);
+            _sqlbuilder = sqlbuilder;
+            _sqlcommandbuilder = sqlcommandbuilder;
+
             _mapper = mapper;
         }
 
@@ -76,7 +81,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executequery = ExecuteQuery(commandtext, commandtype, parameters, 1, new Collection<T> { data.Entity });
+            var executequery = _repository.ExecuteQuery(commandtext, commandtype, parameters, 1, new Collection<T> { data.Entity });
             if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
                 data.Entity = executequery.entities.FirstOrDefault();
@@ -125,7 +130,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executescalar = ExecuteScalar(commandtext, commandtype, parameters);
+            var executescalar = _repository.ExecuteScalar(commandtext, commandtype, parameters);
             if (executescalar.result.Success && executescalar.scalar != null)
             {
                 data.Entity.Id = Convert.ToInt32(executescalar.scalar);
@@ -167,7 +172,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = ExecuteNonQuery(commandtext, commandtype, parameters);
+            var executenonquery = _repository.ExecuteNonQuery(commandtext, commandtype, parameters);
             if (executenonquery.result.Success && executenonquery.rows > 0)
             {
                 _mapper.Map<T, U>(data, 1);
@@ -206,7 +211,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = ExecuteNonQuery(commandtext, commandtype, parameters);
+            var executenonquery = _repository.ExecuteNonQuery(commandtext, commandtype, parameters);
             if (executenonquery.result.Success && executenonquery.rows > 0)
             {
                 return (executenonquery.result, data);

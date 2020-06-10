@@ -1,10 +1,20 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using jrivam.Library;
+using jrivam.Library.Impl.Persistence.Sql;
 using System.Data;
 
 namespace demo.Persistence.Table
 {
     public partial class Sucursal
     {
+        public Sucursal(string connectionstringsettingsname = "test.connectionstring.name",
+            Persistence.Query.Sucursal query = null, Entities.Table.Sucursal entity = null,
+            string name = null, string dbname = null)
+            : this(AutofacConfiguration.ConnectionStringSettings[connectionstringsettingsname],
+                  query, entity,
+                  name, dbname)
+        {
+        }
+
         protected override void Init()
         {
             base.Init();
@@ -21,5 +31,11 @@ namespace demo.Persistence.Query
 {
     public partial class Sucursal
     {
+        public Sucursal(string connectionstringsettingsname = "test.connectionstring.name",
+            string name = null, string dbname = null)
+            : this(AutofacConfiguration.ConnectionStringSettings[connectionstringsettingsname],
+                  name, dbname)
+        {
+        }
     }
 }

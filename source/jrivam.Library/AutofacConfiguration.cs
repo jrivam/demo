@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace jrivam.Library
@@ -7,7 +8,7 @@ namespace jrivam.Library
     {
         public static IContainer Container;
 
-        public static ConnectionStringSettings ConnectionStringSettings;
+        public static Dictionary<string, ConnectionStringSettings> ConnectionStringSettings = new Dictionary<string, ConnectionStringSettings>();
 
         public static IContainer BuildContainer(ContainerBuilder builder)
         {

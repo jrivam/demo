@@ -4,6 +4,7 @@ using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Interface.Entities.Reader;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Database;
+using jrivam.Library.Interface.Persistence.Sql.Builder;
 using jrivam.Library.Interface.Persistence.Sql.Database;
 using System.Collections.Generic;
 using System.Configuration;
@@ -41,7 +42,7 @@ namespace jrivam.Library.Impl.Persistence
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
             var executequery = _dbcommandexecutor.ExecuteQuery(_creator.GetCommand(_connectionstringsettings.ProviderName, _connectionstringsettings.ConnectionString, commandtext, commandtype, parameters),
-                AutofacConfiguration.Container.Resolve<IEntityReader>(new NamedParameter("sqlsyntaxsign", SqlSyntaxSignFactory.Create(_connectionstringsettings.ProviderName))),
+                AutofacConfiguration.Container.Resolve<IEntityReader>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(_connectionstringsettings.ProviderName))),
                 maxdepth, entities);
 
             if ((executequery.entities?.Count() ?? 0) == 0)
