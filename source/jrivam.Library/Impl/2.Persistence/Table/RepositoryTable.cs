@@ -1,9 +1,12 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using Autofac;
+using jrivam.Library.Impl.Persistence.Sql;
+using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence;
+using jrivam.Library.Interface.Persistence.Database;
 using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
+using jrivam.Library.Interface.Persistence.Sql.Database;
 using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
@@ -15,26 +18,26 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Table
 {
-    public class RepositoryTable<T, U> : IRepositoryTable<T, U> 
+    public class RepositoryTable<T, U> : Repository, IRepositoryTable<T, U> 
         where T : IEntity
         where U : class, ITableData<T, U>
     {
-        protected readonly IRepository _repository;
-
-        protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderTable _sqlbuilder;
+        protected readonly ISqlCommandBuilder _sqlcommandbuilder;
 
         protected readonly IDataMapper _mapper;
 
-        public RepositoryTable(IRepository repository,
-            ISqlCommandBuilder sqlcommandbuilder, ISqlBuilderTable sqlbuilder,
+        public RepositoryTable(ConnectionStringSettings connectionstringsettings,
+            ISqlCreator creator,
+            IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk,
             IDataMapper mapper)
+            : base(connectionstringsettings,
+                  creator,
+                  dbcommandexecutor, dbcommandexecutorbulk)
         {
-            _repository = repository;
-
-            _sqlcommandbuilder = sqlcommandbuilder;
-            _sqlbuilder = sqlbuilder;
-
+            _sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new NamedParameter("sqlsyntaxsign", SqlSyntaxSignFactory.Create(connectionstringsettings)));
+            _sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings);
+            
             _mapper = mapper;
         }
 
@@ -73,17 +76,17 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var select = _repository.Select(commandtext, commandtype, parameters, 1, new Collection<T> { data.Entity });
-            if (select.result.Success && select.entities?.Count() > 0)
+            var executequery = ExecuteQuery(commandtext, commandtype, parameters, 1, new Collection<T> { data.Entity });
+            if (executequery.result.Success && executequery.entities?.Count() > 0)
             {
-                data.Entity = select.entities.FirstOrDefault();
+                data.Entity = executequery.entities.FirstOrDefault();
 
                 _mapper.Map<T, U>(data, 1);
 
-                return (select.result, data);
+                return (executequery.result, data);
             }
 
-            return (select.result, default(U));
+            return (executequery.result, default(U));
         }
 
         public virtual (Result result, U data) Insert(U data, bool usedbcommand = false)
@@ -122,17 +125,17 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var insert = _repository.Insert(commandtext, commandtype, parameters);
-            if (insert.result.Success && insert.scalar != null)
+            var executescalar = ExecuteScalar(commandtext, commandtype, parameters);
+            if (executescalar.result.Success && executescalar.scalar != null)
             {
-                data.Entity.Id = Convert.ToInt32(insert.scalar);
+                data.Entity.Id = Convert.ToInt32(executescalar.scalar);
 
                 _mapper.Map<T, U>(data, 1);
 
-                return (insert.result, data);
+                return (executescalar.result, data);
             }
 
-            return (insert.result, default(U));
+            return (executescalar.result, default(U));
         }
 
         public virtual (Result result, U data) Update(U data, bool usedbcommand = false)
@@ -164,15 +167,15 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var update = _repository.Update(commandtext, commandtype, parameters);
-            if (update.result.Success && update.rows > 0)
+            var executenonquery = ExecuteNonQuery(commandtext, commandtype, parameters);
+            if (executenonquery.result.Success && executenonquery.rows > 0)
             {
                 _mapper.Map<T, U>(data, 1);
 
-                return (update.result, data);
+                return (executenonquery.result, data);
             }
 
-            return (update.result, default(U));
+            return (executenonquery.result, default(U));
         }
 
         public virtual (Result result, U data) Delete(U data, bool usedbcommand = false)
@@ -203,13 +206,13 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, IList<SqlParameter> parameters = null)
         {
-            var delete = _repository.Delete(commandtext, commandtype, parameters);
-            if (delete.result.Success && delete.rows > 0)
+            var executenonquery = ExecuteNonQuery(commandtext, commandtype, parameters);
+            if (executenonquery.result.Success && executenonquery.rows > 0)
             {
-                return (delete.result, data);
+                return (executenonquery.result, data);
             }
 
-            return (delete.result, default(U));
+            return (executenonquery.result, default(U));
         }
     }
 }

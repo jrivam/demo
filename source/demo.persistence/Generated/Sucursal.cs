@@ -19,7 +19,7 @@ namespace demo.Persistence.Table
             Persistence.Query.Sucursal query = null, 
             Entities.Table.Sucursal entity = null,
             string name = null, string dbname = null)
-            : base(repositorytable ?? AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>>(),
+            : base(repositorytable ?? AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>>(new NamedParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings)),
                   query ?? new Persistence.Query.Sucursal(),
                   entity ?? new Entities.Table.Sucursal(),
                   name, dbname)
@@ -145,7 +145,7 @@ namespace demo.Persistence.Query
 
         public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositoryquery = null,
             string name = null, string dbname = null)
-            : base(repositoryquery ?? AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>>(),
+            : base(repositoryquery ?? AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>>(new NamedParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings)),
                   name, dbname)
         {
         }

@@ -1,5 +1,4 @@
 ﻿using jrivam.Library.Interface.Persistence.Database;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
 
@@ -7,49 +6,29 @@ namespace jrivam.Library.Impl.Persistence.Database
 {
     public class DbObjectCreator : IDbObjectCreator
     {
-        protected readonly ConnectionStringSettings _connectionstringsettings;
-
-        public DbObjectCreator(ConnectionStringSettings connectionstringsettings)
+        public virtual DbProviderFactory GetProviderFactory(string providername)
         {
-            _connectionstringsettings = connectionstringsettings;
+            return DbProviderFactories.GetFactory(providername);
         }
 
-        public virtual DbProviderFactory ProviderFactory
+        public virtual IDbConnection GetConnection(string providername, string connectionstring = "")
         {
-            get
-            {
-                return DbProviderFactories.GetFactory(_connectionstringsettings.ProviderName);
-            }
+            var connection = GetProviderFactory(providername).CreateConnection();
+            connection.ConnectionString = connectionstring;
+
+            return connection;
         }
-        public virtual IDbConnection Connection
+        public virtual IDbCommand GetCommand(string providername)
         {
-            get
-            {
-                var connection = ProviderFactory.CreateConnection();
-                connection.ConnectionString = _connectionstringsettings.ConnectionString;
-                return connection;
-            }
+            return GetProviderFactory(providername).CreateCommand();
         }
-        public virtual IDbCommand Command
+        public virtual DbParameter GetParameter(string providername)
         {
-            get
-            {
-                return ProviderFactory.CreateCommand();
-            }
+            return GetProviderFactory(providername).CreateParameter();
         }
-        public virtual DbParameter Parameter
+        public virtual DbDataAdapter GetAdapter(string providername)
         {
-            get
-            {
-                return ProviderFactory.CreateParameter();
-            }
-        }
-        public virtual DbDataAdapter Adapter
-        {
-            get
-            {
-                return ProviderFactory.CreateDataAdapter();
-            }
+            return GetProviderFactory(providername).CreateDataAdapter();
         }
     }
 }

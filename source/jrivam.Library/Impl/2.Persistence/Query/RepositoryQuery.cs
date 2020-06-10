@@ -1,37 +1,42 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using Autofac;
+using jrivam.Library.Impl.Persistence.Sql;
+using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
+using jrivam.Library.Interface.Persistence.Database;
 using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
+using jrivam.Library.Interface.Persistence.Sql.Database;
 using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Query
 {
-    public class RepositoryQuery<T, U> : IRepositoryQuery<T, U> 
+    public class RepositoryQuery<T, U> : Repository, IRepositoryQuery<T, U> 
         where T : IEntity
         where U : class, ITableData<T, U>
     {
-        protected readonly IRepository _repository;
-
-        protected readonly ISqlCommandBuilder _sqlcommandbuilder;
         protected readonly ISqlBuilderQuery _sqlbuilder;
+        protected readonly ISqlCommandBuilder _sqlcommandbuilder;
 
         protected readonly IDataMapper _mapper;
 
-        public RepositoryQuery(IRepository repository,
-            ISqlCommandBuilder sqlcommandbuilder, ISqlBuilderQuery sqlbuilder,
+        public RepositoryQuery(ConnectionStringSettings connectionstringsettings,
+            ISqlCreator creator,
+            IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk,
             IDataMapper mapper)
+             : base(connectionstringsettings,
+                  creator,
+                  dbcommandexecutor, dbcommandexecutorbulk)
         {
-            _repository = repository;
-
-            _sqlcommandbuilder = sqlcommandbuilder;
-            _sqlbuilder = sqlbuilder;
+            _sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderQuery>(new NamedParameter("syntaxsign", SqlSyntaxSignFactory.Create(connectionstringsettings)));
+            _sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings);
 
             _mapper = mapper;
         }
@@ -65,14 +70,14 @@ namespace jrivam.Library.Impl.Persistence.Query
             int maxdepth = 1, 
             IListData<T, U> datas = null)
         {
-            var select = _repository.Select(commandtext, commandtype, parameters, maxdepth, datas?.Entities ?? new Collection<T>());
-            if (select.result.Success)
+            var executequery = ExecuteQuery(commandtext, commandtype, parameters, maxdepth, datas?.Entities ?? new Collection<T>());
+            if (executequery.result.Success)
             {
                 var enumeration = new List<U>();
 
-                if (select.entities?.Count() > 0)
+                if (executequery.entities?.Count() > 0)
                 {
-                    foreach (var entity in select.entities)
+                    foreach (var entity in executequery.entities)
                     {
                         var instance = HelperTableRepository<T, U>.CreateData(entity);
 
@@ -81,10 +86,10 @@ namespace jrivam.Library.Impl.Persistence.Query
                         enumeration.Add(instance);
                     }
                 }
-                return (select.result, enumeration);
+                return (executequery.result, enumeration);
             }
 
-            return (select.result, default(IList<U>));
+            return (executequery.result, default(IList<U>));
         }
 
         public virtual (Result result, int rows) Update(IQueryData<T, U> query,
@@ -101,7 +106,7 @@ namespace jrivam.Library.Impl.Persistence.Query
                 _sqlbuilder.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
-            return _repository.Update(updatecommandtext, CommandType.Text, parameters);
+            return ExecuteNonQuery(updatecommandtext, CommandType.Text, parameters);
         }
         public virtual (Result result, int rows) Delete(IQueryData<T, U> query,
             int maxdepth = 1)
@@ -115,7 +120,7 @@ namespace jrivam.Library.Impl.Persistence.Query
                 _sqlbuilder.GetFrom(queryjoins, query.Description.DbName),
                 _sqlbuilder.GetWhere(querycolumns, parameters));
 
-            return _repository.Delete(deletecommandtext, CommandType.Text, parameters);
+            return ExecuteNonQuery(deletecommandtext, CommandType.Text, parameters);
         }
     }
 }

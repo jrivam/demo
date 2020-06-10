@@ -96,7 +96,6 @@
     <Compile Include="Impl\2.Persistence\Mapper\DataMapper.cs" />
     <Compile Include="Impl\2.Persistence\Parameter.cs" />
     <Compile Include="Impl\2.Persistence\Repository.cs" />
-    <Compile Include="Impl\2.Persistence\Sql\Repository\SqlCommandExecutorBulk.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlCommand.cs" />
     <Compile Include="Impl\3.Business\Attributes\DomainAttribute.cs" />
     <Compile Include="Impl\3.Business\ListDomainQuery.cs" />
@@ -145,7 +144,6 @@
     <Compile Include="Impl\2.Persistence\Sql\Providers\SqlServer\SqlServerSyntaxSign.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Providers\MySql\MySqlSyntaxSign.cs" />
     <Compile Include="Impl\2.Persistence\Database\DbObjectCreator.cs" />
-    <Compile Include="Impl\2.Persistence\Sql\Repository\SqlCommandExecutor.cs" />
     <Compile Include="Impl\2.Persistence\Table\ColumnTable.cs" />
     <Compile Include="Impl\2.Persistence\Sql\OrderDirection.cs" />
     <Compile Include="Impl\2.Persistence\Sql\WhereOperator.cs" />
@@ -172,7 +170,6 @@
     <Compile Include="Interface\2.Persistence\IRepository.cs" />
     <Compile Include="Interface\2.Persistence\Sql\ISqlCommand.cs" />
     <Compile Include="Interface\2.Persistence\Sql\ISqlParameter.cs" />
-    <Compile Include="Interface\2.Persistence\Sql\Repository\ISqlCommandExecutorBulk.cs" />
     <Compile Include="Interface\2.Persistence\IListColumns.cs" />
     <Compile Include="Interface\2.Persistence\IDescription.cs" />
     <Compile Include="Interface\2.Persistence\Query\IBuilderQueryData.cs" />
@@ -231,7 +228,6 @@
     <Compile Include="Interface\4.Presentation\Query\IQueryModelMethods.cs" />
     <Compile Include="Interface\4.Presentation\Query\IQueryModel.cs" />
     <Compile Include="Interface\3.Business\Query\IDataQuery.cs" />
-    <Compile Include="Interface\2.Persistence\Sql\Repository\ISqlCommandExecutor.cs" />
     <Compile Include="Interface\2.Persistence\Table\IColumnTable.cs" />
     <Compile Include="Interface\2.Persistence\Sql\Builder\ISqlSyntaxSign.cs" />
     <Compile Include="Interface\2.Persistence\Sql\Builder\ISqlBuilderTable.cs" />

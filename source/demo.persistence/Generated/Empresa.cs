@@ -18,7 +18,7 @@ namespace demo.Persistence.Table
             Persistence.Query.Empresa query = null,
             Entities.Table.Empresa entity = null,
             string name = null, string dbname = null)
-            : base(repositorytable ?? AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(),
+            : base(repositorytable ?? AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(new NamedParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings)),
                   query ?? new Persistence.Query.Empresa(),
                   entity ?? new Entities.Table.Empresa(),
                   name, dbname)
@@ -102,7 +102,7 @@ namespace demo.Persistence.Query
     {
         public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery = null,
             string name = null, string dbname = null)
-            : base(repositoryquery ?? AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>>(),
+            : base(repositoryquery ?? AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>>(new NamedParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings)),
                   name, dbname)
         {
         }

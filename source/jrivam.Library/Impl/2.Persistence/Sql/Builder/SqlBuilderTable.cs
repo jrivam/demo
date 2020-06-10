@@ -8,8 +8,8 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
 {
     public class SqlBuilderTable : AbstractSqlBuilder, ISqlBuilderTable
     {
-        public SqlBuilderTable(ISqlSyntaxSign syntaxsign)
-            : base(syntaxsign)
+        public SqlBuilderTable(ISqlSyntaxSign sqlsyntaxsign)
+            : base(sqlsyntaxsign)
         {
         }
 

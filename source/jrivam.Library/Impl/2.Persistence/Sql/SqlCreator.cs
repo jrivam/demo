@@ -15,14 +15,11 @@ namespace jrivam.Library.Impl.Persistence.Sql
         {
             _dbcreator = objectcreator;
         }
-        //public SqlCreator(ConnectionStringSettings connectionstringsettings)
-        //    : this(new DbObjectCreator(connectionstringsettings))
-        //{
-        //}
 
-        public virtual IDbDataParameter GetParameter(string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
+        public virtual IDbDataParameter GetParameter(string providername, 
+            string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
         {
-            var parameter = _dbcreator?.Parameter;
+            var parameter = _dbcreator?.GetParameter(providername);
 
             parameter.ParameterName = name;
             parameter.DbType = Persistence.Helper.TypeToDbType[type];
@@ -31,19 +28,20 @@ namespace jrivam.Library.Impl.Persistence.Sql
 
             return parameter;
         }
-        public virtual IDbCommand GetCommand(string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+        public virtual IDbCommand GetCommand(string providername, string connectionstring = "",
+            string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
-            var command = _dbcreator?.Command;
+            var command = _dbcreator?.GetCommand(providername);
 
             command.CommandText = commandtext;
             command.CommandType = commandtype;
 
             parameters?.ToList()?.ForEach(p => 
             {
-                command.Parameters.Add(GetParameter(p.Name, p.Type, p.Value, p.Direction));
+                command.Parameters.Add(GetParameter(providername, p.Name, p.Type, p.Value, p.Direction));
             });
 
-            command.Connection = _dbcreator?.Connection;
+            command.Connection = _dbcreator?.GetConnection(providername, connectionstring);
 
             return command;
         }

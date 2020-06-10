@@ -9,14 +9,11 @@ namespace jrivam.Library.Impl.Persistence.Database
 {
     public class DbCommandExecutor : IDbCommandExecutor
     {
-        protected readonly IEntityReader _reader;
-
-        public DbCommandExecutor(IEntityReader reader)
+        public DbCommandExecutor()
         {
-            _reader = reader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, IEntityReader entityreader, int maxdepth = 1, ICollection<T> entities = null)
         {
             var result = new Result() { Success = true };
 
@@ -27,18 +24,18 @@ namespace jrivam.Library.Impl.Persistence.Database
 
                 command.Connection.Open();
 
-                using (var reader = command.ExecuteReader())
+                using (var datareader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    while (datareader.Read())
                     {
                         var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateEntity();
 
-                        _reader.Read<T>(entity, reader, new List<string>(), maxdepth, 0);
+                        entityreader.Read<T>(entity, datareader, new List<string>(), maxdepth, 0);
 
                         enumeration.Add(entity);
                     }
 
-                    reader.Close();
+                    datareader.Close();
                 }
 
                 command.Connection.Close();

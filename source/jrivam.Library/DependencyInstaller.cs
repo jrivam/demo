@@ -11,8 +11,6 @@ using jrivam.Library.Impl.Persistence.Mapper;
 using jrivam.Library.Impl.Persistence.Query;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Impl.Persistence.Sql.Builder;
-using jrivam.Library.Impl.Persistence.Sql.Factory;
-using jrivam.Library.Impl.Persistence.Sql.Repository;
 using jrivam.Library.Impl.Persistence.Table;
 using jrivam.Library.Impl.Presentation;
 using jrivam.Library.Impl.Presentation.Query;
@@ -29,8 +27,6 @@ using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
 using jrivam.Library.Interface.Persistence.Sql.Database;
-using jrivam.Library.Interface.Persistence.Sql.Providers;
-using jrivam.Library.Interface.Persistence.Sql.Repository;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Query;
@@ -62,13 +58,6 @@ namespace jrivam.Library
             builder.RegisterType<DbCommandExecutorBulk>()
                    .As<IDbCommandExecutorBulk>()
                    .InstancePerLifetimeScope();
-            builder.RegisterType<SqlCommandExecutor>()
-                   .As<ISqlCommandExecutor>()
-                   .InstancePerLifetimeScope();
-            builder.RegisterType<SqlCommandExecutorBulk>()
-                   .As<ISqlCommandExecutorBulk>()
-                   .InstancePerLifetimeScope();
-
             builder.RegisterType<DbObjectCreator>()
                    .As<IDbObjectCreator>()
                    .InstancePerLifetimeScope();
@@ -76,13 +65,6 @@ namespace jrivam.Library
             builder.RegisterType<SqlCreator>()
                    .As<ISqlCreator>()
                    .InstancePerLifetimeScope();
-
-            builder.RegisterType<DbObjectCreator>()
-                   .As<IDbObjectCreator>()
-                   .WithParameter("connectionstringsettings", AutofacConfiguration.ConnectionStringSettings);
-
-            builder.Register(c => SqlSyntaxSignFactory.Create(AutofacConfiguration.ConnectionStringSettings)).As<ISqlSyntaxSign>();
-            builder.Register(c => SqlCommandBuilderFactory.Create(AutofacConfiguration.ConnectionStringSettings)).As<ISqlCommandBuilder>();
 
             builder.RegisterType<SqlBuilderQuery>()
                    .As<ISqlBuilderQuery>()
