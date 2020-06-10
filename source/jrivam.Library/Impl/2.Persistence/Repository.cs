@@ -41,7 +41,7 @@ namespace jrivam.Library.Impl.Persistence
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
             var executequery = _dbcommandexecutor.ExecuteQuery(_creator.GetCommand(_connectionstringsettings.ProviderName, _connectionstringsettings.ConnectionString, commandtext, commandtype, parameters),
-                AutofacConfiguration.Container.Resolve<IEntityReader>(new NamedParameter("sqlsyntaxsign", SqlSyntaxSignFactory.Create(_connectionstringsettings))),
+                AutofacConfiguration.Container.Resolve<IEntityReader>(new NamedParameter("sqlsyntaxsign", SqlSyntaxSignFactory.Create(_connectionstringsettings.ProviderName))),
                 maxdepth, entities);
 
             if ((executequery.entities?.Count() ?? 0) == 0)

@@ -35,8 +35,8 @@ namespace jrivam.Library.Impl.Persistence.Query
                   creator,
                   dbcommandexecutor, dbcommandexecutorbulk)
         {
-            _sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderQuery>(new NamedParameter("syntaxsign", SqlSyntaxSignFactory.Create(connectionstringsettings)));
-            _sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings);
+            _sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderQuery>(new NamedParameter("sqlsyntaxsign", SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)));
+            _sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName);
 
             _mapper = mapper;
         }

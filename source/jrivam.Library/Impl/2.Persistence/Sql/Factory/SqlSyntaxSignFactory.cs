@@ -3,15 +3,14 @@ using jrivam.Library.Impl.Persistence.Sql.Providers.PostgreSql;
 using jrivam.Library.Impl.Persistence.Sql.Providers.SqlServer;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
 using System;
-using System.Configuration;
 
 namespace jrivam.Library.Impl.Persistence.Sql.Factory
 {
     public static class SqlSyntaxSignFactory
     {
-        public static ISqlSyntaxSign Create(ConnectionStringSettings connectionstringsettings) 
+        public static ISqlSyntaxSign Create(string providername) 
         {
-            switch (connectionstringsettings?.ProviderName)
+            switch (providername)
             {
                 case "System.Data.SqlClient":
                     return new SqlServerSyntaxSign();
