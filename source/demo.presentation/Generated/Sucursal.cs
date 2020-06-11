@@ -18,12 +18,10 @@ namespace demo.Presentation.Table
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
         public Sucursal(IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivetable = null, 
-            Presentation.Query.Sucursal query = null, 
             Business.Table.Sucursal domain = null,
             int maxdepth = 1,
             string name = null)
             : base(interactivetable ?? AutofacConfiguration.Container.Resolve<IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>>(),
-                  query ?? new Presentation.Query.Sucursal(),
                   domain ?? new Business.Table.Sucursal(),
                   maxdepth,
                   name)

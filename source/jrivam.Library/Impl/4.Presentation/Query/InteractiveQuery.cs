@@ -1,5 +1,4 @@
 ﻿using jrivam.Library.Impl.Business;
-using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
@@ -20,17 +19,12 @@ namespace jrivam.Library.Impl.Presentation.Query
     {
         protected readonly IInteractive<T, U, V> _interactive;
 
-        protected readonly ILogicQuery<T, U, V> _logicquery;
-
         protected readonly IModelRaiser _raiser;
 
         public InteractiveQuery(IInteractive<T, U, V> interactive,
-            ILogicQuery<T, U, V> logicquery,
             IModelRaiser raiser)
         {
             _interactive = interactive;
-
-            _logicquery = logicquery;
 
             _raiser = raiser;
         }
@@ -49,7 +43,7 @@ namespace jrivam.Library.Impl.Presentation.Query
         {
             query.Status = "Listing...";
 
-            var list = _logicquery.List(query.Domain, maxdepth, top, models?.Domains ?? new ListDomain<T, U, V>());
+            var list = _interactive.List(query.Domain, maxdepth, top, models?.Domains ?? new ListDomain<T, U, V>());
             if (list.result.Success)
             {
                 var enumeration = new List<W>();

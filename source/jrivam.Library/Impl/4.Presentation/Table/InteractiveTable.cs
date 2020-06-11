@@ -46,11 +46,11 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W model) LoadQuery(W model, IQueryModel<T, U, V, W> query, int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(W model, int maxdepth = 1)
         {
             model.Status = "Loading...";
 
-            var loadquery = _interactive.LoadQuery(query.Domain, model.Domain, maxdepth);
+            var loadquery = _interactive.LoadQuery(model.Domain, maxdepth);
             if (loadquery.result.Success && loadquery.domain != null)
             {
                 model.Domain = loadquery.domain;

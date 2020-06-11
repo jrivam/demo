@@ -35,14 +35,15 @@ namespace jrivam.Library.Impl.Business.Query
         }
         public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
         {
-            var select = query.Data.Select(maxdepth, top, domains?.Datas ?? new ListData<T, U>());
-            if (select.result.Success)
+            var list = _logic.List(query.Data, maxdepth, top, domains?.Datas ?? new ListData<T, U>());
+
+            if (list.result.Success)
             {
                 var enumeration = new List<V>();
 
-                if (select.datas != null)
+                if (list.datas != null)
                 {
-                    foreach (var data in select.datas)
+                    foreach (var data in list.datas)
                     {
                         var instance = Business.HelperTableLogic<T, U, V>.CreateDomain(data);
 
@@ -55,10 +56,10 @@ namespace jrivam.Library.Impl.Business.Query
                     }
                 }
 
-                return (select.result, enumeration);
+                return (list.result, enumeration);
             }
 
-            return (select.result, default(IList<V>));
+            return (list.result, default(IList<V>));
         }
     }
 }

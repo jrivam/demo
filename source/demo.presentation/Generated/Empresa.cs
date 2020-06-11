@@ -17,12 +17,10 @@ namespace demo.Presentation.Table
     public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
         public Empresa(IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactivetable = null,
-            Presentation.Query.Empresa query = null, 
             Business.Table.Empresa domain = null,
             int maxdepth = 1,
             string name = null)
             : base(interactivetable ?? AutofacConfiguration.Container.Resolve<IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>>(),
-                  query ?? new Presentation.Query.Empresa(),
                   domain ?? new Business.Table.Empresa(),
                   maxdepth,
                   name)

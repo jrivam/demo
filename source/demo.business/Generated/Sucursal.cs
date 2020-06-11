@@ -26,10 +26,8 @@ namespace demo.Business.Table
         }
 
         public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logictable = null,
-            Business.Query.Sucursal query = null,
             Persistence.Table.Sucursal data = null)
             : base(logictable ?? AutofacConfiguration.Container.Resolve<ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>>(),
-                  query ?? new Business.Query.Sucursal(),
                   data ?? new Persistence.Table.Sucursal())
         {
         }

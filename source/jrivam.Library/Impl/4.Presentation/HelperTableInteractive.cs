@@ -23,7 +23,7 @@ namespace jrivam.Library.Impl.Presentation
                            BindingFlags.Public |
                            BindingFlags.Instance |
                            BindingFlags.OptionalParamBinding, null,
-                           new object[] { null, null, domain, maxdepth, null },
+                           new object[] { null, domain, maxdepth, null },
                            CultureInfo.CurrentCulture);
         }
         public static IEnumerable<W> CreateModelList(IEnumerable<V> domains, int maxdepth = 1)

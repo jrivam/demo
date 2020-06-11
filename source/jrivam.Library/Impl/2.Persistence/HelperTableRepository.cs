@@ -1,7 +1,13 @@
-﻿using jrivam.Library.Interface.Entities;
+﻿using Autofac;
+using jrivam.Library.Impl.Persistence.Sql.Factory;
+using jrivam.Library.Interface.Entities;
+using jrivam.Library.Interface.Persistence;
+using jrivam.Library.Interface.Persistence.Sql.Builder;
+using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 
@@ -44,6 +50,17 @@ namespace jrivam.Library.Impl.Persistence
         public static IEnumerable<U> CreateDataList(IEnumerable<T> entities)
         {
             return entities.Select(x => CreateData(x));
+        }
+
+        public static IRepositoryTable<T, U> GetRepositoryTable(ConnectionStringSettings connectionstringsettings)
+        {
+            return AutofacConfiguration.Container.Resolve<IRepositoryTable<T, U>>(
+                        new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
+                                new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
+                        new TypedParameter(typeof(ISqlBuilderTable), AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),
+                        new TypedParameter(typeof(ISqlCommandBuilder), SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName)
+                        )
+                    );
         }
     }
 }

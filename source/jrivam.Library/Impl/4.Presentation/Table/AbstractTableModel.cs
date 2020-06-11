@@ -4,7 +4,6 @@ using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
-using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,19 +29,6 @@ namespace jrivam.Library.Impl.Presentation.Table
             set
             {
                 _domain = value;
-            }
-        }
-
-        protected IQueryModel<T, U, V, W> _query;
-        public virtual IQueryModel<T, U, V, W> Query
-        {
-            get
-            {
-                return _query;
-            }
-            set
-            {
-                _query = value;
             }
         }
 
@@ -93,14 +79,11 @@ namespace jrivam.Library.Impl.Presentation.Table
         protected readonly IInteractiveTable<T, U, V, W> _interactivetable;
 
         public AbstractTableModel(IInteractiveTable<T, U, V, W> interactivetable,
-            IQueryModel<T, U, V, W> query, 
             V domain = default(V), 
             int maxdepth = 1,
             string name = null)
         {
             _interactivetable = interactivetable;
-            
-            _query = query;
 
             if (domain == null)
                 _domain = HelperTableLogic<T, U, V>.CreateDomain(HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity()));
@@ -113,7 +96,7 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(Query, _maxdepth)), $"{Name}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
@@ -136,18 +119,16 @@ namespace jrivam.Library.Impl.Presentation.Table
         {
         }
 
+        public virtual (Result result, W model) LoadQuery(int maxdepth = 1)
+        {
+            var loadquery = _interactivetable.LoadQuery(this as W, maxdepth);
+            return loadquery;
+        }
         public virtual (Result result, W model) Load(bool usedbcommand = false)
         {
             var load = _interactivetable.Load(this as W, usedbcommand);
 
             return load;
-        }
-        public virtual (Result result, W model) LoadQuery(IQueryModel<T, U, V, W> query,
-            int maxdepth = 1)
-        {
-            var loadquery = _interactivetable.LoadQuery(this as W, query, maxdepth);
-
-            return loadquery;
         }
 
         public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)

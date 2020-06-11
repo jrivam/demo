@@ -21,7 +21,7 @@ namespace jrivam.Library.Impl.Business
                            BindingFlags.Public |
                            BindingFlags.Instance |
                            BindingFlags.OptionalParamBinding,
-                           null, new object[] { null, null, data },
+                           null, new object[] { null, data },
                            CultureInfo.CurrentCulture);
         }
 

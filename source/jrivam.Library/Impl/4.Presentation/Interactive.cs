@@ -1,8 +1,10 @@
-﻿using jrivam.Library.Interface.Business.Query;
+﻿using jrivam.Library.Interface.Business;
+using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
+using System.Collections.Generic;
 
 namespace jrivam.Library.Impl.Presentation
 {
@@ -19,14 +21,20 @@ namespace jrivam.Library.Impl.Presentation
         {
             return domain.Load(usedbcommand);
         }
-        public (Result result, V domain) LoadQuery(IQueryDomain<T, U, V> query, V domain, int maxdepth = 1)
+        public (Result result, V domain) LoadQuery(V domain, int maxdepth = 1)
         {
-            return domain.LoadQuery(query, maxdepth);
+            return domain.LoadQuery(maxdepth);
+        }
+
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query,
+            int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
+        {
+            return query.List(maxdepth, top, domains);
         }
 
         public (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
         {
-            return domain.Save(useupdatedbcommand);
+            return domain.Save(useinsertdbcommand, useupdatedbcommand);
         }
         public (Result result, V domain) Erase(V domain, bool usedbcommand = false)
         {

@@ -34,7 +34,8 @@ namespace demo.Persistence.Table
             Persistence.Query.Empresa query = null,
             Entities.Table.Empresa entity = null,
             string name = null, string dbname = null)
-            : this(AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(
+            : this(//HelperTableRepository<Entities.Table.Empresa, Persistence.Table.Empresa>.GetRepositoryTable(connectionstringsettings),
+                  AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>>(
                         new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
                                 new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
                         new TypedParameter(typeof(ISqlBuilderTable), AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),

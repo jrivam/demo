@@ -25,10 +25,8 @@ namespace demo.Business.Table
         }
 
         public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logictable = null,
-            Business.Query.Empresa query = null,
             Persistence.Table.Empresa data = null)
             : base(logictable ?? AutofacConfiguration.Container.Resolve<ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>>(),
-                  query ?? new Business.Query.Empresa(), 
                   data ?? new Persistence.Table.Empresa())
         {
         }

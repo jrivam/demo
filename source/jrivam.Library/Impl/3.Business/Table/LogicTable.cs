@@ -1,6 +1,5 @@
 ﻿using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Loader;
-using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
@@ -42,9 +41,9 @@ namespace jrivam.Library.Impl.Business.Table
 
             return (load.result, default(V));
         }
-        public virtual (Result result, V domain) LoadQuery(V domain, IQueryDomain<T, U, V> query, int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(V domain, int maxdepth = 1)
         {
-            var loadquery = _logic.LoadQuery(query.Data, domain.Data, maxdepth);
+            var loadquery = _logic.LoadQuery(domain.Data, maxdepth);
             if (loadquery.result.Success && loadquery.data != null)
             {
                 domain.Data = loadquery.data;
