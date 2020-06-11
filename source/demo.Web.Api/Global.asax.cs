@@ -7,7 +7,7 @@ namespace demo.Web.Api
     {
         protected void Application_Start()
         {
-            Bootstrapper.Run();
+            AutofacConfig.Initialize(GlobalConfiguration.Configuration);
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
