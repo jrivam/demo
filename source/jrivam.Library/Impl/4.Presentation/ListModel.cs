@@ -59,21 +59,17 @@ namespace jrivam.Library.Impl.Presentation
 
         public virtual ICommand AddCommand { get; protected set; }
 
-        public ListModel(string name = null)
+        public ListModel(IListDomain<T, U, V> domains = null, string name = null)
         {
+            _domains = domains;
+            _domains?.ToList()?.ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
+
             Name = name ?? this.GetType().Name;
 
             AddCommand = new RelayCommand(delegate (object parameter)
             {
                 Messenger.Default.Send<W>(null, $"{Name}Add");
             }, delegate (object parameter) { return this != null; });
-        }
-
-        public ListModel(IListDomain<T, U, V> domains, string name = null)
-            : this(name)
-        {
-            _domains = domains;
-            _domains?.ToList()?.ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
 
             TotalRecords();
         }

@@ -19,11 +19,7 @@ namespace jrivam.Library.Impl.Persistence
             }
         }
 
-        public ListData()
-        {
-        }
-        public ListData(ICollection<T> entities)
-            : this()
+        public ListData(ICollection<T> entities = null)
         {
             _entities = entities;
             _entities?.ToList()?.ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));

@@ -102,11 +102,11 @@ namespace demo.Business.Table
 
     public partial class SucursalesQuery : ListDomainQuery<Business.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas,
-            Business.Query.Sucursal query = null,
+        public SucursalesQuery(Business.Query.Sucursal query,
+            IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas = null,
             int maxdepth = 1)
-            : base(datas,
-                  query,
+            : base(query, 
+                  datas,                  
                   maxdepth)
         {
         }

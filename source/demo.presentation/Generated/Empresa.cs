@@ -91,29 +91,12 @@ namespace demo.Presentation.Table
 
     public partial class EmpresasQuery : ListModelQuery<Presentation.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public EmpresasQuery(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains, 
-            Presentation.Query.Empresa query = null,             
+        public EmpresasQuery(Presentation.Query.Empresa query,
+            IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains = null, 
             int maxdepth = 1, int top = 0)
-            : base(domains, 
-                  query,
+            : base(query, 
+                  domains,                   
                   maxdepth, top)
-        {
-        }
-
-        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, 
-            Presentation.Query.Empresa query = null,
-            int maxdepth = 1)
-            : this(new Business.Table.Empresas(datas), 
-                  query,
-                 maxdepth)
-        {
-        }
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities = null, 
-            Presentation.Query.Empresa query = null,
-            int maxdepth = 1)
-            : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()), 
-                  query,
-                 maxdepth)
         {
         }
     }

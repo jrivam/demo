@@ -103,29 +103,12 @@ namespace demo.Presentation.Table
 
     public partial class SucursalesQuery : ListModelQuery<Presentation.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public SucursalesQuery(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains,
-            Presentation.Query.Sucursal query = null, 
+        public SucursalesQuery(Presentation.Query.Sucursal query,
+            IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains = null,
             int maxdepth = 1, int top = 0)
-            : base(domains,
-                  query,
+            : base(query, 
+                  domains,                  
                   maxdepth, top)
-        {
-        }
-
-        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas, 
-            Presentation.Query.Sucursal query = null,
-            int maxdepth = 1)
-            : this(new Business.Table.Sucursales(datas), 
-                  query,
-                 maxdepth)
-        {
-        }
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities = null, 
-            Presentation.Query.Sucursal query = null,
-            int maxdepth = 1)
-            : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()), 
-                  query,
-                 maxdepth)
         {
         }
     }

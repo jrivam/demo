@@ -14,8 +14,8 @@ namespace jrivam.Library.Impl.Persistence
         public S Query { get; set; }
         protected int _maxdepth = 1;
 
-        public ListDataQuery(ICollection<T> entities,
-            S query,
+        public ListDataQuery(S query, 
+            ICollection<T> entities = null,
             int maxdepth = 1)
             : base(entities)
         {

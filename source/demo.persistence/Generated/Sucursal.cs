@@ -115,11 +115,11 @@ namespace demo.Persistence.Table
 
     public partial class SucursalesQuery : ListDataQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities = null, 
-            Persistence.Query.Sucursal query = null, 
+        public SucursalesQuery(Persistence.Query.Sucursal query,
+            ICollection<Entities.Table.Sucursal> entities = null, 
             int maxdepth = 1)
-            : base(entities ?? new Collection<Entities.Table.Sucursal>(), 
-                  query,
+            : base(query, 
+                  entities ?? new Collection<Entities.Table.Sucursal>(),                   
                   maxdepth)
         {
         }

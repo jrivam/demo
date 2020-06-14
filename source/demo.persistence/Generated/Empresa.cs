@@ -85,11 +85,11 @@ namespace demo.Persistence.Table
 
     public partial class EmpresasQuery : ListDataQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities = null, 
-            Persistence.Query.Empresa query = null, 
+        public EmpresasQuery(Persistence.Query.Empresa query,
+            ICollection<Entities.Table.Empresa> entities = null, 
            int maxdepth = 1)
-           : base(entities ?? new Collection<Entities.Table.Empresa>(), 
-                 query,
+           : base(query, 
+                 entities ?? new Collection<Entities.Table.Empresa>(),                  
                 maxdepth)
         {
         }

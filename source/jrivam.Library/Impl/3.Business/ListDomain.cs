@@ -22,11 +22,7 @@ namespace jrivam.Library.Impl.Business
             }
         }
 
-        public ListDomain()
-        {
-        }
-        public ListDomain(IListData<T, U> datas)
-            : this()
+        public ListDomain(IListData<T, U> datas = null)
         {
             _datas = datas;
             _datas?.ToList()?.ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    

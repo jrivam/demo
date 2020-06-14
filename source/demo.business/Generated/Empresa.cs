@@ -80,21 +80,12 @@ namespace demo.Business.Table
 
     public partial class EmpresasQuery : ListDomainQuery<Business.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public EmpresasQuery(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas, 
-            Business.Query.Empresa query = null, 
+        public EmpresasQuery(Business.Query.Empresa query,
+            IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas = null, 
             int maxdepth = 1)
-            : base(datas, 
-                  query,
+            : base(query,
+                  datas,
                   maxdepth)
-        {
-        }
-
-        public EmpresasQuery(ICollection<Entities.Table.Empresa> entities = null, 
-            Business.Query.Empresa query = null,
-            int maxdepth = 1)
-            : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()), 
-                  query,
-                 maxdepth)
         {
         }
     }

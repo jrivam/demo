@@ -16,8 +16,8 @@ namespace jrivam.Library.Impl.Business
         public S Query { get; set; }
         protected int _maxdepth = 1;
 
-        public ListDomainQuery(IListData<T, U> datas,
-            S query,
+        public ListDomainQuery(S query,
+            IListData<T, U> datas = null,
             int maxdepth = 1)
             : base(datas)
         {
