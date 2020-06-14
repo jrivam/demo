@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using jrivam.Library;
 using System.Web.Http;
 
 namespace demo.Web.Api.App_Start
@@ -10,7 +11,7 @@ namespace demo.Web.Api.App_Start
 
         public static void Initialize(HttpConfiguration config)
         {
-            Initialize(config, DependencyInstaller.RegisterServices(new ContainerBuilder()));
+            Initialize(config, AutofacConfiguration.BuildContainer(DependencyInstaller.RegisterServices(new ContainerBuilder())));
         }
 
         private static void Initialize(HttpConfiguration config, IContainer container)

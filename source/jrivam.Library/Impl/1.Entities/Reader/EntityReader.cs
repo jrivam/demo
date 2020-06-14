@@ -37,7 +37,7 @@ namespace jrivam.Library.Impl.Entities.Reader
                 {
                     var value = datareader[$"{prefix}{property.info.Name}"];
 
-                    property.info.SetValue(entity, value ?? Convert.ChangeType(value, Nullable.GetUnderlyingType(property.info.PropertyType) ?? property.info.PropertyType));
+                    property.info.SetValue(entity, (value == DBNull.Value ? null : value) ?? Convert.ChangeType(value, Nullable.GetUnderlyingType(property.info.PropertyType) ?? property.info.PropertyType));
                 }
 
                 if (property.isforeign)

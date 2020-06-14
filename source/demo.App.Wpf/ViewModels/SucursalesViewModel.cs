@@ -1,4 +1,6 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using Autofac;
+using jrivam.Library;
+using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Impl.Presentation;
 
 namespace demo.App.Wpf.ViewModels
@@ -29,7 +31,7 @@ namespace demo.App.Wpf.ViewModels
             {
                 if (_empresas == null)
                 {
-                    Empresas = new Presentation.Table.EmpresasQuery();
+                    Empresas = AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasQuery>();
                     _empresas.Query.Activo = (true, WhereOperator.Equals);
 
                     _empresas.Refresh();
@@ -55,7 +57,7 @@ namespace demo.App.Wpf.ViewModels
         }
 
         public SucursalesViewModel()
-            : this(new Presentation.Table.SucursalesQuery(maxdepth: 2))
+            : this(AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesQuery>(new NamedParameter("maxdepth", 2)))
         {
         }
     }

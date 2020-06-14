@@ -1,15 +1,8 @@
 ﻿using Autofac;
-using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence;
-using jrivam.Library.Interface.Persistence.Sql.Builder;
-using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Reflection;
 
 namespace jrivam.Library.Impl.Persistence
 {
@@ -33,34 +26,23 @@ namespace jrivam.Library.Impl.Persistence
         //    return creatorExpression.Invoke(entity);
         //}
 
-        public static ConstructorInfo constructor = typeof(U).GetConstructors().Where(c => c.GetParameters().Length == 0 || c.GetParameters().All(p => p.IsOptional)).SingleOrDefault();
+        //public static ConstructorInfo constructor = typeof(U).GetConstructors().Where(c => c.GetParameters().Length == 0 || c.GetParameters().All(p => p.IsOptional)).SingleOrDefault();
+        //public static ConstructorInfo constructor = typeof(U).GetConstructors().OrderBy(x => x.GetParameters().Length).ThenByDescending(y => y.GetParameters().Count(p => p.IsOptional)).FirstOrDefault();
+        //public static ConstructorInfo constructor = typeof(U).GetConstructors().OrderBy(x => x.GetParameters().Length - x.GetParameters().Count(p => p.IsOptional)).ThenBy(x => x.GetParameters().Length).FirstOrDefault();
 
         public static U CreateData(T entity)
         {
-            return (U)constructor.Invoke(new object[] { Type.Missing, Type.Missing, entity, Type.Missing, Type.Missing });
+            //var c = typeof(U).GetConstructors();
+            //var d = c.Where(x => x.GetParameters().Length >= 3);
+            //var e = d.Where(x => x.GetParameters().Any(y => y.GetType() == typeof(T)));
 
-            //return (U)Activator.CreateInstance(typeof(U),
-            //        BindingFlags.Public | BindingFlags.Instance |
-            //        BindingFlags.OptionalParamBinding,
-            //        null,
-            //        new object[] { Type.Missing, Type.Missing, entity },
-            //        CultureInfo.CurrentCulture
-            //        );
+            //return (U)constructor.Invoke(new object[] { Type.Missing, Type.Missing, entity, Type.Missing, Type.Missing });
+
+            return AutofacConfiguration.Container.Resolve<U>(new TypedParameter(typeof(T), entity));
         }
         public static IEnumerable<U> CreateDataList(IEnumerable<T> entities)
         {
             return entities.Select(x => CreateData(x));
-        }
-
-        public static IRepositoryTable<T, U> GetRepositoryTable(ConnectionStringSettings connectionstringsettings)
-        {
-            return AutofacConfiguration.Container.Resolve<IRepositoryTable<T, U>>(
-                        new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
-                                new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
-                        new TypedParameter(typeof(ISqlBuilderTable), AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),
-                        new TypedParameter(typeof(ISqlCommandBuilder), SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName)
-                        )
-                    );
         }
     }
 }

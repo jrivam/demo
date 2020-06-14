@@ -1,11 +1,9 @@
-﻿using jrivam.Library.Interface.Business.Table;
+﻿using Autofac;
+using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace jrivam.Library.Impl.Business
 {
@@ -16,13 +14,7 @@ namespace jrivam.Library.Impl.Business
     {
         public static V CreateDomain(U data)
         {
-            return (V)Activator.CreateInstance(typeof(V),
-                           BindingFlags.CreateInstance |
-                           BindingFlags.Public |
-                           BindingFlags.Instance |
-                           BindingFlags.OptionalParamBinding,
-                           null, new object[] { null, data },
-                           CultureInfo.CurrentCulture);
+            return AutofacConfiguration.Container.Resolve<V>(new TypedParameter(typeof(U), data));
         }
 
         public static IEnumerable<V> CreateDomainList(IEnumerable<U> datas)

@@ -1,4 +1,6 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using Autofac;
+using jrivam.Library;
+using jrivam.Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -15,7 +17,7 @@ namespace demo.Web.Api.Controllers
         {
             try
             {
-                var query = new Business.Query.Sucursal();
+                var query = AutofacConfiguration.Container.Resolve<Business.Query.Sucursal>();
 
                 if (nombre != null)
                     query.Nombre = (nombre, WhereOperator.Like);
@@ -49,7 +51,10 @@ namespace demo.Web.Api.Controllers
         {
             try
             {
-                var load = new Business.Table.Sucursal() { Id = id }.Load();
+                var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
+                sucursal.Id = id;
+
+                var load = sucursal.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
@@ -77,7 +82,7 @@ namespace demo.Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new Business.Table.Sucursal(data: new Persistence.Table.Sucursal(entity: entity)).Save();
+                        var save = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>(new TypedParameter(typeof(Entities.Table.Sucursal), entity)).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();
@@ -104,7 +109,10 @@ namespace demo.Web.Api.Controllers
             {
                 if (entity != null)
                 {
-                    var load = new Business.Table.Sucursal() { Id = id }.Load();
+                    var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
+                    sucursal.Id = id;
+
+                    var load = sucursal.Load();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -144,7 +152,10 @@ namespace demo.Web.Api.Controllers
         {
             try
             {
-                var load = new Business.Table.Sucursal() { Id = id }.Load();
+                var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
+                sucursal.Id = id;
+
+                var load = sucursal.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)

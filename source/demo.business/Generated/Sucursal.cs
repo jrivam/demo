@@ -25,10 +25,10 @@ namespace demo.Business.Table
             //Validations.Add(("NombreNotEmpty", new EmptyValidator(Data["Nombre"])));
         }
 
-        public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logictable = null,
+        public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logictable,
             Persistence.Table.Sucursal data = null)
-            : base(logictable ?? AutofacConfiguration.Container.Resolve<ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>>(),
-                  data ?? new Persistence.Table.Sucursal())
+            : base(logictable,
+                  data)
         {
         }
 
@@ -70,7 +70,7 @@ namespace demo.Business.Table
             {
                 if (_empresa?.Id != this.IdEmpresa)
                 {
-                    Empresa = new Business.Table.Empresa(data: Data?.Empresa);
+                    Empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>(new TypedParameter(typeof(Persistence.Table.Empresa), Data?.Empresa));
                 }
 
                 _empresa.Id = this.IdEmpresa;
@@ -102,21 +102,12 @@ namespace demo.Business.Table
 
     public partial class SucursalesQuery : ListDomainQuery<Business.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas, 
-            Business.Query.Sucursal query = null, 
-            int maxdepth = 1)
-            : base(datas, 
-                  query ?? new Business.Query.Sucursal(), 
-                  maxdepth)
-        {
-        }
-
-        public SucursalesQuery(ICollection<Entities.Table.Sucursal> entities = null, 
+        public SucursalesQuery(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas,
             Business.Query.Sucursal query = null,
             int maxdepth = 1)
-            : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()), 
-                  query ?? new Business.Query.Sucursal(),
-                 maxdepth)
+            : base(datas,
+                  query,
+                  maxdepth)
         {
         }
     }
@@ -126,10 +117,10 @@ namespace demo.Business.Query
 {
     public partial class Sucursal : AbstractQueryDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursal(ILogicQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logicquery = null,
-            Persistence.Query.Sucursal data = null)
-            : base(logicquery ?? AutofacConfiguration.Container.Resolve<ILogicQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>>(),
-                  data ?? new Persistence.Query.Sucursal())
+        public Sucursal(ILogicQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logicquery,
+            Persistence.Query.Sucursal data)
+            : base(logicquery,
+                  data)
         {
         }
 
@@ -179,7 +170,7 @@ namespace demo.Business.Query
         protected Business.Query.Empresa _empresa;
         public virtual Business.Query.Empresa Empresa(Business.Query.Empresa query = null)
         {
-            return _empresa = query ?? _empresa ?? new Business.Query.Empresa(data: ((Persistence.Query.Sucursal)Data)?.Empresa());
+            return _empresa = query ?? _empresa ?? AutofacConfiguration.Container.Resolve<Business.Query.Empresa>(new TypedParameter(typeof(Persistence.Query.Empresa), ((Persistence.Query.Sucursal)Data)?.Empresa()));
         }
     }
 }

@@ -4,9 +4,11 @@ namespace demo.Entities
 { 
     public class DependencyInstaller
     {
-        public static IContainer RegisterServices(ContainerBuilder builder)
+        public static ContainerBuilder RegisterServices(ContainerBuilder builder)
         {
-            return jrivam.Library.DependencyInstaller.RegisterServices(builder);
+            builder = jrivam.Library.DependencyInstaller.RegisterServices(builder);
+            
+            return builder;
         }
     }
 }

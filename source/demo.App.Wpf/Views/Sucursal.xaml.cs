@@ -1,4 +1,6 @@
-﻿using demo.App.Wpf.ViewModels;
+﻿using Autofac;
+using demo.App.Wpf.ViewModels;
+using jrivam.Library;
 using jrivam.Library.Impl;
 using jrivam.Library.Impl.Presentation;
 using System.Windows;
@@ -22,7 +24,7 @@ namespace demo.App.Wpf.Views
         public Sucursal(Presentation.Table.Sucursal entity = null)
         {
             InitializeComponent();
-            DataContext = new SucursalViewModel(entity ?? new Presentation.Table.Sucursal());
+            DataContext = new SucursalViewModel(entity ?? AutofacConfiguration.Container.Resolve<Presentation.Table.Sucursal>());
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

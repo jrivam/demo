@@ -4,7 +4,7 @@
     {
         string Select(string columns, string from, string where, int top = 0);
 
-        string Insert(string into, string insert, string values, string output);
+        string Insert(string into, string insert, string values, bool output = false);
 
         string Update(string table, string from, string set, string where);
 

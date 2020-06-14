@@ -18,12 +18,16 @@ namespace jrivam.Library.Impl.Persistence.Sql.Providers.SqlServer
 
             return commandtext;
         }
-        public string Insert(string into, string insert, string values, string output)
+        public string Insert(string into, string insert, string values, bool output = false)
         {
             var commandtext = string.Empty;
 
             commandtext = $"insert{Environment.NewLine}into {into}{Environment.NewLine}{insert}{Environment.NewLine}values {values}";
-            commandtext += $";{Environment.NewLine}SELECT{output}SCOPE_IDENTITY()";
+
+            if (output)
+            {
+                commandtext += $";{Environment.NewLine}SELECT SCOPE_IDENTITY()";
+            }
 
             return commandtext;
         }

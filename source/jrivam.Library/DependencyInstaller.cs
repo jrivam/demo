@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Features.ResolveAnything;
 using jrivam.Library.Impl.Business;
 using jrivam.Library.Impl.Business.Loader;
 using jrivam.Library.Impl.Business.Query;
@@ -37,7 +36,7 @@ namespace jrivam.Library
 {
     public class DependencyInstaller
     {
-        public static IContainer RegisterServices(ContainerBuilder builder)
+        public static ContainerBuilder RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterType<EntityReader>()
                    .As<IEntityReader>()
@@ -73,9 +72,25 @@ namespace jrivam.Library
                    .As<ISqlBuilderTable>()
                    .InstancePerLifetimeScope();
 
-            builder.RegisterType<Repository>()
-                   .As<IRepository>()
-                   .InstancePerLifetimeScope();
+
+            //        builder.RegisterType<SqlServerCommandBuilder>()
+            //.           As<ISqlCommandBuilder>().AsSelf();
+            //        builder.RegisterType<PostgreSqlCommandBuilder>()
+            //            .As<ISqlCommandBuilder>().AsSelf();
+            //        builder.RegisterType<MySqlCommandBuilder>()
+            //            .As<ISqlCommandBuilder>().AsSelf();
+
+            //        builder.RegisterType<SqlServerSyntaxSign>()
+            //            .As<ISqlSyntaxSign>().AsSelf();
+            //        builder.RegisterType<PostgreSqlSyntaxSign>()
+            //            .As<ISqlSyntaxSign>().AsSelf();
+            //        builder.RegisterType<MySqlSyntaxSign>()
+            //            .As<ISqlSyntaxSign>().AsSelf();
+
+            //builder.RegisterType<Repository>()
+            //       .As<IRepository>()
+            //       .InstancePerLifetimeScope();
+
             builder.RegisterGeneric(typeof(RepositoryTable<,>))
                    .As(typeof(IRepositoryTable<,>))
                    .InstancePerLifetimeScope();
@@ -103,9 +118,28 @@ namespace jrivam.Library
                    .As(typeof(IInteractiveQuery<,,,>))
                    .InstancePerLifetimeScope();
 
-            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+            builder.RegisterGeneric(typeof(ListData<,>))
+                   .As(typeof(IListData<,>))
+                   .InstancePerDependency();
+            builder.RegisterGeneric(typeof(ListDataQuery<,,>))
+                   .As(typeof(IListDataQuery<,,>))
+                   .InstancePerDependency();
 
-            return AutofacConfiguration.BuildContainer(builder);
+            builder.RegisterGeneric(typeof(ListDomain<,,>))
+                   .As(typeof(IListDomain<,,>))
+                   .InstancePerDependency();
+            builder.RegisterGeneric(typeof(ListDomainQuery<,,,>))
+                   .As(typeof(IListDomainQuery<,,,>))
+                   .InstancePerDependency();
+
+            builder.RegisterGeneric(typeof(ListModel<,,,>))
+                   .As(typeof(IListModel<,,,>))
+                   .InstancePerDependency();
+            builder.RegisterGeneric(typeof(ListModelQuery<,,,,>))
+                   .As(typeof(IListModelQuery<,,,,>))
+                   .InstancePerDependency();
+
+            return builder;
         }
     }
 }

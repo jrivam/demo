@@ -17,12 +17,12 @@ namespace demo.Presentation.Table
 {
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursal(IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivetable = null, 
+        public Sucursal(IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivetable, 
             Business.Table.Sucursal domain = null,
             int maxdepth = 1,
             string name = null)
-            : base(interactivetable ?? AutofacConfiguration.Container.Resolve<IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>>(),
-                  domain ?? new Business.Table.Sucursal(),
+            : base(interactivetable,
+                  domain,
                   maxdepth,
                   name)
         {
@@ -65,7 +65,7 @@ namespace demo.Presentation.Table
             {
                 if (_empresa?.Id != this.IdEmpresa)
                 {
-                    Empresa = new Presentation.Table.Empresa(domain: Domain?.Empresa);
+                    Empresa = AutofacConfiguration.Container.Resolve<Presentation.Table.Empresa>(new TypedParameter(typeof(Business.Table.Empresa), Domain?.Empresa));
                 }
 
                 _empresa.Id = this.IdEmpresa;
@@ -107,7 +107,7 @@ namespace demo.Presentation.Table
             Presentation.Query.Sucursal query = null, 
             int maxdepth = 1, int top = 0)
             : base(domains,
-                  query ?? new Presentation.Query.Sucursal(),
+                  query,
                   maxdepth, top)
         {
         }
@@ -116,7 +116,7 @@ namespace demo.Presentation.Table
             Presentation.Query.Sucursal query = null,
             int maxdepth = 1)
             : this(new Business.Table.Sucursales(datas), 
-                  query ?? new Presentation.Query.Sucursal(),
+                  query,
                  maxdepth)
         {
         }
@@ -124,7 +124,7 @@ namespace demo.Presentation.Table
             Presentation.Query.Sucursal query = null,
             int maxdepth = 1)
             : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()), 
-                  query ?? new Presentation.Query.Sucursal(),
+                  query,
                  maxdepth)
         {
         }
@@ -135,10 +135,10 @@ namespace demo.Presentation.Query
 {
     public partial class Sucursal : AbstractQueryModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursal(IInteractiveQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivequery = null,
-            Business.Query.Sucursal domain = null)
-            : base(interactivequery ?? AutofacConfiguration.Container.Resolve<IInteractiveQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>>(),
-                  domain ?? new Business.Query.Sucursal())
+        public Sucursal(IInteractiveQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivequery,
+            Business.Query.Sucursal domain)
+            : base(interactivequery,
+                  domain)
         {
         }
 
@@ -188,7 +188,7 @@ namespace demo.Presentation.Query
         protected Presentation.Query.Empresa _empresa;
         public virtual Presentation.Query.Empresa Empresa(Presentation.Query.Empresa query = null)
         {
-            return _empresa = query ?? _empresa ?? new Presentation.Query.Empresa(domain: ((Business.Query.Sucursal)Domain)?.Empresa());
+            return _empresa = query ?? _empresa ?? AutofacConfiguration.Container.Resolve<Presentation.Query.Empresa>(new TypedParameter(typeof(Persistence.Query.Empresa), ((Persistence.Query.Sucursal)Domain)?.Empresa()));
         }
     }
 }

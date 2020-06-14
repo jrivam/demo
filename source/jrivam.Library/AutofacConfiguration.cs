@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Autofac.Builder;
+using Autofac.Features.ResolveAnything;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -8,11 +10,14 @@ namespace jrivam.Library
     {
         public static IContainer Container;
 
-        public static Dictionary<string, ConnectionStringSettings> ConnectionStringSettings = new Dictionary<string, ConnectionStringSettings>();
+        //public static ConnectionStringSettings ConnectionStringSetting { get; set; }
+        //public static Dictionary<string, ConnectionStringSettings> ConnectionStringSettings = new Dictionary<string, ConnectionStringSettings>();
 
         public static IContainer BuildContainer(ContainerBuilder builder)
         {
-            Container = builder.Build();
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+
+            Container = builder.Build(ContainerBuildOptions.ExcludeDefaultModules);
 
             return Container;
         }

@@ -1,4 +1,6 @@
-﻿using jrivam.Library.Impl.Presentation;
+﻿using Autofac;
+using jrivam.Library;
+using jrivam.Library.Impl.Presentation;
 
 namespace demo.App.Wpf.ViewModels
 {
@@ -29,7 +31,7 @@ namespace demo.App.Wpf.ViewModels
         }
 
         public EmpresasViewModel()
-            : this(new Presentation.Table.EmpresasQuery())
+            : this(AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasQuery>())
         {
         }
     }

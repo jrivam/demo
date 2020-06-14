@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using jrivam.Library;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
@@ -26,18 +27,11 @@ namespace jrivam.Library.Impl.Persistence.Query
         protected readonly IDataMapper _mapper;
 
         public RepositoryQuery(IRepository repository,
-            //ConnectionStringSettings connectionstringsettings,
-            //ISqlCreator creator,
-            //IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk,
             ISqlBuilderQuery sqlbuilder, ISqlCommandBuilder sqlcommandbuilder,
             IDataMapper mapper)
-        //: base(connectionstringsettings,
-        //     creator,
-        //     dbcommandexecutor, dbcommandexecutorbulk)
         {
             _repository = repository;
-            //_sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderQuery>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)));
-            //_sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName);
+
             _sqlbuilder = sqlbuilder;
             _sqlcommandbuilder = sqlcommandbuilder;
 

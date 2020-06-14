@@ -1,4 +1,6 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using Autofac;
+using jrivam.Library;
+using jrivam.Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
 using System.Transactions;
@@ -15,7 +17,7 @@ namespace demo.Web.Api.Controllers
         {
             try
             {
-                var query = new Business.Query.Empresa();
+                var query = AutofacConfiguration.Container.Resolve<Business.Query.Empresa>();
 
                 if (razonsocial != null)
                     query.RazonSocial = (razonsocial, WhereOperator.Like);
@@ -47,7 +49,10 @@ namespace demo.Web.Api.Controllers
         {
             try
             {
-                var load = new Business.Table.Empresa() { Id = id }.Load();
+                var empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>();
+                empresa.Id = id;
+
+                var load = empresa.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)
@@ -77,7 +82,7 @@ namespace demo.Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = new Business.Table.Empresa(data: new Persistence.Table.Empresa(entity: entity)).Save();
+                        var save = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>(new TypedParameter(typeof(Entities.Table.Empresa), entity)).Save();
                         if (save.result.Success)
                         {
                             scope.Complete();
@@ -104,7 +109,10 @@ namespace demo.Web.Api.Controllers
             {
                 if (entity != null)
                 {
-                    var load = new Business.Table.Empresa() { Id = id }.Load();
+                    var empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>();
+                    empresa.Id = id;
+
+                    var load = empresa.Load();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -144,7 +152,10 @@ namespace demo.Web.Api.Controllers
         {
             try
             {
-                var load = new Business.Table.Empresa() { Id = id }.Load();
+                var empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>();
+                empresa.Id = id;
+
+                var load = empresa.Load();
                 if (load.result.Success)
                 {
                     if (load.domain != null)

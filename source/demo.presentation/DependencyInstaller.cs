@@ -4,9 +4,11 @@ namespace demo.Presentation
 { 
     public class DependencyInstaller
     {
-        public static IContainer RegisterServices(ContainerBuilder builder)
+        public static ContainerBuilder RegisterServices(ContainerBuilder builder)
         {
-            return demo.Business.DependencyInstaller.RegisterServices(builder);
+            builder = demo.Business.DependencyInstaller.RegisterServices(builder);
+            
+            return builder;
         }
     }
 }

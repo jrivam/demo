@@ -6,11 +6,13 @@ namespace demo.Web.Api.App_Start
 {
     public class DependencyInstaller
     {
-        public static IContainer RegisterServices(ContainerBuilder builder)
+        public static ContainerBuilder RegisterServices(ContainerBuilder builder)
         {
+            builder = demo.Business.DependencyInstaller.RegisterServices(builder);
+
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            return demo.Business.DependencyInstaller.RegisterServices(builder);
+            return builder;
         }
     }
 }

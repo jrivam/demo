@@ -4,9 +4,11 @@ namespace demo.App.Wpf
 {
     public class DependencyInstaller
     {
-        public static IContainer RegisterServices(ContainerBuilder builder)
+        public static ContainerBuilder RegisterServices(ContainerBuilder builder)
         {
-            return demo.Presentation.DependencyInstaller.RegisterServices(builder);
+            builder = demo.Presentation.DependencyInstaller.RegisterServices(builder);
+            
+            return builder;
         }
     }
 }

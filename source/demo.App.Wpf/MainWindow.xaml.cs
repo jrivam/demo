@@ -1,18 +1,16 @@
 ﻿using Autofac;
+using jrivam.Library;
 using System.Windows;
 
 namespace demo.App.Wpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
 
-            DependencyInstaller.RegisterServices(new ContainerBuilder());
+            AutofacConfiguration.BuildContainer(DependencyInstaller.RegisterServices(new ContainerBuilder()));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

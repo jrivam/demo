@@ -4,44 +4,22 @@ using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Query;
 using jrivam.Library.Impl.Persistence.Sql;
-using jrivam.Library.Impl.Persistence.Sql.Factory;
 using jrivam.Library.Impl.Persistence.Table;
-using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Query;
-using jrivam.Library.Interface.Persistence.Sql.Builder;
-using jrivam.Library.Interface.Persistence.Sql.Providers;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
 
 namespace demo.Persistence.Table
 {
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositorytable, 
-            Persistence.Query.Sucursal query = null, 
+        public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositorytable,
+            Persistence.Query.Sucursal query,
             Entities.Table.Sucursal entity = null,
             string name = null, string dbname = null)
             : base(repositorytable,
-                  query ?? new Persistence.Query.Sucursal(),
-                  entity ?? new Entities.Table.Sucursal(),
-                  name, dbname)
-        {
-        }
-
-        public Sucursal(ConnectionStringSettings connectionstringsettings,
-            Persistence.Query.Sucursal query = null,
-            Entities.Table.Sucursal entity = null,
-            string name = null, string dbname = null)
-            : this(AutofacConfiguration.Container.Resolve<IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>>(
-                        new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
-                                new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
-                        new TypedParameter(typeof(ISqlBuilderTable), AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),
-                        new TypedParameter(typeof(ISqlCommandBuilder), SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName)
-                        )
-                    ),
                   query,
                   entity,
                   name, dbname)
@@ -102,9 +80,8 @@ namespace demo.Persistence.Table
                     {
                         Entity.Empresa = new Entities.Table.Empresa();
                     }
-                    Empresa = new Persistence.Table.Empresa(entity: Entity?.Empresa);
                     //Empresa = new Persistence.Table.Empresa(Entity?.Empresa ??= new Entities.Table.Empresa());
-
+                    Empresa = AutofacConfiguration.Container.Resolve<Persistence.Table.Empresa>(new TypedParameter(typeof(Entities.Table.Empresa), Entity?.Empresa));
                     if (_empresa.Id == null && this.IdEmpresa != null)
                     {
                         _empresa.Id = this.IdEmpresa;
@@ -142,7 +119,7 @@ namespace demo.Persistence.Table
             Persistence.Query.Sucursal query = null, 
             int maxdepth = 1)
             : base(entities ?? new Collection<Entities.Table.Sucursal>(), 
-                  query ?? new Persistence.Query.Sucursal(), 
+                  query,
                   maxdepth)
         {
         }
@@ -168,17 +145,6 @@ namespace demo.Persistence.Query
         public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositoryquery,
             string name = null, string dbname = null)
             : base(repositoryquery,
-                  name, dbname)
-        {
-        }
-
-        public Sucursal(ConnectionStringSettings connectionstringsettings,
-            string name = null, string dbname = null)
-            : base(AutofacConfiguration.Container.Resolve<IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>>(
-                        new TypedParameter(typeof(IRepository), AutofacConfiguration.Container.Resolve<IRepository>(
-                                new TypedParameter(typeof(ConnectionStringSettings), connectionstringsettings))),
-                        new TypedParameter(typeof(ISqlBuilderQuery), AutofacConfiguration.Container.Resolve<ISqlBuilderQuery>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)))),
-                        new TypedParameter(typeof(ISqlCommandBuilder), SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName))),
                   name, dbname)
         {
         }
@@ -230,7 +196,7 @@ namespace demo.Persistence.Query
         protected Persistence.Query.Empresa _empresa;
         public virtual Persistence.Query.Empresa Empresa(Persistence.Query.Empresa query = null)
         {
-            return _empresa = query ?? _empresa ?? new Persistence.Query.Empresa();
+            return _empresa = query ?? _empresa ?? AutofacConfiguration.Container.Resolve<Persistence.Query.Empresa>();
         }
     }
 }

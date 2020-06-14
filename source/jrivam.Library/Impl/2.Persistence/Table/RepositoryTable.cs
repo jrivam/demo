@@ -28,18 +28,11 @@ namespace jrivam.Library.Impl.Persistence.Table
         protected readonly IDataMapper _mapper;
 
         public RepositoryTable(IRepository repository,
-            //ConnectionStringSettings connectionstringsettings,
-            //ISqlCreator creator,
-            //IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk,
             ISqlBuilderTable sqlbuilder, ISqlCommandBuilder sqlcommandbuilder,
             IDataMapper mapper)
-            //: base(connectionstringsettings,
-            //      creator,
-            //      dbcommandexecutor, dbcommandexecutorbulk)
         {
             _repository = repository;
-            //_sqlbuilder = AutofacConfiguration.Container.Resolve<ISqlBuilderTable>(new TypedParameter(typeof(ISqlSyntaxSign), SqlSyntaxSignFactory.Create(connectionstringsettings.ProviderName)));
-            //_sqlcommandbuilder = SqlCommandBuilderFactory.Create(connectionstringsettings.ProviderName);
+
             _sqlbuilder = sqlbuilder;
             _sqlcommandbuilder = sqlcommandbuilder;
 
@@ -108,12 +101,7 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             var parameters = new List<SqlParameter>();
 
-            var output = string.Empty;
-
-            foreach (var c in data.Columns.Where(c => c.IsIdentity).ToList())
-            {
-                output += $"{(string.IsNullOrWhiteSpace(output) ? " " : ", ")}";
-            }
+            var output = data.Columns.Any(c => c.IsIdentity);
 
             var insertcommandtext = _sqlcommandbuilder.Insert($"{data.Description.DbName}",
                 _sqlbuilder.GetInsertColumns(data.Columns.Where(c => !c.IsIdentity).ToList()),

@@ -1,4 +1,6 @@
-﻿using demo.App.Wpf.ViewModels;
+﻿using Autofac;
+using demo.App.Wpf.ViewModels;
+using jrivam.Library;
 using jrivam.Library.Impl;
 using jrivam.Library.Impl.Presentation;
 using System;
@@ -28,7 +30,7 @@ namespace demo.App.Wpf.Views
         public Empresa(Presentation.Table.Empresa entity = null)
         {
             InitializeComponent();
-            DataContext = new EmpresaViewModel(entity ?? new Presentation.Table.Empresa());
+            DataContext = new EmpresaViewModel(entity ?? AutofacConfiguration.Container.Resolve<Presentation.Table.Empresa>());
 
         }
 

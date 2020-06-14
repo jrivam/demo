@@ -1,4 +1,5 @@
-﻿using jrivam.Library.Extension;
+﻿using Autofac;
+using jrivam.Library.Extension;
 using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
