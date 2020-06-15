@@ -14,7 +14,7 @@ namespace demo.Persistence
         {
             builder = demo.Entities.DependencyInstaller.RegisterServices(builder);
 
-            var connectionstringsetting = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["test.connectionstring.name"]];
+            var connectionstringsetting = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["connectionstring.name.test"]];
 
             builder.Register(ctx =>
             {
@@ -32,9 +32,6 @@ namespace demo.Persistence
                  )
                 .As<IRepository>();
 
-            //builder.RegisterType<Persistence.Table.EmpresasQuery>();
-            //builder.RegisterType<Persistence.Table.Empresa>();
-            //builder.RegisterType<Persistence.Query.Empresa>();
             /////////////////////////////////////////////////////////////////////////////
 
             // builder.Register((c, p) =>
