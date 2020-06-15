@@ -14,7 +14,7 @@ namespace demo.Persistence
         {
             builder = demo.Entities.DependencyInstaller.RegisterServices(builder);
 
-            var connectionstringsetting = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["connectionstring.name.test"]];
+            var connectionstringsetting = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["connectionstringname.test"]];
 
             builder.Register(ctx =>
             {
