@@ -76,7 +76,7 @@ namespace demo.Web.Api.Controllers
                 }
             }
 
-            return BadRequest();
+            return BadRequest("Id should be greater than 0");
         }
 
         [HttpPost]
@@ -105,7 +105,7 @@ namespace demo.Web.Api.Controllers
                 }
             }
 
-            return BadRequest();
+            return BadRequest("Entity cannot be null");
         }
 
         [HttpPut]
@@ -149,8 +149,8 @@ namespace demo.Web.Api.Controllers
                     return InternalServerError(ex);
                 }
             }
-            
-            return BadRequest();
+
+            return BadRequest("Id should be greater than 0");
         }
 
         [HttpDelete]
@@ -193,7 +193,7 @@ namespace demo.Web.Api.Controllers
                 }
             }
 
-            return BadRequest();
+            return BadRequest("Id should be greater than 0");
         }
     }
 }
