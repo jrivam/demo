@@ -17,11 +17,11 @@ namespace jrivam.Library.Impl.Persistence.Database
 
             try
             {
-                command.Connection.Open();
+                command.Connection?.Open();
 
                 int rows = command.ExecuteNonQuery();
 
-                command.Connection.Close();
+                command.Connection?.Close();
 
                 return (result, rows);
             }
@@ -36,11 +36,11 @@ namespace jrivam.Library.Impl.Persistence.Database
 
             try
             {
-                command.Connection.Open();
+                command.Connection?.Open();
 
                 object scalar = command.ExecuteScalar();
 
-                command.Connection.Close();
+                command.Connection?.Close();
 
                 return (result, scalar);
             }

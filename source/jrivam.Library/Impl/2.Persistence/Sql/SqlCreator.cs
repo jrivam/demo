@@ -16,6 +16,11 @@ namespace jrivam.Library.Impl.Persistence.Sql
             _dbcreator = objectcreator;
         }
 
+        public virtual IDbConnection GetConnection(string providername, string connectionstring)
+        {
+            return _dbcreator?.GetConnection(providername, connectionstring);
+        }
+
         public virtual IDbDataParameter GetParameter(string providername, 
             string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
         {
@@ -28,20 +33,36 @@ namespace jrivam.Library.Impl.Persistence.Sql
 
             return parameter;
         }
-        public virtual IDbCommand GetCommand(string providername, string connectionstring = "",
-            string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+
+        public virtual IDbCommand GetCommand(string providername,
+            string commandtext = "", CommandType commandtype = CommandType.Text)
         {
             var command = _dbcreator?.GetCommand(providername);
 
             command.CommandText = commandtext;
             command.CommandType = commandtype;
 
-            parameters?.ToList()?.ForEach(p => 
+            return command;
+        }
+        public virtual IDbCommand GetCommand(string providername, 
+            string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+        {
+            var command = GetCommand(providername, commandtext, commandtype);
+
+            parameters?.ToList()?.ForEach(p =>
             {
                 command.Parameters.Add(GetParameter(providername, p.Name, p.Type, p.Value, p.Direction));
             });
 
-            command.Connection = _dbcreator?.GetConnection(providername, connectionstring);
+            return command;
+        }
+        public virtual IDbCommand GetCommand(string providername, 
+            string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null,
+            string connectionstring = "")
+        {            
+            var command = GetCommand(providername, commandtext, commandtype, parameters);
+
+            command.Connection = GetConnection(providername, connectionstring);
 
             return command;
         }

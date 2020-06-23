@@ -9,11 +9,14 @@ namespace jrivam.Library.Impl.Persistence.Database
 {
     public class DbCommandExecutor : IDbCommandExecutor
     {
-        public DbCommandExecutor()
+        protected readonly IEntityReader _entityreader;
+
+        public DbCommandExecutor(IEntityReader entityreader)
         {
+            _entityreader = entityreader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, IEntityReader entityreader, int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
         {
             var result = new Result() { Success = true };
 
@@ -22,7 +25,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                 var enumeration = new Collection<T>();
                 var iterator = (entities ?? new Collection<T>()).GetEnumerator();
 
-                command.Connection.Open();
+                command.Connection?.Open();
 
                 using (var datareader = command.ExecuteReader())
                 {
@@ -30,7 +33,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                     {
                         var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateEntity();
 
-                        entityreader.Read<T>(entity, datareader, new List<string>(), maxdepth, 0);
+                        _entityreader.Read<T>(entity, datareader, new List<string>(), maxdepth, 0);
 
                         enumeration.Add(entity);
                     }
@@ -38,7 +41,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                     datareader.Close();
                 }
 
-                command.Connection.Close();
+                command.Connection?.Close();
 
                 return (result, enumeration);
             }
