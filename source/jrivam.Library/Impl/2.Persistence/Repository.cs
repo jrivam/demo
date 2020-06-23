@@ -13,7 +13,7 @@ namespace jrivam.Library.Impl.Persistence
     {
         protected readonly ConnectionStringSettings _connectionstringsettings;
 
-        protected readonly ISqlCreator _creator;
+        protected readonly ISqlCreator _sqlcreator;
 
         protected readonly IDbCommandExecutor _dbcommandexecutor;
         protected readonly IDbCommandExecutorBulk _dbcommandexecutorbulk;
@@ -24,7 +24,7 @@ namespace jrivam.Library.Impl.Persistence
         {
             _connectionstringsettings = connectionstringsettings;
 
-            _creator = creator;
+            _sqlcreator = creator;
 
             _dbcommandexecutor = dbcommandexecutor;
             _dbcommandexecutorbulk = dbcommandexecutorbulk;
@@ -37,9 +37,9 @@ namespace jrivam.Library.Impl.Persistence
         }
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
-            var executequery = _dbcommandexecutor.ExecuteQuery(_creator.GetCommand(_connectionstringsettings.ProviderName, 
-                commandtext, commandtype, parameters, 
-                _connectionstringsettings.ConnectionString),
+            var executequery = _dbcommandexecutor.ExecuteQuery(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName, 
+                    commandtext, commandtype, parameters, 
+                    _connectionstringsettings.ConnectionString),
                 maxdepth, entities);
 
             if ((executequery.entities?.Count() ?? 0) == 0)
@@ -56,9 +56,9 @@ namespace jrivam.Library.Impl.Persistence
         }
         public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
-            var executenonquery = _dbcommandexecutorbulk.ExecuteNonQuery(_creator.GetCommand(_connectionstringsettings.ProviderName,  
-                commandtext, commandtype, parameters,
-                _connectionstringsettings.ConnectionString));
+            var executenonquery = _dbcommandexecutorbulk.ExecuteNonQuery(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName,  
+                    commandtext, commandtype, parameters,
+                    _connectionstringsettings.ConnectionString));
 
             if (executenonquery.rows == 0)
             {
@@ -74,9 +74,9 @@ namespace jrivam.Library.Impl.Persistence
         }
         public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
-            var executescalar = _dbcommandexecutorbulk.ExecuteScalar(_creator.GetCommand(_connectionstringsettings.ProviderName,  
-                commandtext, commandtype, parameters,
-                _connectionstringsettings.ConnectionString));
+            var executescalar = _dbcommandexecutorbulk.ExecuteScalar(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName,  
+                    commandtext, commandtype, parameters,
+                    _connectionstringsettings.ConnectionString));
 
             if (executescalar.scalar == null)
             {
