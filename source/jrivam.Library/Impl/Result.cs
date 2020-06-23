@@ -48,11 +48,11 @@ namespace jrivam.Library.Impl
 
             return Messages;
         }
-        public string FilteredAsText(string newlinereplacement, Func<(ResultCategory category, string name, string message), bool> condition = null)
+        public string FilteredAsText(string newlinereplacement = null, Func<(ResultCategory category, string name, string message), bool> condition = null)
         {
-            return String.Join(newlinereplacement, Filtered(condition).ToArray()).Replace(Environment.NewLine, string.Empty);
+            return String.Join(newlinereplacement ?? Environment.NewLine, Filtered(condition).ToArray()).Replace(Environment.NewLine, string.Empty);
         }
-        public string FilteredAsTextSelected<T>(string newlinereplacement, Func<(ResultCategory category, string name, string message), bool> condition = null, Func<(ResultCategory category, string name, string message), T> selector = null)
+        public string FilteredAsTextSelected<T>(string newlinereplacement = null, Func<(ResultCategory category, string name, string message), bool> condition = null, Func<(ResultCategory category, string name, string message), T> selector = null)
         {
             if (selector != null)
             {

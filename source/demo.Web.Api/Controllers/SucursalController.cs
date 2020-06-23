@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using jrivam.Library;
+using jrivam.Library.Impl;
 using jrivam.Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
@@ -32,7 +33,7 @@ namespace demo.Web.Api.Controllers
                     return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities);
                 }
 
-                return InternalServerError();
+                return InternalServerError(new Exception(list.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
             }
             catch (Exception ex)
             {
@@ -49,36 +50,41 @@ namespace demo.Web.Api.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-            try
+            if (id > 0)
             {
-                var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
-                sucursal.Id = id;
-
-                var load = sucursal.Load();
-                if (load.result.Success)
+                try
                 {
-                    if (load.domain != null)
+                    var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
+                    sucursal.Id = id;
+
+                    var load = sucursal.Load();
+                    if (load.result.Success)
                     {
-                        return Ok(load.domain?.Data?.Entity);
+                        if (load.domain != null)
+                        {
+                            return Ok(load.domain?.Data?.Entity);
+                        }
+
+                        return NotFound();
                     }
 
-                    return NotFound();
+                    return InternalServerError(new Exception(load.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
                 }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+            }
 
-                return InternalServerError();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            return BadRequest();
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody]Entities.Table.Sucursal entity)
+        public IHttpActionResult Create([FromBody] Entities.Table.Sucursal entity)
         {
-            try
+            if (entity != null)
             {
-                if (entity != null)
+                try
                 {
                     using (var scope = new TransactionScope())
                     {
@@ -90,24 +96,24 @@ namespace demo.Web.Api.Controllers
                             return Created<Entities.Table.Sucursal>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
-                        return InternalServerError();
+                        return InternalServerError(new Exception(save.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
                     }
                 }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+            }
 
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            return BadRequest();
         }
 
         [HttpPut]
-        public IHttpActionResult Update(int id, [FromBody]Entities.Table.Sucursal entity)
+        public IHttpActionResult Update(int id, [FromBody] Entities.Table.Sucursal entity)
         {
-            try
+            if (id > 0)
             {
-                if (entity != null)
+                try
                 {
                     var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
                     sucursal.Id = id;
@@ -129,60 +135,65 @@ namespace demo.Web.Api.Controllers
                                     return Ok(save.domain?.Data?.Entity);
                                 }
 
-                                return InternalServerError();
+                                return InternalServerError(new Exception(save.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
                             }
                         }
 
                         return NotFound();
                     }
 
-                    return InternalServerError();
+                    return InternalServerError(new Exception(load.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
                 }
-
-                return BadRequest();
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            
+            return BadRequest();
         }
 
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
-            try
+            if (id > 0)
             {
-                var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
-                sucursal.Id = id;
-
-                var load = sucursal.Load();
-                if (load.result.Success)
+                try
                 {
-                    if (load.domain != null)
+                    var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
+                    sucursal.Id = id;
+
+                    var load = sucursal.Load();
+                    if (load.result.Success)
                     {
-                        using (var scope = new TransactionScope())
+                        if (load.domain != null)
                         {
-                            var erase = load.domain.Erase();
-                            if (erase.result.Success)
+                            using (var scope = new TransactionScope())
                             {
-                                scope.Complete();
+                                var erase = load.domain.Erase();
+                                if (erase.result.Success)
+                                {
+                                    scope.Complete();
 
-                                return StatusCode(HttpStatusCode.NoContent);
+                                    return StatusCode(HttpStatusCode.NoContent);
+                                }
+
+                                return InternalServerError(new Exception(erase.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
                             }
-
-                            return InternalServerError();
                         }
+
+                        return NotFound();
                     }
 
-                    return NotFound();
+                    return InternalServerError(new Exception(load.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
                 }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+            }
 
-                return InternalServerError();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            return BadRequest();
         }
     }
 }
