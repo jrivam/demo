@@ -19,12 +19,12 @@ namespace jrivam.Library.Impl.Persistence
         protected readonly IDbCommandExecutorBulk _dbcommandexecutorbulk;
 
         public Repository(ConnectionStringSettings connectionstringsettings,
-            ISqlCreator creator,
+            ISqlCreator sqlcreator,
             IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk)
         {
             _connectionstringsettings = connectionstringsettings;
 
-            _sqlcreator = creator;
+            _sqlcreator = sqlcreator;
 
             _dbcommandexecutor = dbcommandexecutor;
             _dbcommandexecutorbulk = dbcommandexecutorbulk;
@@ -38,7 +38,8 @@ namespace jrivam.Library.Impl.Persistence
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
         {
             var executequery = _dbcommandexecutor.ExecuteQuery(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName, 
-                    commandtext, commandtype, parameters, 
+                    commandtext, commandtype, 
+                    parameters, 
                     _connectionstringsettings.ConnectionString),
                 maxdepth, entities);
 
@@ -57,7 +58,8 @@ namespace jrivam.Library.Impl.Persistence
         public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
             var executenonquery = _dbcommandexecutorbulk.ExecuteNonQuery(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName,  
-                    commandtext, commandtype, parameters,
+                    commandtext, commandtype, 
+                    parameters,
                     _connectionstringsettings.ConnectionString));
 
             if (executenonquery.rows == 0)
@@ -75,7 +77,8 @@ namespace jrivam.Library.Impl.Persistence
         public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
         {
             var executescalar = _dbcommandexecutorbulk.ExecuteScalar(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName,  
-                    commandtext, commandtype, parameters,
+                    commandtext, commandtype, 
+                    parameters,
                     _connectionstringsettings.ConnectionString));
 
             if (executescalar.scalar == null)
