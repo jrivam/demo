@@ -2,6 +2,7 @@
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence
@@ -21,7 +22,7 @@ namespace jrivam.Library.Impl.Persistence
 
         public ListData(ICollection<T> entities = null)
         {
-            _entities = entities;
+            _entities = entities ?? new Collection<T>();
             _entities?.ToList()?.ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));
         }
 

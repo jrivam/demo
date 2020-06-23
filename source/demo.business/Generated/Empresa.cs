@@ -48,7 +48,7 @@ namespace demo.Business.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesQuery>(new TypedParameter(typeof(Persistence.Table.SucursalesQuery), Data?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesQuery>(new TypedParameter(typeof(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
                 }
 
                 _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);

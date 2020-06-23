@@ -44,7 +44,7 @@ namespace demo.Presentation.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesQuery>(new TypedParameter(typeof(Business.Table.SucursalesQuery), Domain?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesQuery>(new TypedParameter(typeof(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>), Domain?.Sucursales));
 
                     if (this.Id != null)
                     {

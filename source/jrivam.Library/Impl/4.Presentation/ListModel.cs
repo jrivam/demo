@@ -1,4 +1,5 @@
-﻿using jrivam.Library.Interface.Business;
+﻿using jrivam.Library.Impl.Business;
+using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
@@ -15,7 +16,7 @@ namespace jrivam.Library.Impl.Presentation
     public class ListModel<T, U, V, W> : ObservableCollection<W>, IListModel<T, U, V, W>, IStatus
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>
+        where V : class, ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
     {
         protected IListDomain<T, U, V> _domains;
@@ -61,7 +62,7 @@ namespace jrivam.Library.Impl.Presentation
 
         public ListModel(IListDomain<T, U, V> domains = null, string name = null)
         {
-            _domains = domains;
+            _domains = domains ?? new ListDomain<T, U, V>();
             _domains?.ToList()?.ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
 
             Name = name ?? this.GetType().Name;

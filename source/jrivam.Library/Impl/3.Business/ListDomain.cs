@@ -1,4 +1,5 @@
-﻿using jrivam.Library.Interface.Business;
+﻿using jrivam.Library.Impl.Persistence;
+using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
@@ -24,7 +25,7 @@ namespace jrivam.Library.Impl.Business
 
         public ListDomain(IListData<T, U> datas = null)
         {
-            _datas = datas;
+            _datas = datas ?? new ListData<T, U>();
             _datas?.ToList()?.ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    
         }
 

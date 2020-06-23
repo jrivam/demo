@@ -12,7 +12,7 @@ namespace jrivam.Library.Impl.Presentation
     public class ListModelQuery<S, T, U, V, W> : ListModel<T, U, V, W>, IListModelQuery<S, T, U, V, W>, IListModelRefresh<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>
+        where V : class, ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
         where S : IQueryModel<T, U, V, W>
     {
