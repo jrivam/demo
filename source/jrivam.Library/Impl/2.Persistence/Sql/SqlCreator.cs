@@ -45,7 +45,8 @@ namespace jrivam.Library.Impl.Persistence.Sql
             return command;
         }
         public virtual IDbCommand GetCommand(string providername, 
-            string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+            string commandtext = "", CommandType commandtype = CommandType.Text, 
+            IList<SqlParameter> parameters = null)
         {
             var command = GetCommand(providername, commandtext, commandtype);
 
@@ -57,7 +58,8 @@ namespace jrivam.Library.Impl.Persistence.Sql
             return command;
         }
         public virtual IDbCommand GetCommand(string providername, 
-            string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null,
+            string commandtext = "", CommandType commandtype = CommandType.Text, 
+            IList<SqlParameter> parameters = null,
             string connectionstring = "")
         {            
             var command = GetCommand(providername, commandtext, commandtype, parameters);
