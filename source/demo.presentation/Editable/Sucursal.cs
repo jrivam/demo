@@ -14,7 +14,7 @@ namespace demo.Presentation.Table
             {
                 Codigo = value;
 
-                Domain.Validate("CodigoNotEmpty").FilteredAsText(Environment.NewLine);
+                Domain.Validate("CodigoNotEmpty").GetMessages();
 
                 OnPropertyChanged("CodigoNotEmpty");
             }

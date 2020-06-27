@@ -7,59 +7,36 @@ namespace jrivam.Library.Impl
     public class Result
     {
         public bool Success { get; set; }
+        
         public IList<(ResultCategory category, string name, string message)> Messages { get; set; } = new List<(ResultCategory, string, string)>() { };
 
-        public Result()
-        {
-        }
-        public Result(Result result)
-            : this()
+        public Result(Result result = null)
         {
             Append(result);
-        }
-        public Result(IList<(ResultCategory category, string name, string message)> messages)
-           : this()
-        {
-            messages?.ToList()?.ForEach(x => Messages.Add(x));
-        }
-        public Result(Result result, IList<(ResultCategory category, string name, string message)> messages)
-            : this(result)
-        {
-            messages?.ToList()?.ForEach(x => Messages.Add(x));
         }
 
         public Result Append(Result result)
         {
             if (result != null)
             {
-                Success = Success && result.Success;
                 ((List<(ResultCategory, string, string)>)Messages).AddRange(result.Messages);
+
+                Success = Success && result.Success;
             }
 
             return this;
         }
 
-        public IList<(ResultCategory category, string name, string message)> Filtered(Func<(ResultCategory category, string name, string message), bool> condition = null)
+        public string GetMessages(Func<(ResultCategory category, string name, string message), bool> condition = null, string newlinereplacement = null)
         {
-            if (condition != null)
+            var messages = String.Join(Environment.NewLine, condition != null ? Messages.Where(condition) : Messages);
+
+            if (newlinereplacement != null)
             {
-                return Messages.Where(condition).ToList();
+                return messages.Replace(Environment.NewLine, newlinereplacement);
             }
 
-            return Messages;
-        }
-        public string FilteredAsText(string newlinereplacement = null, Func<(ResultCategory category, string name, string message), bool> condition = null)
-        {
-            return String.Join(newlinereplacement ?? Environment.NewLine, Filtered(condition).ToArray()).Replace(Environment.NewLine, string.Empty);
-        }
-        public string FilteredAsTextSelected<T>(string newlinereplacement = null, Func<(ResultCategory category, string name, string message), bool> condition = null, Func<(ResultCategory category, string name, string message), T> selector = null)
-        {
-            if (selector != null)
-            {
-                return String.Join(newlinereplacement, Filtered(condition).Select(selector).ToArray()).Replace(Environment.NewLine, string.Empty);
-            }
-
-            return FilteredAsText(newlinereplacement, condition);
+            return messages;
         }
     }
 }

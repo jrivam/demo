@@ -33,7 +33,7 @@ namespace demo.Web.Api.Controllers
                     return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities);
                 }
 
-                return InternalServerError(new Exception(list.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                return InternalServerError(new Exception(list.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace demo.Web.Api.Controllers
                         return NotFound();
                     }
 
-                    return InternalServerError(new Exception(load.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                    return InternalServerError(new Exception(load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
                 }
                 catch (Exception ex)
                 {
@@ -96,7 +96,7 @@ namespace demo.Web.Api.Controllers
                             return Created<Entities.Table.Sucursal>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
-                        return InternalServerError(new Exception(save.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                        return InternalServerError(new Exception(save.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
                     }
                 }
                 catch (Exception ex)
@@ -135,14 +135,14 @@ namespace demo.Web.Api.Controllers
                                     return Ok(save.domain?.Data?.Entity);
                                 }
 
-                                return InternalServerError(new Exception(save.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                                return InternalServerError(new Exception(save.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
                             }
                         }
 
                         return NotFound();
                     }
 
-                    return InternalServerError(new Exception(load.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                    return InternalServerError(new Exception(load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
                 }
                 catch (Exception ex)
                 {
@@ -178,14 +178,14 @@ namespace demo.Web.Api.Controllers
                                     return StatusCode(HttpStatusCode.NoContent);
                                 }
 
-                                return InternalServerError(new Exception(erase.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                                return InternalServerError(new Exception(erase.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
                             }
                         }
 
                         return NotFound();
                     }
 
-                    return InternalServerError(new Exception(load.result.FilteredAsText(null, x => x.category == ResultCategory.OnlyErrors)));
+                    return InternalServerError(new Exception(load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
                 }
                 catch (Exception ex)
                 {

@@ -2,7 +2,6 @@
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
-using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Raiser;
 using jrivam.Library.Interface.Presentation.Table;
 
@@ -42,7 +41,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (load.result, model);
             }
 
-            model.Status = load.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors), "/");
 
             return (load.result, default(W));
         }
@@ -62,7 +61,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (loadquery.result, model);
             }
 
-            model.Status = loadquery.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = loadquery.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors), "/");
 
             return (loadquery.result, default(W));
         }
@@ -81,7 +80,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (save.result, model);
             }
 
-            model.Status = save.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = save.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors), "/");
 
             return (save.result, default(W));
         }
@@ -97,7 +96,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (erase.result, model);
             }
 
-            model.Status = erase.result.FilteredAsText("/", x => x.category == (x.category & ResultCategory.OnlyErrors));
+            model.Status = erase.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors), "/");
 
             return (erase.result, default(W));
         }

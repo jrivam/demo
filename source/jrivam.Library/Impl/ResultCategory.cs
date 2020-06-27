@@ -2,11 +2,12 @@
 {
     public enum ResultCategory
     {
-        Information = 0,
-        Warning = 1,
-        Error = 2,
-        Exception = 4,
+        Information = 1,
+        Warning = 2,
+        Error = 4,
+        Exception = 8,
         OnlyErrors = Error | Exception,
-        All = Information | Warning | Error | Exception
+        OnlyInformation = Information | Warning,
+        All = OnlyErrors | OnlyInformation
     }
 }
