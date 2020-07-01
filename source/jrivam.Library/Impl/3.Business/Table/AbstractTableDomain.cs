@@ -55,7 +55,7 @@ namespace jrivam.Library.Impl.Business.Table
 
         public virtual Result Validate()
         {
-            var result = new Result() { Success = true };
+            var result = new Result();
 
             foreach (var validation in Validations)
             {
@@ -110,7 +110,7 @@ namespace jrivam.Library.Impl.Business.Table
 
         protected virtual Result SaveChildren()
         {
-            var savechildren = new Result() { Success = true };
+            var savechildren = new Result();
 
             foreach (var property in typeof(V).GetPropertiesFromType(iscollection: true, attributetypes: new System.Type[] { typeof(DomainAttribute) }))
             {
@@ -125,7 +125,7 @@ namespace jrivam.Library.Impl.Business.Table
         }
         protected virtual Result EraseChildren()
         {
-            var erasechildren = new Result() { Success = true };
+            var erasechildren = new Result();
 
             foreach (var property in typeof(V).GetPropertiesFromType(iscollection: true, attributetypes: new System.Type[] { typeof(DomainAttribute) }))
             {

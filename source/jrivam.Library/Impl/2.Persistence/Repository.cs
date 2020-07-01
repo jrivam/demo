@@ -43,9 +43,16 @@ namespace jrivam.Library.Impl.Persistence
                     _connectionstringsettings.ConnectionString),
                 maxdepth, entities);
 
-            if ((executequery.entities?.Count() ?? 0) == 0)
+            if(executequery.result.Success && executequery.entities?.Count() == 0)
             {
-                executequery.result.Messages.Add((ResultCategory.Information, nameof(ExecuteQuery), "No rows found"));
+                executequery.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = nameof(ExecuteQuery),
+                        Description = "No rows found."
+                    }
+                );
             }
 
             return executequery;
@@ -62,9 +69,16 @@ namespace jrivam.Library.Impl.Persistence
                     parameters,
                     _connectionstringsettings.ConnectionString));
 
-            if (executenonquery.rows == 0)
+            if (executenonquery.result.Success && executenonquery.rows == 0)
             {
-                executenonquery.result.Messages.Add((ResultCategory.Information, nameof(ExecuteNonQuery), "No rows affected"));
+                executenonquery.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = nameof(ExecuteNonQuery),
+                        Description = "No rows affected."
+                    }
+                );
             }
 
             return executenonquery;
@@ -81,9 +95,16 @@ namespace jrivam.Library.Impl.Persistence
                     parameters,
                     _connectionstringsettings.ConnectionString));
 
-            if (executescalar.scalar == null)
+            if (executescalar.result.Success && executescalar.scalar == null)
             {
-                executescalar.result.Messages.Add((ResultCategory.Information, nameof(ExecuteScalar), "No rows affected"));
+                executescalar.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = nameof(ExecuteScalar),
+                        Description = "No rows affected."
+                    }
+                );
             }
 
             return executescalar;

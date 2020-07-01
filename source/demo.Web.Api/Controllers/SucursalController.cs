@@ -33,7 +33,10 @@ namespace demo.Web.Api.Controllers
                     return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities);
                 }
 
-                return InternalServerError(new Exception(list.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                if (list.result.Exception == null)
+                    return BadRequest(list.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                throw list.result.Exception;
             }
             catch (Exception ex)
             {
@@ -68,7 +71,10 @@ namespace demo.Web.Api.Controllers
                         return NotFound();
                     }
 
-                    return InternalServerError(new Exception(load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                    if (load.result.Exception == null)
+                        return BadRequest(load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                    throw load.result.Exception;
                 }
                 catch (Exception ex)
                 {
@@ -93,10 +99,13 @@ namespace demo.Web.Api.Controllers
                         {
                             scope.Complete();
 
-                            return Created<Entities.Table.Sucursal>($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
+                            return Created($"{Request.RequestUri}/{save.domain?.Id?.ToString()}", save.domain?.Data?.Entity);
                         }
 
-                        return InternalServerError(new Exception(save.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                        if (save.result.Exception == null)
+                            return BadRequest(save.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                        throw save.result.Exception;
                     }
                 }
                 catch (Exception ex)
@@ -135,14 +144,20 @@ namespace demo.Web.Api.Controllers
                                     return Ok(save.domain?.Data?.Entity);
                                 }
 
-                                return InternalServerError(new Exception(save.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                                if (save.result.Exception == null)
+                                    return BadRequest(save.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                                throw save.result.Exception;
                             }
                         }
 
                         return NotFound();
                     }
 
-                    return InternalServerError(new Exception(load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                    if (load.result.Exception == null)
+                        return BadRequest(load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                    throw load.result.Exception;
                 }
                 catch (Exception ex)
                 {
@@ -178,14 +193,20 @@ namespace demo.Web.Api.Controllers
                                     return StatusCode(HttpStatusCode.NoContent);
                                 }
 
-                                return InternalServerError(new Exception(erase.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                                if (erase.result.Exception == null)
+                                    return BadRequest(erase.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                                throw erase.result.Exception;
                             }
                         }
 
                         return NotFound();
                     }
 
-                    return InternalServerError(new Exception(load.result.GetMessages(x => x.category == (x.category & ResultCategory.OnlyErrors))));
+                    if (load.result.Exception == null)
+                        return BadRequest(load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
+
+                    throw load.result.Exception;
                 }
                 catch (Exception ex)
                 {

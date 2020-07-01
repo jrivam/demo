@@ -25,7 +25,14 @@ namespace jrivam.Library.Impl.Business.Validator
                 if ((_min != null && (int)_column.Value < _min)
                     || (_max != null && (int)_column.Value > _max))
                 {
-                    return new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "RangeValidation", $"{_column.Description.Name} must be between {_min} and {_max}") } };
+                    return new Result(
+                        new ResultMessage()
+                            {
+                                Category = ResultCategory.Error,
+                                Name = "RangeValidation",
+                                Description =  $"{_column.Description.Name} must be between {_min} and {_max}"
+                            }
+                        );
                 }
             }
 

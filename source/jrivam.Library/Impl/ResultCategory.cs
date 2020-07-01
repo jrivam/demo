@@ -6,8 +6,8 @@
         Warning = 2,
         Error = 4,
         Exception = 8,
-        OnlyErrors = Error | Exception,
-        OnlyInformation = Information | Warning,
-        All = OnlyErrors | OnlyInformation
+        Successful = Information | Warning,
+        NotSuccessful = Error | Exception,
+        All = Successful | NotSuccessful
     }
 }

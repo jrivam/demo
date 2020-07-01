@@ -1,6 +1,5 @@
 ﻿using jrivam.Library.Interface.Persistence.Database;
 using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace jrivam.Library.Impl.Persistence.Database
@@ -13,8 +12,6 @@ namespace jrivam.Library.Impl.Persistence.Database
 
         public virtual (Result result, int rows) ExecuteNonQuery(IDbCommand command)
         {
-            var result = new Result() { Success = true };
-
             try
             {
                 command.Connection?.Open();
@@ -23,17 +20,22 @@ namespace jrivam.Library.Impl.Persistence.Database
 
                 command.Connection?.Close();
 
-                return (result, rows);
+                return (new Result(), rows);
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, nameof(ExecuteNonQuery), $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, -1);
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = nameof(ExecuteNonQuery),
+                        Description = ex.Message,
+                    })
+                { Exception = ex }, -1);
             }
         }
         public virtual (Result result, object scalar) ExecuteScalar(IDbCommand command)
         {
-            var result = new Result() { Success = true };
-
             try
             {
                 command.Connection?.Open();
@@ -42,11 +44,18 @@ namespace jrivam.Library.Impl.Persistence.Database
 
                 command.Connection?.Close();
 
-                return (result, scalar);
+                return (new Result(), scalar);
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, nameof(ExecuteScalar), $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = nameof(ExecuteScalar),
+                        Description = ex.Message
+                    })
+                { Exception = ex }, null);
             }
         }
     }

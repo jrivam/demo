@@ -44,7 +44,7 @@ namespace jrivam.Library.Impl.Business
 
         public virtual Result SaveAll()
         {
-            var result = new Result() { Success = true };
+            var result = new Result();
 
             foreach (var domain in this)
             {
@@ -57,7 +57,7 @@ namespace jrivam.Library.Impl.Business
         }
         public virtual Result EraseAll()
         {
-            var result = new Result() { Success = true };
+            var result = new Result();
 
             foreach (var domain in this)
             {

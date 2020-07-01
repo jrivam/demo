@@ -45,7 +45,14 @@ namespace jrivam.Library.Impl.Business.Validator
                 {
                     if (selectsingle.data != null)
                     {
-                        return new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "UniqueValidation", $"{_column.Description.Name} {_column.Value} already exists in {_column.Table.Description.Name}.{_column.Description.Name}: {selectsingle.data?.Columns[_column.Description.Name].Value}") } };
+                        return new Result(
+                            new ResultMessage()
+                                {
+                                    Category = ResultCategory.Error,
+                                    Name = "UniqueValidation",
+                                    Description =  $"{_column.Description.Name} {_column.Value} already exists in {_column.Table.Description.Name}.{_column.Description.Name}: {selectsingle.data?.Columns[_column.Description.Name].Value}"
+                                }
+                            );
                     }
                 }
                 else

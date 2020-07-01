@@ -18,8 +18,6 @@ namespace jrivam.Library.Impl.Persistence.Database
 
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
         {
-            var result = new Result() { Success = true };
-
             try
             {
                 var enumeration = new Collection<T>();
@@ -43,11 +41,18 @@ namespace jrivam.Library.Impl.Persistence.Database
 
                 command.Connection?.Close();
 
-                return (result, enumeration);
+                return (new Result(), enumeration);
             }
             catch (Exception ex)
             {
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Exception, nameof(ExecuteQuery), $"{ex.Message}{Environment.NewLine}{ex.InnerException}") } }, null);
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = nameof(ExecuteQuery),
+                        Description = ex.Message
+                    })
+                { Exception = ex }, null);
             }
         } 
     }

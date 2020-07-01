@@ -25,10 +25,25 @@ namespace jrivam.Library.Impl.Business
                 {
                     return data.Select(usedbcommand);
                 }
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Load), $"Id in {data.Description.DbName} cannot be null") } }, default(U));
+
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Load),
+                            Description =  $"Id in {data.Description.DbName} cannot be null."
+                        }
+                    ), default(U));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Load), $"Primary Key column in {data.Description.DbName} not defined") } }, default(U));
+            return (new Result(
+                new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Load),
+                            Description =  $"Primary Key column in {data.Description.DbName} not defined."
+                        }
+                    ), default(U));
         }
         public virtual (Result result, U data) LoadQuery(U data, int maxdepth = 1)
         {
@@ -40,10 +55,24 @@ namespace jrivam.Library.Impl.Business
                     return data.SelectQuery(maxdepth);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(LoadQuery), $"Id in {data.Description.DbName} cannot be null") } }, default(U));
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(LoadQuery),
+                            Description =  $"Id in {data.Description.DbName} cannot be null."
+                        }
+                    ), default(U));
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(LoadQuery), $"Primary Key column in {data.Description.DbName} not defined") } }, default(U));
+            return (new Result(
+                new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(LoadQuery),
+                            Description = $"Primary Key column in {data.Description.DbName} not defined."
+                        }
+                    ), default(U));
         }
 
         public virtual (Result result, IEnumerable<U> datas) List(IQueryData<T, U> query,
@@ -71,7 +100,14 @@ namespace jrivam.Library.Impl.Business
                 }
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Save), $"Primary Key column in {data.Description.DbName} not defined") } }, default(U));
+            return (new Result(
+                new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Save),
+                            Description = $"Primary Key column in {data.Description.DbName} not defined."
+                        }
+                    ), default(U));
         }
         public virtual (Result result, U data) Erase(U data, bool usedbcommand = false)
         {
@@ -85,10 +121,24 @@ namespace jrivam.Library.Impl.Business
                     return (delete.result, delete.data);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Erase), $"Id in {data.Description.DbName} cannot be null") } }, default(U));
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Erase),
+                            Description = $"Id in {data.Description.DbName} cannot be null."
+                        }
+                    ), default(U));                
             }
 
-            return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Erase), $"Primary Key column in {data.Description.DbName} not defined") } }, default(U));
+            return (new Result(
+                new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Erase),
+                            Description = $"Primary Key column in {data.Description.DbName} not defined."
+                        }
+                    ), default(U));
         }
     }
 }

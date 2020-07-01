@@ -18,7 +18,14 @@ namespace jrivam.Library.Impl.Business.Validator
             {
                 if (string.IsNullOrWhiteSpace(_column.Value?.ToString()))
                 {
-                    return new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, "EmptyValidation", $"{_column.Description.Name} must have a value") } };
+                    return new Result(
+                        new ResultMessage()
+                            {
+                                Category = ResultCategory.Error,
+                                Name = "EmptyValidation",
+                                Description =  $"{_column.Description.Name} must have a value"
+                            }
+                        );
                 }
             }
 

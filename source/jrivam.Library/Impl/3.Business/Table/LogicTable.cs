@@ -77,7 +77,14 @@ namespace jrivam.Library.Impl.Business.Table
                 return (validate, default(V));
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Save), $"No changes to persist in {domain.Data.Description.DbName} with Id {domain.Data.Entity.Id}") } }, default(V));
+            return (new Result(
+                new ResultMessage()
+                        {
+                            Category = ResultCategory.Information,
+                            Name = nameof(Save),
+                            Description =  $"No changes to persist in {domain.Data.Description.DbName} with Id {domain.Data.Entity.Id}."
+                        }
+                    ), default(V));
         }
         public virtual (Result result, V domain) Erase(V domain, bool usedbcommand = false)
         {
@@ -90,7 +97,14 @@ namespace jrivam.Library.Impl.Business.Table
                 return (erase.result, domain);
             }
 
-            return (new Result() { Success = true, Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Information, nameof(Erase), $"{domain.Data.Description.DbName} with Id {domain.Data.Entity.Id} already deleted") } }, default(V));
+            return (new Result(
+                new ResultMessage()
+                        {
+                            Category = ResultCategory.Information,
+                            Name = nameof(Erase),
+                            Description =  $"{domain.Data.Description.DbName} with Id {domain.Data.Entity.Id} already deleted."
+                        }
+                    ), default(V));
         }
     }
 }

@@ -55,7 +55,14 @@ namespace jrivam.Library.Impl.Persistence.Table
                     return Select(data, data.SelectDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Select), "No SelectDbCommand defined.") } }, default(U));
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Select),
+                            Description =  "No SelectDbCommand defined."
+                        }
+                    ), default(U));
             }
 
             var parameters = new List<SqlParameter>();
@@ -96,7 +103,14 @@ namespace jrivam.Library.Impl.Persistence.Table
                     return Insert(data, data.InsertDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Insert), "No InsertDbCommand defined.") } }, default(U));
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Insert),
+                            Description =  "No InsertDbCommand defined."
+                        }
+                    ), default(U));
             }
 
             var parameters = new List<SqlParameter>();
@@ -140,7 +154,14 @@ namespace jrivam.Library.Impl.Persistence.Table
                     return Update(data, data.UpdateDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Update), "No UpdateDbCommand defined.") } }, default(U));
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Update),
+                            Description =  "No UpdateDbCommand defined."
+                        }
+                    ), default(U));
             }
 
             var parameters = new List<SqlParameter>();
@@ -180,7 +201,14 @@ namespace jrivam.Library.Impl.Persistence.Table
                     return Delete(data, data.DeleteDbCommand.Value.dbcommand);
                 }
 
-                return (new Result() { Messages = new List<(ResultCategory, string, string)>() { (ResultCategory.Error, nameof(Delete), "No DeleteDbCommand defined.") } }, default(U));
+                return (new Result(
+                    new ResultMessage()
+                        {
+                            Category = ResultCategory.Error,
+                            Name = nameof(Delete),
+                            Description =  "No DeleteDbCommand defined."
+                        }
+                    ), default(U));
             }
 
             var parameters = new List<SqlParameter>();

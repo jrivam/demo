@@ -114,6 +114,7 @@
     <Compile Include="Impl\4.Presentation\NotifyPropertyChanged.cs" />
     <Compile Include="Impl\4.Presentation\Table\AbstractTableModel.cs" />
     <Compile Include="Impl\4.Presentation\Validatoring.cs" />
+    <Compile Include="Impl\ResultMessage.cs" />
     <Compile Include="Interface\2.Persistence\IColumn.cs" />
     <Compile Include="Impl\2.Persistence\ListColumns.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Builder\SqlBuilderTable.cs" />

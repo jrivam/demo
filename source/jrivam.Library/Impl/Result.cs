@@ -6,20 +6,26 @@ namespace jrivam.Library.Impl
 {
     public class Result
     {
-        public bool Success { get; set; }
-        
-        public IList<(ResultCategory category, string name, string message)> Messages { get; set; } = new List<(ResultCategory, string, string)>() { };
+        public IList<ResultMessage> _messages = new List<ResultMessage>() { };
+
+        public bool Success { get; protected set; } = true;
+        public Exception Exception { get; set; }
 
         public Result(Result result = null)
         {
             Append(result);
+        }
+        public Result(ResultMessage message)
+            : this()
+        {
+            SetMessage(message);
         }
 
         public Result Append(Result result)
         {
             if (result != null)
             {
-                ((List<(ResultCategory, string, string)>)Messages).AddRange(result.Messages);
+                ((List<ResultMessage>)_messages).AddRange(result.GetMessages());
 
                 Success = Success && result.Success;
             }
@@ -27,14 +33,25 @@ namespace jrivam.Library.Impl
             return this;
         }
 
-        public string GetMessages(Func<(ResultCategory category, string name, string message), bool> condition = null, string newlinereplacement = null)
+        public void SetMessage(ResultMessage message)
         {
-            var messages = String.Join(Environment.NewLine, condition != null ? Messages.Where(condition) : Messages);
+            _messages.Add(message);
+            Success = Success & message.Category == (message.Category & ResultCategory.Successful);
+        }
+        public IEnumerable<ResultMessage> GetMessages(Func<ResultMessage, bool> condition = null)
+        {
+            if (condition != null)
+                return _messages.Where(condition);
+            
+            return _messages;
+        }
+
+        public string GetMessagesAsString(Func<ResultMessage, bool> condition = null, string newlinereplacement = null)
+        {
+            var messages = String.Join(Environment.NewLine, GetMessages(condition).Select(x => $"[{x.Category}]-({x.Name})-{x.Description}"));
 
             if (newlinereplacement != null)
-            {
                 return messages.Replace(Environment.NewLine, newlinereplacement);
-            }
 
             return messages;
         }

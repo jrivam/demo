@@ -14,7 +14,7 @@ namespace jrivam.Library.Impl.Business.Validator
 
         public virtual Result Validate()
         {
-            return (new Result() { Success = true });
+            return new Result();
         }
     }
 }

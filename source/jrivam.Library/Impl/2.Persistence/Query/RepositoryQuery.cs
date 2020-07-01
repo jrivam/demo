@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using jrivam.Library;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
@@ -83,6 +82,7 @@ namespace jrivam.Library.Impl.Persistence.Query
                         enumeration.Add(instance);
                     }
                 }
+
                 return (executequery.result, enumeration);
             }
 
