@@ -40,16 +40,16 @@ namespace jrivam.Library
         {
             builder.RegisterType<EntityReader>()
                    .As<IEntityReader>()
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterType<DataMapper>()
                    .As<IDataMapper>()
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterType<DomainLoader>()
                    .As<IDomainLoader>()
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterType<ModelRaiser>()
                    .As<IModelRaiser>()
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
 
             builder.RegisterType<DbCommandExecutor>()
                    .As<IDbCommandExecutor>()
@@ -90,33 +90,35 @@ namespace jrivam.Library
             //builder.RegisterType<Repository>()
             //       .As<IRepository>()
             //       .InstancePerLifetimeScope();
+            //builder.RegisterGeneric(typeof(AbstractTableData<,>))
+            //    .As(typeof(AbstractTableData<,>)).InstancePerDependency();
 
             builder.RegisterGeneric(typeof(RepositoryTable<,>))
                    .As(typeof(IRepositoryTable<,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterGeneric(typeof(RepositoryQuery<,>))
                    .As(typeof(IRepositoryQuery<,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
 
             builder.RegisterGeneric(typeof(Logic<,>))
                    .As(typeof(ILogic<,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterGeneric(typeof(LogicTable<,,>))
                    .As(typeof(ILogicTable<,,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterGeneric(typeof(LogicQuery<,,>))
                    .As(typeof(ILogicQuery<,,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
 
             builder.RegisterGeneric(typeof(Interactive<,,>))
                    .As(typeof(IInteractive<,,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterGeneric(typeof(InteractiveTable<,,,>))
                    .As(typeof(IInteractiveTable<,,,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
             builder.RegisterGeneric(typeof(InteractiveQuery<,,,>))
                    .As(typeof(IInteractiveQuery<,,,>))
-                   .InstancePerLifetimeScope();
+                   .InstancePerDependency();
 
             builder.RegisterGeneric(typeof(ListData<,>))
                    .As(typeof(IListData<,>))

@@ -13,8 +13,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
         {
         }
 
-        public virtual string
-            GetSelectColumns
+        public virtual string GetSelectColumns
             (IList<IColumnTable> columns)
         {
             var select = string.Empty;
@@ -28,8 +27,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             return select;
         }
 
-        public virtual string
-            GetWhere
+        public virtual string GetWhere
             (IList<IColumnTable> columns, IList<SqlParameter> parameters)
         {
             var where = string.Empty;
@@ -42,8 +40,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             return where;
         }
 
-        public virtual string
-            GetInsertColumns
+        public virtual string GetInsertColumns
             (IList<IColumnTable> columns)
         {
             var insert = string.Empty;
@@ -57,8 +54,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             return insert;
         }
 
-        public virtual string
-            GetInsertValues
+        public virtual string GetInsertValues
             (IList<IColumnTable> columns, IList<SqlParameter> parameters)
         {
             var values = string.Empty;

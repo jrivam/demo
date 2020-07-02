@@ -13,8 +13,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
         {
         }
 
-        public virtual IList<(IColumnQuery column, IList<string> tablenames, IList<string> aliasnames)>
-            GetQueryColumns
+        public virtual IList<(IColumnQuery column, IList<string> tablenames, IList<string> aliasnames)> GetQueryColumns
             (IBuilderQueryData query,
             IList<string> tablenames,
             IList<string> aliasnames,
@@ -66,8 +65,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             return joins;
         }    
 
-        public virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> 
-            GetParameters
+        public virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> GetParameters
             ((IColumnQuery column, IList<string> aliases, IList<string> parameters) columns,
             IList<SqlParameter> parameters)
         {
@@ -90,8 +88,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             }
         }
 
-        public virtual string 
-            GetFrom
+        public virtual string GetFrom
             (IList<(IBuilderQueryData internaltable, IList<string> internalalias, IBuilderQueryData externaltable, IList<string> externalalias, IList<(IColumnQuery internalkey, IColumnQuery externalkey)> joins)> joins, 
             string tablename)
         {
@@ -113,8 +110,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             return from;
         }
 
-        public virtual string 
-            GetWhere
+        public virtual string GetWhere
             (IList<(IColumnQuery column, IList<string> tablenames, IList<string> aliasnames)> columns, 
             IList<SqlParameter> parameters)
         {
@@ -140,8 +136,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
             return where;
         }
 
-        public virtual string 
-            GetSelectColumns
+        public virtual string GetSelectColumns
             (IList<(IColumnQuery column, IList<string> tablenames, IList<string> aliasnames)> columns)
         {
             var select = string.Empty;
