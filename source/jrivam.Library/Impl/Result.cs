@@ -40,17 +40,12 @@ namespace jrivam.Library.Impl
         }
         public IEnumerable<ResultMessage> GetMessages(Func<ResultMessage, bool> condition = null)
         {
-            if (condition != null)
-                return _messages.Where(condition);
-            
-            return _messages;
+            return _messages.Where(condition ?? (x => x.Category == (x.Category & ResultCategory.All)));
         }
 
-        public string GetMessagesAsString(Func<ResultMessage, bool> condition = null, string newlinereplacement = null)
+        public string GetMessagesAsString(Func<ResultMessage, bool> condition = null, Func<ResultMessage, string> selector = null, string newlinereplacement = null)
         {
-            var messages = String.Join(newlinereplacement ?? Environment.NewLine, GetMessages(condition).Select(x => $"[{x.Category}]-({x.Name})-{x.Description}"));
-
-            return messages;
+            return String.Join(newlinereplacement ?? Environment.NewLine, GetMessages(condition).Select(selector ?? (x => $"[{x.Category}]-({x.Name})-{x.Description}")));
         }
     }
 }

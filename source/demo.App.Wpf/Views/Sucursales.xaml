@@ -20,7 +20,7 @@
         <Button x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding SucursalesQuery.AddCommand}" CommandParameter="{Binding}" Margin="10,10,0,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"/>
         <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding SucursalesQuery.RefreshCommand}" CommandParameter="{Binding}" Margin="0,10,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="163"/>        
         
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding SucursalesQuery}" Margin="0,37,0,60" >
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding SucursalesQuery}" Margin="0,37,0,76" >
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -169,14 +169,16 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" >
+        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,46" >
             <StatusBarItem HorizontalAlignment="Left">
                 <TextBlock x:Name="lblTotal" Text="{Binding SucursalesQuery.Total}"/>
             </StatusBarItem>
         </StatusBar>
-        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+        <StatusBar Background="LightBlue" Height="46" VerticalAlignment="Bottom" >
             <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblStatus" Text="{Binding SucursalesQuery.Status}"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                    <TextBlock x:Name="lblStatus" Text="{Binding SucursalesQuery.Status}" TextWrapping="Wrap"/>
+                </ScrollViewer>
             </StatusBarItem>
         </StatusBar>
     </Grid>

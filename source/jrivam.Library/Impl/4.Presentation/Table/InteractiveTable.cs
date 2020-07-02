@@ -41,7 +41,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (load.result, model);
             }
 
-            model.Status = load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful), "/");
+            model.Status = load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful));
 
             return (load.result, default(W));
         }
@@ -61,7 +61,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (loadquery.result, model);
             }
 
-            model.Status = loadquery.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful), "/");
+            model.Status = loadquery.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful));
 
             return (loadquery.result, default(W));
         }
@@ -80,7 +80,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (save.result, model);
             }
 
-            model.Status = save.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful), "/");
+            model.Status = save.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful));
 
             return (save.result, default(W));
         }
@@ -96,7 +96,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 return (erase.result, model);
             }
 
-            model.Status = erase.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful), "/");
+            model.Status = erase.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful));
 
             return (erase.result, default(W));
         }

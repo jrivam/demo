@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:demo.App.Wpf.ViewModels"
         mc:Ignorable="d"
-        Title="Sucursal" Height="307" Width="639" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+        Title="Sucursal" Height="313.079" Width="639" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <!--<Window.DataContext>
         <viewmodels:SucursalViewModel/>
@@ -53,9 +53,11 @@
 
         <CheckBox IsThreeState="False" Content="Activo" IsChecked="{Binding Sucursal.Activo, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="92,208,0,0" VerticalAlignment="Top"/>
 
-        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+        <StatusBar Background="LightBlue" Height="46" VerticalAlignment="Bottom" >
             <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblStatus" Text="{Binding Sucursal.Status}"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                    <TextBlock x:Name="lblStatus" Text="{Binding Sucursal.Status}" TextWrapping="Wrap"/>
+                </ScrollViewer>
             </StatusBarItem>
         </StatusBar>
     </Grid>

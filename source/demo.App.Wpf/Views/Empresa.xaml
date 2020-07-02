@@ -65,7 +65,7 @@
         <Button  x:Name="btnAddSucursal" Content="Adicionar Sucursal" Command="{Binding Empresa.Sucursales.AddCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
         <Button x:Name="btnRefreshSucursales" Content="Refrescar" Command="{Binding Empresa.Sucursales.RefreshCommand}" CommandParameter="{Binding}" Margin="0,172,10,0" RenderTransformOrigin="0.253,-0.455" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="129"/>
 
-        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Empresa.Sucursales}" Margin="0,199,0,60">
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding Empresa.Sucursales}" Margin="0,199,0,76">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Id" CellStyle="{StaticResource DataGridCellHorizontalRight}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -134,7 +134,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                                </Grid.ColumnDefinitions>                                
                                 <Button x:Name="btnLoadSucursal" Content="Cargar" Command="{Binding LoadCommand}" CommandParameter="{Binding}" Grid.Column="0"/>
                                 <Button x:Name="btnSaveSucursal" Content="Grabar" Command="{Binding SaveCommand}" CommandParameter="{Binding}" Grid.Column="1"/>
                                 <Button x:Name="btnEraseSucursal" Content="Borrar" Command="{Binding EraseCommand}" CommandParameter="{Binding}" Grid.Column="2"/>
@@ -175,14 +175,16 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" >
+        <StatusBar Background="#FFADE6B2" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,46" >
             <StatusBarItem HorizontalAlignment="Left">
                 <TextBlock x:Name="lblTotal" Text="{Binding Empresa.Sucursales.Total}"/>
             </StatusBarItem>
         </StatusBar>
-        <StatusBar Background="LightBlue" Height="30" VerticalAlignment="Bottom" >
+        <StatusBar Background="LightBlue" Height="46" VerticalAlignment="Bottom" >
             <StatusBarItem HorizontalAlignment="Left">
-                <TextBlock x:Name="lblStatus" Text="{Binding Empresa.Status}"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                    <TextBlock x:Name="lblStatus" Text="{Binding Empresa.Status}" TextWrapping="Wrap"/>
+                </ScrollViewer>
             </StatusBarItem>
         </StatusBar>
     </Grid>

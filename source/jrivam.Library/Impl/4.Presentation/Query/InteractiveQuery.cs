@@ -35,7 +35,7 @@ namespace jrivam.Library.Impl.Presentation.Query
 
             var list = List(query, maxdepth, 1, model != null ? new ListModel<T, U, V, W>() { model } : null);
 
-            query.Status = list.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful), "/");
+            query.Status = list.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful));
 
             return (list.result, list.models.FirstOrDefault());
         }
@@ -67,7 +67,7 @@ namespace jrivam.Library.Impl.Presentation.Query
                 return (list.result, enumeration);
             }
 
-            query.Status = list.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful), "/");
+            query.Status = list.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.NotSuccessful));
 
             return (list.result, default(IList<W>));
         }
