@@ -54,10 +54,6 @@ namespace demo.Persistence.Table
             {
                 if (_sucursales == null)
                 {
-                    if (Entity?.Sucursales == null)
-                    {
-                        Entity.Sucursales = new Collection<Entities.Table.Sucursal>();
-                    }
                     Sucursales = AutofacConfiguration.Container.Resolve<Persistence.Table.SucursalesQuery>(new TypedParameter(typeof(ICollection<Entities.Table.Sucursal>), Entity?.Sucursales));
                 }
 

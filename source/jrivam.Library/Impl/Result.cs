@@ -48,10 +48,7 @@ namespace jrivam.Library.Impl
 
         public string GetMessagesAsString(Func<ResultMessage, bool> condition = null, string newlinereplacement = null)
         {
-            var messages = String.Join(Environment.NewLine, GetMessages(condition).Select(x => $"[{x.Category}]-({x.Name})-{x.Description}"));
-
-            if (newlinereplacement != null)
-                return messages.Replace(Environment.NewLine, newlinereplacement);
+            var messages = String.Join(newlinereplacement ?? Environment.NewLine, GetMessages(condition).Select(x => $"[{x.Category}]-({x.Name})-{x.Description}"));
 
             return messages;
         }

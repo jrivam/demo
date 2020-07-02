@@ -1,5 +1,6 @@
 ﻿using jrivam.Library.Interface.Entities;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,6 +21,6 @@ namespace demo.Entities.Table
         [Column("activo")]
         public virtual bool? Activo { get; set; }
 
-        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; set; }
+        public virtual ICollection<Entities.Table.Sucursal> Sucursales { get; protected set; } = new Collection<Entities.Table.Sucursal>();
     }
 }
