@@ -35,7 +35,6 @@ namespace demo.Web.Api.Controllers
 
                 if (list.result.Exception == null)
                     return BadRequest(list.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                 throw list.result.Exception;
             }
             catch (Exception ex)
@@ -73,7 +72,6 @@ namespace demo.Web.Api.Controllers
 
                     if (load.result.Exception == null)
                         return BadRequest(load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                     throw load.result.Exception;
                 }
                 catch (Exception ex)
@@ -104,7 +102,6 @@ namespace demo.Web.Api.Controllers
 
                         if (save.result.Exception == null)
                             return BadRequest(save.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                         throw save.result.Exception;
                     }
                 }
@@ -146,7 +143,6 @@ namespace demo.Web.Api.Controllers
 
                                 if (save.result.Exception == null)
                                     return BadRequest(save.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                                 throw save.result.Exception;
                             }
                         }
@@ -156,7 +152,6 @@ namespace demo.Web.Api.Controllers
 
                     if (load.result.Exception == null)
                         return BadRequest(load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                     throw load.result.Exception;
                 }
                 catch (Exception ex)
@@ -195,7 +190,6 @@ namespace demo.Web.Api.Controllers
 
                                 if (erase.result.Exception == null)
                                     return BadRequest(erase.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                                 throw erase.result.Exception;
                             }
                         }
@@ -205,7 +199,6 @@ namespace demo.Web.Api.Controllers
 
                     if (load.result.Exception == null)
                         return BadRequest(load.result.GetMessagesAsString(x => x.Category == (x.Category & ResultCategory.Error)));
-
                     throw load.result.Exception;
                 }
                 catch (Exception ex)
