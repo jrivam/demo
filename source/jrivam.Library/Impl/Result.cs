@@ -36,13 +36,13 @@ namespace jrivam.Library.Impl
         public void SetMessage(ResultMessage message)
         {
             _messages.Add(message);
-            Success = Success & message.Category == (message.Category & ResultCategory.Successful);
+            Success = Success && (message.Category == (message.Category & ResultCategory.Successful));
         }
+
         public IEnumerable<ResultMessage> GetMessages(Func<ResultMessage, bool> condition = null)
         {
             return _messages.Where(condition ?? (x => x.Category == (x.Category & ResultCategory.All)));
         }
-
         public string GetMessagesAsString(Func<ResultMessage, bool> condition = null, Func<ResultMessage, string> selector = null, string newlinereplacement = null)
         {
             return String.Join(newlinereplacement ?? Environment.NewLine, GetMessages(condition).Select(selector ?? (x => $"[{x.Category}]-({x.Name})-{x.Description}")));
