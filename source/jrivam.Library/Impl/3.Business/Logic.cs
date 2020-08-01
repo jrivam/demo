@@ -32,7 +32,7 @@ namespace jrivam.Library.Impl.Business
                     new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(Load),
+                            Name = $"{this.GetType().Name}.{nameof(Load)}",
                             Description =  $"Id in {data.Description.DbName} cannot be null."
                         }
                     ), default(U));
@@ -42,7 +42,7 @@ namespace jrivam.Library.Impl.Business
                 new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(Load),
+                            Name = $"{this.GetType().Name}.{nameof(Load)}",
                             Description =  $"Primary Key column in {data.Description.DbName} not defined."
                         }
                     ), default(U));
@@ -63,7 +63,7 @@ namespace jrivam.Library.Impl.Business
                     new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(LoadQuery),
+                            Name = $"{this.GetType().Name}.{nameof(LoadQuery)}",
                             Description =  $"Id in {data.Description.DbName} cannot be null."
                         }
                     ), default(U));
@@ -73,7 +73,7 @@ namespace jrivam.Library.Impl.Business
                 new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(LoadQuery),
+                            Name = $"{this.GetType().Name}.{nameof(LoadQuery)}",
                             Description = $"Primary Key column in {data.Description.DbName} not defined."
                         }
                     ), default(U));
@@ -113,7 +113,7 @@ namespace jrivam.Library.Impl.Business
                 new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(Save),
+                            Name = $"{this.GetType().Name}.{nameof(Save)}",
                             Description = $"Primary Key column in {data.Description.DbName} not defined."
                         }
                     ), default(U));
@@ -136,7 +136,7 @@ namespace jrivam.Library.Impl.Business
                     new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(Erase),
+                            Name = $"{this.GetType().Name}.{nameof(Erase)}",
                             Description = $"Id in {data.Description.DbName} cannot be null."
                         }
                     ), default(U));                
@@ -146,7 +146,7 @@ namespace jrivam.Library.Impl.Business
                 new ResultMessage()
                         {
                             Category = ResultCategory.Error,
-                            Name = nameof(Erase),
+                            Name = $"{this.GetType().Name}.{nameof(Erase)}",
                             Description = $"Primary Key column in {data.Description.DbName} not defined."
                         }
                     ), default(U));

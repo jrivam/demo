@@ -87,7 +87,7 @@ namespace jrivam.Library.Impl.Business.Table
                 new ResultMessage()
                         {
                             Category = ResultCategory.Information,
-                            Name = nameof(Save),
+                            Name = $"{this.GetType().Name}.{nameof(Save)}",
                             Description =  $"No changes to persist in {domain.Data.Description.DbName} with Id {domain.Data.Entity.Id}."
                         }
                     ), default(V));
@@ -109,7 +109,7 @@ namespace jrivam.Library.Impl.Business.Table
                 new ResultMessage()
                         {
                             Category = ResultCategory.Information,
-                            Name = nameof(Erase),
+                            Name = $"{this.GetType().Name}.{nameof(Erase)}",
                             Description =  $"{domain.Data.Description.DbName} with Id {domain.Data.Entity.Id} already deleted."
                         }
                     ), default(V));

@@ -48,7 +48,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(Select),
+                        Name = $"{this.GetType().Name}.{nameof(Select)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, null);
@@ -86,7 +86,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(Select),
+                        Name = $"{this.GetType().Name}.{nameof(Select)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, null);
@@ -170,7 +170,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(Insert),
+                        Name = $"{this.GetType().Name}.{nameof(Insert)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, null);
@@ -249,7 +249,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(Update),
+                        Name = $"{this.GetType().Name}.{nameof(Update)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, null);
@@ -274,7 +274,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(Delete),
+                        Name = $"{this.GetType().Name}.{nameof(Delete)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, null);
@@ -313,7 +313,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(Delete),
+                        Name = $"{this.GetType().Name}.{nameof(Delete)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, null);

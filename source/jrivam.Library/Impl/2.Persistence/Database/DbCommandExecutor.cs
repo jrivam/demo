@@ -39,7 +39,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(ExecuteQuery),
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, default(IEnumerable<T>));
@@ -63,7 +63,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(ExecuteNonQuery),
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
                         Description = ex.Message,
                     })
                 { Exception = ex }, -1);
@@ -87,7 +87,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = nameof(ExecuteScalar),
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteScalar)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, default(T));

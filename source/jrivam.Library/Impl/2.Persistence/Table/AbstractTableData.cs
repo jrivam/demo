@@ -146,7 +146,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Error,
-                        Name = nameof(Select),
+                        Name = $"{this.GetType().Name}.{nameof(Select)}",
                         Description = "No SelectDbCommand defined."
                     }
                     ), default(U));
@@ -173,7 +173,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Error,
-                        Name = nameof(Insert),
+                        Name = $"{this.GetType().Name}.{nameof(Insert)}",
                         Description = "No InsertDbCommand defined."
                     }
                     ), default(U));
@@ -199,7 +199,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Error,
-                        Name = nameof(Update),
+                        Name = $"{this.GetType().Name}.{nameof(Update)}",
                         Description = "No UpdateDbCommand defined."
                     }
                     ), default(U));
@@ -225,7 +225,7 @@ namespace jrivam.Library.Impl.Persistence.Table
                     new ResultMessage()
                     {
                         Category = ResultCategory.Error,
-                        Name = nameof(Delete),
+                        Name = $"{this.GetType().Name}.{nameof(Delete)}",
                         Description = "No DeleteDbCommand defined."
                     }
                     ), default(U));

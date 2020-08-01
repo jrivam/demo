@@ -65,7 +65,7 @@ namespace jrivam.Library.Impl.Persistence
                         new ResultMessage()
                         {
                             Category = ResultCategory.Information,
-                            Name = nameof(ExecuteQuery),
+                            Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
                             Description = "No rows found."
                         }
                     );
@@ -106,7 +106,7 @@ namespace jrivam.Library.Impl.Persistence
                         new ResultMessage()
                         {
                             Category = ResultCategory.Information,
-                            Name = nameof(ExecuteNonQuery),
+                            Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
                             Description = "No rows affected."
                         }
                     );
@@ -148,7 +148,7 @@ namespace jrivam.Library.Impl.Persistence
                         new ResultMessage()
                         {
                             Category = ResultCategory.Information,
-                            Name = nameof(ExecuteScalar),
+                            Name = $"{this.GetType().Name}.{nameof(ExecuteScalar)}",
                             Description = "No rows affected."
                         }
                     );
