@@ -105,17 +105,17 @@ namespace demo.Persistence.Table
         }
     }
 
-    public partial class Sucursales : ListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
+    public partial class SucursalesEdit : ListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
+        public SucursalesEdit(ICollection<Entities.Table.Sucursal> entities = null)
             : base(entities ?? new Collection<Entities.Table.Sucursal>())
         {
         }
     }
 
-    public partial class SucursalesQuery : ListDataQuery<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal>
+    public partial class SucursalesReload : ListDataReload<Persistence.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public SucursalesQuery(Persistence.Query.Sucursal query,
+        public SucursalesReload(Persistence.Query.Sucursal query,
             ICollection<Entities.Table.Sucursal> entities = null, 
             int maxdepth = 1)
             : base(query, 
@@ -136,7 +136,7 @@ namespace demo.Persistence.Query
 
             if (_empresa != null || depth < maxdepth || maxdepth == 0)
             {
-                joins.Add((Columns[nameof(IdEmpresa)], Empresa()[nameof(Id)]));
+                joins.Add((Columns[nameof(IdEmpresa)], Empresa[nameof(Id)]));
             }
 
             return joins;
@@ -194,9 +194,24 @@ namespace demo.Persistence.Query
         }
 
         protected Persistence.Query.Empresa _empresa;
-        public virtual Persistence.Query.Empresa Empresa(Persistence.Query.Empresa query = null)
+        public virtual Persistence.Query.Empresa Empresa
         {
-            return _empresa = query ?? _empresa ?? AutofacConfiguration.Container.Resolve<Persistence.Query.Empresa>();
+            get
+            {
+                if (_empresa == null)
+                {
+                    Empresa = AutofacConfiguration.Container.Resolve<Persistence.Query.Empresa>();
+                }
+
+                return _empresa;
+            }
+            set
+            {
+                if (_empresa != value)
+                {
+                    _empresa = value;
+                }
+            }
         }
     }
 }

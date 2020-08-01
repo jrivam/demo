@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class ListData<T, U> : List<U>, IListData<T, U>
+    public class ListDataEdit<T, U> : List<U>, IListDataEdit<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {
@@ -20,13 +20,13 @@ namespace jrivam.Library.Impl.Persistence
             }
         }
 
-        public ListData(ICollection<T> entities = null)
+        public ListDataEdit(ICollection<T> entities = null)
         {
             _entities = entities ?? new Collection<T>();
             _entities?.ToList()?.ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));
         }
 
-        public virtual IListData<T, U> Load(IEnumerable<U> datas)
+        public virtual IListDataEdit<T, U> Load(IEnumerable<U> datas)
         {
             if (datas != null)
             {

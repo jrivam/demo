@@ -28,7 +28,7 @@ namespace demo.Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new Business.Table.Empresas().Load(list.domains)?.Datas?.Entities);
+                    return Ok(new Business.Table.EmpresasEdit().Load(list.domains)?.Datas?.Entities);
                 }
 
                 if (list.result.Exception == null)

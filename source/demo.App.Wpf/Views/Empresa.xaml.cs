@@ -42,8 +42,8 @@ namespace demo.App.Wpf.Views
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, nameof(SucursalErase));
             Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, nameof(SucursalEdit));
 
-            Messenger.Default.Register<(Result result, Presentation.Table.Sucursales list)>(this, SucursalesQueryRefresh, nameof(SucursalesQueryRefresh));
-            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesQueryAdd, nameof(SucursalesQueryAdd));
+            Messenger.Default.Register<(Result result, Presentation.Table.SucursalesReload list)>(this, SucursalesReloadRefresh, nameof(SucursalesReloadRefresh));
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesReloadAdd, nameof(SucursalesReloadAdd));
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -53,8 +53,8 @@ namespace demo.App.Wpf.Views
             Messenger.Default.Unregister(this, nameof(SucursalErase));
             Messenger.Default.Unregister(this, nameof(SucursalEdit));
 
-            Messenger.Default.Unregister(this, nameof(SucursalesQueryRefresh));
-            Messenger.Default.Unregister(this, nameof(SucursalesQueryAdd));
+            Messenger.Default.Unregister(this, nameof(SucursalesReloadRefresh));
+            Messenger.Default.Unregister(this, nameof(SucursalesReloadAdd));
 
             //ViewModel.Dispose();
         }
@@ -77,12 +77,12 @@ namespace demo.App.Wpf.Views
             ViewModel.Empresa.Sucursales.CommandErase(message);
         }
 
-        public virtual void SucursalesQueryRefresh((Result result, Presentation.Table.Sucursales list) message)
+        public virtual void SucursalesReloadRefresh((Result result, Presentation.Table.SucursalesReload list) message)
         {
             ViewModel.Empresa.Sucursales.CommandRefresh(message);
         }
 
-        public virtual void SucursalesQueryAdd(Presentation.Table.Sucursal entity)
+        public virtual void SucursalesReloadAdd(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
             view.ViewModel.Sucursal.IdEmpresa = ViewModel.Empresa.Id;

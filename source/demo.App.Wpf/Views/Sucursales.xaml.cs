@@ -33,8 +33,8 @@ namespace demo.App.Wpf.Views
             Messenger.Default.Register<(CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation)>(this, SucursalErase, nameof(SucursalErase));
             Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalEdit, nameof(SucursalEdit));
 
-            Messenger.Default.Register<(Result result, Presentation.Table.Sucursales list)>(this, SucursalesQueryRefresh, nameof(SucursalesQueryRefresh));
-            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesQueryAdd, nameof(SucursalesQueryAdd));
+            Messenger.Default.Register<(Result result, Presentation.Table.SucursalesReload list)>(this, SucursalesReloadRefresh, nameof(SucursalesReloadRefresh));
+            Messenger.Default.Register<Presentation.Table.Sucursal>(this, SucursalesReloadAdd, nameof(SucursalesReloadAdd));
         }
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -43,43 +43,43 @@ namespace demo.App.Wpf.Views
             Messenger.Default.Unregister(this, nameof(SucursalErase));
             Messenger.Default.Unregister(this, nameof(SucursalEdit));
 
-            Messenger.Default.Unregister(this, nameof(SucursalesQueryRefresh));
-            Messenger.Default.Unregister(this, nameof(SucursalesQueryAdd));
+            Messenger.Default.Unregister(this, nameof(SucursalesReloadRefresh));
+            Messenger.Default.Unregister(this, nameof(SucursalesReloadAdd));
         }
 
         public virtual void SucursalLoad((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.SucursalesQuery.CommandLoad(message);
+            ViewModel.Sucursales.CommandLoad(message);
         }
         public virtual void SucursalSave((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.SucursalesQuery.CommandSave(message);
+            ViewModel.Sucursales.CommandSave(message);
         }
         public virtual void SucursalErase((CommandAction action, (Result result, Presentation.Table.Sucursal entity) operation) message)
         {
-            ViewModel.SucursalesQuery.CommandErase(message);
+            ViewModel.Sucursales.CommandErase(message);
         }
 
-        public virtual void SucursalesQueryRefresh((Result result, Presentation.Table.Sucursales list) message)
+        public virtual void SucursalesReloadRefresh((Result result, Presentation.Table.SucursalesReload list) message)
         {
-            ViewModel.SucursalesQuery.CommandRefresh(message);
+            ViewModel.Sucursales.CommandRefresh(message);
         }
 
-        public virtual void SucursalesQueryAdd(Presentation.Table.Sucursal entity)
+        public virtual void SucursalesReloadAdd(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal();
             view.ViewModel.Sucursal.Fecha = DateTime.Now.Date;
             view.ViewModel.Sucursal.Activo = true;
             view.ShowDialog();
 
-            ViewModel.SucursalesQuery.ItemAdd(view.ViewModel.Sucursal);
+            ViewModel.Sucursales.ItemAdd(view.ViewModel.Sucursal);
         }
         public virtual void SucursalEdit(Presentation.Table.Sucursal entity)
         {
             var view = new Views.Sucursal(entity);
             view.ShowDialog();
 
-            ViewModel.SucursalesQuery.ItemEdit(entity, view.ViewModel.Sucursal);
+            ViewModel.Sucursales.ItemEdit(entity, view.ViewModel.Sucursal);
         }
     }
 }

@@ -105,20 +105,20 @@ namespace jrivam.Library
             builder.RegisterGeneric(typeof(InteractiveQuery<,,,>))
                    .As(typeof(IInteractiveQuery<,,,>));
 
-            builder.RegisterGeneric(typeof(ListData<,>))
-                   .As(typeof(IListData<,>));
-            builder.RegisterGeneric(typeof(ListDataQuery<,,>))
-                   .As(typeof(IListDataQuery<,,>));
+            builder.RegisterGeneric(typeof(ListDataEdit<,>))
+                   .As(typeof(IListDataEdit<,>));
+            builder.RegisterGeneric(typeof(ListDataReload<,,>))
+                   .As(typeof(IListDataReload<,>));
 
-            builder.RegisterGeneric(typeof(ListDomain<,,>))
-                   .As(typeof(IListDomain<,,>));
-            builder.RegisterGeneric(typeof(ListDomainQuery<,,,>))
-                   .As(typeof(IListDomainQuery<,,,>));
+            builder.RegisterGeneric(typeof(ListDomainEdit<,,>))
+                   .As(typeof(IListDomainEdit<,,>));
+            builder.RegisterGeneric(typeof(ListDomainReload<,,,>))
+                   .As(typeof(IListDomainReload<,,>));
 
-            builder.RegisterGeneric(typeof(ListModel<,,,>))
-                   .As(typeof(IListModel<,,,>));
-            builder.RegisterGeneric(typeof(ListModelQuery<,,,,>))
-                   .As(typeof(IListModelQuery<,,,,>));
+            builder.RegisterGeneric(typeof(ListModelEdit<,,,>))
+                   .As(typeof(IListModelEdit<,,,>));
+            builder.RegisterGeneric(typeof(ListModelReload<,,,,>))
+                   .As(typeof(IListModelReload<,,,>));
 
             return builder;
         }

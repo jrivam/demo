@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class ListDataQuery<S, T, U> : ListData<T, U>, IListDataQuery<S, T, U>, IListDataRefresh<T, U>
+    public class ListDataReload<S, T, U> : ListDataEdit<T, U>, IListDataQuery<S, T, U>, IListDataReload<T, U>
         where T : IEntity
         where U : ITableData<T, U>
         where S : IQueryData<T, U>
@@ -14,7 +14,7 @@ namespace jrivam.Library.Impl.Persistence
         public S Query { get; set; }
         protected int _maxdepth = 1;
 
-        public ListDataQuery(S query, 
+        public ListDataReload(S query, 
             ICollection<T> entities = null,
             int maxdepth = 1)
             : base(entities)
@@ -23,7 +23,7 @@ namespace jrivam.Library.Impl.Persistence
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListData<T, U> datas) Refresh(int top = 0)
+        public virtual (Result result, IListDataEdit<T, U> datas) Refresh(int top = 0)
         {
             var select = Query.Select(_maxdepth, top);
 

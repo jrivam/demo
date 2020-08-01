@@ -33,12 +33,14 @@ namespace jrivam.Library.Impl.Persistence
         }
 
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            ISqlCommand sqlcommand)
+            ISqlCommand sqlcommand,
+            int maxdepth = 1)
         {
-            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray());
+            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(), maxdepth);
         }
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null)
+            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            int maxdepth = 1)
         {
             var executequery = _dbcommandexecutor.ExecuteQuery<T>(
                 _sqlcreator.GetCommand(
@@ -46,7 +48,7 @@ namespace jrivam.Library.Impl.Persistence
                         _connectionstringsettings.ConnectionString,
                         commandtext, commandtype,
                         parameters),
-                (x, y) => _entityreader.Read<T>(x, y, new List<string>(), 1, 0));
+                (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
 
             if (executequery.result.Success && executequery.entities?.Count() == 0)
             {

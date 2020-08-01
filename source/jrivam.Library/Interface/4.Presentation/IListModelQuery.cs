@@ -6,7 +6,7 @@ using jrivam.Library.Interface.Presentation.Table;
 
 namespace jrivam.Library.Interface.Presentation
 {
-    public interface IListModelQuery<S, T, U, V, W> : IListModel<T, U, V, W>
+    public interface IListModelQuery<S, T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>

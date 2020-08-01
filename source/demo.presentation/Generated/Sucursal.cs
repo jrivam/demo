@@ -84,27 +84,27 @@ namespace demo.Presentation.Table
         }
     }
 
-    public partial class Sucursales : ListModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
+    public partial class SucursalesEdit : ListModelEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursales(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
+        public SucursalesEdit(IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
             : base(domains)
         {
         }
 
-        public Sucursales(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
-           : this(new Business.Table.Sucursales(datas))
+        public SucursalesEdit(IListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
+           : this(new Business.Table.SucursalesEdit(datas))
         {
         }
-        public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
-           : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()))
+        public SucursalesEdit(ICollection<Entities.Table.Sucursal> entities = null)
+           : this(new Persistence.Table.SucursalesEdit(entities ?? new Collection<Entities.Table.Sucursal>()))
         {
         }
     }
 
-    public partial class SucursalesQuery : ListModelQuery<Presentation.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
+    public partial class SucursalesReload : ListModelReload<Presentation.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public SucursalesQuery(Presentation.Query.Sucursal query,
-            IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains = null,
+        public SucursalesReload(Presentation.Query.Sucursal query,
+            IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains = null,
             int maxdepth = 1, int top = 0)
             : base(query, 
                   domains,                  
@@ -169,9 +169,24 @@ namespace demo.Presentation.Query
         }
 
         protected Presentation.Query.Empresa _empresa;
-        public virtual Presentation.Query.Empresa Empresa(Presentation.Query.Empresa query = null)
+        public virtual Presentation.Query.Empresa Empresa
         {
-            return _empresa = query ?? _empresa ?? AutofacConfiguration.Container.Resolve<Presentation.Query.Empresa>(new TypedParameter(typeof(Persistence.Query.Empresa), ((Persistence.Query.Sucursal)Domain)?.Empresa()));
+            get
+            {
+                if (_empresa == null)
+                {
+                    Empresa = AutofacConfiguration.Container.Resolve<Presentation.Query.Empresa>(new TypedParameter(typeof(Persistence.Query.Empresa), ((Persistence.Query.Sucursal)Domain)?.Empresa));
+                }
+
+                return _empresa;
+            }
+            set
+            {
+                if (_empresa != value)
+                {
+                    _empresa = value;
+                }
+            }
         }
     }
 }

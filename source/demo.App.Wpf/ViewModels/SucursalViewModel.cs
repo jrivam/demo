@@ -24,14 +24,14 @@ namespace demo.App.Wpf.ViewModels
             }
         }
 
-        protected Presentation.Table.EmpresasQuery _empresas;
-        public Presentation.Table.EmpresasQuery Empresas
+        protected Presentation.Table.EmpresasReload _empresas;
+        public Presentation.Table.EmpresasReload Empresas
         {
             get
             {
                 if (_empresas == null)
                 {
-                    Empresas = AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasQuery>();
+                    Empresas = AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasReload>();
                     _empresas.Query.Activo = (true, WhereOperator.Equals);
 
                     _empresas.Refresh();

@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace jrivam.Library.Interface.Presentation
 {
-    public interface IListModel<T, U, V, W> : IList<W>, IListModelEdit<T, U, V, W>
+    public interface IListModel<T, U, V, W> : IList<W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        IListDomain<T, U, V> Domains { get; }
+        IListDomainEdit<T, U, V> Domains { get; }
 
         string Name { get; }
 

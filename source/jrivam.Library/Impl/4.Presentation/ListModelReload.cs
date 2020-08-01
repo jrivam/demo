@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace jrivam.Library.Impl.Presentation
 {
-    public class ListModelQuery<S, T, U, V, W> : ListModel<T, U, V, W>, IListModelQuery<S, T, U, V, W>, IListModelRefresh<T, U, V, W>
+    public class ListModelReload<S, T, U, V, W> : ListModelEdit<T, U, V, W>, IListModelQuery<S, T, U, V, W>, IListModelReload<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -21,8 +21,8 @@ namespace jrivam.Library.Impl.Presentation
 
         public virtual ICommand RefreshCommand { get; protected set; }
 
-        public ListModelQuery(S query, 
-            IListDomain<T, U, V> domains = null,            
+        public ListModelReload(S query, 
+            IListDomainEdit<T, U, V> domains = null,            
             int maxdepth = 1, int top = 0,
             string name = null)
             : base(domains, name)

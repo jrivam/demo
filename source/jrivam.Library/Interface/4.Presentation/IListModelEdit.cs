@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace jrivam.Library.Interface.Presentation
 {
-    public interface IListModelEdit<T, U, V, W>
+    public interface IListModelEdit<T, U, V, W> : IListModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>

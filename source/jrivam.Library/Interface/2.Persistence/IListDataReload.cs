@@ -4,10 +4,10 @@ using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Interface.Persistence
 {
-    public interface IListDataRefresh<T, U>
+    public interface IListDataReload<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {
-        (Result result, IListData<T, U> datas) Refresh(int top = 0);
+        (Result result, IListDataEdit<T, U> datas) Refresh(int top = 0);
     }
 }

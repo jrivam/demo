@@ -105,7 +105,7 @@
     <Compile Include="Impl\2.Persistence\Helper.cs" />
     <Compile Include="Impl\2.Persistence\HelperTableRepository.cs" />
     <Compile Include="Impl\2.Persistence\Column.cs" />
-    <Compile Include="Impl\2.Persistence\ListDataQuery.cs" />
+    <Compile Include="Impl\2.Persistence\ListDataReload.cs" />
     <Compile Include="Impl\2.Persistence\Mapper\DataMapper.cs" />
     <Compile Include="Impl\2.Persistence\Parameter.cs" />
     <Compile Include="Impl\2.Persistence\RepositoryDapper.cs" />
@@ -113,7 +113,7 @@
     <Compile Include="Impl\2.Persistence\Table\RepositoryTableEF.cs" />
     <Compile Include="Impl\2.Persistence\Sql\SqlCommand.cs" />
     <Compile Include="Impl\3.Business\Attributes\DomainAttribute.cs" />
-    <Compile Include="Impl\3.Business\ListDomainQuery.cs" />
+    <Compile Include="Impl\3.Business\ListDomainReload.cs" />
     <Compile Include="Impl\3.Business\Validator\ColumnValidator.cs" />
     <Compile Include="Impl\3.Business\Validator\EmptyValidator.cs" />
     <Compile Include="Impl\3.Business\Validator\RangeGenericValidator.cs" />
@@ -122,7 +122,7 @@
     <Compile Include="Impl\3.Business\HelperTableLogic.cs" />
     <Compile Include="Impl\4.Presentation\Attributes\ModelAttribute.cs" />
     <Compile Include="Impl\4.Presentation\HelperTableInteractive.cs" />
-    <Compile Include="Impl\4.Presentation\ListModelQuery.cs" />
+    <Compile Include="Impl\4.Presentation\ListModelReload.cs" />
     <Compile Include="Impl\4.Presentation\TableModelValidation.cs" />
     <Compile Include="Impl\4.Presentation\NotifyDataErrorInfo.cs" />
     <Compile Include="Impl\4.Presentation\NotifyPropertyChanged.cs" />
@@ -139,7 +139,7 @@
     <Compile Include="Impl\2.Persistence\Sql\Providers\PostgreSql\PostgreSqlSyntaxSign.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Providers\SqlServer\SqlServerCommandBuilder.cs" />
     <Compile Include="Impl\2.Persistence\Table\AbstractTableData.cs" />
-    <Compile Include="Impl\2.Persistence\ListData.cs" />
+    <Compile Include="Impl\2.Persistence\ListDataEdit.cs" />
     <Compile Include="Impl\2.Persistence\Query\AbstractQueryData.cs" />
     <Compile Include="Impl\2.Persistence\Query\RepositoryQuery.cs" />
     <Compile Include="Impl\4.Presentation\ConverterHelper.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Impl\2.Persistence\Sql\SqlCreator.cs" />
     <Compile Include="Impl\2.Persistence\Sql\Builder\AbstractSqlBuilder.cs" />
     <Compile Include="Impl\3.Business\Table\AbstractTableDomain.cs" />
-    <Compile Include="Impl\3.Business\ListDomain.cs" />
+    <Compile Include="Impl\3.Business\ListDomainEdit.cs" />
     <Compile Include="Impl\3.Business\Query\AbstractQueryDomain.cs" />
     <Compile Include="Impl\3.Business\Query\LogicQuery.cs" />
     <Compile Include="Impl\3.Business\Table\LogicTable.cs" />
@@ -164,7 +164,7 @@
     <Compile Include="Impl\2.Persistence\Sql\OrderDirection.cs" />
     <Compile Include="Impl\2.Persistence\Sql\WhereOperator.cs" />
     <Compile Include="Impl\3.Business\Logic.cs" />
-    <Compile Include="Impl\4.Presentation\ListModel.cs" />
+    <Compile Include="Impl\4.Presentation\ListModelEdit.cs" />
     <Compile Include="Impl\4.Presentation\Query\AbstractQueryModel.cs" />
     <Compile Include="Impl\4.Presentation\CommandAction.cs" />
     <Compile Include="Impl\4.Presentation\Table\InteractiveTable.cs" />
@@ -180,7 +180,7 @@
     <Compile Include="Interface\2.Persistence\Database\IDbCommandExecutor.cs" />
     <Compile Include="Interface\2.Persistence\IListDataEdit.cs" />
     <Compile Include="Interface\2.Persistence\IListDataQuery.cs" />
-    <Compile Include="Interface\2.Persistence\IListDataRefresh.cs" />
+    <Compile Include="Interface\2.Persistence\IListDataReload.cs" />
     <Compile Include="Interface\2.Persistence\IParameter.cs" />
     <Compile Include="Interface\2.Persistence\IRepository.cs" />
     <Compile Include="Interface\2.Persistence\Sql\ISqlCommand.cs" />
@@ -195,7 +195,7 @@
     <Compile Include="Interface\2.Persistence\Table\IBuilderTableData.cs" />
     <Compile Include="Interface\3.Business\IListDomainEdit.cs" />
     <Compile Include="Interface\3.Business\IListDomainQuery.cs" />
-    <Compile Include="Interface\3.Business\IListDomainRefresh.cs" />
+    <Compile Include="Interface\3.Business\IListDomainReload.cs" />
     <Compile Include="Interface\3.Business\Table\ITableDomainValidation.cs" />
     <Compile Include="Interface\3.Business\Validator\IColumnValidator.cs" />
     <Compile Include="Interface\2.Persistence\Table\ITableData.cs" />
@@ -224,7 +224,7 @@
     <Compile Include="Interface\4.Presentation\IListModelEdit.cs" />
     <Compile Include="Interface\4.Presentation\IListModelQuery.cs" />
     <Compile Include="Interface\4.Presentation\Table\ITableModelValidation.cs" />
-    <Compile Include="Interface\4.Presentation\IListModelRefresh.cs" />
+    <Compile Include="Interface\4.Presentation\IListModelReload.cs" />
     <Compile Include="Interface\4.Presentation\IListModel.cs" />
     <Compile Include="Interface\4.Presentation\ITotal.cs" />
     <Compile Include="Interface\4.Presentation\IStatus.cs" />

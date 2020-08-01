@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace jrivam.Library.Interface.Business
 {
-    public interface IListDomain<T, U, V> : IList<V>, IListDomainEdit<T, U, V>
+    public interface IListDomain<T, U, V> : IList<V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        IListData<T, U> Datas { get; }
+        IListDataEdit<T, U> Datas { get; }
         
-        IListDomain<T, U, V> Load(IEnumerable<V> list);
+        IListDomainEdit<T, U, V> Load(IEnumerable<V> list);
     }
 }

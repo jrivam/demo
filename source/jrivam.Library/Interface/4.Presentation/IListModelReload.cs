@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace jrivam.Library.Interface.Presentation
 {
-    public interface IListModelRefresh<T, U, V, W>
+    public interface IListModelReload<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>

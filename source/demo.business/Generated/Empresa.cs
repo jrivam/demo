@@ -40,15 +40,15 @@ namespace demo.Business.Table
         [Domain]
         public virtual bool? Activo { get { return Data?.Activo; } set { if (Data?.Activo != value) { Data.Activo = value; Changed = true; } } }
 
-        protected Business.Table.SucursalesQuery _sucursales;
+        protected Business.Table.SucursalesReload _sucursales;
         [Domain]
-        public virtual Business.Table.SucursalesQuery Sucursales
+        public virtual Business.Table.SucursalesReload Sucursales
         {
             get
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesQuery>(new TypedParameter(typeof(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesReload>(new TypedParameter(typeof(IListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
                 }
 
                 _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
@@ -65,23 +65,23 @@ namespace demo.Business.Table
         }
     }
 
-    public partial class Empresas : ListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    public partial class EmpresasEdit : ListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresas(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+        public EmpresasEdit(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
             : base(datas)
         {
         }
 
-        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
-           : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()))
+        public EmpresasEdit(ICollection<Entities.Table.Empresa> entities = null)
+           : this(new Persistence.Table.EmpresasEdit(entities ?? new Collection<Entities.Table.Empresa>()))
         {
         }
     }
 
-    public partial class EmpresasQuery : ListDomainQuery<Business.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    public partial class EmpresasReload : ListDomainReload<Business.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public EmpresasQuery(Business.Query.Empresa query,
-            IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas = null, 
+        public EmpresasReload(Business.Query.Empresa query,
+            IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas = null, 
             int maxdepth = 1)
             : base(query,
                   datas,
@@ -132,9 +132,24 @@ namespace demo.Business.Query
         }
 
         protected Business.Query.Sucursal _sucursal;
-        public virtual Business.Query.Sucursal Sucursal(Business.Query.Sucursal query = null)
+        public virtual Business.Query.Sucursal Sucursal
         {
-            return _sucursal = query ?? _sucursal ?? AutofacConfiguration.Container.Resolve<Business.Query.Sucursal>(new TypedParameter(typeof(Persistence.Query.Sucursal), ((Persistence.Query.Empresa)Data)?.Sucursal()));
+            get
+            {
+                if (_sucursal == null)
+                {
+                    Sucursal = AutofacConfiguration.Container.Resolve<Business.Query.Sucursal>(new TypedParameter(typeof(Persistence.Query.Sucursal), ((Persistence.Query.Empresa)Data)?.Sucursal));
+                }
+
+                return _sucursal;
+            }
+            set
+            {
+                if (_sucursal != value)
+                {
+                    _sucursal = value;
+                }
+            }
         }
     }
 }

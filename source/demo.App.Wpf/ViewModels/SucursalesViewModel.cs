@@ -7,31 +7,31 @@ namespace demo.App.Wpf.ViewModels
 {
     public class SucursalesViewModel : NotifyPropertyChanged
     {
-        protected Presentation.Table.SucursalesQuery _sucursalesquery;
-        public Presentation.Table.SucursalesQuery SucursalesQuery
+        protected Presentation.Table.SucursalesReload _sucursales;
+        public Presentation.Table.SucursalesReload Sucursales
         {
             get
             {
-                return _sucursalesquery;
+                return _sucursales;
             }
             set
             {
-                if (_sucursalesquery != value)
+                if (_sucursales != value)
                 {
-                    _sucursalesquery = value;
-                    OnPropertyChanged(nameof(SucursalesQuery));
+                    _sucursales = value;
+                    OnPropertyChanged(nameof(Sucursales));
                 }
             }
         }
 
-        protected Presentation.Table.EmpresasQuery _empresas;
-        public Presentation.Table.EmpresasQuery Empresas
+        protected Presentation.Table.EmpresasReload _empresas;
+        public Presentation.Table.EmpresasReload Empresas
         {
             get
             {
                 if (_empresas == null)
                 {
-                    Empresas = AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasQuery>();
+                    Empresas = AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasReload>();
                     _empresas.Query.Activo = (true, WhereOperator.Equals);
 
                     _empresas.Refresh();
@@ -49,15 +49,15 @@ namespace demo.App.Wpf.ViewModels
             }
         }
 
-        public SucursalesViewModel(Presentation.Table.SucursalesQuery sucursalesquery)
+        public SucursalesViewModel(Presentation.Table.SucursalesReload sucursales)
             : base()
         {
-            SucursalesQuery = sucursalesquery;
-            SucursalesQuery.Refresh();
+            Sucursales = sucursales;
+            Sucursales.Refresh();
         }
 
         public SucursalesViewModel()
-            : this(AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesQuery>(new NamedParameter("maxdepth", 2)))
+            : this(AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesReload>(new NamedParameter("maxdepth", 2)))
         {
         }
     }

@@ -3,7 +3,7 @@ using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Interface.Persistence
 {
-    public interface IListDataEdit<T, U>
+    public interface IListDataEdit<T, U> : IListData<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {

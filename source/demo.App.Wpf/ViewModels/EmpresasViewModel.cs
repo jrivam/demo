@@ -6,32 +6,32 @@ namespace demo.App.Wpf.ViewModels
 {
     public class EmpresasViewModel : NotifyPropertyChanged
     {
-        protected Presentation.Table.EmpresasQuery _empresasquery;
-        public Presentation.Table.EmpresasQuery EmpresasQuery
+        protected Presentation.Table.EmpresasReload _empresas;
+        public Presentation.Table.EmpresasReload Empresas
         {
             get
             {
-                return _empresasquery;
+                return _empresas;
             }
             set
             {
-                if (_empresasquery != value)
+                if (_empresas != value)
                 {
-                    _empresasquery = value;
-                    OnPropertyChanged(nameof(EmpresasQuery));
+                    _empresas = value;
+                    OnPropertyChanged(nameof(Empresas));
                 }
             }
         }
 
-        public EmpresasViewModel(Presentation.Table.EmpresasQuery empresasquery)
+        public EmpresasViewModel(Presentation.Table.EmpresasReload empresas)
             : base()
         {
-            EmpresasQuery = empresasquery;
-            EmpresasQuery.Refresh();
+            Empresas = empresas;
+            Empresas.Refresh();
         }
 
         public EmpresasViewModel()
-            : this(AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasQuery>())
+            : this(AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasReload>())
         {
         }
     }

@@ -30,7 +30,7 @@ namespace demo.Web.Api.Controllers
                 var list = query.List();
                 if (list.result.Success)
                 {
-                    return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities);
+                    return Ok(new Business.Table.SucursalesEdit().Load(list.domains)?.Datas?.Entities);
                 }
 
                 if (list.result.Exception == null)

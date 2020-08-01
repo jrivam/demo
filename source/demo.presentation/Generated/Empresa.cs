@@ -36,15 +36,15 @@ namespace demo.Presentation.Table
         [Model]
         public virtual bool? Activo { get { return Domain?.Activo; } set { if (Domain?.Activo != value) { Domain.Activo = value; ValidateProperty(value); OnPropertyChanged(nameof(Activo)); } } }
 
-        protected Presentation.Table.SucursalesQuery _sucursales;
+        protected Presentation.Table.SucursalesReload _sucursales;
         [Model]
-        public virtual Presentation.Table.SucursalesQuery Sucursales
+        public virtual Presentation.Table.SucursalesReload Sucursales
         {
             get
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesQuery>(new TypedParameter(typeof(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>), Domain?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesReload>(new TypedParameter(typeof(IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>), Domain?.Sucursales));
 
                     if (this.Id != null)
                     {
@@ -72,27 +72,27 @@ namespace demo.Presentation.Table
         }
     }
 
-    public partial class Empresas : ListModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
+    public partial class EmpresasEdit : ListModelEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresas(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
+        public EmpresasEdit(IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
             : base(domains)
         {
         }
 
-        public Empresas(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
-           : this(new Business.Table.Empresas(datas))
+        public EmpresasEdit(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+           : this(new Business.Table.EmpresasEdit(datas))
         {
         }
-        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
-           : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()))
+        public EmpresasEdit(ICollection<Entities.Table.Empresa> entities = null)
+           : this(new Persistence.Table.EmpresasEdit(entities ?? new Collection<Entities.Table.Empresa>()))
         {
         }
     }
 
-    public partial class EmpresasQuery : ListModelQuery<Presentation.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
+    public partial class EmpresasReload : ListModelReload<Presentation.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public EmpresasQuery(Presentation.Query.Empresa query,
-            IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains = null, 
+        public EmpresasReload(Presentation.Query.Empresa query,
+            IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains = null, 
             int maxdepth = 1, int top = 0)
             : base(query, 
                   domains,                   
@@ -143,9 +143,24 @@ namespace demo.Presentation.Query
         }
 
         protected Presentation.Query.Sucursal _sucursal;
-        public virtual Presentation.Query.Sucursal Sucursal(Presentation.Query.Sucursal query = null)
+        public virtual Presentation.Query.Sucursal Sucursal
         {
-            return _sucursal = query ?? _sucursal ?? AutofacConfiguration.Container.Resolve<Presentation.Query.Sucursal>(new TypedParameter(typeof(Persistence.Query.Sucursal), ((Persistence.Query.Empresa)Domain)?.Sucursal()));
+            get
+            {
+                if (_sucursal == null)
+                {
+                    Sucursal = AutofacConfiguration.Container.Resolve<Presentation.Query.Sucursal>(new TypedParameter(typeof(Persistence.Query.Sucursal), ((Persistence.Query.Empresa)Domain)?.Sucursal));
+                }
+
+                return _sucursal;
+            }
+            set
+            {
+                if (_sucursal != value)
+                {
+                    _sucursal = value;
+                }
+            }
         }
     }
 }

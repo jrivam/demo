@@ -7,7 +7,7 @@ using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Impl.Business
 {
-    public class ListDomainQuery<S, T, U, V> : ListDomain<T, U, V>, IListDomainQuery<S, T, U, V>, IListDomainRefresh<T, U, V>
+    public class ListDomainReload<S, T, U, V> : ListDomainEdit<T, U, V>, IListDomainQuery<S, T, U, V>, IListDomainReload<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -16,8 +16,8 @@ namespace jrivam.Library.Impl.Business
         public S Query { get; set; }
         protected int _maxdepth = 1;
 
-        public ListDomainQuery(S query,
-            IListData<T, U> datas = null,
+        public ListDomainReload(S query,
+            IListDataEdit<T, U> datas = null,
             int maxdepth = 1)
             : base(datas)
         {
@@ -25,7 +25,7 @@ namespace jrivam.Library.Impl.Business
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0)
+        public virtual (Result result, IListDomainEdit<T, U, V> domains) Refresh(int top = 0)
         {
             var list = Query.List(_maxdepth, top);
 

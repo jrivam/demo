@@ -64,7 +64,8 @@ namespace jrivam.Library.Impl.Persistence.Query
             int maxdepth = 1)
         {
             var executequery = _repository.ExecuteQuery<T>(
-                commandtext, commandtype, parameters);
+                commandtext, commandtype, parameters,
+                maxdepth);
             if (executequery.result.Success)
             {
                 var enumeration = new List<U>();

@@ -13,14 +13,14 @@ using System.Windows.Input;
 
 namespace jrivam.Library.Impl.Presentation
 {
-    public class ListModel<T, U, V, W> : ObservableCollection<W>, IListModel<T, U, V, W>, IStatus
+    public class ListModelEdit<T, U, V, W> : ObservableCollection<W>, IListModelEdit<T, U, V, W>, IStatus
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
         where W : class, ITableModel<T, U, V, W>
     {
-        protected IListDomain<T, U, V> _domains;
-        public virtual IListDomain<T, U, V> Domains
+        protected IListDomainEdit<T, U, V> _domains;
+        public virtual IListDomainEdit<T, U, V> Domains
         {
             get
             {
@@ -60,9 +60,9 @@ namespace jrivam.Library.Impl.Presentation
 
         public virtual ICommand AddCommand { get; protected set; }
 
-        public ListModel(IListDomain<T, U, V> domains = null, string name = null)
+        public ListModelEdit(IListDomainEdit<T, U, V> domains = null, string name = null)
         {
-            _domains = domains ?? new ListDomain<T, U, V>();
+            _domains = domains ?? new ListDomainEdit<T, U, V>();
             _domains?.ToList()?.ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
 
             Name = name ?? this.GetType().Name;

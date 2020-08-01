@@ -46,15 +46,15 @@ namespace demo.Persistence.Table
         [Data]
         public virtual bool? Activo { get { return Entity?.Activo; } set { if (Entity?.Activo != value) { Columns[nameof(Activo)].Value = Entity.Activo = value; } } }
 
-        protected Persistence.Table.SucursalesQuery _sucursales;
+        protected Persistence.Table.SucursalesReload _sucursales;
         [Data]
-        public virtual Persistence.Table.SucursalesQuery Sucursales
+        public virtual Persistence.Table.SucursalesReload Sucursales
         {
             get
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Persistence.Table.SucursalesQuery>(new TypedParameter(typeof(ICollection<Entities.Table.Sucursal>), Entity?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Persistence.Table.SucursalesReload>(new TypedParameter(typeof(ICollection<Entities.Table.Sucursal>), Entity?.Sucursales));
                 }
 
                 _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
@@ -71,17 +71,17 @@ namespace demo.Persistence.Table
         }
     }
 
-    public partial class Empresas : ListData<Entities.Table.Empresa, Persistence.Table.Empresa>
+    public partial class EmpresasEdit : ListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
+        public EmpresasEdit(ICollection<Entities.Table.Empresa> entities = null)
             : base(entities ?? new Collection<Entities.Table.Empresa>())
         {
         }
     }
 
-    public partial class EmpresasQuery : ListDataQuery<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa>
+    public partial class EmpresasReload : ListDataReload<Persistence.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public EmpresasQuery(Persistence.Query.Empresa query,
+        public EmpresasReload(Persistence.Query.Empresa query,
             ICollection<Entities.Table.Empresa> entities = null, 
            int maxdepth = 1)
            : base(query, 
@@ -133,9 +133,24 @@ namespace demo.Persistence.Query
         }
 
         protected Persistence.Query.Sucursal _sucursal;
-        public virtual Persistence.Query.Sucursal Sucursal(Persistence.Query.Sucursal query = null)
+        public virtual Persistence.Query.Sucursal Sucursal
         {
-            return _sucursal = query ?? _sucursal ?? AutofacConfiguration.Container.Resolve<Persistence.Query.Sucursal>();
+            get
+            {
+                if (_sucursal == null)
+                {
+                    Sucursal = AutofacConfiguration.Container.Resolve<Persistence.Query.Sucursal>();
+                }
+
+                return _sucursal;
+            }
+            set
+            {
+                if (_sucursal != value)
+                {
+                    _sucursal = value;
+                }
+            }
         }
     }
 }

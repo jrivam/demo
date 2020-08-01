@@ -132,7 +132,7 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    var refresh = collection.GetType().GetMethod(nameof(IListDomainRefresh<T, U, V>.Refresh)).Invoke(collection, new object[] { null });
+                    var refresh = collection.GetType().GetMethod(nameof(IListDomainReload<T, U, V>.Refresh)).Invoke(collection, new object[] { null });
                     var item2 = refresh.GetType().GetField("Item2").GetValue(refresh);
                     if (item2 != null)
                     {

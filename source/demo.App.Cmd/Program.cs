@@ -40,7 +40,7 @@ namespace demo.App.Cmd
             //sucursalesquery.Refresh();
 
             var sucursales = AutofacConfiguration.Container.Resolve<Persistence.Query.Sucursal>();
-            sucursales.Empresa().Id = (1, jrivam.Library.Impl.Persistence.Sql.WhereOperator.Equals);
+            sucursales.Empresa.Id = (1, jrivam.Library.Impl.Persistence.Sql.WhereOperator.Equals);
             var r = sucursales.Select();
         }
     }
