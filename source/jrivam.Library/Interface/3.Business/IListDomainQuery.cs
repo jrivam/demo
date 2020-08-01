@@ -8,7 +8,7 @@ namespace jrivam.Library.Interface.Business
     public interface IListDomainQuery<S, T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
-        where V : ITableDomain<T, U, V>
+        where V : class, ITableDomain<T, U, V>
         where S : IQueryDomain<T, U, V>
     {
         S Query { get; set; }

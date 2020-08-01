@@ -18,7 +18,8 @@ namespace jrivam.Library.Impl.Persistence.Database
             {
                 var enumeration = new Collection<T>();
 
-                command.Connection?.Open();
+                if (command.Connection.State != ConnectionState.Open)
+                    command.Connection.Open();
 
                 using (var datareader = command.ExecuteReader())
                 {
@@ -29,8 +30,6 @@ namespace jrivam.Library.Impl.Persistence.Database
 
                     datareader.Close();
                 }
-
-                command.Connection?.Close();
 
                 return (new Result(), enumeration);
             }
@@ -51,11 +50,10 @@ namespace jrivam.Library.Impl.Persistence.Database
         {
             try
             {
-                command.Connection?.Open();
+                if (command.Connection.State != ConnectionState.Open)
+                    command.Connection.Open();
 
                 var rows = command.ExecuteNonQuery();
-
-                command.Connection?.Close();
 
                 return (new Result(), rows);
             }
@@ -71,15 +69,15 @@ namespace jrivam.Library.Impl.Persistence.Database
                 { Exception = ex }, -1);
             }
         }
+
         public virtual (Result result, T scalar) ExecuteScalar<T>(IDbCommand command)
         {
             try
             {
-                command.Connection?.Open();
+                if (command.Connection.State != ConnectionState.Open)
+                    command.Connection.Open();
 
                 var scalar = command.ExecuteScalar();
-
-                command.Connection?.Close();
 
                 return (new Result(), (T)(scalar == DBNull.Value ? null : Convert.ChangeType(scalar, typeof(T))));
             }

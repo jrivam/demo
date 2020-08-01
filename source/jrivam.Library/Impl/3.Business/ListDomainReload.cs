@@ -4,10 +4,11 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Table;
+using System.Data;
 
 namespace jrivam.Library.Impl.Business
 {
-    public class ListDomainReload<S, T, U, V> : ListDomainEdit<T, U, V>, IListDomainQuery<S, T, U, V>, IListDomainReload<T, U, V>
+    public class ListDomainReload<S, T, U, V> : ListDomainEdit<T, U, V>, IListDomainReload<T, U, V>, IListDomainQuery<S, T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -25,9 +26,11 @@ namespace jrivam.Library.Impl.Business
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0)
+        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0,
+            IDbConnection connection = null)
         {
-            var list = Query.List(_maxdepth, top);
+            var list = Query.List(_maxdepth, top,
+                connection);
 
             if (list.result.Success)
             {

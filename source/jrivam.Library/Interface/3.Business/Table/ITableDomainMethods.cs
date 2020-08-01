@@ -1,6 +1,7 @@
 ﻿using jrivam.Library.Impl;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
+using System.Data;
 
 namespace jrivam.Library.Interface.Business.Table
 {
@@ -9,9 +10,10 @@ namespace jrivam.Library.Interface.Business.Table
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        (Result result, V domain) Load(bool usedbcommand = false);
-        (Result result, V domain) LoadQuery(int maxdepth = 1);
-        (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false);
-        (Result result, V domain) Erase(bool usedbcommand = false);
+        (Result result, V domain) Load(bool usedbcommand = false, IDbConnection connection = null);
+        (Result result, V domain) LoadQuery(int maxdepth = 1, IDbConnection connection = null);
+
+        (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false, IDbConnection connection = null, IDbTransaction transaction = null);
+        (Result result, V domain) Erase(bool usedbcommand = false, IDbConnection connection = null, IDbTransaction transaction = null);
     }
 }

@@ -26,7 +26,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             _datamapper = datamapper;
         }
 
-        public (Result result, U data) Select(U data)
+        public (Result result, U data) Select(U data,
+            IDbConnection connection = null)
         {
             try
             {
@@ -53,7 +54,8 @@ namespace jrivam.Library.Impl.Persistence.Table
                 { Exception = ex }, null);
             }
         }
-        public (Result result, U data) Select(U data, ISqlCommand dbcommand)
+        public (Result result, U data) Select(U data, ISqlCommand dbcommand,
+            IDbConnection connection = null)
         {
             foreach (var c in data.Columns.Where(c => c.IsPrimaryKey))
             {
@@ -67,7 +69,8 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             return Select(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null)
+        public (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+            IDbConnection connection = null)
         {
             try
             {
@@ -92,7 +95,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             return (new Result(), data);
         }
 
-        public (Result result, U data) Insert(U data)
+        public (Result result, U data) Insert(U data,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
@@ -129,7 +133,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             //    { Exception = ex }, null);
             //}
         }
-        public (Result result, U data) Insert(U data, ISqlCommand dbcommand)
+        public (Result result, U data) Insert(U data, ISqlCommand dbcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             foreach (var c in data.Columns.Where(c => !c.IsIdentity))
             {
@@ -148,7 +153,8 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             return Insert(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null)
+        public (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
@@ -173,7 +179,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             return (new Result(), data);
         }
 
-        public (Result result, U data) Update(U data)
+        public (Result result, U data) Update(U data,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
@@ -209,7 +216,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             //    { Exception = ex }, null);
             //}
         }
-        public (Result result, U data) Update(U data, ISqlCommand dbcommand)
+        public (Result result, U data) Update(U data, ISqlCommand dbcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             foreach (var c in data.Columns)
             {
@@ -228,7 +236,8 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             return Update(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null)
+        public (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
@@ -249,7 +258,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             return (new Result(), data);
         }
 
-        public (Result result, U data) Delete(U data)
+        public (Result result, U data) Delete(U data,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
@@ -270,7 +280,8 @@ namespace jrivam.Library.Impl.Persistence.Table
                 { Exception = ex }, null);
             }
         }
-        public (Result result, U data) Delete(U data, ISqlCommand dbcommand)
+        public (Result result, U data) Delete(U data, ISqlCommand dbcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             foreach (var c in data.Columns.Where(c => c.IsPrimaryKey))
             {
@@ -289,7 +300,8 @@ namespace jrivam.Library.Impl.Persistence.Table
 
             return Delete(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null)
+        public (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {

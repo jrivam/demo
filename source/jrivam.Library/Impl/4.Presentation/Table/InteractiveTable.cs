@@ -4,6 +4,7 @@ using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Raiser;
 using jrivam.Library.Interface.Presentation.Table;
+using System.Data;
 
 namespace jrivam.Library.Impl.Presentation.Table
 {
@@ -25,11 +26,13 @@ namespace jrivam.Library.Impl.Presentation.Table
             _raiser = raiser;
         }
 
-        public virtual (Result result, W model) Load(W model, bool usedbcommand = false)
+        public virtual (Result result, W model) Load(W model, bool usedbcommand = false,
+            IDbConnection connection = null)
         {
             model.Status = "Loading...";
 
-            var load = _interactive.Load(model.Domain, usedbcommand);
+            var load = _interactive.Load(model.Domain, usedbcommand,
+                connection);
             if (load.result.Success && load.domain != null)
             {
                 model.Domain = load.domain;
@@ -45,11 +48,13 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W model) LoadQuery(W model, int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(W model, int maxdepth = 1,
+            IDbConnection connection = null)
         {
             model.Status = "Loading...";
 
-            var loadquery = _interactive.LoadQuery(model.Domain, maxdepth);
+            var loadquery = _interactive.LoadQuery(model.Domain, maxdepth,
+                connection);
             if (loadquery.result.Success && loadquery.domain != null)
             {
                 model.Domain = loadquery.domain;
@@ -66,11 +71,13 @@ namespace jrivam.Library.Impl.Presentation.Table
             return (loadquery.result, default(W));
         }
         
-        public virtual (Result result, W model) Save(W model, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W model) Save(W model, bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             model.Status = "Saving...";
 
-            var save = _interactive.Save(model.Domain, useupdatedbcommand);
+            var save = _interactive.Save(model.Domain, useinsertdbcommand, useupdatedbcommand,
+                connection, transaction);
             if (save.result.Success)
             {
                 _raiser.Raise<T, U, V, W>(model);
@@ -84,11 +91,13 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             return (save.result, default(W));
         }
-        public virtual (Result result, W model) Erase(W model, bool usedbcommand = false)
+        public virtual (Result result, W model) Erase(W model, bool usedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             model.Status = "Deleting...";
 
-            var erase = _interactive.Erase(model.Domain, usedbcommand);
+            var erase = _interactive.Erase(model.Domain, usedbcommand,
+                connection, transaction);
             if (erase.result.Success)
             {
                 model.Status = string.Empty;

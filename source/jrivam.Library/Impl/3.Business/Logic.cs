@@ -3,6 +3,7 @@ using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace jrivam.Library.Impl.Business
@@ -15,14 +16,16 @@ namespace jrivam.Library.Impl.Business
         {
         }
 
-        public virtual (Result result, U data) Load(U data, bool usedbcommand = false)
+        public virtual (Result result, U data) Load(U data, bool usedbcommand = false, 
+            IDbConnection connection = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
             if (primarykeycolumn != null)
             {
                 if (primarykeycolumn.Value != null)
                 {
-                    return data.Select(usedbcommand);
+                    return data.Select(usedbcommand,
+                        connection);
                 }
 
                 return (new Result(
@@ -44,14 +47,16 @@ namespace jrivam.Library.Impl.Business
                         }
                     ), default(U));
         }
-        public virtual (Result result, U data) LoadQuery(U data, int maxdepth = 1)
+        public virtual (Result result, U data) LoadQuery(U data, int maxdepth = 1, 
+            IDbConnection connection = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
             if (primarykeycolumn != null)
             {
                 if (primarykeycolumn.Value != null)
                 {
-                    return data.SelectQuery(maxdepth);
+                    return data.SelectQuery(maxdepth,
+                        connection);
                 }
 
                 return (new Result(
@@ -75,25 +80,30 @@ namespace jrivam.Library.Impl.Business
         }
 
         public virtual (Result result, IEnumerable<U> datas) List(IQueryData<T, U> query,
-            int maxdepth = 1, int top = 0)
+            int maxdepth = 1, int top = 0,
+            IDbConnection connection = null)
         {
-            return query.Select(maxdepth, top);
+            return query.Select(maxdepth, top,
+                connection);
         }
 
-        public virtual (Result result, U data) Save(U data, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, U data) Save(U data, bool useinsertdbcommand = false, bool useupdatedbcommand = false, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
             if (primarykeycolumn != null)
             {
                 if (primarykeycolumn.DbValue != null)
                 {
-                    var update = data.Update(useupdatedbcommand);
+                    var update = data.Update(useupdatedbcommand,
+                        connection, transaction);
 
                     return (update.result, update.data);
                 }
                 else
                 {
-                    var insert = data.Insert(useinsertdbcommand);
+                    var insert = data.Insert(useinsertdbcommand,
+                        connection, transaction);
 
                     return (insert.result, insert.data);
                 }
@@ -108,14 +118,16 @@ namespace jrivam.Library.Impl.Business
                         }
                     ), default(U));
         }
-        public virtual (Result result, U data) Erase(U data, bool usedbcommand = false)
+        public virtual (Result result, U data) Erase(U data, bool usedbcommand = false, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
             if (primarykeycolumn != null)
             {
                 if (primarykeycolumn?.Value != null)
                 {
-                    var delete = data.Delete(usedbcommand);
+                    var delete = data.Delete(usedbcommand,
+                        connection, transaction);
 
                     return (delete.result, delete.data);
                 }

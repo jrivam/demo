@@ -38,37 +38,18 @@ namespace jrivam.Library.Impl.Persistence.Sql
 
         public virtual IDbCommand GetCommand(
             string providername,
-            string commandtext = "", CommandType commandtype = CommandType.Text)
+            string commandtext = "", CommandType commandtype = CommandType.Text,
+            ISqlParameter[] parameters = null)
         {
             var command = _dbcreator?.GetCommand(providername);
 
             command.CommandText = commandtext;
             command.CommandType = commandtype;
 
-            return command;
-        }
-        public virtual IDbCommand GetCommand(
-            string providername, 
-            string commandtext = "", CommandType commandtype = CommandType.Text, 
-            ISqlParameter[] parameters = null)
-        {
-            var command = GetCommand(providername, commandtext, commandtype);
-
             parameters?.ToList()?.ForEach(p =>
             {
                 command.Parameters.Add(GetParameter(providername, p.Name, p.Type, p.Value, p.Direction));
             });
-
-            return command;
-        }
-        public virtual IDbCommand GetCommand(
-            string providername, string connectionstring,
-            string commandtext = "", CommandType commandtype = CommandType.Text,
-            ISqlParameter[] parameters = null)
-        {            
-            var command = GetCommand(providername, commandtext, commandtype, parameters);
-
-            command.Connection = GetConnection(providername, connectionstring);
 
             return command;
         }

@@ -3,7 +3,7 @@ using jrivam.Library.Interface.Business.Loader;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
-using System.Collections.Generic;
+using System.Data;
 
 namespace jrivam.Library.Impl.Business.Table
 {
@@ -24,9 +24,11 @@ namespace jrivam.Library.Impl.Business.Table
             _loader = loader;
         }
 
-        public virtual (Result result, V domain) Load(V domain, bool usedbcommand = false)
+        public virtual (Result result, V domain) Load(V domain, bool usedbcommand = false,
+            IDbConnection connection = null)
         {
-            var load = _logic.Load(domain.Data, usedbcommand);
+            var load = _logic.Load(domain.Data, usedbcommand,
+                connection);
             if (load.result.Success && load.data != null)
             {
                 domain.Data = load.data;
@@ -41,9 +43,11 @@ namespace jrivam.Library.Impl.Business.Table
 
             return (load.result, default(V));
         }
-        public virtual (Result result, V domain) LoadQuery(V domain, int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(V domain, int maxdepth = 1,
+            IDbConnection connection = null)
         {
-            var loadquery = _logic.LoadQuery(domain.Data, maxdepth);
+            var loadquery = _logic.LoadQuery(domain.Data, maxdepth,
+                connection);
             if (loadquery.result.Success && loadquery.data != null)
             {
                 domain.Data = loadquery.data;
@@ -59,7 +63,8 @@ namespace jrivam.Library.Impl.Business.Table
             return (loadquery.result, default(V));
         }
 
-        public virtual (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (domain.Changed)
             {
@@ -67,7 +72,8 @@ namespace jrivam.Library.Impl.Business.Table
 
                 if (validate.Success)
                 {
-                    var save = _logic.Save(domain.Data, useupdatedbcommand);
+                    var save = _logic.Save(domain.Data, useinsertdbcommand, useupdatedbcommand,
+                        connection, transaction);
 
                     domain.Changed = !save.result.Success;
 
@@ -86,11 +92,13 @@ namespace jrivam.Library.Impl.Business.Table
                         }
                     ), default(V));
         }
-        public virtual (Result result, V domain) Erase(V domain, bool usedbcommand = false)
+        public virtual (Result result, V domain) Erase(V domain, bool usedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (!domain.Deleted)
             {
-                var erase = _logic.Erase(domain.Data, usedbcommand);
+                var erase = _logic.Erase(domain.Data, usedbcommand,
+                    connection, transaction);
 
                 domain.Deleted = erase.result.Success;
 

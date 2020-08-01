@@ -86,17 +86,17 @@ namespace demo.Presentation.Table
 
     public partial class Sucursales : ListModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursales(IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
+        public Sucursales(IListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
             : base(domains)
         {
         }
 
-        public Sucursales(IListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
-           : this(new Business.Table.SucursalesEdit(datas))
+        public Sucursales(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
+           : this(new Business.Table.Sucursales(datas))
         {
         }
         public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
-           : this(new Persistence.Table.SucursalesEdit(entities ?? new Collection<Entities.Table.Sucursal>()))
+           : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()))
         {
         }
     }

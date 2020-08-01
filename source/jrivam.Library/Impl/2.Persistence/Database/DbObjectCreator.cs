@@ -18,6 +18,7 @@ namespace jrivam.Library.Impl.Persistence.Database
 
             return connection;
         }
+
         public virtual IDbCommand GetCommand(string providername)
         {
             return GetProviderFactory(providername).CreateCommand();

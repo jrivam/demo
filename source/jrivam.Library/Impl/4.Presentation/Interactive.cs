@@ -4,6 +4,7 @@ using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using System.Collections.Generic;
+using System.Data;
 
 namespace jrivam.Library.Impl.Presentation
 {
@@ -16,28 +17,38 @@ namespace jrivam.Library.Impl.Presentation
         {
         }
 
-        public (Result result, V domain) Load(V domain, bool usedbcommand = false)
+        public (Result result, V domain) Load(V domain, bool usedbcommand = false,
+            IDbConnection connection = null)
         {
-            return domain.Load(usedbcommand);
+            return domain.Load(usedbcommand,
+                connection);
         }
-        public (Result result, V domain) LoadQuery(V domain, int maxdepth = 1)
+        public (Result result, V domain) LoadQuery(V domain, int maxdepth = 1,
+            IDbConnection connection = null)
         {
-            return domain.LoadQuery(maxdepth);
+            return domain.LoadQuery(maxdepth,
+                connection);
         }
 
         public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query,
-            int maxdepth = 1, int top = 0)
+            int maxdepth = 1, int top = 0,
+            IDbConnection connection = null)
         {
-            return query.List(maxdepth, top);
+            return query.List(maxdepth, top, 
+                connection);
         }
 
-        public (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public (Result result, V domain) Save(V domain, bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return domain.Save(useinsertdbcommand, useupdatedbcommand);
+            return domain.Save(useinsertdbcommand, useupdatedbcommand,
+                connection, transaction);
         }
-        public (Result result, V domain) Erase(V domain, bool usedbcommand = false)
+        public (Result result, V domain) Erase(V domain, bool usedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return domain.Erase(usedbcommand);
+            return domain.Erase(usedbcommand,
+                connection, transaction);
         }
     }
 }

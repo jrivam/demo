@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class ListDataReload<S, T, U> : ListDataEdit<T, U>, IListDataQuery<S, T, U>, IListDataReload<T, U>
+    public class ListDataReload<S, T, U> : ListDataEdit<T, U>, IListDataReload<T, U>, IListDataQuery<S, T, U> 
         where T : IEntity
         where U : ITableData<T, U>
         where S : IQueryData<T, U>

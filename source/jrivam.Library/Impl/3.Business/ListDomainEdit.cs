@@ -3,6 +3,7 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Table;
+using System.Data;
 
 namespace jrivam.Library.Impl.Business
 {
@@ -10,7 +11,7 @@ namespace jrivam.Library.Impl.Business
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
-    {
+    { 
         public ListDomainEdit(IListDataEdit<T, U> datas = null)
             : base(datas)
         {
@@ -52,27 +53,26 @@ namespace jrivam.Library.Impl.Business
             return false;
         }
 
-
-        public virtual Result SaveAll()
+        public virtual Result SaveAll(IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var result = new Result();
 
             foreach (var domain in this)
             {
-                result.Append(domain.Save().result);
+                result.Append(domain.Save(connection: connection, transaction: transaction).result);
 
                 if (!result.Success) break;
             }
 
             return result;
         }
-        public virtual Result EraseAll()
+        public virtual Result EraseAll(IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var result = new Result();
 
             foreach (var domain in this)
             {
-                result.Append(domain.Erase().result);
+                result.Append(domain.Erase(connection: connection, transaction: transaction).result);
 
                 if (!result.Success) break;
             }

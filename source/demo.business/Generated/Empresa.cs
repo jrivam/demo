@@ -48,7 +48,7 @@ namespace demo.Business.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesReload>(new TypedParameter(typeof(IListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesReload>(new TypedParameter(typeof(IListDataReload<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
                 }
 
                 _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
@@ -67,13 +67,13 @@ namespace demo.Business.Table
 
     public partial class Empresas : ListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresas(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+        public Empresas(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
             : base(datas)
         {
         }
 
         public Empresas(ICollection<Entities.Table.Empresa> entities = null)
-           : this(new Persistence.Table.EmpresasEdit(entities ?? new Collection<Entities.Table.Empresa>()))
+           : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()))
         {
         }
     }

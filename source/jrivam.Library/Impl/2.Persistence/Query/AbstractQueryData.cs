@@ -7,6 +7,7 @@ using jrivam.Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Query
@@ -67,28 +68,36 @@ namespace jrivam.Library.Impl.Persistence.Query
             }
         }
 
-        public virtual (Result result, U data) SelectSingle(int maxdepth = 1)
+        public virtual (Result result, U data) SelectSingle(int maxdepth = 1, 
+            IDbConnection connection = null)
         {
-            var selectsingle = _repositoryquery.SelectSingle(this, maxdepth);
+            var selectsingle = _repositoryquery.SelectSingle(this, maxdepth,
+                connection);
 
             return selectsingle;
         }
-        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, 
+            IDbConnection connection = null)
         {
-            var select = _repositoryquery.Select(this, maxdepth, top);
+            var select = _repositoryquery.Select(this, maxdepth, top,
+                connection);
 
             return select;
         }
 
-        public virtual (Result result, int rows) Update(IList<IColumnTable> columns, int maxdepth = 1)
+        public virtual (Result result, int rows) Update(IList<IColumnTable> columns, int maxdepth = 1, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var update = _repositoryquery.Update(this, columns, maxdepth);
+            var update = _repositoryquery.Update(this, columns, maxdepth,
+                connection, transaction);
 
             return update;
         }
-        public virtual (Result result, int rows) Delete(int maxdepth = 1)
+        public virtual (Result result, int rows) Delete(int maxdepth = 1, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var delete = _repositoryquery.Delete(this, maxdepth);
+            var delete = _repositoryquery.Delete(this, maxdepth,
+                connection, transaction);
 
             return delete;
         }

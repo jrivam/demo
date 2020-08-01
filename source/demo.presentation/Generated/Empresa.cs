@@ -44,7 +44,7 @@ namespace demo.Presentation.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesReload>(new TypedParameter(typeof(IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>), Domain?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Presentation.Table.SucursalesReload>(new TypedParameter(typeof(IListDomainReload<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>), Domain?.Sucursales));
 
                     if (this.Id != null)
                     {
@@ -74,17 +74,17 @@ namespace demo.Presentation.Table
 
     public partial class Empresas : ListModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresas(IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
+        public Empresas(IListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
             : base(domains)
         {
         }
 
-        public Empresas(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
-           : this(new Business.Table.EmpresasEdit(datas))
+        public Empresas(IListData<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+           : this(new Business.Table.Empresas(datas))
         {
         }
         public Empresas(ICollection<Entities.Table.Empresa> entities = null)
-           : this(new Persistence.Table.EmpresasEdit(entities ?? new Collection<Entities.Table.Empresa>()))
+           : this(new Persistence.Table.Empresas(entities ?? new Collection<Entities.Table.Empresa>()))
         {
         }
     }

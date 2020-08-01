@@ -59,7 +59,7 @@ namespace jrivam.Library.Impl.Presentation
 
         public ListModel(IListDomain<T, U, V> domains = null, string name = null)
         {
-            _domains = domains ?? new ListDomainEdit<T, U, V>();
+            _domains = domains ?? new ListDomain<T, U, V>();
             _domains?.ToList()?.ForEach(x => this.Add(Presentation.HelperTableInteractive<T, U, V, W>.CreateModel(x)));
 
             Name = name ?? this.GetType().Name;

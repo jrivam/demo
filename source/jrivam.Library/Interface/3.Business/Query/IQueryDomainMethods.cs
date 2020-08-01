@@ -3,6 +3,7 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Data;
 
 namespace jrivam.Library.Interface.Business.Query
 {
@@ -11,7 +12,7 @@ namespace jrivam.Library.Interface.Business.Query
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        (Result result, V domain) Retrieve(int maxdept);
-        (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0);
+        (Result result, V domain) Retrieve(int maxdept, IDbConnection connection = null);
+        (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IDbConnection connection = null);
     }
 }

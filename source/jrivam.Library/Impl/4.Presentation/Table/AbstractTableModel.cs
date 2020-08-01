@@ -7,6 +7,7 @@ using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -119,27 +120,35 @@ namespace jrivam.Library.Impl.Presentation.Table
         {
         }
 
-        public virtual (Result result, W model) LoadQuery(int maxdepth = 1)
+        public virtual (Result result, W model) LoadQuery(int maxdepth = 1,
+            IDbConnection connection = null)
         {
-            var loadquery = _interactivetable.LoadQuery(this as W, maxdepth);
+            var loadquery = _interactivetable.LoadQuery(this as W, maxdepth, 
+                connection);
             return loadquery;
         }
-        public virtual (Result result, W model) Load(bool usedbcommand = false)
+        public virtual (Result result, W model) Load(bool usedbcommand = false,
+            IDbConnection connection = null)
         {
-            var load = _interactivetable.Load(this as W, usedbcommand);
+            var load = _interactivetable.Load(this as W, usedbcommand,
+                connection);
 
             return load;
         }
 
-        public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var save = _interactivetable.Save(this as W, useinsertdbcommand, useupdatedbcommand);
+            var save = _interactivetable.Save(this as W, useinsertdbcommand, useupdatedbcommand,
+                connection, transaction);
 
             return save;
         }
-        public virtual (Result result, W model) Erase(bool usedbcommand = false)
+        public virtual (Result result, W model) Erase(bool usedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var erase = _interactivetable.Erase(this as W, usedbcommand);
+            var erase = _interactivetable.Erase(this as W, usedbcommand,
+                connection, transaction);
 
             return erase;
         }

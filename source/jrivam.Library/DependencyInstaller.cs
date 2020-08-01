@@ -31,6 +31,8 @@ using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Raiser;
 using jrivam.Library.Interface.Presentation.Table;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace jrivam.Library
 {
@@ -105,16 +107,25 @@ namespace jrivam.Library
             builder.RegisterGeneric(typeof(InteractiveQuery<,,,>))
                    .As(typeof(IInteractiveQuery<,,,>));
 
+            builder.RegisterGeneric(typeof(List<>))
+                   .As(typeof(ICollection<>));
+
+            builder.RegisterGeneric(typeof(ListData<,>))
+                   .As(typeof(IListData<,>));
             builder.RegisterGeneric(typeof(ListDataEdit<,>))
                    .As(typeof(IListDataEdit<,>));
             builder.RegisterGeneric(typeof(ListDataReload<,,>))
                    .As(typeof(IListDataReload<,>));
 
+            builder.RegisterGeneric(typeof(ListDomain<,,>))
+                   .As(typeof(IListDomain<,,>));
             builder.RegisterGeneric(typeof(ListDomainEdit<,,>))
                    .As(typeof(IListDomainEdit<,,>));
             builder.RegisterGeneric(typeof(ListDomainReload<,,,>))
                    .As(typeof(IListDomainReload<,,>));
 
+            builder.RegisterGeneric(typeof(ListModel<,,,>))
+                   .As(typeof(IListModel<,,,>));
             builder.RegisterGeneric(typeof(ListModelEdit<,,,>))
                    .As(typeof(IListModelEdit<,,,>));
             builder.RegisterGeneric(typeof(ListModelReload<,,,,>))

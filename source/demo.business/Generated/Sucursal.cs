@@ -89,13 +89,13 @@ namespace demo.Business.Table
 
     public partial class Sucursales : ListDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursales(IListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
+        public Sucursales(IListData<Entities.Table.Sucursal, Persistence.Table.Sucursal> datas)
             : base(datas)
         {
         }
 
         public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
-           : this(new Persistence.Table.SucursalesEdit(entities ?? new Collection<Entities.Table.Sucursal>()))
+           : this(new Persistence.Table.Sucursales(entities ?? new Collection<Entities.Table.Sucursal>()))
         {
         }
     }

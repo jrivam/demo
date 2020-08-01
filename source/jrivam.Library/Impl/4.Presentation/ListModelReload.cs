@@ -5,11 +5,12 @@ using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
+using System.Data;
 using System.Windows.Input;
 
 namespace jrivam.Library.Impl.Presentation
 {
-    public class ListModelReload<S, T, U, V, W> : ListModelEdit<T, U, V, W>, IListModelQuery<S, T, U, V, W>, IListModelReload<T, U, V, W>
+    public class ListModelReload<S, T, U, V, W> : ListModelEdit<T, U, V, W>, IListModelReload<T, U, V, W>, IListModelQuery<S, T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -36,9 +37,11 @@ namespace jrivam.Library.Impl.Presentation
             }, delegate (object parameter) { return true; });
         }
 
-        public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0)
+        public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0,
+            IDbConnection connection = null)
         {
-            var list = Query.List(_maxdepth, top);
+            var list = Query.List(_maxdepth, top,
+                connection);
 
             Status = Query.Status;
 

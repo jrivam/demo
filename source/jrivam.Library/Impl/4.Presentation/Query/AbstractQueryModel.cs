@@ -5,6 +5,7 @@ using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
+using System.Data;
 
 namespace jrivam.Library.Impl.Presentation.Query
 {
@@ -28,15 +29,19 @@ namespace jrivam.Library.Impl.Presentation.Query
             Domain = domain;
         }
 
-        public virtual (Result result, W model) Retrieve(int maxdepth = 1)
+        public virtual (Result result, W model) Retrieve(int maxdepth = 1,
+            IDbConnection connection = null)
         {
-            var retrieve = _interactivequery.Retrieve(this, maxdepth);
+            var retrieve = _interactivequery.Retrieve(this, maxdepth,
+                connection);
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<W> models) List(int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<W> models) List(int maxdepth = 1, int top = 0,
+            IDbConnection connection = null)
         {
-            var list = _interactivequery.List(this, maxdepth, top);
+            var list = _interactivequery.List(this, maxdepth, top,
+                connection);
 
             return list;
         }

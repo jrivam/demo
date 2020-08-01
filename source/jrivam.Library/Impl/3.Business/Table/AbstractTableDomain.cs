@@ -7,6 +7,7 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace jrivam.Library.Impl.Business.Table
@@ -69,36 +70,40 @@ namespace jrivam.Library.Impl.Business.Table
             return Validations.FirstOrDefault(x => x.name == name).validator.Validate();
         }
 
-        public virtual (Result result, V domain) LoadQuery(int maxdepth = 1)
+        public virtual (Result result, V domain) LoadQuery(int maxdepth = 1, IDbConnection connection = null)
         {
             var loadquery = _logictable.LoadQuery(this as V, maxdepth);
             return loadquery;
         }
-        public virtual (Result result, V domain) Load(bool usedbcommand = false)
+        public virtual (Result result, V domain) Load(bool usedbcommand = false, IDbConnection connection = null)
         {
             var load = _logictable.Load(this as V, usedbcommand);
 
             return load;
         }
 
-        public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false)
+        public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var save = _logictable.Save(this as V, useinsertdbcommand, useupdatedbcommand);
+            var save = _logictable.Save(this as V, useinsertdbcommand, useupdatedbcommand,
+                connection, transaction);
 
             if (save.result.Success)
             {
-                save.result.Append(SaveChildren());
+                save.result.Append(SaveChildren(connection, transaction));
             }
 
             return save;
         }
-        public virtual (Result result, V domain) Erase(bool usedbcommand = false)
+        public virtual (Result result, V domain) Erase(bool usedbcommand = false, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            (Result result, V domain) erasechildren = (EraseChildren(), default(V));
+            (Result result, V domain) erasechildren = (EraseChildren(connection, transaction), default(V));
 
             if (erasechildren.result.Success)
             {
-                var erase = _logictable.Erase(this as V, usedbcommand);
+                var erase = _logictable.Erase(this as V, usedbcommand,
+                    connection, transaction);
 
                 erasechildren.result.Append(erase.result);
 
@@ -108,7 +113,7 @@ namespace jrivam.Library.Impl.Business.Table
             return erasechildren;
         }
 
-        protected virtual Result SaveChildren()
+        protected virtual Result SaveChildren(IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var savechildren = new Result();
 
@@ -117,13 +122,13 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    savechildren.Append((Result)collection.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.SaveAll)).Invoke(collection, null));
+                    savechildren.Append((Result)collection.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.SaveAll)).Invoke(collection, new object[] { connection, transaction }));
                 }
             }
 
             return savechildren;
         }
-        protected virtual Result EraseChildren()
+        protected virtual Result EraseChildren(IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var erasechildren = new Result();
 
@@ -132,11 +137,11 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    var refresh = collection.GetType().GetMethod(nameof(IListDomainReload<T, U, V>.Refresh)).Invoke(collection, new object[] { null });
+                    var refresh = collection.GetType().GetMethod(nameof(IListDomainReload<T, U, V>.Refresh)).Invoke(collection, new object[] { null, connection });
                     var item2 = refresh.GetType().GetField("Item2").GetValue(refresh);
                     if (item2 != null)
                     {
-                        erasechildren.Append((Result)item2.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.EraseAll)).Invoke(item2, null));
+                        erasechildren.Append((Result)item2.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.EraseAll)).Invoke(item2, new object[] { connection, transaction }));
                     }
                 }
             }

@@ -5,6 +5,7 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace jrivam.Library.Impl.Business.Query
@@ -26,15 +27,19 @@ namespace jrivam.Library.Impl.Business.Query
             _loader = loader;
         }
 
-        public virtual (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1)
+        public virtual (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1,
+            IDbConnection connection = null)
         {
-            var list = List(query, maxdepth, 1);
+            var list = List(query, maxdepth, 1, 
+                connection);
 
             return (list.result, list.domains.FirstOrDefault());
         }
-        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0)
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0,
+            IDbConnection connection = null)
         {
-            var list = _logic.List(query.Data, maxdepth, top);
+            var list = _logic.List(query.Data, maxdepth, top,
+                connection);
 
             if (list.result.Success)
             {

@@ -4,7 +4,7 @@ using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Interface.Persistence
 {
-    public interface IListDataReload<T, U>
+    public interface IListDataReload<T, U> : IListDataEdit<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {

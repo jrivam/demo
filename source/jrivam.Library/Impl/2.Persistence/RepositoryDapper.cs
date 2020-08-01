@@ -27,17 +27,20 @@ namespace jrivam.Library.Impl.Persistence
 
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
             ISqlCommand sqlcommand,
-            int maxdepht = 1)
+            int maxdepht = 1,
+            IDbConnection connection = null)
         {
-            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters.ToArray(), maxdepht);
+            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters.ToArray(), maxdepht,
+                connection);
         }
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
             string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
-            int maxdepht = 1)
+            int maxdepht = 1,
+            IDbConnection connection = null)
         {
             try
             {
-                using (var connection = _sqlcreator.GetConnection(
+                using (var c = connection ?? _sqlcreator.GetConnection(
                     _connectionstringsettings.ProviderName,
                     _connectionstringsettings.ConnectionString))
                 {
@@ -68,16 +71,19 @@ namespace jrivam.Library.Impl.Persistence
         }
 
         public virtual (Result result, int rows) ExecuteNonQuery(
-            ISqlCommand sqlcommand)
+            ISqlCommand sqlcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray());
+            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(),
+                connection, transaction);
         }
         public virtual (Result result, int rows) ExecuteNonQuery(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null)
+            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
-                using (var connection = _sqlcreator.GetConnection(
+                using (var c = connection ?? _sqlcreator.GetConnection(
                     _connectionstringsettings.ProviderName,
                     _connectionstringsettings.ConnectionString))
                 {
@@ -106,16 +112,19 @@ namespace jrivam.Library.Impl.Persistence
         }
 
         public virtual (Result result, T scalar) ExecuteScalar<T>(
-            ISqlCommand sqlcommand)
+            ISqlCommand sqlcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray());
+            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(),
+                connection, transaction);
         }
         public virtual (Result result, T scalar) ExecuteScalar<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null)
+            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
-                using (var connection = _sqlcreator.GetConnection(
+                using (var c = connection ?? _sqlcreator.GetConnection(
                     _connectionstringsettings.ProviderName,
                     _connectionstringsettings.ConnectionString))
                 {

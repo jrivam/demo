@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Entities.Reader;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Query;
@@ -38,15 +37,18 @@ namespace jrivam.Library.Impl.Persistence.Query
         }
 
         public virtual (Result result, U data) SelectSingle(IQueryData<T, U> query,
-            int maxdepth = 1)
+            int maxdepth = 1, 
+            IDbConnection connection = null)
         {
-            var select = Select(query, maxdepth, 1);
+            var select = Select(query, maxdepth, 1,
+                connection);
 
             return (select.result, select.datas?.FirstOrDefault());
         }
 
         public virtual (Result result, IEnumerable<U> datas) Select(IQueryData<T, U> query,
-            int maxdepth = 1, int top = 0)
+            int maxdepth = 1, int top = 0,
+            IDbConnection connection = null)
         {
             var parameters = new List<ISqlParameter>();
 
@@ -57,15 +59,18 @@ namespace jrivam.Library.Impl.Persistence.Query
                 _sqlbuilderquery.GetFrom(queryjoins, query.Description.DbName),
                 _sqlbuilderquery.GetWhere(querycolumns, parameters), top);
 
-            return Select(selectcommandtext, CommandType.Text, parameters?.ToArray(), maxdepth);
+            return Select(selectcommandtext, CommandType.Text, parameters?.ToArray(), maxdepth,
+                connection);
         }
         public virtual (Result result, IEnumerable<U> datas) Select(string commandtext, CommandType commandtype = CommandType.Text, 
             ISqlParameter[] parameters = null,
-            int maxdepth = 1)
+            int maxdepth = 1, 
+            IDbConnection connection = null)
         {
             var executequery = _repository.ExecuteQuery<T>(
                 commandtext, commandtype, parameters,
-                maxdepth);
+                maxdepth,
+                connection);
             if (executequery.result.Success)
             {
                 var enumeration = new List<U>();
@@ -86,7 +91,8 @@ namespace jrivam.Library.Impl.Persistence.Query
 
         public virtual (Result result, int rows) Update(IQueryData<T, U> query,
             IList<IColumnTable> columns,
-            int maxdepth = 1)
+            int maxdepth = 1, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var parameters = new List<ISqlParameter>();
 
@@ -98,10 +104,12 @@ namespace jrivam.Library.Impl.Persistence.Query
                 _sqlbuilderquery.GetUpdateSet(columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters),
                 _sqlbuilderquery.GetWhere(querycolumns, parameters));
 
-            return _repository.ExecuteNonQuery(updatecommandtext, CommandType.Text, parameters?.ToArray());
+            return _repository.ExecuteNonQuery(updatecommandtext, CommandType.Text, parameters?.ToArray(),
+                connection, transaction);
         }
         public virtual (Result result, int rows) Delete(IQueryData<T, U> query,
-            int maxdepth = 1)
+            int maxdepth = 1,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var parameters = new List<ISqlParameter>();
 
@@ -112,7 +120,8 @@ namespace jrivam.Library.Impl.Persistence.Query
                 _sqlbuilderquery.GetFrom(queryjoins, query.Description.DbName),
                 _sqlbuilderquery.GetWhere(querycolumns, parameters));
 
-            return _repository.ExecuteNonQuery(deletecommandtext, CommandType.Text, parameters?.ToArray());
+            return _repository.ExecuteNonQuery(deletecommandtext, CommandType.Text, parameters?.ToArray(),
+                connection, transaction);
         }
     }
 }
