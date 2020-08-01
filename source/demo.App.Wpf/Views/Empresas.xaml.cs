@@ -78,7 +78,7 @@ namespace demo.App.Wpf.Views
             var view = new Views.Empresa(entity);
             view.ShowDialog();
 
-            ViewModel.Empresas.ItemEdit(entity, view.ViewModel.Empresa);
+            ViewModel.Empresas.ItemModify(entity, view.ViewModel.Empresa);
         }
     }
 }

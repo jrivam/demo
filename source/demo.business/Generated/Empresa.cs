@@ -65,6 +65,19 @@ namespace demo.Business.Table
         }
     }
 
+    public partial class Empresas : ListDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
+    {
+        public Empresas(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+            : base(datas)
+        {
+        }
+
+        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
+           : this(new Persistence.Table.EmpresasEdit(entities ?? new Collection<Entities.Table.Empresa>()))
+        {
+        }
+    }
+
     public partial class EmpresasEdit : ListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
         public EmpresasEdit(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)

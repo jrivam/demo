@@ -1,46 +1,57 @@
-﻿using jrivam.Library.Impl.Persistence;
-using jrivam.Library.Interface.Business;
+﻿using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Table;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace jrivam.Library.Impl.Business
 {
-    public class ListDomainEdit<T, U, V> : List<V>, IListDomainEdit<T, U, V>
+    public class ListDomainEdit<T, U, V> : ListDomain<T, U, V>, IListDomainEdit<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
     {
-        protected IListDataEdit<T, U> _datas;
-        public virtual IListDataEdit<T, U> Datas
-        {
-            get
-            {
-                return _datas;
-            }
-        }
-
         public ListDomainEdit(IListDataEdit<T, U> datas = null)
+            : base(datas)
         {
-            _datas = datas ?? new ListDataEdit<T, U>();
-            _datas?.ToList()?.ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    
         }
 
-        public virtual IListDomainEdit<T, U, V> Load(IEnumerable<V> domains)
+        public virtual void ItemModify(V olddomain, V newdomain)
         {
-            if (domains != null)
+            ((IListDataEdit<T, U>)Datas).ItemModify(olddomain.Data, olddomain.Data);
+        }
+        public virtual bool ItemAdd(V domain)
+        {
+            if (domain != null)
             {
-                this?.AddRange(domains);
+                if (!domain.Deleted)
+                {
+                    if (((IListDataEdit<T, U>)Datas).ItemAdd(domain.Data))
+                    {
+                        this.Add(domain);
 
-                _datas?.Clear();
-                _datas?.Load(this.Select(x => x.Data));
+                        return true;
+                    }
+                }
             }
 
-            return this;
+            return false;
         }
+        public virtual bool ItemRemove(V domain)
+        {
+            if (domain != null)
+            {
+                if (((IListDataEdit<T, U>)Datas).ItemRemove(domain.Data))
+                {
+                    this.Remove(domain);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
 
         public virtual Result SaveAll()
         {
@@ -67,42 +78,6 @@ namespace jrivam.Library.Impl.Business
             }
 
             return result;
-        }
-
-        public virtual void ItemEdit(V olddomain, V newdomain)
-        {
-            Datas.ItemEdit(olddomain.Data, olddomain.Data);
-        }
-        public virtual bool ItemAdd(V domain)
-        {
-            if (domain != null)
-            {
-                if (!domain.Deleted)
-                {
-                    if (Datas.ItemAdd(domain.Data))
-                    {
-                        this.Add(domain);
-
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-        public virtual bool ItemRemove(V domain)
-        {
-            if (domain != null)
-            {
-                if (Datas.ItemRemove(domain.Data))
-                {
-                    this.Remove(domain);
-
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

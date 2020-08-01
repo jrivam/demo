@@ -25,7 +25,7 @@ namespace jrivam.Library.Impl.Business
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListDomainEdit<T, U, V> domains) Refresh(int top = 0)
+        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0)
         {
             var list = Query.List(_maxdepth, top);
 

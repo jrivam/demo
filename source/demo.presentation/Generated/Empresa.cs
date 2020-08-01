@@ -72,6 +72,23 @@ namespace demo.Presentation.Table
         }
     }
 
+    public partial class Empresas : ListModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
+    {
+        public Empresas(IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
+            : base(domains)
+        {
+        }
+
+        public Empresas(IListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa> datas)
+           : this(new Business.Table.EmpresasEdit(datas))
+        {
+        }
+        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
+           : this(new Persistence.Table.EmpresasEdit(entities ?? new Collection<Entities.Table.Empresa>()))
+        {
+        }
+    }
+
     public partial class EmpresasEdit : ListModelEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
         public EmpresasEdit(IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)

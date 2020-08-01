@@ -11,8 +11,8 @@ namespace jrivam.Library.Interface.Business
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        IListDataEdit<T, U> Datas { get; }
+        IListData<T, U> Datas { get; }
         
-        IListDomainEdit<T, U, V> Load(IEnumerable<V> list);
+        IListDomain<T, U, V> Load(IEnumerable<V> list);
     }
 }

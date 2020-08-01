@@ -105,6 +105,14 @@ namespace demo.Persistence.Table
         }
     }
 
+    public partial class Sucursales : ListData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
+    {
+        public Sucursales(ICollection<Entities.Table.Sucursal> entities = null)
+            : base(entities ?? new Collection<Entities.Table.Sucursal>())
+        {
+        }
+    }
+
     public partial class SucursalesEdit : ListDataEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
         public SucursalesEdit(ICollection<Entities.Table.Sucursal> entities = null)

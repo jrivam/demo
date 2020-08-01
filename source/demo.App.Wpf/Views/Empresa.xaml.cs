@@ -100,7 +100,7 @@ namespace demo.App.Wpf.Views
             view.ShowDialog();
 
             if (view.ViewModel.Sucursal.IdEmpresa == ViewModel.Empresa.Id)
-                ViewModel.Empresa.Sucursales.ItemEdit(entity, view.ViewModel.Sucursal);
+                ViewModel.Empresa.Sucursales.ItemModify(entity, view.ViewModel.Sucursal);
             else if (!view.ViewModel.Sucursal.Domain.Changed)
                 ViewModel.Empresa.Sucursales.ItemRemove(entity);
         }

@@ -13,7 +13,7 @@ namespace jrivam.Library.Interface.Business
         Result SaveAll();
         Result EraseAll();
 
-        void ItemEdit(V olddomain, V newdomain);
+        void ItemModify(V olddomain, V newdomain);
         bool ItemAdd(V domain);
         bool ItemRemove(V domain);
     }

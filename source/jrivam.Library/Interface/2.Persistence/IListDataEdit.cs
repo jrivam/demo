@@ -7,7 +7,7 @@ namespace jrivam.Library.Interface.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
-        void ItemEdit(U olddata, U newdata);
+        void ItemModify(U olddata, U newdata);
         bool ItemAdd(U data);
         bool ItemRemove(U data);
     }

@@ -14,7 +14,7 @@ namespace jrivam.Library.Interface.Presentation
     {
         ICommand AddCommand { get; }
 
-        void ItemEdit(W oldmodel, W newmodel);
+        void ItemModify(W oldmodel, W newmodel);
         bool ItemAdd(W model);
         bool ItemRemove(W model);
     }

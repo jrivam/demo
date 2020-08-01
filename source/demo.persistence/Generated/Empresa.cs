@@ -71,6 +71,14 @@ namespace demo.Persistence.Table
         }
     }
 
+    public partial class Empresas : ListData<Entities.Table.Empresa, Persistence.Table.Empresa>
+    {
+        public Empresas(ICollection<Entities.Table.Empresa> entities = null)
+            : base(entities ?? new Collection<Entities.Table.Empresa>())
+        {
+        }
+    }
+
     public partial class EmpresasEdit : ListDataEdit<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
         public EmpresasEdit(ICollection<Entities.Table.Empresa> entities = null)

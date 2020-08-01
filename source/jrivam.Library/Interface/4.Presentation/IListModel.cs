@@ -13,7 +13,7 @@ namespace jrivam.Library.Interface.Presentation
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        IListDomainEdit<T, U, V> Domains { get; }
+        IListDomain<T, U, V> Domains { get; }
 
         string Name { get; }
 

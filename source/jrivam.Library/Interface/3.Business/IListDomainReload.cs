@@ -10,6 +10,6 @@ namespace jrivam.Library.Interface.Business
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        (Result result, IListDomainEdit<T, U, V> domains) Refresh(int top = 0);
+        (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0);
     }
 }

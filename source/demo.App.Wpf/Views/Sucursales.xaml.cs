@@ -79,7 +79,7 @@ namespace demo.App.Wpf.Views
             var view = new Views.Sucursal(entity);
             view.ShowDialog();
 
-            ViewModel.Sucursales.ItemEdit(entity, view.ViewModel.Sucursal);
+            ViewModel.Sucursales.ItemModify(entity, view.ViewModel.Sucursal);
         }
     }
 }

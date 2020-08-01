@@ -23,7 +23,7 @@ namespace jrivam.Library.Impl.Persistence
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListDataEdit<T, U> datas) Refresh(int top = 0)
+        public virtual (Result result, IListData<T, U> datas) Refresh(int top = 0)
         {
             var select = Query.Select(_maxdepth, top);
 
