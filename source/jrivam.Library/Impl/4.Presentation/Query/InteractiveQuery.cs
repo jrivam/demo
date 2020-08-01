@@ -1,5 +1,4 @@
-﻿using jrivam.Library.Impl.Business;
-using jrivam.Library.Interface.Business.Table;
+﻿using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
@@ -29,21 +28,21 @@ namespace jrivam.Library.Impl.Presentation.Query
             _raiser = raiser;
         }
 
-        public virtual (Result result, W model) Retrieve(IQueryModel<T, U, V, W> query, int maxdepth = 1, W model = default(W))
+        public virtual (Result result, W model) Retrieve(IQueryModel<T, U, V, W> query, int maxdepth = 1)
         {
             query.Status = "Retrieving...";
 
-            var list = List(query, maxdepth, 1, model != null ? new ListModel<T, U, V, W>() { model } : null);
+            var list = List(query, maxdepth, 1);
 
             query.Status = list.result.GetMessagesAsString();
 
             return (list.result, list.models.FirstOrDefault());
         }
-        public virtual (Result result, IEnumerable<W> models) List(IQueryModel<T, U, V, W> query, int maxdepth = 1, int top = 0, IListModel<T, U, V, W> models = null)
+        public virtual (Result result, IEnumerable<W> models) List(IQueryModel<T, U, V, W> query, int maxdepth = 1, int top = 0)
         {
             query.Status = "Listing...";
 
-            var list = _interactive.List(query.Domain, maxdepth, top, models?.Domains ?? new ListDomain<T, U, V>());
+            var list = _interactive.List(query.Domain, maxdepth, top);
             if (list.result.Success)
             {
                 var enumeration = new List<W>();

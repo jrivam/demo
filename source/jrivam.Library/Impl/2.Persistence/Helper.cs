@@ -1,7 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using jrivam.Library.Impl.Persistence.Sql;
+using MySql.Data.MySqlClient;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 
 namespace jrivam.Library.Impl.Persistence
@@ -112,6 +114,27 @@ namespace jrivam.Library.Impl.Persistence
                     { DbType.Time, NpgsqlDbType.Time },
                 };
             }
+        }
+
+        public static bool UseDbCommand(bool classusedbcommand, bool propertyusedbcommand, bool methodusedbcommand)
+        {
+            bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["database.forceusedbcommand"]);
+
+            return (methodusedbcommand || propertyusedbcommand || classusedbcommand || configusedbcommand);
+        }
+
+        public static SqlParameter
+            GetParameter
+            (string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
+        {
+            return new SqlParameter()
+            {
+                Name = name,
+                Type = type,
+                Value = value,
+
+                Direction = direction
+            };
         }
     }
 }

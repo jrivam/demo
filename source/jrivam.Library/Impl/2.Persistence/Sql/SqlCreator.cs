@@ -1,7 +1,7 @@
 ﻿using jrivam.Library.Interface.Persistence.Database;
+using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Sql.Database;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -16,12 +16,14 @@ namespace jrivam.Library.Impl.Persistence.Sql
             _dbcreator = objectcreator;
         }
 
-        public virtual IDbConnection GetConnection(string providername, string connectionstring)
+        public virtual IDbConnection GetConnection(
+            string providername, string connectionstring)
         {
             return _dbcreator?.GetConnection(providername, connectionstring);
         }
 
-        public virtual IDbDataParameter GetParameter(string providername, 
+        public virtual IDbDataParameter GetParameter(
+            string providername, 
             string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input)
         {
             var parameter = _dbcreator?.GetParameter(providername);
@@ -34,7 +36,8 @@ namespace jrivam.Library.Impl.Persistence.Sql
             return parameter;
         }
 
-        public virtual IDbCommand GetCommand(string providername,
+        public virtual IDbCommand GetCommand(
+            string providername,
             string commandtext = "", CommandType commandtype = CommandType.Text)
         {
             var command = _dbcreator?.GetCommand(providername);
@@ -44,9 +47,10 @@ namespace jrivam.Library.Impl.Persistence.Sql
 
             return command;
         }
-        public virtual IDbCommand GetCommand(string providername, 
+        public virtual IDbCommand GetCommand(
+            string providername, 
             string commandtext = "", CommandType commandtype = CommandType.Text, 
-            IList<SqlParameter> parameters = null)
+            ISqlParameter[] parameters = null)
         {
             var command = GetCommand(providername, commandtext, commandtype);
 
@@ -57,10 +61,10 @@ namespace jrivam.Library.Impl.Persistence.Sql
 
             return command;
         }
-        public virtual IDbCommand GetCommand(string providername, 
-            string commandtext = "", CommandType commandtype = CommandType.Text, 
-            IList<SqlParameter> parameters = null,
-            string connectionstring = "")
+        public virtual IDbCommand GetCommand(
+            string providername, string connectionstring,
+            string commandtext = "", CommandType commandtype = CommandType.Text,
+            ISqlParameter[] parameters = null)
         {            
             var command = GetCommand(providername, commandtext, commandtype, parameters);
 

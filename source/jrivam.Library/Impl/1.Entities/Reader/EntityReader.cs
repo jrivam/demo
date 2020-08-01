@@ -24,9 +24,9 @@ namespace jrivam.Library.Impl.Entities.Reader
             }
         }
 
-        public virtual void Read<T>(T entity, IDataReader datareader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
+        public virtual T Read<T>(T entity, IDataReader datareader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
         {
-            prefixname.Add(entity?.GetType().Name);
+            (prefixname ?? new List<string>()).Add(entity?.GetType().Name);
 
             var prefix = string.Join(_sqlsyntaxsign.AliasSeparatorColumn, prefixname);
             prefix += (prefix == string.Empty ? prefix : _sqlsyntaxsign.AliasSeparatorColumn);
@@ -55,6 +55,8 @@ namespace jrivam.Library.Impl.Entities.Reader
                     }
                 }
             }
+
+            return entity;
         }
     }
 }

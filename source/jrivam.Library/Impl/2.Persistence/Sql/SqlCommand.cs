@@ -8,6 +8,6 @@ namespace jrivam.Library.Impl.Persistence.Sql
     {
         public string Text { get; set; } = string.Empty;
         public CommandType Type { get; set; } = CommandType.Text;
-        public IList<SqlParameter> Parameters { get; set; } = new List<SqlParameter>();
+        public IList<ISqlParameter> Parameters { get; set; } = new List<ISqlParameter>();
     }
 }

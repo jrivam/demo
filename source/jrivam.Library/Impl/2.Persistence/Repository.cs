@@ -1,6 +1,7 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
+﻿using jrivam.Library.Interface.Entities.Reader;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Database;
+using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Sql.Database;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,34 +17,38 @@ namespace jrivam.Library.Impl.Persistence
         protected readonly ISqlCreator _sqlcreator;
 
         protected readonly IDbCommandExecutor _dbcommandexecutor;
-        protected readonly IDbCommandExecutorBulk _dbcommandexecutorbulk;
+        protected readonly IEntityReader _entityreader;
 
-        public Repository(ConnectionStringSettings connectionstringsettings,
+        public Repository(
+            ConnectionStringSettings connectionstringsettings,
             ISqlCreator sqlcreator,
-            IDbCommandExecutor dbcommandexecutor, IDbCommandExecutorBulk dbcommandexecutorbulk)
+            IDbCommandExecutor dbcommandexecutor, IEntityReader entityreader)
         {
             _connectionstringsettings = connectionstringsettings;
 
             _sqlcreator = sqlcreator;
 
             _dbcommandexecutor = dbcommandexecutor;
-            _dbcommandexecutorbulk = dbcommandexecutorbulk;
+            _entityreader = entityreader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(SqlCommand sqlcommand,
-            int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
+            ISqlCommand sqlcommand)
         {
-            return ExecuteQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters, maxdepth, entities);
+            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray());
         }
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
+            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null)
         {
-            var executequery = _dbcommandexecutor.ExecuteQuery(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName, 
-                    commandtext, commandtype, 
-                    parameters, 
-                    _connectionstringsettings.ConnectionString),
-                maxdepth, entities);
+            var executequery = _dbcommandexecutor.ExecuteQuery<T>(
+                _sqlcreator.GetCommand(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString,
+                        commandtext, commandtype,
+                        parameters),
+                (x, y) => _entityreader.Read<T>(x, y, new List<string>(), 1, 0));
 
-            if(executequery.result.Success && executequery.entities?.Count() == 0)
+            if (executequery.result.Success && executequery.entities?.Count() == 0)
             {
                 executequery.result.SetMessage(
                     new ResultMessage()
@@ -58,16 +63,20 @@ namespace jrivam.Library.Impl.Persistence
             return executequery;
         }
 
-        public virtual (Result result, int rows) ExecuteNonQuery(SqlCommand sqlcommand)
+        public virtual (Result result, int rows) ExecuteNonQuery(
+            ISqlCommand sqlcommand)
         {
-            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters);
+            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray());
         }
-        public virtual (Result result, int rows) ExecuteNonQuery(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+        public virtual (Result result, int rows) ExecuteNonQuery(
+            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null)
         {
-            var executenonquery = _dbcommandexecutorbulk.ExecuteNonQuery(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName,  
+            var executenonquery = _dbcommandexecutor.ExecuteNonQuery(
+                _sqlcreator.GetCommand(
+                    _connectionstringsettings.ProviderName,
+                    _connectionstringsettings.ConnectionString,
                     commandtext, commandtype, 
-                    parameters,
-                    _connectionstringsettings.ConnectionString));
+                    parameters));
 
             if (executenonquery.result.Success && executenonquery.rows == 0)
             {
@@ -84,16 +93,20 @@ namespace jrivam.Library.Impl.Persistence
             return executenonquery;
         }
 
-        public virtual (Result result, object scalar) ExecuteScalar(SqlCommand sqlcommand)
+        public virtual (Result result, T scalar) ExecuteScalar<T>(
+            ISqlCommand sqlcommand)
         {
-            return ExecuteScalar(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters);
+            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray());
         }
-        public virtual (Result result, object scalar) ExecuteScalar(string commandtext, CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null)
+        public virtual (Result result, T scalar) ExecuteScalar<T>(
+            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null)
         {
-            var executescalar = _dbcommandexecutorbulk.ExecuteScalar(_sqlcreator.GetCommand(_connectionstringsettings.ProviderName,  
+            var executescalar = _dbcommandexecutor.ExecuteScalar<T>(
+                _sqlcreator.GetCommand(
+                    _connectionstringsettings.ProviderName,
+                    _connectionstringsettings.ConnectionString,
                     commandtext, commandtype, 
-                    parameters,
-                    _connectionstringsettings.ConnectionString));
+                    parameters));
 
             if (executescalar.result.Success && executescalar.scalar == null)
             {

@@ -1,5 +1,4 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 
 namespace jrivam.Library.Interface.Persistence.Sql
@@ -10,6 +9,6 @@ namespace jrivam.Library.Interface.Persistence.Sql
 
         CommandType Type { get; set; }
 
-        IList<SqlParameter> Parameters { get; set; }
+        IList<ISqlParameter> Parameters { get; set; }
     }
 }

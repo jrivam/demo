@@ -18,7 +18,7 @@ namespace jrivam.Library.Impl.Persistence.Mapper
             }
         }
 
-        public virtual void Map<T, U>(U data, int maxdepth = 1, int depth = 0)
+        public virtual U Map<T, U>(U data, int maxdepth = 1, int depth = 0)
             where T : IEntity
             where U : ITableData<T, U>
         {
@@ -46,6 +46,8 @@ namespace jrivam.Library.Impl.Persistence.Mapper
                     }
                 }
             }
+
+            return data;
         }
     }
 }

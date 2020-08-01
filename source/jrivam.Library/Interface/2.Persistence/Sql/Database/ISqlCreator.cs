@@ -1,6 +1,4 @@
-﻿using jrivam.Library.Impl.Persistence.Sql;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 
 namespace jrivam.Library.Interface.Persistence.Sql.Database
@@ -12,7 +10,7 @@ namespace jrivam.Library.Interface.Persistence.Sql.Database
         IDbDataParameter GetParameter(string providername, string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input);
 
         IDbCommand GetCommand(string providername, string commandtext = "", CommandType commandtype = CommandType.Text);
-        IDbCommand GetCommand(string providername, string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null);
-        IDbCommand GetCommand(string providername, string commandtext = "", CommandType commandtype = CommandType.Text, IList<SqlParameter> parameters = null, string connectionstring = "");
+        IDbCommand GetCommand(string providername, string commandtext = "", CommandType commandtype = CommandType.Text, params ISqlParameter[] parameters);
+        IDbCommand GetCommand(string providername, string connectionstring, string commandtext = "", CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null);
     }
 }

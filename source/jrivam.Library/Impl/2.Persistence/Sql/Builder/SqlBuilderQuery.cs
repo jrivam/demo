@@ -1,8 +1,10 @@
 ﻿using jrivam.Library.Interface.Persistence.Query;
+using jrivam.Library.Interface.Persistence.Sql;
 using jrivam.Library.Interface.Persistence.Sql.Builder;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace jrivam.Library.Impl.Persistence.Sql.Builder
 {
@@ -67,22 +69,29 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
 
         public virtual IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)> GetParameters
             ((IColumnQuery column, IList<string> aliases, IList<string> parameters) columns,
-            IList<SqlParameter> parameters)
+            IList<ISqlParameter> parameters)
         {
             var count = 0;
             foreach (var w in columns.column.Wheres)
             {
                 count++;
 
-                var parameter = GetParameter($"{_sqlsyntaxsign.ParameterPrefix}{string.Join(_sqlsyntaxsign.ParameterSeparator, columns.parameters)}{_sqlsyntaxsign.ParameterSeparator}{columns.column.Description.Name}{count}", columns.column.Type, w.value, ParameterDirection.Input);
+                var parameter = Helper.GetParameter($"{_sqlsyntaxsign.ParameterPrefix}{string.Join(_sqlsyntaxsign.ParameterSeparator, columns.parameters)}{_sqlsyntaxsign.ParameterSeparator}{columns.column.Description.Name}{count}", columns.column.Type, w.value, ParameterDirection.Input);
 
                 if ((w.sign & WhereOperator.LikeBegin) == WhereOperator.LikeBegin)
                     parameter.Value = $"{_sqlsyntaxsign.WhereWildcardAny}{parameter.Value}";
                 if ((w.sign & WhereOperator.LikeEnd) == WhereOperator.LikeEnd)
                     parameter.Value = $"{parameter.Value}{_sqlsyntaxsign.WhereWildcardAny}";
 
-                if (parameters.IndexOf(parameter) < 0)
+                var commandparameter = parameters.FirstOrDefault(x => x.Name == parameter.Name);
+                if (commandparameter == null)
+                {
                     parameters.Add(parameter);
+                }
+                else
+                {
+                    commandparameter.Value = w.value;
+                }
 
                 yield return (w, parameter, count);
             }
@@ -112,7 +121,7 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
 
         public virtual string GetWhere
             (IList<(IColumnQuery column, IList<string> tablenames, IList<string> aliasnames)> columns, 
-            IList<SqlParameter> parameters)
+            IList<ISqlParameter> parameters)
         {
             var where = string.Empty;
 

@@ -11,7 +11,7 @@ namespace jrivam.Library.Interface.Business.Query
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1, V domain = default(V));
-        (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null);
+        (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1);
+        (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0);
     }
 }

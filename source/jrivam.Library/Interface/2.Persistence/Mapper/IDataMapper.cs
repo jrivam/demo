@@ -9,7 +9,7 @@ namespace jrivam.Library.Interface.Persistence.Mapper
             where T : IEntity
             where U : ITableData<T, U>;
 
-        void Map<T, U>(U data, int maxdepth = 1, int depth = 0)
+        U Map<T, U>(U data, int maxdepth = 1, int depth = 0)
             where T : IEntity
             where U : ITableData<T, U>;
     }

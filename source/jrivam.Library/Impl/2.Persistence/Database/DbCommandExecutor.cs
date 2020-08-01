@@ -1,5 +1,4 @@
-﻿using jrivam.Library.Interface.Entities.Reader;
-using jrivam.Library.Interface.Persistence.Database;
+﻿using jrivam.Library.Interface.Persistence.Database;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,19 +8,15 @@ namespace jrivam.Library.Impl.Persistence.Database
 {
     public class DbCommandExecutor : IDbCommandExecutor
     {
-        protected readonly IEntityReader _entityreader;
-
-        public DbCommandExecutor(IEntityReader entityreader)
+        public DbCommandExecutor()
         {
-            _entityreader = entityreader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, int maxdepth = 1, ICollection<T> entities = null)
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(IDbCommand command, Func<T, IDataReader, T> reader)
         {
             try
             {
                 var enumeration = new Collection<T>();
-                var iterator = (entities ?? new Collection<T>()).GetEnumerator();
 
                 command.Connection?.Open();
 
@@ -29,11 +24,7 @@ namespace jrivam.Library.Impl.Persistence.Database
                 {
                     while (datareader.Read())
                     {
-                        var entity = iterator.MoveNext() ? iterator.Current : Entities.HelperEntities<T>.CreateEntity();
-
-                        _entityreader.Read<T>(entity, datareader, new List<string>(), maxdepth, 0);
-
-                        enumeration.Add(entity);
+                        enumeration.Add(reader(Entities.HelperEntities<T>.CreateEntity(), datareader));
                     }
 
                     datareader.Close();
@@ -52,8 +43,57 @@ namespace jrivam.Library.Impl.Persistence.Database
                         Name = nameof(ExecuteQuery),
                         Description = ex.Message
                     })
-                { Exception = ex }, null);
+                { Exception = ex }, default(IEnumerable<T>));
             }
-        } 
+        }
+
+        public virtual (Result result, int rows) ExecuteNonQuery(IDbCommand command)
+        {
+            try
+            {
+                command.Connection?.Open();
+
+                var rows = command.ExecuteNonQuery();
+
+                command.Connection?.Close();
+
+                return (new Result(), rows);
+            }
+            catch (Exception ex)
+            {
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = nameof(ExecuteNonQuery),
+                        Description = ex.Message,
+                    })
+                { Exception = ex }, -1);
+            }
+        }
+        public virtual (Result result, T scalar) ExecuteScalar<T>(IDbCommand command)
+        {
+            try
+            {
+                command.Connection?.Open();
+
+                var scalar = command.ExecuteScalar();
+
+                command.Connection?.Close();
+
+                return (new Result(), (T)(scalar == DBNull.Value ? null : Convert.ChangeType(scalar, typeof(T))));
+            }
+            catch (Exception ex)
+            {
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = nameof(ExecuteScalar),
+                        Description = ex.Message
+                    })
+                { Exception = ex }, default(T));
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence.Mapper;
 using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Interface.Persistence.Query

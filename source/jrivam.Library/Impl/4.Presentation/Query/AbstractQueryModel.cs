@@ -2,7 +2,6 @@
 using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
-using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
@@ -29,17 +28,15 @@ namespace jrivam.Library.Impl.Presentation.Query
             Domain = domain;
         }
 
-        public virtual (Result result, W model) Retrieve(int maxdepth = 1, 
-            W model = default(W))
+        public virtual (Result result, W model) Retrieve(int maxdepth = 1)
         {
-            var retrieve = _interactivequery.Retrieve(this, maxdepth, model);
+            var retrieve = _interactivequery.Retrieve(this, maxdepth);
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<W> models) List(int maxdepth = 1, int top = 0, 
-            IListModel<T, U, V, W> models = null)
+        public virtual (Result result, IEnumerable<W> models) List(int maxdepth = 1, int top = 0)
         {
-            var list = _interactivequery.List(this, maxdepth, top, models);
+            var list = _interactivequery.List(this, maxdepth, top);
 
             return list;
         }

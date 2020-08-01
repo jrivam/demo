@@ -130,28 +130,109 @@ namespace jrivam.Library.Impl.Persistence.Table
         }          
         public virtual (Result result, U data) Select(bool usedbcommand = false)
         {
-            var select = _repositorytable.Select(this as U, usedbcommand);
+            if (Helper.UseDbCommand(UseDbCommand, SelectDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (SelectDbCommand != null)
+                {
+                    return _repositorytable.Select(this as U, SelectDbCommand.Value.dbcommand);
+                }
+
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Error,
+                        Name = nameof(Select),
+                        Description = "No SelectDbCommand defined."
+                    }
+                    ), default(U));
+            }
+
+            var select = _repositorytable.Select(this as U);
 
             return select;
         }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false)
         {
-            var insert = _repositorytable.Insert(this as U, usedbcommand);
+            if (Helper.UseDbCommand(UseDbCommand, InsertDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (InsertDbCommand != null)
+                {
+                    return _repositorytable.Insert(this as U, InsertDbCommand.Value.dbcommand);
+                }
+
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Error,
+                        Name = nameof(Insert),
+                        Description = "No InsertDbCommand defined."
+                    }
+                    ), default(U));
+            }
+
+            var insert = _repositorytable.Insert(this as U);
 
             return insert;
         }
         public virtual (Result result, U data) Update(bool usedbcommand = false)
         {
-            var update = _repositorytable.Update(this as U, usedbcommand);
+            if (Helper.UseDbCommand(UseDbCommand, UpdateDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (UpdateDbCommand != null)
+                {
+                    return _repositorytable.Update(this as U, UpdateDbCommand.Value.dbcommand);
+                }
+
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Error,
+                        Name = nameof(Update),
+                        Description = "No UpdateDbCommand defined."
+                    }
+                    ), default(U));
+            }
+
+            var update = _repositorytable.Update(this as U);
 
             return update;
         }
         public virtual (Result result, U data) Delete(bool usedbcommand = false)
         {
-            var delete = _repositorytable.Delete(this as U, usedbcommand);
+            if (Helper.UseDbCommand(UseDbCommand, DeleteDbCommand?.usedbcommand ?? false, usedbcommand))
+            {
+                if (DeleteDbCommand != null)
+                {
+                    return _repositorytable.Delete(this as U, DeleteDbCommand.Value.dbcommand);
+                }
+
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Error,
+                        Name = nameof(Delete),
+                        Description = "No DeleteDbCommand defined."
+                    }
+                    ), default(U));
+            }
+
+            var delete = _repositorytable.Delete(this as U);
 
             return delete;
+        }
+
+        public virtual (Result result, U data) Upsert(bool usedbcommand = false)
+        {
+            var select = Select(usedbcommand);
+            if (select.result.Success && select.data != null)
+            {
+                return Update(usedbcommand);
+            }
+            else
+            {
+                return Insert(usedbcommand);
+            }
         }
     }
 }

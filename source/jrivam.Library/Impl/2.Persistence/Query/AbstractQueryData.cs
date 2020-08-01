@@ -1,9 +1,7 @@
-﻿using Autofac;
-using jrivam.Library.Extension;
+﻿using jrivam.Library.Extension;
 using jrivam.Library.Impl.Persistence.Attributes;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
@@ -69,17 +67,15 @@ namespace jrivam.Library.Impl.Persistence.Query
             }
         }
 
-        public virtual (Result result, U data) SelectSingle(int maxdepth = 1, 
-            U data = default(U))
+        public virtual (Result result, U data) SelectSingle(int maxdepth = 1)
         {
-            var selectsingle = _repositoryquery.SelectSingle(this, maxdepth, data);
+            var selectsingle = _repositoryquery.SelectSingle(this, maxdepth);
 
             return selectsingle;
         }
-        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0, 
-            IListData<T, U> datas = null)
+        public virtual (Result result, IEnumerable<U> datas) Select(int maxdepth = 1, int top = 0)
         {
-            var select = _repositoryquery.Select(this, maxdepth, top, datas);
+            var select = _repositoryquery.Select(this, maxdepth, top);
 
             return select;
         }

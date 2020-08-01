@@ -22,7 +22,7 @@ namespace jrivam.Library.Interface.Persistence.Sql.Builder
         IEnumerable<((object value, WhereOperator? sign) where, SqlParameter parameter, int counter)>
             GetParameters
             ((IColumnQuery column, IList<string> aliases, IList<string> parameters) columns,
-            IList<SqlParameter> parameters);
+            IList<ISqlParameter> parameters);
 
         string
             GetFrom
@@ -32,7 +32,7 @@ namespace jrivam.Library.Interface.Persistence.Sql.Builder
         string
             GetWhere
             (IList<(IColumnQuery column, IList<string> tablenames, IList<string> aliasnames)> columns,
-            IList<SqlParameter> parameters);
+            IList<ISqlParameter> parameters);
 
         string
             GetSelectColumns

@@ -39,23 +39,16 @@ namespace jrivam.Library
         public static ContainerBuilder RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterType<EntityReader>()
-                   .As<IEntityReader>()
-                   .InstancePerDependency();
+                   .As<IEntityReader>();
             builder.RegisterType<DataMapper>()
-                   .As<IDataMapper>()
-                   .InstancePerDependency();
+                   .As<IDataMapper>();
             builder.RegisterType<DomainLoader>()
-                   .As<IDomainLoader>()
-                   .InstancePerDependency();
+                   .As<IDomainLoader>();
             builder.RegisterType<ModelRaiser>()
-                   .As<IModelRaiser>()
-                   .InstancePerDependency();
+                   .As<IModelRaiser>();
 
             builder.RegisterType<DbCommandExecutor>()
                    .As<IDbCommandExecutor>()
-                   .InstancePerLifetimeScope();
-            builder.RegisterType<DbCommandExecutorBulk>()
-                   .As<IDbCommandExecutorBulk>()
                    .InstancePerLifetimeScope();
             builder.RegisterType<DbObjectCreator>()
                    .As<IDbObjectCreator>()
@@ -94,52 +87,38 @@ namespace jrivam.Library
             //    .As(typeof(AbstractTableData<,>)).InstancePerDependency();
 
             builder.RegisterGeneric(typeof(RepositoryTable<,>))
-                   .As(typeof(IRepositoryTable<,>))
-                   .InstancePerDependency();
+                   .As(typeof(IRepositoryTable<,>));
             builder.RegisterGeneric(typeof(RepositoryQuery<,>))
-                   .As(typeof(IRepositoryQuery<,>))
-                   .InstancePerDependency();
+                   .As(typeof(IRepositoryQuery<,>));
 
             builder.RegisterGeneric(typeof(Logic<,>))
-                   .As(typeof(ILogic<,>))
-                   .InstancePerDependency();
+                   .As(typeof(ILogic<,>));
             builder.RegisterGeneric(typeof(LogicTable<,,>))
-                   .As(typeof(ILogicTable<,,>))
-                   .InstancePerDependency();
+                   .As(typeof(ILogicTable<,,>));
             builder.RegisterGeneric(typeof(LogicQuery<,,>))
-                   .As(typeof(ILogicQuery<,,>))
-                   .InstancePerDependency();
+                   .As(typeof(ILogicQuery<,,>));
 
             builder.RegisterGeneric(typeof(Interactive<,,>))
-                   .As(typeof(IInteractive<,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IInteractive<,,>));
             builder.RegisterGeneric(typeof(InteractiveTable<,,,>))
-                   .As(typeof(IInteractiveTable<,,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IInteractiveTable<,,,>));
             builder.RegisterGeneric(typeof(InteractiveQuery<,,,>))
-                   .As(typeof(IInteractiveQuery<,,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IInteractiveQuery<,,,>));
 
             builder.RegisterGeneric(typeof(ListData<,>))
-                   .As(typeof(IListData<,>))
-                   .InstancePerDependency();
+                   .As(typeof(IListData<,>));
             builder.RegisterGeneric(typeof(ListDataQuery<,,>))
-                   .As(typeof(IListDataQuery<,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IListDataQuery<,,>));
 
             builder.RegisterGeneric(typeof(ListDomain<,,>))
-                   .As(typeof(IListDomain<,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IListDomain<,,>));
             builder.RegisterGeneric(typeof(ListDomainQuery<,,,>))
-                   .As(typeof(IListDomainQuery<,,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IListDomainQuery<,,,>));
 
             builder.RegisterGeneric(typeof(ListModel<,,,>))
-                   .As(typeof(IListModel<,,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IListModel<,,,>));
             builder.RegisterGeneric(typeof(ListModelQuery<,,,,>))
-                   .As(typeof(IListModelQuery<,,,,>))
-                   .InstancePerDependency();
+                   .As(typeof(IListModelQuery<,,,,>));
 
             return builder;
         }

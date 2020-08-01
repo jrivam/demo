@@ -13,5 +13,7 @@ namespace jrivam.Library.Interface.Persistence.Table
         (Result result, U data) Insert(bool usedbcommand = false);
         (Result result, U data) Update(bool usedbcommand = false);
         (Result result, U data) Delete(bool usedbcommand = false);
+
+        (Result result, U data) Upsert(bool usedbcommand = false);
     }
 }

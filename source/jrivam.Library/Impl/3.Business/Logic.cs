@@ -1,6 +1,5 @@
 ﻿using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Entities;
-using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
@@ -76,9 +75,9 @@ namespace jrivam.Library.Impl.Business
         }
 
         public virtual (Result result, IEnumerable<U> datas) List(IQueryData<T, U> query,
-            int maxdepth = 1, int top = 0, IListData<T, U> datas = null)
+            int maxdepth = 1, int top = 0)
         {
-            return query.Select(maxdepth, top, datas);
+            return query.Select(maxdepth, top);
         }
 
         public virtual (Result result, U data) Save(U data, bool useinsertdbcommand = false, bool useupdatedbcommand = false)

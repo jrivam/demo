@@ -1,5 +1,4 @@
-﻿using jrivam.Library.Impl.Persistence;
-using jrivam.Library.Interface.Business;
+﻿using jrivam.Library.Interface.Business;
 using jrivam.Library.Interface.Business.Loader;
 using jrivam.Library.Interface.Business.Query;
 using jrivam.Library.Interface.Business.Table;
@@ -27,15 +26,15 @@ namespace jrivam.Library.Impl.Business.Query
             _loader = loader;
         }
 
-        public virtual (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1, V domain = default(V))
+        public virtual (Result result, V domain) Retrieve(IQueryDomain<T, U, V> query, int maxdepth = 1)
         {
-            var list = List(query, maxdepth, 1, domain != null ? new ListDomain<T, U, V>() { domain } : null);
+            var list = List(query, maxdepth, 1);
 
             return (list.result, list.domains.FirstOrDefault());
         }
-        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0, IListDomain<T, U, V> domains = null)
+        public virtual (Result result, IEnumerable<V> domains) List(IQueryDomain<T, U, V> query, int maxdepth = 1, int top = 0)
         {
-            var list = _logic.List(query.Data, maxdepth, top, domains?.Datas ?? new ListData<T, U>());
+            var list = _logic.List(query.Data, maxdepth, top);
 
             if (list.result.Success)
             {

@@ -1,4 +1,5 @@
-﻿using jrivam.Library.Interface.Persistence.Sql.Builder;
+﻿using jrivam.Library.Interface.Persistence.Sql;
+using jrivam.Library.Interface.Persistence.Sql.Builder;
 using jrivam.Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
@@ -28,13 +29,13 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
         }
 
         public virtual string GetWhere
-            (IList<IColumnTable> columns, IList<SqlParameter> parameters)
+            (IList<IColumnTable> columns, IList<ISqlParameter> parameters)
         {
             var where = string.Empty;
 
-            foreach (var p in GetParameters(columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters))
+            foreach (var p in GetParameters(columns.ToList(), parameters))
             {
-                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {(_sqlsyntaxsign.UpdateWhereUseAlias ? $"{p.view.DbName}." : string.Empty)}{p.column.DbName} {_sqlsyntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
+                where += $"{(string.IsNullOrWhiteSpace(where) ? "where" : "and")} {(_sqlsyntaxsign.UpdateWhereUseAlias ? $"{p.table.DbName}." : string.Empty)}{p.column.DbName} {_sqlsyntaxsign.GetOperator(WhereOperator.Equals)} {p.parameter.Name}{Environment.NewLine}";
             }
 
             return where;
@@ -55,11 +56,11 @@ namespace jrivam.Library.Impl.Persistence.Sql.Builder
         }
 
         public virtual string GetInsertValues
-            (IList<IColumnTable> columns, IList<SqlParameter> parameters)
+            (IList<IColumnTable> columns, IList<ISqlParameter> parameters)
         {
             var values = string.Empty;
 
-            foreach (var p in GetParameters(columns.Select(x => (x.Table.Description, x.Description, x.Type, x.Value)).ToList(), parameters))
+            foreach (var p in GetParameters(columns.ToList(), parameters))
             {
                 values += $"{(string.IsNullOrWhiteSpace(values) ? string.Empty : $",{Environment.NewLine}")}{p.parameter.Name}";
             }

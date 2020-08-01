@@ -27,6 +27,13 @@ namespace demo.Entities.Table
         [Column("id_empresa")]
         [ForeignKey(nameof(Empresa))]
         public virtual int? IdEmpresa { get; set; }
+
         public virtual Entities.Table.Empresa Empresa { get; set; }
+        //Lazy<Entities.Table.Empresa> _empresa { get; set; } = new Lazy<Entities.Table.Empresa>();
+        //public virtual Entities.Table.Empresa Empresa
+        //{
+        //    get => _empresa.Value;
+        //    set => new Lazy<Entities.Table.Empresa>(() => value);
+        //}
     }
 }
