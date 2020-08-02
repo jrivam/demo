@@ -45,34 +45,43 @@ namespace jrivam.Library.Impl.Persistence
             int maxdepth = 1,
             IDbConnection connection = null)
         {
-            using (var c = connection ?? _sqlcreator.GetConnection(
-               _connectionstringsettings.ProviderName,
-               _connectionstringsettings.ConnectionString))
+            bool closeConnection = false;
+
+            if (connection == null)
             {
-                var command = _sqlcreator.GetCommand(
-                        _connectionstringsettings.ProviderName,
-                        commandtext, commandtype,
-                        parameters);
+                connection = _sqlcreator.GetConnection(
+                   _connectionstringsettings.ProviderName,
+                   _connectionstringsettings.ConnectionString);
 
-                command.Connection = c;
-
-                var executequery = _dbcommandexecutor.ExecuteQuery<T>(command,    
-                    (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
-
-                if (executequery.result.Success && executequery.entities?.Count() == 0)
-                {
-                    executequery.result.SetMessage(
-                        new ResultMessage()
-                        {
-                            Category = ResultCategory.Information,
-                            Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
-                            Description = "No rows found."
-                        }
-                    );
-                }
-
-                return executequery;
+                closeConnection = true;
             }
+
+            var command = _sqlcreator.GetCommand(
+                    _connectionstringsettings.ProviderName,
+                    commandtext, commandtype,
+                    parameters);
+
+            command.Connection = connection;
+
+            var executequery = _dbcommandexecutor.ExecuteQuery<T>(command,    
+                (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
+
+            if (closeConnection)
+                connection.Close();
+
+            if (executequery.result.Success && executequery.entities?.Count() == 0)
+            {
+                executequery.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
+                        Description = "No rows found."
+                    }
+                );
+            }
+
+            return executequery;
         }
 
         public virtual (Result result, int rows) ExecuteNonQuery(
@@ -86,34 +95,36 @@ namespace jrivam.Library.Impl.Persistence
             string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            using (var c = connection ?? _sqlcreator.GetConnection(
+            if (connection == null)
+                connection = _sqlcreator.GetConnection(
                         _connectionstringsettings.ProviderName,
-                        _connectionstringsettings.ConnectionString))
+                        _connectionstringsettings.ConnectionString);
+
+            var command = _sqlcreator.GetCommand(_connectionstringsettings.ProviderName,
+                                        commandtext, commandtype,
+                                        parameters);
+
+            command.Connection = connection;
+            command.Transaction = transaction;
+
+            var executenonquery = _dbcommandexecutor.ExecuteNonQuery(command);
+
+            if (transaction == null)
+                connection.Close();
+
+            if (executenonquery.result.Success && executenonquery.rows == 0)
             {
-                var command = _sqlcreator.GetCommand(_connectionstringsettings.ProviderName,
-                                            commandtext, commandtype,
-                                            parameters);
-
-                command.Connection = c;
-                command.Transaction = transaction;
-
-                var executenonquery = _dbcommandexecutor.ExecuteNonQuery(
-                    command);
-
-                if (executenonquery.result.Success && executenonquery.rows == 0)
-                {
-                    executenonquery.result.SetMessage(
-                        new ResultMessage()
-                        {
-                            Category = ResultCategory.Information,
-                            Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
-                            Description = "No rows affected."
-                        }
-                    );
-                }
-
-                return executenonquery;
+                executenonquery.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
+                        Description = "No rows affected."
+                    }
+                );
             }
+
+            return executenonquery;
         }
 
         public virtual (Result result, T scalar) ExecuteScalar<T>(
@@ -127,22 +138,25 @@ namespace jrivam.Library.Impl.Persistence
             string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            using (var c = connection ?? _sqlcreator.GetConnection(
-               _connectionstringsettings.ProviderName,
-               _connectionstringsettings.ConnectionString))
-            {
-                var command = _sqlcreator.GetCommand(
+            if (connection == null)
+                connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
+
+            var command = _sqlcreator.GetCommand(
                     _connectionstringsettings.ProviderName,
                     commandtext, commandtype,
                     parameters);
 
-                command.Connection = c;
-                command.Transaction = transaction;
+            command.Connection = connection;
+            command.Transaction = transaction;
                 
-                var executescalar = _dbcommandexecutor.ExecuteScalar<T>(
-                    command);
-                
-                if (executescalar.result.Success && executescalar.scalar == null)
+            var executescalar = _dbcommandexecutor.ExecuteScalar<T>(command);
+
+            if (transaction == null)
+                connection.Close();
+
+            if (executescalar.result.Success && executescalar.scalar == null)
                 {
                     executescalar.result.SetMessage(
                         new ResultMessage()
@@ -154,8 +168,7 @@ namespace jrivam.Library.Impl.Persistence
                     );
                 }
 
-                return executescalar;
-            }
+            return executescalar;
         }
     }
 }
