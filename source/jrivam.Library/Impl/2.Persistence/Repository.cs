@@ -96,9 +96,11 @@ namespace jrivam.Library.Impl.Persistence
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (connection == null)
+            {
                 connection = _sqlcreator.GetConnection(
                         _connectionstringsettings.ProviderName,
                         _connectionstringsettings.ConnectionString);
+            }
 
             var command = _sqlcreator.GetCommand(_connectionstringsettings.ProviderName,
                                         commandtext, commandtype,
@@ -110,7 +112,9 @@ namespace jrivam.Library.Impl.Persistence
             var executenonquery = _dbcommandexecutor.ExecuteNonQuery(command);
 
             if (transaction == null)
+            {
                 connection.Close();
+            }
 
             if (executenonquery.result.Success && executenonquery.rows == 0)
             {
@@ -139,9 +143,11 @@ namespace jrivam.Library.Impl.Persistence
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (connection == null)
+            {
                 connection = _sqlcreator.GetConnection(
                         _connectionstringsettings.ProviderName,
                         _connectionstringsettings.ConnectionString);
+            }
 
             var command = _sqlcreator.GetCommand(
                     _connectionstringsettings.ProviderName,
@@ -154,7 +160,9 @@ namespace jrivam.Library.Impl.Persistence
             var executescalar = _dbcommandexecutor.ExecuteScalar<T>(command);
 
             if (transaction == null)
+            {
                 connection.Close();
+            }
 
             if (executescalar.result.Success && executescalar.scalar == null)
                 {

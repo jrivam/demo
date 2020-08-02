@@ -19,7 +19,9 @@ namespace jrivam.Library.Impl.Persistence.Database
                 var enumeration = new Collection<T>();
 
                 if (command.Connection.State != ConnectionState.Open)
+                {
                     command.Connection.Open();
+                }
 
                 using (var datareader = command.ExecuteReader())
                 {
@@ -51,7 +53,9 @@ namespace jrivam.Library.Impl.Persistence.Database
             try
             {
                 if (command.Connection.State != ConnectionState.Open)
+                {
                     command.Connection.Open();
+                }
 
                 var rows = command.ExecuteNonQuery();
 
@@ -75,7 +79,9 @@ namespace jrivam.Library.Impl.Persistence.Database
             try
             {
                 if (command.Connection.State != ConnectionState.Open)
+                {
                     command.Connection.Open();
+                }
 
                 var scalar = command.ExecuteScalar();
 

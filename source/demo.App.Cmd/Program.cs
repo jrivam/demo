@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using jrivam.Library;
+using System.Data.SqlClient;
+using jrivam.Library.Extension;
 
 namespace demo.App.Cmd
 {
-    class Program
+   class Program
     {
         static void Main(string[] args)
         {

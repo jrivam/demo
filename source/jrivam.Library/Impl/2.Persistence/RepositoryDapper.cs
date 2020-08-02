@@ -40,21 +40,37 @@ namespace jrivam.Library.Impl.Persistence
         {
             try
             {
-                using (var c = connection ?? _sqlcreator.GetConnection(
-                    _connectionstringsettings.ProviderName,
-                    _connectionstringsettings.ConnectionString))
+                var closeConnection = false;
+
+                if (connection == null)
                 {
-                    var p = new DynamicParameters();
+                    connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
 
-                    foreach(var parameter in parameters)
-                    {
-                        p.Add(parameter.Name, parameter.Value);
-                    }
-
-                    var r = connection.Query<T>(commandtext, p);
-
-                    return (new Result(), r);
+                    closeConnection = true;
                 }
+
+                var p = new DynamicParameters();
+
+                foreach(var parameter in parameters)
+                {
+                    p.Add(parameter.Name, parameter.Value);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                var query = connection.Query<T>(commandtext, p);
+                
+                if (closeConnection)
+                {
+                    connection.Close();
+                }
+
+                return (new Result(), query);
 
             }
             catch (Exception ex)
@@ -83,20 +99,33 @@ namespace jrivam.Library.Impl.Persistence
         {
             try
             {
-                using (var c = connection ?? _sqlcreator.GetConnection(
-                    _connectionstringsettings.ProviderName,
-                    _connectionstringsettings.ConnectionString))
+                if (connection == null)
                 {
-                    var p = new DynamicParameters();
-
-                    foreach (var parameter in parameters)
-                    {
-                        p.Add(parameter.Name, parameter.Value);
-                    }
-
-                    return (new Result(), connection.Query<int>(commandtext, p).FirstOrDefault());
+                    connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
                 }
 
+                var p = new DynamicParameters();
+
+                foreach (var parameter in parameters)
+                {
+                    p.Add(parameter.Name, parameter.Value);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                var query = connection.Query<int>(commandtext, p, transaction).FirstOrDefault();
+
+                if (transaction == null)
+                {
+                    connection.Close();
+                }
+
+                return (new Result(), query);
             }
             catch (Exception ex)
             {
@@ -124,22 +153,33 @@ namespace jrivam.Library.Impl.Persistence
         {
             try
             {
-                using (var c = connection ?? _sqlcreator.GetConnection(
-                    _connectionstringsettings.ProviderName,
-                    _connectionstringsettings.ConnectionString))
+                if (connection == null)
                 {
-                    var p = new DynamicParameters();
-
-                    foreach (var parameter in parameters)
-                    {
-                        p.Add(parameter.Name, parameter.Value);
-                    }
-
-                    var execute = connection.Execute(commandtext, p);
-
-                    return (new Result(), (T)Convert.ChangeType(execute, typeof(T)));
+                    connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
                 }
 
+                var p = new DynamicParameters();
+
+                foreach (var parameter in parameters)
+                {
+                    p.Add(parameter.Name, parameter.Value);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                var execute = connection.Execute(commandtext, p, transaction);
+
+                if (transaction == null)
+                {
+                    connection.Close();
+                }
+
+                return (new Result(), (T)Convert.ChangeType(execute, typeof(T)));
             }
             catch (Exception ex)
             {
