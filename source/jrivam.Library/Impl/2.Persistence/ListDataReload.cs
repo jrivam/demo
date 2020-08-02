@@ -36,7 +36,7 @@ namespace jrivam.Library.Impl.Persistence
                 return (select.result, load);
             }
 
-            return (select.result, null);
+            return (select.result, default(IListData<T, U>));
         }
     }
 }

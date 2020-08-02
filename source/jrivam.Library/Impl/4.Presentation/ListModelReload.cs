@@ -54,7 +54,7 @@ namespace jrivam.Library.Impl.Presentation
                 return (list.result, load);
             }
 
-            return (list.result, null);
+            return (list.result, default(IListModel<T, U, V, W>));
         }
 
         public virtual (Result result, IListModel<T, U, V, W> models) CommandRefresh((Result result, IListModel<T, U, V, W> models) operation)

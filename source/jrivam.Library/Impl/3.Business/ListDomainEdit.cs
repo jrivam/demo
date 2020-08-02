@@ -53,26 +53,30 @@ namespace jrivam.Library.Impl.Business
             return false;
         }
 
-        public virtual Result SaveAll(IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual Result SaveAll(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var result = new Result();
 
             foreach (var domain in this)
             {
-                result.Append(domain.Save(connection: connection, transaction: transaction).result);
+                result.Append(domain.Save(useinsertdbcommand, useupdatedbcommand,
+                    connection, transaction).result);
 
                 if (!result.Success) break;
             }
 
             return result;
         }
-        public virtual Result EraseAll(IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual Result EraseAll(bool usedbcommand = false, 
+            IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var result = new Result();
 
             foreach (var domain in this)
             {
-                result.Append(domain.Erase(connection: connection, transaction: transaction).result);
+                result.Append(domain.Erase(usedbcommand,
+                    connection, transaction).result);
 
                 if (!result.Success) break;
             }

@@ -11,8 +11,8 @@ namespace jrivam.Library.Interface.Business
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        Result SaveAll(IDbConnection connection = null, IDbTransaction transaction = null);
-        Result EraseAll(IDbConnection connection = null, IDbTransaction transaction = null);
+        Result SaveAll(bool useinsertdbcommand = false, bool useupdatedbcommand = false, IDbConnection connection = null, IDbTransaction transaction = null);
+        Result EraseAll(bool usedbcommand = false, IDbConnection connection = null, IDbTransaction transaction = null);
 
         void ItemModify(V olddomain, V newdomain);
         bool ItemAdd(V domain);

@@ -41,7 +41,7 @@ namespace jrivam.Library.Impl.Business
                 return (list.result, load);
             }
 
-            return (list.result, null);
+            return (list.result, default(IListDomain<T, U, V>));
         }
     }
 }
