@@ -45,7 +45,7 @@ namespace jrivam.Library.Impl.Persistence
             int maxdepth = 1,
             IDbConnection connection = null)
         {
-            bool closeConnection = false;
+            var closeConnection = false;
 
             if (connection == null)
             {
