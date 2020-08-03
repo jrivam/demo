@@ -24,7 +24,7 @@ namespace jrivam.Library.Impl.Entities.Reader
             }
         }
 
-        public virtual T Read<T>(T entity, IDataReader datareader, IList<string> prefixname, int maxdepth = 1, int depth = 0)
+        public virtual T Read<T>(T entity, IDataReader datareader, IList<string> prefixname = null, int maxdepth = 1, int depth = 0)
         {
             (prefixname ?? new List<string>()).Add(entity?.GetType().Name);
 

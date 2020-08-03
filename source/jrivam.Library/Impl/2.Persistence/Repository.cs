@@ -67,7 +67,9 @@ namespace jrivam.Library.Impl.Persistence
                 (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
 
             if (closeConnection)
+            {
                 connection.Close();
+            }
 
             if (executequery.result.Success && executequery.entities?.Count() == 0)
             {
