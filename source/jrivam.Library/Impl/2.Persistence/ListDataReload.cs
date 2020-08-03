@@ -3,6 +3,7 @@ using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
+using System.Data;
 
 namespace jrivam.Library.Impl.Persistence
 {
@@ -23,9 +24,11 @@ namespace jrivam.Library.Impl.Persistence
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListData<T, U> datas) Refresh(int top = 0)
+        public virtual (Result result, IListData<T, U> datas) Refresh(int top = 0,
+            IDbConnection connection = null)
         {
-            var select = Query.Select(_maxdepth, top);
+            var select = Query.Select(_maxdepth, top,
+                connection);
 
             if (select.result.Success)
             {

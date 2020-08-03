@@ -1,6 +1,7 @@
 ﻿using jrivam.Library.Impl;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
+using System.Data;
 
 namespace jrivam.Library.Interface.Persistence
 {
@@ -8,6 +9,6 @@ namespace jrivam.Library.Interface.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
-        (Result result, IListData<T, U> datas) Refresh(int top = 0);
+        (Result result, IListData<T, U> datas) Refresh(int top = 0, IDbConnection connection = null);
     }
 }
