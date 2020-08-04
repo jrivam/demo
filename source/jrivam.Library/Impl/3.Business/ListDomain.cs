@@ -29,14 +29,18 @@ namespace jrivam.Library.Impl.Business
             _datas?.ToList()?.ForEach(x => this.Add(Business.HelperTableLogic<T, U, V>.CreateDomain(x)));    
         }
 
-        public virtual IListDomain<T, U, V> Load(IEnumerable<V> domains)
+        public virtual IListDomain<T, U, V> Load(IEnumerable<V> domains, bool clear = false)
         {
             if (domains != null)
             {
+                if (clear)
+                {
+                    this.Clear();
+                }
+
                 this?.AddRange(domains);
 
-                _datas?.Clear();
-                _datas?.Load(this.Select(x => x.Data));
+                _datas?.Load(this.Select(x => x.Data), true);
             }
 
             return this;

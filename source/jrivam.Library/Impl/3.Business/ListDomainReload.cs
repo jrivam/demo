@@ -34,9 +34,7 @@ namespace jrivam.Library.Impl.Business
 
             if (list.result.Success)
             {
-                this.Clear();
-
-                var load = Load(list.domains);
+                var load = Load(list.domains, true);
 
                 return (list.result, load);
             }

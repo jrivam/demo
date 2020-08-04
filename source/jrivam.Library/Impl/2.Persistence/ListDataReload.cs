@@ -32,9 +32,7 @@ namespace jrivam.Library.Impl.Persistence
 
             if (select.result.Success)
             {
-                this.Clear();
-
-                var load = Load(select.datas);
+                var load = Load(select.datas, true);
 
                 return (select.result, load);
             }

@@ -13,6 +13,6 @@ namespace jrivam.Library.Interface.Business
     {
         IListData<T, U> Datas { get; }
         
-        IListDomain<T, U, V> Load(IEnumerable<V> list);
+        IListDomain<T, U, V> Load(IEnumerable<V> list, bool clear = false);
     }
 }

@@ -67,14 +67,18 @@ namespace jrivam.Library.Impl.Presentation
             TotalRecords();
         }
 
-        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> models)
+        public virtual IListModel<T, U, V, W> Load(IEnumerable<W> models, bool clear = false)
         {
             if (models != null)
             {
-                models.ToList()?.ForEach(x => this?.Add(x));
+                if (clear)
+                {
+                    this.ClearItems();
+                }
 
-                _domains?.Clear();
-                _domains?.Load(this.Select(x => x.Domain));
+                models.ToList()?.ForEach(x => this?.Add(x)); //ObservableCollection.AddRange()
+
+                _domains?.Load(this.Select(x => x.Domain), true);
 
                 TotalRecords();
             }

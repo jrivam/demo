@@ -47,9 +47,7 @@ namespace jrivam.Library.Impl.Presentation
 
             if (list.result.Success)
             {
-                this.ClearItems();
-
-                var load = Load(list.models);
+                var load = Load(list.models, true);
 
                 return (list.result, load);
             }

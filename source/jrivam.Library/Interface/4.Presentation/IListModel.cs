@@ -17,6 +17,6 @@ namespace jrivam.Library.Interface.Presentation
 
         string Name { get; }
 
-        IListModel<T, U, V, W> Load(IEnumerable<W> list);
+        IListModel<T, U, V, W> Load(IEnumerable<W> list, bool clear = false);
     }
 }

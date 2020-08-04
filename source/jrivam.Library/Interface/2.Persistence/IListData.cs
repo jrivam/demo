@@ -10,6 +10,6 @@ namespace jrivam.Library.Interface.Persistence
     {
         ICollection<T> Entities { get; }
 
-        IListData<T, U> Load(IEnumerable<U> list);
+        IListData<T, U> Load(IEnumerable<U> list, bool clear = false);
     }
 }

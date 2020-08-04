@@ -26,10 +26,15 @@ namespace jrivam.Library.Impl.Persistence
             _entities?.ToList()?.ForEach(x => this.Add(Persistence.HelperTableRepository<T, U>.CreateData(x)));
         }
 
-        public virtual IListData<T, U> Load(IEnumerable<U> datas)
+        public virtual IListData<T, U> Load(IEnumerable<U> datas, bool clear = false)
         {
             if (datas != null)
             {
+                if (clear)
+                {
+                    this.Clear();
+                }
+
                 this?.AddRange(datas);
 
                 _entities?.Clear();
