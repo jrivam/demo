@@ -9,6 +9,8 @@ namespace jrivam.Library.Interface.Persistence.Sql
 
         CommandType Type { get; set; }
 
+        int CommandTimeout { get; set; }
+
         IList<ISqlParameter> Parameters { get; set; }
     }
 }

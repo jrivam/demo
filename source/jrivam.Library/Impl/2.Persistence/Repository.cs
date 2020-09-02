@@ -37,11 +37,14 @@ namespace jrivam.Library.Impl.Persistence
             int maxdepth = 1,
             IDbConnection connection = null)
         {
-            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(), maxdepth, 
+            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
+                sqlcommand.Parameters?.ToArray(), 
+                maxdepth, 
                 connection);
         }
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             int maxdepth = 1,
             IDbConnection connection = null)
         {
@@ -62,6 +65,7 @@ namespace jrivam.Library.Impl.Persistence
                     parameters);
 
             command.Connection = connection;
+            command.CommandTimeout = commandtimeout;
 
             var executequery = _dbcommandexecutor.ExecuteQuery<T>(command,    
                 (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
@@ -94,7 +98,8 @@ namespace jrivam.Library.Impl.Persistence
                 connection, transaction);
         }
         public virtual (Result result, int rows) ExecuteNonQuery(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (connection == null)
@@ -110,6 +115,7 @@ namespace jrivam.Library.Impl.Persistence
 
             command.Connection = connection;
             command.Transaction = transaction;
+            command.CommandTimeout = commandtimeout;
 
             var executenonquery = _dbcommandexecutor.ExecuteNonQuery(command);
 
@@ -141,7 +147,8 @@ namespace jrivam.Library.Impl.Persistence
                 connection, transaction);
         }
         public virtual (Result result, T scalar) ExecuteScalar<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (connection == null)
@@ -158,6 +165,7 @@ namespace jrivam.Library.Impl.Persistence
 
             command.Connection = connection;
             command.Transaction = transaction;
+            command.CommandTimeout = commandtimeout;
                 
             var executescalar = _dbcommandexecutor.ExecuteScalar<T>(command);
 
