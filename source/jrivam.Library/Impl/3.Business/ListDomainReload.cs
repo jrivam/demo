@@ -26,10 +26,12 @@ namespace jrivam.Library.Impl.Business
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0,
+        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int? commandtimeout = null, 
+            int top = 0,
             IDbConnection connection = null)
         {
-            var list = Query.List(_maxdepth, top,
+            var list = Query.List(commandtimeout,
+                _maxdepth, top,
                 connection);
 
             if (list.result.Success)

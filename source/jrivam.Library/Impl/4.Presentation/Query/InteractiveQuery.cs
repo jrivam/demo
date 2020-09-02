@@ -29,24 +29,32 @@ namespace jrivam.Library.Impl.Presentation.Query
             _raiser = raiser;
         }
 
-        public virtual (Result result, W model) Retrieve(IQueryModel<T, U, V, W> query, int maxdepth = 1,
+        public virtual (Result result, W model) Retrieve(IQueryModel<T, U, V, W> query,
+            int? commandtimeout = null, 
+            int maxdepth = 1,
             IDbConnection connection = null)
         {
             query.Status = "Retrieving...";
 
-            var list = List(query, maxdepth, 1,
+            var list = List(query, 
+                commandtimeout,
+                maxdepth, 1,
                 connection);
 
             query.Status = list.result.GetMessagesAsString();
 
             return (list.result, list.models.FirstOrDefault());
         }
-        public virtual (Result result, IEnumerable<W> models) List(IQueryModel<T, U, V, W> query, int maxdepth = 1, int top = 0, 
+        public virtual (Result result, IEnumerable<W> models) List(IQueryModel<T, U, V, W> query,
+            int? commandtimeout = null, 
+            int maxdepth = 1, int top = 0, 
             IDbConnection connection = null)
         {
             query.Status = "Listing...";
 
-            var list = _interactive.List(query.Domain, maxdepth, top,
+            var list = _interactive.List(query.Domain, 
+                commandtimeout,
+                maxdepth, top,
                 connection);
             if (list.result.Success)
             {

@@ -54,6 +54,7 @@ namespace jrivam.Library.Impl.Business
         }
 
         public virtual Result SaveAll(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var result = new Result();
@@ -61,6 +62,7 @@ namespace jrivam.Library.Impl.Business
             foreach (var domain in this)
             {
                 result.Append(domain.Save(useinsertdbcommand, useupdatedbcommand,
+                    commandtimeout,
                     connection, transaction).result);
 
                 if (!result.Success) break;
@@ -68,7 +70,8 @@ namespace jrivam.Library.Impl.Business
 
             return result;
         }
-        public virtual Result EraseAll(bool usedbcommand = false, 
+        public virtual Result EraseAll(bool usedbcommand = false,
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var result = new Result();
@@ -76,6 +79,7 @@ namespace jrivam.Library.Impl.Business
             foreach (var domain in this)
             {
                 result.Append(domain.Erase(usedbcommand,
+                    commandtimeout,
                     connection, transaction).result);
 
                 if (!result.Success) break;

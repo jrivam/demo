@@ -30,11 +30,13 @@ namespace jrivam.Library.Impl.Persistence
             int maxdepht = 1,
             IDbConnection connection = null)
         {
-            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters.ToArray(), maxdepht,
+            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
+                sqlcommand.Parameters.ToArray(), maxdepht,
                 connection);
         }
         public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             int maxdepht = 1,
             IDbConnection connection = null)
         {
@@ -63,7 +65,7 @@ namespace jrivam.Library.Impl.Persistence
                     connection.Open();
                 }
 
-                var query = connection.Query<T>(commandtext, p);
+                var query = connection.Query<T>(commandtext, p, commandTimeout: commandtimeout);
                 
                 if (closeConnection)
                 {
@@ -90,11 +92,13 @@ namespace jrivam.Library.Impl.Persistence
             ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(),
+            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
                 connection, transaction);
         }
         public virtual (Result result, int rows) ExecuteNonQuery(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -118,7 +122,7 @@ namespace jrivam.Library.Impl.Persistence
                     connection.Open();
                 }
 
-                var query = connection.Query<int>(commandtext, p, transaction).FirstOrDefault();
+                var query = connection.Query<int>(commandtext, p, transaction, commandTimeout: commandtimeout).FirstOrDefault();
 
                 if (transaction == null)
                 {
@@ -144,11 +148,13 @@ namespace jrivam.Library.Impl.Persistence
             ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(),
+            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
                 connection, transaction);
         }
         public virtual (Result result, T scalar) ExecuteScalar<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -172,7 +178,7 @@ namespace jrivam.Library.Impl.Persistence
                     connection.Open();
                 }
 
-                var execute = connection.Execute(commandtext, p, transaction);
+                var execute = connection.Execute(commandtext, p, transaction, commandTimeout: commandtimeout);
 
                 if (transaction == null)
                 {

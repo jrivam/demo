@@ -12,7 +12,7 @@ namespace jrivam.Library.Interface.Business.Query
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        (Result result, V domain) Retrieve(int maxdept, IDbConnection connection = null);
-        (Result result, IEnumerable<V> domains) List(int maxdepth = 1, int top = 0, IDbConnection connection = null);
+        (Result result, V domain) Retrieve(int? commandtimeout = null, int maxdepth = 1, IDbConnection connection = null);
+        (Result result, IEnumerable<V> domains) List(int? commandtimeout = null, int maxdepth = 1, int top = 0, IDbConnection connection = null);
     }
 }

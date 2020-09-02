@@ -11,6 +11,6 @@ namespace jrivam.Library.Interface.Business
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        (Result result, IListDomain<T, U, V> domains) Refresh(int top = 0, IDbConnection connection = null);
+        (Result result, IListDomain<T, U, V> domains) Refresh(int? commandtimeout = null, int top = 0, IDbConnection connection = null);
     }
 }

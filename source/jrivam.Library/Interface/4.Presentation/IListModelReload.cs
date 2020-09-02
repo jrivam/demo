@@ -16,6 +16,6 @@ namespace jrivam.Library.Interface.Presentation
     {
         ICommand RefreshCommand { get; }
 
-        (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0, IDbConnection connection = null);
+        (Result result, IListModel<T, U, V, W> models) Refresh(int? commandtimeout = null, int top = 0, IDbConnection connection = null);
     }
 }

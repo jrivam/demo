@@ -112,7 +112,8 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
         }
 
-        public virtual (Result result, U data) SelectQuery(int maxdepth = 1, 
+        public virtual (Result result, U data) SelectQuery(int? commandtimeout = null, 
+            int maxdepth = 1, 
             IDbConnection connection = null)
         {
             _query.ClearConditions();
@@ -126,19 +127,22 @@ namespace jrivam.Library.Impl.Persistence.Table
                 }
             }
 
-            var selectsingle = _query.SelectSingle(maxdepth,
+            var selectsingle = _query.SelectSingle(commandtimeout,
+                maxdepth,
                 connection);
 
             return selectsingle;
         }          
         public virtual (Result result, U data) Select(bool usedbcommand = false, 
+            int? commandtimeout = null,
             IDbConnection connection = null)
         {
             if (Helper.UseDbCommand(UseDbCommand, SelectDbCommand?.usedbcommand ?? false, usedbcommand))
             {
                 if (SelectDbCommand != null)
                 {
-                    return _repositorytable.Select(this as U, SelectDbCommand.Value.dbcommand,
+                    return _repositorytable.Select(this as U, 
+                        SelectDbCommand.Value.dbcommand,
                         connection);
                 }
 
@@ -153,19 +157,22 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
 
             var select = _repositorytable.Select(this as U,
+                Helper.CommandTimeout(commandtimeout),
                 connection);
 
             return select;
         }
 
         public virtual (Result result, U data) Insert(bool usedbcommand = false, 
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (Helper.UseDbCommand(UseDbCommand, InsertDbCommand?.usedbcommand ?? false, usedbcommand))
             {
                 if (InsertDbCommand != null)
                 {
-                    return _repositorytable.Insert(this as U, InsertDbCommand.Value.dbcommand,
+                    return _repositorytable.Insert(this as U, 
+                        InsertDbCommand.Value.dbcommand,
                         connection, transaction);
                 }
 
@@ -180,18 +187,21 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
 
             var insert = _repositorytable.Insert(this as U,
+                Helper.CommandTimeout(commandtimeout),
                 connection, transaction);
 
             return insert;
         }
         public virtual (Result result, U data) Update(bool usedbcommand = false, 
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (Helper.UseDbCommand(UseDbCommand, UpdateDbCommand?.usedbcommand ?? false, usedbcommand))
             {
                 if (UpdateDbCommand != null)
                 {
-                    return _repositorytable.Update(this as U, UpdateDbCommand.Value.dbcommand,
+                    return _repositorytable.Update(this as U, 
+                        UpdateDbCommand.Value.dbcommand,
                         connection, transaction);
                 }
 
@@ -206,18 +216,21 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
 
             var update = _repositorytable.Update(this as U,
+                Helper.CommandTimeout(commandtimeout),
                 connection, transaction);
 
             return update;
         }
-        public virtual (Result result, U data) Delete(bool usedbcommand = false,
+        public virtual (Result result, U data) Delete(bool usedbcommand = false, 
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             if (Helper.UseDbCommand(UseDbCommand, DeleteDbCommand?.usedbcommand ?? false, usedbcommand))
             {
                 if (DeleteDbCommand != null)
                 {
-                    return _repositorytable.Delete(this as U, DeleteDbCommand.Value.dbcommand,
+                    return _repositorytable.Delete(this as U, 
+                        DeleteDbCommand.Value.dbcommand,
                         connection, transaction);
                 }
 
@@ -231,25 +244,29 @@ namespace jrivam.Library.Impl.Persistence.Table
                     ), default(U));
             }
 
-            var delete = _repositorytable.Delete(this as U, 
+            var delete = _repositorytable.Delete(this as U,
+                Helper.CommandTimeout(commandtimeout),
                 connection, transaction);
 
             return delete;
         }
 
-        public virtual (Result result, U data) Upsert(bool usedbcommand = false, 
+        public virtual (Result result, U data) Upsert(bool usedbcommand = false, int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var select = Select(usedbcommand,
+                Helper.CommandTimeout(commandtimeout),
                 connection);
             if (select.result.Success && select.data != null)
             {
                 return Update(usedbcommand,
+                    Helper.CommandTimeout(commandtimeout),
                     connection, transaction);
             }
             else
             {
                 return Insert(usedbcommand,
+                    Helper.CommandTimeout(commandtimeout), 
                     connection, transaction);
             }
         }

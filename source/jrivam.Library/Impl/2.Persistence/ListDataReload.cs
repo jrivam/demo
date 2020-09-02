@@ -24,10 +24,12 @@ namespace jrivam.Library.Impl.Persistence
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListData<T, U> datas) Refresh(int top = 0,
+        public virtual (Result result, IListData<T, U> datas) Refresh(int? commandtimeout = null,
+            int top = 0,
             IDbConnection connection = null)
         {
-            var select = Query.Select(_maxdepth, top,
+            var select = Query.Select(commandtimeout, 
+                _maxdepth, top,
                 connection);
 
             if (select.result.Success)

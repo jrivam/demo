@@ -9,6 +9,6 @@ namespace jrivam.Library.Interface.Persistence
         where T : IEntity
         where U : ITableData<T, U>
     {
-        (Result result, IListData<T, U> datas) Refresh(int top = 0, IDbConnection connection = null);
+        (Result result, IListData<T, U> datas) Refresh(int? commandtimeout = null, int top = 0, IDbConnection connection = null);
     }
 }

@@ -27,6 +27,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public (Result result, U data) Select(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null)
         {
             try
@@ -54,22 +55,24 @@ namespace jrivam.Library.Impl.Persistence.Table
                 { Exception = ex }, null);
             }
         }
-        public (Result result, U data) Select(U data, ISqlCommand dbcommand,
+        public (Result result, U data) Select(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null)
         {
             foreach (var c in data.Columns.Where(c => c.IsPrimaryKey))
             {
                 var parameter = Helper.GetParameter($"{c.Table.Description.Name}_{c.Description.Name}", c.Type, c.Value, ParameterDirection.Input);
-                if (dbcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name) == null)
+                if (sqlcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name) == null)
                 {
-                    dbcommand.Parameters.Add(parameter);
+                    sqlcommand.Parameters.Add(parameter);
                 }
 
             }
 
-            return Select(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
+            return Select(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
+                sqlcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null)
         {
             try
@@ -96,6 +99,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public (Result result, U data) Insert(U data,
+            int commandtimeout = 30, 
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -133,17 +137,17 @@ namespace jrivam.Library.Impl.Persistence.Table
             //    { Exception = ex }, null);
             //}
         }
-        public (Result result, U data) Insert(U data, ISqlCommand dbcommand,
+        public (Result result, U data) Insert(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             foreach (var c in data.Columns.Where(c => !c.IsIdentity))
             {
                 var parameter = Helper.GetParameter($"{c.Table.Description.Name}_{c.Description.Name}", c.Type, c.Value, ParameterDirection.Input);
 
-                var commandparameter = dbcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name);
+                var commandparameter = sqlcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name);
                 if (commandparameter == null)
                 {
-                    dbcommand.Parameters.Add(parameter);
+                    sqlcommand.Parameters.Add(parameter);
                 }
                 else
                 {
@@ -151,9 +155,11 @@ namespace jrivam.Library.Impl.Persistence.Table
                 }
             }
 
-            return Insert(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
+            return Insert(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -180,6 +186,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public (Result result, U data) Update(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -216,17 +223,17 @@ namespace jrivam.Library.Impl.Persistence.Table
             //    { Exception = ex }, null);
             //}
         }
-        public (Result result, U data) Update(U data, ISqlCommand dbcommand,
+        public (Result result, U data) Update(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             foreach (var c in data.Columns)
             {
                 var parameter = Helper.GetParameter($"{c.Table.Description.Name}_{c.Description.Name}", c.Type, c.Value, ParameterDirection.Input);
 
-                var commandparameter = dbcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name);
+                var commandparameter = sqlcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name);
                 if (commandparameter == null)
                 {
-                    dbcommand.Parameters.Add(parameter);
+                    sqlcommand.Parameters.Add(parameter);
                 }
                 else
                 {
@@ -234,9 +241,11 @@ namespace jrivam.Library.Impl.Persistence.Table
                 }
             }
 
-            return Update(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
+            return Update(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -259,6 +268,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public (Result result, U data) Delete(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
@@ -280,17 +290,17 @@ namespace jrivam.Library.Impl.Persistence.Table
                 { Exception = ex }, null);
             }
         }
-        public (Result result, U data) Delete(U data, ISqlCommand dbcommand,
+        public (Result result, U data) Delete(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             foreach (var c in data.Columns.Where(c => c.IsPrimaryKey))
             {
                 var parameter = Helper.GetParameter($"{c.Table.Description.Name}_{c.Description.Name}", c.Type, c.Value, ParameterDirection.Input);
 
-                var commandparameter = dbcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name);
+                var commandparameter = sqlcommand.Parameters.FirstOrDefault(x => x.Name == parameter.Name);
                 if (commandparameter == null)
                 {
-                    dbcommand.Parameters.Add(parameter);
+                    sqlcommand.Parameters.Add(parameter);
                 }
                 else
                 {
@@ -298,9 +308,11 @@ namespace jrivam.Library.Impl.Persistence.Table
                 }
             }
 
-            return Delete(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray());
+            return Delete(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray());
         }
-        public (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try

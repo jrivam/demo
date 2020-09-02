@@ -97,7 +97,7 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(_maxdepth)), $"{Name}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(maxdepth: _maxdepth)), $"{Name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
@@ -120,34 +120,46 @@ namespace jrivam.Library.Impl.Presentation.Table
         {
         }
 
-        public virtual (Result result, W model) LoadQuery(int maxdepth = 1,
+        public virtual (Result result, W model) LoadQuery(int? commandtimeout = null, 
+            int maxdepth = 1,
             IDbConnection connection = null)
         {
-            var loadquery = _interactivetable.LoadQuery(this as W, maxdepth, 
+            var loadquery = _interactivetable.LoadQuery(this as W, 
+                commandtimeout,
+                maxdepth, 
                 connection);
             return loadquery;
         }
         public virtual (Result result, W model) Load(bool usedbcommand = false,
+            int? commandtimeout = null, 
             IDbConnection connection = null)
         {
-            var load = _interactivetable.Load(this as W, usedbcommand,
+            var load = _interactivetable.Load(this as W, 
+                usedbcommand,
+                commandtimeout,
                 connection);
 
             return load;
         }
 
         public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            int? commandtimeout = null, 
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var save = _interactivetable.Save(this as W, useinsertdbcommand, useupdatedbcommand,
+            var save = _interactivetable.Save(this as W, 
+                useinsertdbcommand, useupdatedbcommand,
+                commandtimeout,
                 connection, transaction);
 
             return save;
         }
         public virtual (Result result, W model) Erase(bool usedbcommand = false,
+            int? commandtimeout = null, 
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var erase = _interactivetable.Erase(this as W, usedbcommand,
+            var erase = _interactivetable.Erase(this as W, 
+                usedbcommand,
+                commandtimeout,
                 connection, transaction);
 
             return erase;

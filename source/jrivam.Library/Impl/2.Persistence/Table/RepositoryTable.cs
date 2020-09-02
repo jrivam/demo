@@ -36,6 +36,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public virtual (Result result, U data) Select(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null)
         {
             var parameters = new List<ISqlParameter>();
@@ -44,22 +45,26 @@ namespace jrivam.Library.Impl.Persistence.Table
                 $"{data.Description.DbName}",
                 _sqlbuildertable.GetWhere(data.Columns.Where(c => c.IsPrimaryKey).ToList(), parameters), 1);
 
-            return Select(data, selectcommandtext, CommandType.Text, parameters?.ToArray(),
+            return Select(data, selectcommandtext, CommandType.Text, commandtimeout,
+                parameters?.ToArray(),
                 connection);
         }
-        public virtual (Result result, U data) Select(U data, ISqlCommand dbcommand,
+        public virtual (Result result, U data) Select(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null)
         {
-            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), dbcommand.Parameters));
+            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), sqlcommand.Parameters));
 
-            return Select(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray(),
+            return Select(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
                 connection);
         }
-        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public virtual (Result result, U data) Select(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null)
         {
             var executequery = _repository.ExecuteQuery<T>(
-                commandtext, commandtype, parameters,
+                commandtext, commandtype, commandtimeout, 
+                parameters,
                 1,
                 connection);
             if (executequery.result.Success && executequery.entities?.Count() > 0)
@@ -75,6 +80,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public virtual (Result result, U data) Insert(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var parameters = new List<ISqlParameter>();
@@ -86,21 +92,25 @@ namespace jrivam.Library.Impl.Persistence.Table
                 _sqlbuildertable.GetInsertValues(data.Columns.Where(c => !c.IsIdentity).ToList(), parameters),
                 output);
 
-            return Insert(data, insertcommandtext, CommandType.Text, parameters?.ToArray(),
+            return Insert(data, insertcommandtext, CommandType.Text, commandtimeout, 
+                parameters?.ToArray(),
                 connection, transaction);
         }
-        public virtual (Result result, U data) Insert(U data, ISqlCommand dbcommand,
+        public virtual (Result result, U data) Insert(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.Where(c => !c.IsIdentity).ToList(), dbcommand.Parameters));
+            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.Where(c => !c.IsIdentity).ToList(), sqlcommand.Parameters));
 
-            return Insert(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray(),
+            return Insert(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
                 connection, transaction);
         }
-        public virtual (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public virtual (Result result, U data) Insert(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var executescalar = _repository.ExecuteScalar<int>(commandtext, commandtype, parameters,
+            var executescalar = _repository.ExecuteScalar<int>(commandtext, commandtype, commandtimeout, 
+                parameters,
                 connection, transaction);
             if (executescalar.result.Success)
             {
@@ -115,6 +125,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public virtual (Result result, U data) Update(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var parameters = new List<ISqlParameter>();
@@ -124,21 +135,25 @@ namespace jrivam.Library.Impl.Persistence.Table
                 _sqlbuildertable.GetUpdateSet(data.Columns.Where(c => !c.IsIdentity && c.Value != c.DbValue).ToList(), parameters),
                 _sqlbuildertable.GetWhere(data.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Update(data, updatecommandtext, CommandType.Text, parameters?.ToArray(),
+            return Update(data, updatecommandtext, CommandType.Text, commandtimeout, 
+                parameters?.ToArray(),
                 connection, transaction);
         }
-        public virtual (Result result, U data) Update(U data, ISqlCommand dbcommand,
+        public virtual (Result result, U data) Update(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.ToList(), dbcommand.Parameters));
+            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.ToList(), sqlcommand.Parameters));
 
-            return Update(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray(),
+            return Update(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
                 connection, transaction);
         }
-        public virtual (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public virtual (Result result, U data) Update(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var executenonquery = _repository.ExecuteNonQuery(commandtext, commandtype, parameters,
+            var executenonquery = _repository.ExecuteNonQuery(commandtext, commandtype, commandtimeout, 
+                parameters,
                 connection, transaction);
             if (executenonquery.result.Success && executenonquery.rows > 0)
             {
@@ -151,6 +166,7 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
 
         public virtual (Result result, U data) Delete(U data,
+            int commandtimeout = 30,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var parameters = new List<ISqlParameter>();
@@ -159,21 +175,25 @@ namespace jrivam.Library.Impl.Persistence.Table
                 $"{data.Description.DbName}",
                 _sqlbuildertable.GetWhere(data.Columns.Where(c => c.IsPrimaryKey && c.DbValue != null).ToList(), parameters));
 
-            return Delete(data, deletecommandtext, CommandType.Text, parameters?.ToArray(),
+            return Delete(data, deletecommandtext, CommandType.Text, commandtimeout,
+                parameters?.ToArray(),
                 connection, transaction);
         }
-        public virtual (Result result, U data) Delete(U data, ISqlCommand dbcommand,
+        public virtual (Result result, U data) Delete(U data, ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), dbcommand.Parameters)) ;
+            foreach (var p in _sqlbuildertable.GetParameters(data.Columns.Where(c => c.IsPrimaryKey).ToList(), sqlcommand.Parameters)) ;
 
-            return Delete(data, dbcommand.Text, dbcommand.Type, dbcommand.Parameters?.ToArray(),
+            return Delete(data, sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
                 connection, transaction);
         }
-        public virtual (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, ISqlParameter[] parameters = null,
+        public virtual (Result result, U data) Delete(U data, string commandtext, CommandType commandtype = CommandType.StoredProcedure, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            var executenonquery = _repository.ExecuteNonQuery(commandtext, commandtype, parameters,
+            var executenonquery = _repository.ExecuteNonQuery(commandtext, commandtype, commandtimeout, 
+                parameters,
                 connection, transaction);
             if (executenonquery.result.Success && executenonquery.rows > 0)
             {

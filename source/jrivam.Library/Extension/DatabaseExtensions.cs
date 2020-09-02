@@ -10,10 +10,11 @@ namespace jrivam.Library.Extension
     public static class DatabaseExtensions
     {
         public static (Result result, IEnumerable<T> entities) ExecuteQuery<T>(this IDbConnection connection,
-            string commandtext, CommandType commandtype = CommandType.Text, ISqlParameter[] parameters = null,
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
             int maxdepth = 1)
         {
-            return AutofacConfiguration.Container.Resolve<Repository>().ExecuteQuery<T>(commandtext, commandtype, parameters, maxdepth, connection);
+            return AutofacConfiguration.Container.Resolve<Repository>().ExecuteQuery<T>(commandtext, commandtype, commandtimeout, parameters, maxdepth, connection);
         }
     }
 }

@@ -16,7 +16,9 @@ namespace jrivam.Library.Impl.Business
         {
         }
 
-        public virtual (Result result, U data) Load(U data, bool usedbcommand = false, 
+        public virtual (Result result, U data) Load(U data, 
+            bool usedbcommand = false, 
+            int? commandtimeout = null,
             IDbConnection connection = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
@@ -24,7 +26,7 @@ namespace jrivam.Library.Impl.Business
             {
                 if (primarykeycolumn.Value != null)
                 {
-                    return data.Select(usedbcommand,
+                    return data.Select(usedbcommand, commandtimeout,
                         connection);
                 }
 
@@ -47,7 +49,9 @@ namespace jrivam.Library.Impl.Business
                         }
                     ), default(U));
         }
-        public virtual (Result result, U data) LoadQuery(U data, int maxdepth = 1, 
+        public virtual (Result result, U data) LoadQuery(U data, 
+            int? commandtimeout = null,
+            int maxdepth = 1, 
             IDbConnection connection = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
@@ -55,7 +59,8 @@ namespace jrivam.Library.Impl.Business
             {
                 if (primarykeycolumn.Value != null)
                 {
-                    return data.SelectQuery(maxdepth,
+                    return data.SelectQuery(commandtimeout, 
+                        maxdepth,
                         connection);
                 }
 
@@ -80,14 +85,18 @@ namespace jrivam.Library.Impl.Business
         }
 
         public virtual (Result result, IEnumerable<U> datas) List(IQueryData<T, U> query,
+            int? commandtimeout = null, 
             int maxdepth = 1, int top = 0,
             IDbConnection connection = null)
         {
-            return query.Select(maxdepth, top,
+            return query.Select(commandtimeout, 
+                maxdepth, top,
                 connection);
         }
 
-        public virtual (Result result, U data) Save(U data, bool useinsertdbcommand = false, bool useupdatedbcommand = false, 
+        public virtual (Result result, U data) Save(U data, 
+            bool useinsertdbcommand = false, bool useupdatedbcommand = false,
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
@@ -96,6 +105,7 @@ namespace jrivam.Library.Impl.Business
                 if (primarykeycolumn.DbValue != null)
                 {
                     var update = data.Update(useupdatedbcommand,
+                        commandtimeout,
                         connection, transaction);
 
                     return (update.result, update.data);
@@ -103,6 +113,7 @@ namespace jrivam.Library.Impl.Business
                 else
                 {
                     var insert = data.Insert(useinsertdbcommand,
+                        commandtimeout,
                         connection, transaction);
 
                     return (insert.result, insert.data);
@@ -118,7 +129,9 @@ namespace jrivam.Library.Impl.Business
                         }
                     ), default(U));
         }
-        public virtual (Result result, U data) Erase(U data, bool usedbcommand = false, 
+        public virtual (Result result, U data) Erase(U data, 
+            bool usedbcommand = false,
+            int? commandtimeout = null,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
@@ -127,6 +140,7 @@ namespace jrivam.Library.Impl.Business
                 if (primarykeycolumn?.Value != null)
                 {
                     var delete = data.Delete(usedbcommand,
+                        commandtimeout,
                         connection, transaction);
 
                     return (delete.result, delete.data);

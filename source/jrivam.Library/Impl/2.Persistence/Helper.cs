@@ -118,9 +118,12 @@ namespace jrivam.Library.Impl.Persistence
 
         public static bool UseDbCommand(bool classusedbcommand, bool propertyusedbcommand, bool methodusedbcommand)
         {
-            bool configusedbcommand = Convert.ToBoolean(ConfigurationManager.AppSettings["database.forceusedbcommand"]);
+            return (methodusedbcommand || propertyusedbcommand || classusedbcommand || Convert.ToBoolean(ConfigurationManager.AppSettings["database.forceusedbcommand"]));
+        }
 
-            return (methodusedbcommand || propertyusedbcommand || classusedbcommand || configusedbcommand);
+        public static int CommandTimeout(int? methodcommandtimeout)
+        {
+            return (methodcommandtimeout ?? (int.TryParse(ConfigurationManager.AppSettings["database.commandtimeout"], out var tryparseintvalue) ? tryparseintvalue : 30));
         }
 
         public static SqlParameter

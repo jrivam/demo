@@ -33,14 +33,16 @@ namespace jrivam.Library.Impl.Presentation
 
             RefreshCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(Refresh(top), $"{Name}Refresh");
+                Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(Refresh(top: top), $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
         }
 
-        public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int top = 0,
+        public virtual (Result result, IListModel<T, U, V, W> models) Refresh(int? commandtimeout = null, 
+            int top = 0,
             IDbConnection connection = null)
         {
-            var list = Query.List(_maxdepth, top,
+            var list = Query.List(commandtimeout,
+                _maxdepth, top,
                 connection);
 
             Status = Query.Status;

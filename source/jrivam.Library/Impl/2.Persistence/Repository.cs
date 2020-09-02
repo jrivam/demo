@@ -94,7 +94,8 @@ namespace jrivam.Library.Impl.Persistence
             ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(),
+            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
+                sqlcommand.Parameters?.ToArray(),
                 connection, transaction);
         }
         public virtual (Result result, int rows) ExecuteNonQuery(
@@ -143,7 +144,8 @@ namespace jrivam.Library.Impl.Persistence
             ISqlCommand sqlcommand,
             IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.Parameters?.ToArray(), 
+            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
+                sqlcommand.Parameters?.ToArray(), 
                 connection, transaction);
         }
         public virtual (Result result, T scalar) ExecuteScalar<T>(
