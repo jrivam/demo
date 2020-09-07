@@ -9,6 +9,6 @@ namespace jrivam.Library.Interface.Persistence.Sql.Database
 
         IDbDataParameter GetParameter(string providername, string name, Type type, object value, ParameterDirection direction = ParameterDirection.Input);
 
-        IDbCommand GetCommand(string providername, string commandtext = "", CommandType commandtype = CommandType.Text, params ISqlParameter[] parameters);
+        IDbCommand GetCommand(string providername, string commandtext = "", CommandType commandtype = CommandType.Text, int commandtimeout = 30, params ISqlParameter[] parameters);
     }
 }

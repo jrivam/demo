@@ -38,13 +38,14 @@ namespace jrivam.Library.Impl.Persistence.Sql
 
         public virtual IDbCommand GetCommand(
             string providername,
-            string commandtext = "", CommandType commandtype = CommandType.Text,
+            string commandtext = "", CommandType commandtype = CommandType.Text, int commandtimeout = 30,
             ISqlParameter[] parameters = null)
         {
             var command = _dbcreator?.GetCommand(providername);
 
             command.CommandText = commandtext;
             command.CommandType = commandtype;
+            command.CommandTimeout = commandtimeout;
 
             parameters?.ToList()?.ForEach(p =>
             {

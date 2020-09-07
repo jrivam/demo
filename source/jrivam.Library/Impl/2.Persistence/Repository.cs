@@ -61,11 +61,10 @@ namespace jrivam.Library.Impl.Persistence
 
             var command = _sqlcreator.GetCommand(
                     _connectionstringsettings.ProviderName,
-                    commandtext, commandtype,
+                    commandtext, commandtype, commandtimeout,
                     parameters);
 
             command.Connection = connection;
-            command.CommandTimeout = commandtimeout;
 
             var executequery = _dbcommandexecutor.ExecuteQuery<T>(command,    
                 (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
@@ -111,12 +110,11 @@ namespace jrivam.Library.Impl.Persistence
             }
 
             var command = _sqlcreator.GetCommand(_connectionstringsettings.ProviderName,
-                                        commandtext, commandtype,
+                                        commandtext, commandtype, commandtimeout,
                                         parameters);
 
             command.Connection = connection;
             command.Transaction = transaction;
-            command.CommandTimeout = commandtimeout;
 
             var executenonquery = _dbcommandexecutor.ExecuteNonQuery(command);
 
@@ -162,12 +160,11 @@ namespace jrivam.Library.Impl.Persistence
 
             var command = _sqlcreator.GetCommand(
                     _connectionstringsettings.ProviderName,
-                    commandtext, commandtype,
+                    commandtext, commandtype, commandtimeout,
                     parameters);
 
             command.Connection = connection;
             command.Transaction = transaction;
-            command.CommandTimeout = commandtimeout;
                 
             var executescalar = _dbcommandexecutor.ExecuteScalar<T>(command);
 
