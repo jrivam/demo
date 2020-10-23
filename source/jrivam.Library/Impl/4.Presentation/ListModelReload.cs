@@ -34,7 +34,7 @@ namespace jrivam.Library.Impl.Presentation
 
             RefreshCommand = new RelayCommand(async (object parameter) =>
             {
-                Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(await RefreshAsync(top: top), $"{Name}Refresh");
+                Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(await RefreshAsync(top: top).ConfigureAwait(false), $"{Name}Refresh");
             }, (object parameter) => true );
         }
 
