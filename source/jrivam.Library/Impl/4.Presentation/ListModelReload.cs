@@ -32,9 +32,9 @@ namespace jrivam.Library.Impl.Presentation
             Query = query;
             _maxdepth = maxdepth;
 
-            RefreshCommand = new RelayCommand(delegate (object parameter)
+            RefreshCommand = new RelayCommand(async (object parameter) =>
             {
-                Messenger.Default.Send<Task<(Result result, IListModel<T, U, V, W> models)>>(RefreshAsync(top: top), $"{Name}Refresh");
+                Messenger.Default.Send<(Result result, IListModel<T, U, V, W> models)>(await RefreshAsync(top: top), $"{Name}Refresh");
             }, delegate (object parameter) { return true; });
         }
 

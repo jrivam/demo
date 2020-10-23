@@ -109,7 +109,7 @@ namespace jrivam.Library.Impl.Presentation.Table
                 Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, await EraseAsync()), $"{Name}Erase");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
-            EditCommand = new RelayCommand(delegate (object parameter)
+            EditCommand = new RelayCommand((object parameter) =>
             {
                 Messenger.Default.Send<W>(this as W, $"{Name}Edit");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
