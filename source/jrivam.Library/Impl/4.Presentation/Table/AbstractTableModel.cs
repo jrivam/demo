@@ -96,17 +96,17 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             Name = name ?? typeof(T).Name;
 
-            LoadCommand = new RelayCommand(delegate (object parameter)
+            LoadCommand = new RelayCommand(async delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, Task<(Result result, W model)> operation)>((CommandAction.Load, LoadQueryAsync(maxdepth: _maxdepth)), $"{Name}Load");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, await LoadQueryAsync(maxdepth: _maxdepth)), $"{Name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
-            SaveCommand = new RelayCommand(delegate (object parameter)
+            SaveCommand = new RelayCommand(async delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, Task<(Result result, W model)> operation)>((CommandAction.Save, SaveAsync()), $"{Name}Save");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, await SaveAsync()), $"{Name}Save");
             }, delegate (object parameter) { return this.Domain.Changed; });
-            EraseCommand = new RelayCommand(delegate (object parameter)
+            EraseCommand = new RelayCommand(async delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, Task<(Result result, W model)> operation)>((CommandAction.Erase, EraseAsync()), $"{Name}Erase");
+                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, await EraseAsync()), $"{Name}Erase");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
