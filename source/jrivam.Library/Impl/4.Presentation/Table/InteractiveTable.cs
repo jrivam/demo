@@ -5,38 +5,37 @@ using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Raiser;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Presentation.Table
 {
-    public class InteractiveTable<T, U, V, W> : IInteractiveTable<T, U, V, W> 
+    public partial class InteractiveTableAsync<T, U, V, W> : IInteractiveTableAsync<T, U, V, W> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
         where W : ITableModel<T, U, V, W>
     {
-        protected readonly IInteractive<T, U, V> _interactive;
+        protected readonly IInteractiveAsync<T, U, V> _interactiveasync;
 
         protected readonly IModelRaiser _raiser;
 
-        public InteractiveTable(IInteractive<T, U, V> interactive,
+        public InteractiveTableAsync(IInteractiveAsync<T, U, V> interactiveasync,
             IModelRaiser raiser)
         {
-            _interactive = interactive;
+            _interactiveasync = interactiveasync;
 
             _raiser = raiser;
         }
 
-        public virtual (Result result, W model) Load(W model, 
-            bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, W model)> LoadAsync(W model,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
             model.Status = "Loading...";
 
-            var load = _interactive.Load(model.Domain, 
-                usedbcommand,
-                commandtimeout,
-                connection);
+            var load = await _interactiveasync.LoadAsync(model.Domain,
+                connection,
+                commandtimeout).ConfigureAwait(false);
             if (load.result.Success && load.domain != null)
             {
                 model.Domain = load.domain;
@@ -52,17 +51,18 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             return (load.result, default(W));
         }
-        public virtual (Result result, W model) LoadQuery(W model,
-            int? commandtimeout = null, 
+
+        public virtual async Task<(Result result, W model)> LoadQueryAsync(W model,
             int maxdepth = 1,
-            IDbConnection connection = null)
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
             model.Status = "Loading...";
 
-            var loadquery = _interactive.LoadQuery(model.Domain, 
-                commandtimeout,
+            var loadquery = await _interactiveasync.LoadQueryAsync(model.Domain,
                 maxdepth,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
             if (loadquery.result.Success && loadquery.domain != null)
             {
                 model.Domain = loadquery.domain;
@@ -78,18 +78,16 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             return (loadquery.result, default(W));
         }
-        
-        public virtual (Result result, W model) Save(W model, 
-            bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, W model)> SaveAsync(W model,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             model.Status = "Saving...";
 
-            var save = _interactive.Save(model.Domain,                 
-                useinsertdbcommand, useupdatedbcommand,
-                commandtimeout,
-                connection, transaction);
+            var save = await _interactiveasync.SaveAsync(model.Domain,
+                connection, transaction,
+                commandtimeout).ConfigureAwait(false);
             if (save.result.Success)
             {
                 _raiser.Raise<T, U, V, W>(model);
@@ -103,17 +101,16 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             return (save.result, default(W));
         }
-        public virtual (Result result, W model) Erase(W model, 
-            bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, W model)> EraseAsync(W model,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             model.Status = "Deleting...";
 
-            var erase = _interactive.Erase(model.Domain, 
-                usedbcommand,
-                commandtimeout,
-                connection, transaction);
+            var erase = await _interactiveasync.EraseAsync(model.Domain,
+                connection, transaction,
+                commandtimeout).ConfigureAwait(false);
             if (erase.result.Success)
             {
                 model.Status = string.Empty;

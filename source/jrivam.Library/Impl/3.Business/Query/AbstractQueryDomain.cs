@@ -5,45 +5,47 @@ using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Business.Query
 {
-    public abstract class AbstractQueryDomain<T, U, V> : IQueryDomain<T, U, V>
+    public abstract partial class AbstractQueryDomain<T, U, V> : IQueryDomain<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
         public IQueryData<T, U> Data { get; set; }
 
-        protected readonly ILogicQuery<T, U, V> _logicquery;
+        protected readonly ILogicQueryAsync<T, U, V> _logicqueryasync;
 
-        public AbstractQueryDomain(ILogicQuery<T, U, V> logicquery, 
+        public AbstractQueryDomain(ILogicQueryAsync<T, U, V> logicqueryasync, 
             IQueryData<T, U> data)
         {
-            _logicquery = logicquery;
+            _logicqueryasync = logicqueryasync;
 
             Data = data;
         }
 
-        public virtual (Result result, V domain) Retrieve(int? commandtimeout = null, 
-            int maxdepth = 1,
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, V domain)> RetrieveAsync(int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var retrieve = _logicquery.Retrieve(this, 
-                commandtimeout,
+            var retrieve = await _logicqueryasync.RetrieveAsync(this,
                 maxdepth,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<V> domains) List(int? commandtimeout = null, 
-            int maxdepth = 1, int top = 0,
-            IDbConnection connection = null)
+
+        public virtual async Task<(Result result, IEnumerable<V> domains)> ListAsync(int maxdepth = 1, int top = 0,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var list = _logicquery.List(this, 
-                commandtimeout,
+            var list = await _logicqueryasync.ListAsync(this,
                 maxdepth, top,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return list;
         }

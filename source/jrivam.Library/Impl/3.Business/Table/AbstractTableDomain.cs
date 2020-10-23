@@ -9,10 +9,11 @@ using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Business.Table
 {
-    public abstract class AbstractTableDomain<T, U, V> : ITableDomain<T, U, V>
+    public abstract partial class AbstractTableDomain<T, U, V> : ITableDomain<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -35,12 +36,12 @@ namespace jrivam.Library.Impl.Business.Table
 
         public IList<(string name, IColumnValidator validator)> Validations { get; set; } = new List<(string, IColumnValidator)>();
 
-        protected readonly ILogicTable<T, U, V> _logictable;
+        protected readonly ILogicTableAsync<T, U, V> _logictableasync;
 
-        public AbstractTableDomain(ILogicTable<T, U, V> logictable,
+        public AbstractTableDomain(ILogicTableAsync<T, U, V> logictableasync,
             U data = default(U))
         {
-            _logictable = logictable;
+            _logictableasync = logictableasync;
 
             if (data == null)
                 _data = HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity());
@@ -70,61 +71,58 @@ namespace jrivam.Library.Impl.Business.Table
             return Validations.FirstOrDefault(x => x.name == name).validator.Validate();
         }
 
-        public virtual (Result result, V domain) LoadQuery(int? commandtimeout = null, 
-            int maxdepth = 1, 
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, V domain)> LoadQueryAsync(int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var loadquery = _logictable.LoadQuery(this as V, 
-                commandtimeout,
+            var loadquery = await _logictableasync.LoadQueryAsync(this as V,
                 maxdepth,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return loadquery;
         }
-        public virtual (Result result, V domain) Load(bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null)
+
+        public virtual async Task<(Result result, V domain)> LoadAsync(
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var load = _logictable.Load(this as V, 
-                usedbcommand,
-                commandtimeout,
-                connection);
+            var load = await _logictableasync.LoadAsync(this as V,
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return load;
         }
 
-        public virtual (Result result, V domain) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, V domain)> SaveAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            var save = _logictable.Save(this as V, 
-                useinsertdbcommand, useupdatedbcommand,
-                commandtimeout,
-                connection, transaction);
+            var save = await _logictableasync.SaveAsync(this as V,
+                connection, transaction,
+                commandtimeout).ConfigureAwait(false);
 
             if (save.result.Success)
             {
-                save.result.Append(SaveChildren(useinsertdbcommand, useupdatedbcommand, 
-                    commandtimeout,
-                    connection, transaction));
+                save.result.Append(await SaveChildrenAsync(connection, transaction,
+                    commandtimeout).ConfigureAwait(false));
             }
 
             return save;
         }
-        public virtual (Result result, V domain) Erase(bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, V domain)> EraseAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            (Result result, V domain) erasechildren = (EraseChildren(usedbcommand,
-                commandtimeout,
-                connection, transaction), default(V));
+            (Result result, V domain) erasechildren = (await EraseChildrenAsync(connection, transaction,
+                commandtimeout).ConfigureAwait(false), default(V));
 
             if (erasechildren.result.Success)
             {
-                var erase = _logictable.Erase(this as V, 
-                    usedbcommand,
-                    commandtimeout,
-                    connection, transaction);
+                var erase = await _logictableasync.EraseAsync(this as V,
+                    connection, transaction,
+                    commandtimeout).ConfigureAwait(false);
 
                 erasechildren.result.Append(erase.result);
 
@@ -134,9 +132,9 @@ namespace jrivam.Library.Impl.Business.Table
             return erasechildren;
         }
 
-        protected virtual Result SaveChildren(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        protected virtual async Task<Result> SaveChildrenAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             var savechildren = new Result();
 
@@ -145,15 +143,16 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    savechildren.Append((Result)collection.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.SaveAll)).Invoke(collection, new object[] { useinsertdbcommand, useupdatedbcommand, commandtimeout, connection, transaction }));
+                    var saveall = (Task<Result>)collection.GetType().GetMethod(nameof(IListDomainEditAsync<T, U, V>.SaveAllAsync)).Invoke(collection, new object[] { connection, transaction, commandtimeout });
+                    savechildren.Append(await saveall.ConfigureAwait(false));
                 }
             }
 
             return savechildren;
         }
-        protected virtual Result EraseChildren(bool usedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        protected virtual async Task<Result> EraseChildrenAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             var erasechildren = new Result();
 
@@ -162,11 +161,12 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    var refresh = collection.GetType().GetMethod(nameof(IListDomainReload<T, U, V>.Refresh)).Invoke(collection, new object[] { commandtimeout, null, connection });
-                    var item2 = refresh.GetType().GetField("Item2").GetValue(refresh);
+                    var refresh = (Task<(Result, IListDomain<T, U, V>)>)collection.GetType().GetMethod(nameof(IListDomainReloadAsync<T, U, V>.RefreshAsync)).Invoke(collection, new object[] { null, connection, commandtimeout });
+                    var item2 = refresh.GetType().GetField("Item2").GetValue(await refresh.ConfigureAwait(false));
                     if (item2 != null)
                     {
-                        erasechildren.Append((Result)item2.GetType().GetMethod(nameof(IListDomainEdit<T, U, V>.EraseAll)).Invoke(item2, new object[] { usedbcommand, commandtimeout, connection, transaction }));
+                        var eraseall = (Task<Result>)item2.GetType().GetMethod(nameof(IListDomainEditAsync<T, U, V>.EraseAllAsync)).Invoke(item2, new object[] { connection, transaction, commandtimeout });
+                        erasechildren.Append(await eraseall.ConfigureAwait(false));
                     }
                 }
             }

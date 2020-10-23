@@ -2,6 +2,7 @@
 using jrivam.Library;
 using jrivam.Library.Impl.Persistence.Sql;
 using jrivam.Library.Impl.Presentation;
+using System.Threading.Tasks;
 
 namespace demo.App.Wpf.ViewModels
 {
@@ -34,7 +35,7 @@ namespace demo.App.Wpf.ViewModels
                     Empresas = AutofacConfiguration.Container.Resolve<Presentation.Table.EmpresasReload>();
                     _empresas.Query.Activo = (true, WhereOperator.Equals);
 
-                    _empresas.Refresh();
+                    Task.Run(async () => await _empresas.RefreshAsync());
                 }
 
                 return _empresas;

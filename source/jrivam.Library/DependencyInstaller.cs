@@ -49,8 +49,8 @@ namespace jrivam.Library
             builder.RegisterType<ModelRaiser>()
                    .As<IModelRaiser>();
 
-            builder.RegisterType<DbCommandExecutor>()
-                   .As<IDbCommandExecutor>()
+            builder.RegisterType<DbCommandExecutorAsync>()
+                   .As<IDbCommandExecutorAsync>()
                    .InstancePerLifetimeScope();
             builder.RegisterType<DbObjectCreator>()
                    .As<IDbObjectCreator>()
@@ -88,24 +88,24 @@ namespace jrivam.Library
             //builder.RegisterGeneric(typeof(AbstractTableData<,>))
             //    .As(typeof(AbstractTableData<,>)).InstancePerDependency();
 
-            builder.RegisterGeneric(typeof(RepositoryTable<,>))
-                   .As(typeof(IRepositoryTable<,>));
-            builder.RegisterGeneric(typeof(RepositoryQuery<,>))
-                   .As(typeof(IRepositoryQuery<,>));
+            builder.RegisterGeneric(typeof(RepositoryTableAsync<,>))
+                   .As(typeof(IRepositoryTableAsync<,>));
+            builder.RegisterGeneric(typeof(RepositoryQueryAsync<,>))
+                   .As(typeof(IRepositoryQueryAsync<,>));
 
-            builder.RegisterGeneric(typeof(Logic<,>))
-                   .As(typeof(ILogic<,>));
-            builder.RegisterGeneric(typeof(LogicTable<,,>))
-                   .As(typeof(ILogicTable<,,>));
-            builder.RegisterGeneric(typeof(LogicQuery<,,>))
-                   .As(typeof(ILogicQuery<,,>));
+            builder.RegisterGeneric(typeof(LogicAsync<,>))
+                   .As(typeof(ILogicAsync<,>));
+            builder.RegisterGeneric(typeof(LogicTableAsync<,,>))
+                   .As(typeof(ILogicTableAsync<,,>));
+            builder.RegisterGeneric(typeof(LogicQueryAsync<,,>))
+                   .As(typeof(ILogicQueryAsync<,,>));
 
-            builder.RegisterGeneric(typeof(Interactive<,,>))
-                   .As(typeof(IInteractive<,,>));
-            builder.RegisterGeneric(typeof(InteractiveTable<,,,>))
-                   .As(typeof(IInteractiveTable<,,,>));
-            builder.RegisterGeneric(typeof(InteractiveQuery<,,,>))
-                   .As(typeof(IInteractiveQuery<,,,>));
+            builder.RegisterGeneric(typeof(InteractiveAsync<,,>))
+                   .As(typeof(IInteractiveAsync<,,>));
+            builder.RegisterGeneric(typeof(InteractiveTableAsync<,,,>))
+                   .As(typeof(IInteractiveTableAsync<,,,>));
+            builder.RegisterGeneric(typeof(InteractiveQueryAsync<,,,>))
+                   .As(typeof(IInteractiveQueryAsync<,,,>));
 
             builder.RegisterGeneric(typeof(List<>))
                    .As(typeof(ICollection<>));
@@ -115,21 +115,21 @@ namespace jrivam.Library
             builder.RegisterGeneric(typeof(ListDataEdit<,>))
                    .As(typeof(IListDataEdit<,>));
             builder.RegisterGeneric(typeof(ListDataReload<,,>))
-                   .As(typeof(IListDataReload<,>));
+                   .As(typeof(IListDataReloadAsync<,>));
 
             builder.RegisterGeneric(typeof(ListDomain<,,>))
                    .As(typeof(IListDomain<,,>));
             builder.RegisterGeneric(typeof(ListDomainEdit<,,>))
-                   .As(typeof(IListDomainEdit<,,>));
+                   .As(typeof(IListDomainEditAsync<,,>));
             builder.RegisterGeneric(typeof(ListDomainReload<,,,>))
-                   .As(typeof(IListDomainReload<,,>));
+                   .As(typeof(IListDomainReloadAsync<,,>));
 
             builder.RegisterGeneric(typeof(ListModel<,,,>))
                    .As(typeof(IListModel<,,,>));
             builder.RegisterGeneric(typeof(ListModelEdit<,,,>))
                    .As(typeof(IListModelEdit<,,,>));
             builder.RegisterGeneric(typeof(ListModelReload<,,,,>))
-                   .As(typeof(IListModelReload<,,,>));
+                   .As(typeof(IListModelReloadAsync<,,,>));
 
             return builder;
         }

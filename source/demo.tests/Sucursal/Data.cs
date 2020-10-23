@@ -95,7 +95,7 @@ namespace demo.Tests.Sucursal
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Sucursal(
-            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
+            new RepositoryTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -165,7 +165,7 @@ namespace demo.Tests.Sucursal
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Sucursal(
-            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
+            new RepositoryTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -179,7 +179,7 @@ namespace demo.Tests.Sucursal
                     Activo = Entity.Activo,
                     IdEmpresa = Entity.IdEmpresa
                 },
-            new Persistence.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
+            new Persistence.Query.Sucursal(new RepositoryQueryAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>(new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
                 mockCommandBuilder.Object,
@@ -238,7 +238,7 @@ namespace demo.Tests.Sucursal
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Sucursal(
-            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
+            new RepositoryTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -263,7 +263,7 @@ namespace demo.Tests.Sucursal
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            return new Persistence.Query.Sucursal(new RepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
+            return new Persistence.Query.Sucursal(new RepositoryQueryAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -323,7 +323,7 @@ namespace demo.Tests.Sucursal
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Sucursal(
-            new RepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
+            new RepositoryTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>(
                 new Entities.Reader.Sucursal(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Sucursal(),
                 mockDatabase.mockSyntaxSign.Object,

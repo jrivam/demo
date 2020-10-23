@@ -39,7 +39,7 @@ namespace jrivam.Library.Impl.Business.Validator
 
                 _query.Columns[_column.Description.Name].Where(_column.Value, WhereOperator.Equals);
 
-                var selectsingle = _query.SelectSingle(1);
+                var selectsingle = _query.SelectSingleAsync(1).Result;
 
                 if (selectsingle.result.Success)
                 {

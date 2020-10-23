@@ -9,13 +9,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Persistence.Query
 {
-    public abstract class AbstractQueryData<T, U> : IQueryData<T, U>
+    public abstract partial class AbstractQueryData<T, U> : IQueryData<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {
+        public bool Exclude { get; set; }
+
         public virtual Description Description { get; protected set; }
 
         public virtual IColumnQuery this[string name]
@@ -34,12 +37,12 @@ namespace jrivam.Library.Impl.Persistence.Query
 
         public virtual IList<(IColumnQuery column, OrderDirection flow)> Orders { get; } = new List<(IColumnQuery, OrderDirection)>();
 
-        protected readonly IRepositoryQuery<T, U> _repositoryquery;
+        protected readonly IRepositoryQueryAsync<T, U> _repositoryqueryasync;
 
-        protected AbstractQueryData(IRepositoryQuery<T, U> repositoryquery,
+        protected AbstractQueryData(IRepositoryQueryAsync<T, U> repositoryqueryasync,
             string name = null, string dbname = null)
         {
-            _repositoryquery = repositoryquery;
+            _repositoryqueryasync = repositoryqueryasync;
 
             Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
 
@@ -51,7 +54,7 @@ namespace jrivam.Library.Impl.Persistence.Query
             Columns.ForEach(x => x.Wheres.Clear());
         }
 
-        public virtual void Init()
+        private void Init()
         {
             Columns.Clear();
 
@@ -68,49 +71,51 @@ namespace jrivam.Library.Impl.Persistence.Query
             }
         }
 
-        public virtual (Result result, U data) SelectSingle(int? commandtimeout = null,
-            int maxdepth = 1, 
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, U data)> SelectSingleAsync(int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var selectsingle = _repositoryquery.SelectSingle(this,
-                Helper.CommandTimeout(commandtimeout),
+            var selectsingle = await _repositoryqueryasync.SelectSingleAsync(this,
                 maxdepth,
-                connection);
+                connection,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return selectsingle;
         }
-        public virtual (Result result, IEnumerable<U> datas) Select(int? commandtimeout = null, 
-            int maxdepth = 1, int top = 0, 
-            IDbConnection connection = null)
+
+        public virtual async Task<(Result result, IEnumerable<U> datas)> SelectAsync(int maxdepth = 1, int top = 0,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var select = _repositoryquery.Select(this,
-                Helper.CommandTimeout(commandtimeout),
+            var select = await _repositoryqueryasync.SelectAsync(this,
                 maxdepth, top,
-                connection);
+                connection,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return select;
         }
 
-        public virtual (Result result, int rows) Update(IList<IColumnTable> columns,
-            int? commandtimeout = null,
-            int maxdepth = 1, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, int rows)> UpdateAsync(IList<IColumnTable> columns,
+            int maxdepth = 1,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            var update = _repositoryquery.Update(this, columns,
-                Helper.CommandTimeout(commandtimeout),
+            var update = await _repositoryqueryasync.UpdateAsync(this, columns,
                 maxdepth,
-                connection, transaction);
+                connection, transaction,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return update;
         }
-        public virtual (Result result, int rows) Delete(int? commandtimeout = null, 
-            int maxdepth = 1, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, int rows)> DeleteAsync(int maxdepth = 1,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            var delete = _repositoryquery.Delete(this,
-                Helper.CommandTimeout(commandtimeout),
+            var delete = await _repositoryqueryasync.DeleteAsync(this,
                 maxdepth,
-                connection, transaction);
+                connection, transaction,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return delete;
         }

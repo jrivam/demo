@@ -5,6 +5,7 @@ using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation;
 using jrivam.Library.Interface.Presentation.Table;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,7 +13,7 @@ using System.Linq;
 
 namespace jrivam.Library.Impl.Presentation
 {
-    public class ListModel<T, U, V, W> : ObservableCollection<W>, IListModel<T, U, V, W>, IStatus
+    public class ListModel<T, U, V, W> : AsyncObservableCollection<W>, IListModel<T, U, V, W>, IStatus
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>

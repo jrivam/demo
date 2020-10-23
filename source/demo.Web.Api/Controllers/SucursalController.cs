@@ -4,6 +4,7 @@ using jrivam.Library.Impl;
 using jrivam.Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Http;
 
@@ -14,7 +15,7 @@ namespace demo.Web.Api.Controllers
     {
         [HttpGet]
         [Route(nameof(Search))]
-        public IHttpActionResult Search(string nombre = null, bool? activo = null, string fecha = null)
+        public async Task<IHttpActionResult> Search(string nombre = null, bool? activo = null, string fecha = null)
         {
             try
             {
@@ -27,7 +28,7 @@ namespace demo.Web.Api.Controllers
                 if (activo != null)
                     query.Activo = (activo, WhereOperator.Equals);
 
-                var list = query.List();
+                var list = await query.ListAsync();
                 if (list.result.Success)
                 {
                     return Ok(new Business.Table.Sucursales().Load(list.domains)?.Datas?.Entities);
@@ -44,13 +45,13 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetAll()
+        public async Task<IHttpActionResult> GetAll()
         {
-            return Search();
+            return await Search();
         }
 
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
             if (id > 0)
             {
@@ -59,7 +60,7 @@ namespace demo.Web.Api.Controllers
                     var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
                     sucursal.Id = id;
 
-                    var load = sucursal.Load();
+                    var load = await sucursal.LoadAsync();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -84,7 +85,7 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody] Entities.Table.Sucursal entity)
+        public async Task<IHttpActionResult> Create([FromBody] Entities.Table.Sucursal entity)
         {
             if (entity != null)
             {
@@ -92,7 +93,7 @@ namespace demo.Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>(new TypedParameter(typeof(Entities.Table.Sucursal), entity)).Save();
+                        var save = await AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>(new TypedParameter(typeof(Entities.Table.Sucursal), entity)).SaveAsync();
                         if (save.result.Success)
                         {
                             scope.Complete();
@@ -115,7 +116,7 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Update(int id, [FromBody] Entities.Table.Sucursal entity)
+        public async Task<IHttpActionResult> Update(int id, [FromBody] Entities.Table.Sucursal entity)
         {
             if (id > 0)
             {
@@ -124,7 +125,7 @@ namespace demo.Web.Api.Controllers
                     var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
                     sucursal.Id = id;
 
-                    var load = sucursal.Load();
+                    var load = await sucursal.LoadAsync();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -133,7 +134,7 @@ namespace demo.Web.Api.Controllers
 
                             using (var scope = new TransactionScope())
                             {
-                                var save = load.domain.Save();
+                                var save = await load.domain.SaveAsync();
                                 if (save.result.Success)
                                 {
                                     scope.Complete();
@@ -164,7 +165,7 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpDelete]
-        public IHttpActionResult Delete(int id)
+        public async Task<IHttpActionResult> Delete(int id)
         {
             if (id > 0)
             {
@@ -173,14 +174,14 @@ namespace demo.Web.Api.Controllers
                     var sucursal = AutofacConfiguration.Container.Resolve<Business.Table.Sucursal>();
                     sucursal.Id = id;
 
-                    var load = sucursal.Load();
+                    var load = await sucursal.LoadAsync();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
                         {
                             using (var scope = new TransactionScope())
                             {
-                                var erase = load.domain.Erase();
+                                var erase = await load.domain.EraseAsync();
                                 if (erase.result.Success)
                                 {
                                     scope.Complete();

@@ -89,7 +89,7 @@ namespace demo.Tests.Empresa
 
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
-            var repositoryQuery = new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(
+            var repositoryQuery = new RepositoryQueryAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -98,7 +98,7 @@ namespace demo.Tests.Empresa
 
             var queryUnique = new Persistence.Query.Empresa(repositoryQuery);
 
-            var repositoryTable = new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
+            var repositoryTable = new RepositoryTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -131,7 +131,7 @@ namespace demo.Tests.Empresa
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Empresa(
-            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
+            new RepositoryTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -193,7 +193,7 @@ namespace demo.Tests.Empresa
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Empresa(
-                new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
+                new RepositoryTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -205,7 +205,7 @@ namespace demo.Tests.Empresa
                     Ruc = Entity.Ruc,
                     Activo = Entity.Activo
                 },
-                new Persistence.Query.Empresa(new RepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
+                new Persistence.Query.Empresa(new RepositoryQueryAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                     new Persistence.Mapper.Empresa(),
                     mockDatabase.mockSyntaxSign.Object,
                     mockCommandBuilder.Object,
@@ -256,7 +256,7 @@ namespace demo.Tests.Empresa
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Empresa(
-            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
+            new RepositoryTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
                 mockDatabase.mockSyntaxSign.Object,
@@ -316,7 +316,7 @@ namespace demo.Tests.Empresa
             var mockCommandBuilder = new Moq.Mock<ISqlCommandBuilder>();
 
             return new Persistence.Table.Empresa(
-            new RepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa>(
+            new RepositoryTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa>(
                 new Entities.Reader.Empresa(mockDatabase.mockSyntaxSign.Object),
                 new Persistence.Mapper.Empresa(),
                 mockDatabase.mockSyntaxSign.Object,

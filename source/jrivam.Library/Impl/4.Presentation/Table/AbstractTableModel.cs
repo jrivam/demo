@@ -10,11 +10,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace jrivam.Library.Impl.Presentation.Table
 {
-    public abstract class AbstractTableModel<T, U, V, W> : TableModelValidation, ITableModel<T, U, V, W>
+    public abstract partial class AbstractTableModel<T, U, V, W> : TableModelValidation, ITableModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -77,14 +78,14 @@ namespace jrivam.Library.Impl.Presentation.Table
 
         protected readonly int _maxdepth;
 
-        protected readonly IInteractiveTable<T, U, V, W> _interactivetable;
+        protected readonly IInteractiveTableAsync<T, U, V, W> _interactivetableasync;
 
-        public AbstractTableModel(IInteractiveTable<T, U, V, W> interactivetable,
+        public AbstractTableModel(IInteractiveTableAsync<T, U, V, W> interactivetableasync,
             V domain = default(V), 
             int maxdepth = 1,
             string name = null)
         {
-            _interactivetable = interactivetable;
+            _interactivetableasync = interactivetableasync;
 
             if (domain == null)
                 _domain = HelperTableLogic<T, U, V>.CreateDomain(HelperTableRepository<T, U>.CreateData(HelperEntities<T>.CreateEntity()));
@@ -97,15 +98,15 @@ namespace jrivam.Library.Impl.Presentation.Table
 
             LoadCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Load, LoadQuery(maxdepth: _maxdepth)), $"{Name}Load");
+                Messenger.Default.Send<(CommandAction action, Task<(Result result, W model)> operation)>((CommandAction.Load, LoadQueryAsync(maxdepth: _maxdepth)), $"{Name}Load");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && this.Domain.Changed; });
             SaveCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Save, Save()), $"{Name}Save");
+                Messenger.Default.Send<(CommandAction action, Task<(Result result, W model)> operation)>((CommandAction.Save, SaveAsync()), $"{Name}Save");
             }, delegate (object parameter) { return this.Domain.Changed; });
             EraseCommand = new RelayCommand(delegate (object parameter)
             {
-                Messenger.Default.Send<(CommandAction action, (Result result, W model) operation)>((CommandAction.Erase, Erase()), $"{Name}Erase");
+                Messenger.Default.Send<(CommandAction action, Task<(Result result, W model)> operation)>((CommandAction.Erase, EraseAsync()), $"{Name}Erase");
             }, delegate (object parameter) { return this.Domain.Data.Entity.Id != null && !this.Domain.Deleted; });
 
             EditCommand = new RelayCommand(delegate (object parameter)
@@ -120,47 +121,46 @@ namespace jrivam.Library.Impl.Presentation.Table
         {
         }
 
-        public virtual (Result result, W model) LoadQuery(int? commandtimeout = null, 
-            int maxdepth = 1,
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, W model)> LoadQueryAsync(int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var loadquery = _interactivetable.LoadQuery(this as W, 
-                commandtimeout,
-                maxdepth, 
-                connection);
+            var loadquery = await _interactivetableasync.LoadQueryAsync(this as W,
+                maxdepth,
+                connection,
+                commandtimeout).ConfigureAwait(false);
             return loadquery;
         }
-        public virtual (Result result, W model) Load(bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null)
+
+        public virtual async Task<(Result result, W model)> LoadAsync(
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var load = _interactivetable.Load(this as W, 
-                usedbcommand,
-                commandtimeout,
-                connection);
+            var load = await _interactivetableasync.LoadAsync(this as W,
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return load;
         }
 
-        public virtual (Result result, W model) Save(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, W model)> SaveAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            var save = _interactivetable.Save(this as W, 
-                useinsertdbcommand, useupdatedbcommand,
-                commandtimeout,
-                connection, transaction);
+            var save = await _interactivetableasync.SaveAsync(this as W,
+                connection, transaction,
+                commandtimeout).ConfigureAwait(false);
 
             return save;
         }
-        public virtual (Result result, W model) Erase(bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, W model)> EraseAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            var erase = _interactivetable.Erase(this as W, 
-                usedbcommand,
-                commandtimeout,
-                connection, transaction);
+            var erase = await _interactivetableasync.EraseAsync(this as W,
+                connection, transaction,
+                commandtimeout).ConfigureAwait(false);
 
             return erase;
         }

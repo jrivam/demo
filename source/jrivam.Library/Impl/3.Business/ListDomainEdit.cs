@@ -4,10 +4,11 @@ using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Business
 {
-    public class ListDomainEdit<T, U, V> : ListDomain<T, U, V>, IListDomainEdit<T, U, V>
+    public partial class ListDomainEdit<T, U, V> : ListDomain<T, U, V>, IListDomainEditAsync<T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -53,34 +54,34 @@ namespace jrivam.Library.Impl.Business
             return false;
         }
 
-        public virtual Result SaveAll(bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<Result> SaveAllAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             var result = new Result();
 
             foreach (var domain in this)
             {
-                result.Append(domain.Save(useinsertdbcommand, useupdatedbcommand,
-                    commandtimeout,
-                    connection, transaction).result);
+                var save = await domain.SaveAsync(connection, transaction,
+                    commandtimeout).ConfigureAwait(false);
+                result.Append(save.result);
 
                 if (!result.Success) break;
             }
 
             return result;
         }
-        public virtual Result EraseAll(bool usedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<Result> EraseAllAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             var result = new Result();
 
             foreach (var domain in this)
             {
-                result.Append(domain.Erase(usedbcommand,
-                    commandtimeout,
-                    connection, transaction).result);
+                var erase = await domain.EraseAsync(connection, transaction,
+                    commandtimeout).ConfigureAwait(false);
+                result.Append(erase.result);
 
                 if (!result.Success) break;
             }

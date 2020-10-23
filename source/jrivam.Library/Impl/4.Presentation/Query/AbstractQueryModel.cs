@@ -6,10 +6,11 @@ using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Presentation.Query
 {
-    public abstract class AbstractQueryModel<T, U, V, W> : IQueryModel<T, U, V, W>
+    public abstract partial class AbstractQueryModel<T, U, V, W> : IQueryModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -19,35 +20,36 @@ namespace jrivam.Library.Impl.Presentation.Query
 
         public string Status { get; set; } = string.Empty;
 
-        protected readonly IInteractiveQuery<T, U, V, W> _interactivequery;
+        protected readonly IInteractiveQueryAsync<T, U, V, W> _interactivequeryasync;
 
-        public AbstractQueryModel(IInteractiveQuery<T, U, V, W> interactivequery,
+        public AbstractQueryModel(IInteractiveQueryAsync<T, U, V, W> interactivequeryasync,
             IQueryDomain<T, U, V> domain)
         {
-            _interactivequery = interactivequery;
+            _interactivequeryasync = interactivequeryasync;
 
             Domain = domain;
         }
 
-        public virtual (Result result, W model) Retrieve(int? commandtimeout = null, 
-            int maxdepth = 1,
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, W model)> RetrieveAsync(int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var retrieve = _interactivequery.Retrieve(this, 
-                commandtimeout,
+            var retrieve = await _interactivequeryasync.RetrieveAsync(this,
                 maxdepth,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return retrieve;
         }
-        public virtual (Result result, IEnumerable<W> models) List(int? commandtimeout = null, 
-            int maxdepth = 1, int top = 0,
-            IDbConnection connection = null)
+
+        public virtual async Task<(Result result, IEnumerable<W> models)> ListAsync(int maxdepth = 1, int top = 0,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var list = _interactivequery.List(this, 
-                commandtimeout,
+            var list = await _interactivequeryasync.ListAsync(this,
                 maxdepth, top,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return list;
         }

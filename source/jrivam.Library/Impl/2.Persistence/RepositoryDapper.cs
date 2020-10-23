@@ -6,11 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class RepositoryDapper : IRepository
+    public class RepositoryDapper : IRepositoryAsync
     {
         protected readonly ConnectionStringSettings _connectionstringsettings;
 
@@ -25,51 +27,41 @@ namespace jrivam.Library.Impl.Persistence
             _sqlcreator = sqlcreator;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            ISqlCommand sqlcommand,
-            int maxdepht = 1,
-            IDbConnection connection = null)
-        {
-            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
-                sqlcommand.Parameters.ToArray(), maxdepht,
-                connection);
-        }
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+        public virtual async Task<(Result result, IEnumerable<T> entities)> ExecuteQueryAsync<T>(
+            string commandtext, CommandType commandtype = CommandType.Text, 
             ISqlParameter[] parameters = null,
             int maxdepht = 1,
-            IDbConnection connection = null)
+            IDbConnection connection = null,
+            int commandtimeout = 30)
         {
             try
             {
-                var closeConnection = false;
+                var closeConnection = (connection == null);
 
                 if (connection == null)
                 {
                     connection = _sqlcreator.GetConnection(
                         _connectionstringsettings.ProviderName,
                         _connectionstringsettings.ConnectionString);
-
-                    closeConnection = true;
                 }
 
                 var p = new DynamicParameters();
 
-                foreach(var parameter in parameters)
+                foreach (var parameter in parameters)
                 {
                     p.Add(parameter.Name, parameter.Value);
                 }
 
                 if (connection.State != ConnectionState.Open)
                 {
-                    connection.Open();
+                    await ((DbConnection)connection).OpenAsync().ConfigureAwait(false);
                 }
 
-                var query = connection.Query<T>(commandtext, p, commandTimeout: commandtimeout);
-                
+                var query = await connection.QueryAsync<T>(commandtext, p, commandTimeout: commandtimeout).ConfigureAwait(false);
+
                 if (closeConnection)
                 {
-                    connection.Close();
+                    connection?.Close();
                 }
 
                 return (new Result(), query);
@@ -81,25 +73,18 @@ namespace jrivam.Library.Impl.Persistence
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteQueryAsync)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, default(IEnumerable<T>));
             }
         }
 
-        public virtual (Result result, int rows) ExecuteNonQuery(
-            ISqlCommand sqlcommand,
-            IDbConnection connection = null, IDbTransaction transaction = null)
-        {
-            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
-                sqlcommand.Parameters?.ToArray(),
-                connection, transaction);
-        }
-        public virtual (Result result, int rows) ExecuteNonQuery(
-            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+        public virtual async Task<(Result result, int rows)> ExecuteNonQueryAsync(
+            string commandtext, CommandType commandtype = CommandType.Text, 
             ISqlParameter[] parameters = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int commandtimeout = 30)
         {
             try
             {
@@ -119,17 +104,17 @@ namespace jrivam.Library.Impl.Persistence
 
                 if (connection.State != ConnectionState.Open)
                 {
-                    connection.Open();
+                    await ((DbConnection)connection).OpenAsync().ConfigureAwait(false);
                 }
 
-                var query = connection.Query<int>(commandtext, p, transaction, commandTimeout: commandtimeout).FirstOrDefault();
+                var query = await connection.QueryAsync<int>(commandtext, p, transaction, commandTimeout: commandtimeout).ConfigureAwait(false);
 
                 if (transaction == null)
                 {
-                    connection.Close();
+                    connection?.Close();
                 }
 
-                return (new Result(), query);
+                return (new Result(), query.FirstOrDefault());
             }
             catch (Exception ex)
             {
@@ -137,25 +122,18 @@ namespace jrivam.Library.Impl.Persistence
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQueryAsync)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, -1);
             }
         }
 
-        public virtual (Result result, T scalar) ExecuteScalar<T>(
-            ISqlCommand sqlcommand,
-            IDbConnection connection = null, IDbTransaction transaction = null)
-        {
-            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
-                sqlcommand.Parameters?.ToArray(),
-                connection, transaction);
-        }
-        public virtual (Result result, T scalar) ExecuteScalar<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+        public virtual async Task<(Result result, T scalar)> ExecuteScalarAsync<T>(
+            string commandtext, CommandType commandtype = CommandType.Text, 
             ISqlParameter[] parameters = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int commandtimeout = 30)
         {
             try
             {
@@ -175,14 +153,14 @@ namespace jrivam.Library.Impl.Persistence
 
                 if (connection.State != ConnectionState.Open)
                 {
-                    connection.Open();
+                    await ((DbConnection)connection).OpenAsync().ConfigureAwait(false);
                 }
 
-                var execute = connection.Execute(commandtext, p, transaction, commandTimeout: commandtimeout);
+                var execute = await connection.ExecuteAsync(commandtext, p, transaction, commandTimeout: commandtimeout).ConfigureAwait(false);
 
                 if (transaction == null)
                 {
-                    connection.Close();
+                    connection?.Close();
                 }
 
                 return (new Result(), (T)Convert.ChangeType(execute, typeof(T)));
@@ -193,7 +171,7 @@ namespace jrivam.Library.Impl.Persistence
                     new ResultMessage()
                     {
                         Category = ResultCategory.Exception,
-                        Name = $"{this.GetType().Name}.{nameof(ExecuteScalar)}",
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteScalarAsync)}",
                         Description = ex.Message
                     })
                 { Exception = ex }, default(T));

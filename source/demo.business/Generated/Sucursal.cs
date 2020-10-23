@@ -25,7 +25,7 @@ namespace demo.Business.Table
             //Validations.Add(("NombreNotEmpty", new EmptyValidator(Data["Nombre"])));
         }
 
-        public Sucursal(ILogicTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logictable,
+        public Sucursal(ILogicTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logictable,
             Persistence.Table.Sucursal data = null)
             : base(logictable,
                   data)
@@ -130,7 +130,7 @@ namespace demo.Business.Query
 {
     public partial class Sucursal : AbstractQueryDomain<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal>
     {
-        public Sucursal(ILogicQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logicquery,
+        public Sucursal(ILogicQueryAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> logicquery,
             Persistence.Query.Sucursal data)
             : base(logicquery,
                   data)

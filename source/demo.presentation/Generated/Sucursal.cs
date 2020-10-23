@@ -17,7 +17,7 @@ namespace demo.Presentation.Table
 {
     public partial class Sucursal : AbstractTableModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursal(IInteractiveTable<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivetable, 
+        public Sucursal(IInteractiveTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivetable, 
             Business.Table.Sucursal domain = null,
             int maxdepth = 1,
             string name = null)
@@ -103,7 +103,7 @@ namespace demo.Presentation.Table
 
     public partial class SucursalesEdit : ListModelEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public SucursalesEdit(IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
+        public SucursalesEdit(IListDomainEditAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains)
             : base(domains)
         {
         }
@@ -121,7 +121,7 @@ namespace demo.Presentation.Table
     public partial class SucursalesReload : ListModelReload<Presentation.Query.Sucursal, Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
         public SucursalesReload(Presentation.Query.Sucursal query,
-            IListDomainEdit<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains = null,
+            IListDomainEditAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal> domains = null,
             int maxdepth = 1, int top = 0)
             : base(query, 
                   domains,                  
@@ -135,7 +135,7 @@ namespace demo.Presentation.Query
 {
     public partial class Sucursal : AbstractQueryModel<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal>
     {
-        public Sucursal(IInteractiveQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivequery,
+        public Sucursal(IInteractiveQueryAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal, Business.Table.Sucursal, Presentation.Table.Sucursal> interactivequery,
             Business.Query.Sucursal domain)
             : base(interactivequery,
                   domain)
