@@ -39,7 +39,6 @@ namespace jrivam.Library.Impl.Presentation
                 {
                     this.Add(model);
 
-                    TotalRecords();
                     return true;
                 }
             }
@@ -54,7 +53,6 @@ namespace jrivam.Library.Impl.Presentation
                 {
                     this.Remove(model);
 
-                    TotalRecords();
                     return true;
                 }
             }

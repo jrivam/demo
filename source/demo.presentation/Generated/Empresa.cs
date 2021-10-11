@@ -52,6 +52,7 @@ namespace demo.Presentation.Table
                         _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
 
                         Task.Run(async () => await _sucursales.RefreshAsync());
+                        // _sucursales.RefreshAsync();
                     }
                 }
                 else

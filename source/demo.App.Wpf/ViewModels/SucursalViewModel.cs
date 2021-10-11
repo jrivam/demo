@@ -36,6 +36,7 @@ namespace demo.App.Wpf.ViewModels
                     _empresas.Query.Activo = (true, WhereOperator.Equals);
 
                     Task.Run(async () => await _empresas.RefreshAsync());
+                    //_empresas.RefreshAsync();
                 }
 
                 return _empresas;

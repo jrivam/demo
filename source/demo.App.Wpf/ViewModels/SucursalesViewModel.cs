@@ -36,6 +36,7 @@ namespace demo.App.Wpf.ViewModels
                     _empresas.Query.Activo = (true, WhereOperator.Equals);
 
                     Task.Run(async () => await _empresas.RefreshAsync());
+                    //_empresas.RefreshAsync();
                 }
 
                 return _empresas;
@@ -56,6 +57,7 @@ namespace demo.App.Wpf.ViewModels
             Sucursales = sucursales;
 
             Task.Run(async () => await Sucursales.RefreshAsync());
+            //Sucursales.RefreshAsync();
         }
 
         public SucursalesViewModel()

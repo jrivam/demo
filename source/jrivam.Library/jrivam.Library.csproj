@@ -127,7 +127,7 @@
     <Compile Include="Impl\3.Business\Validator\RangeValidator.cs" />
     <Compile Include="Impl\3.Business\Validator\UniqueValidator.cs" />
     <Compile Include="Impl\3.Business\HelperTableLogic.cs" />
-    <Compile Include="Impl\4.Presentation\AsyncObservableCollection.cs" />
+    <Compile Include="Impl\4.Presentation\ConcurrentObservableCollection.cs" />
     <Compile Include="Impl\4.Presentation\Attributes\ModelAttribute.cs" />
     <Compile Include="Impl\4.Presentation\HelperTableInteractive.cs" />
     <Compile Include="Impl\4.Presentation\ListModel.cs" />

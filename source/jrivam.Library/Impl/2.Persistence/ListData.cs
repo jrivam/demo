@@ -28,18 +28,18 @@ namespace jrivam.Library.Impl.Persistence
 
         public virtual IListData<T, U> Load(IEnumerable<U> datas, bool clear = false)
         {
+            if (clear || datas == null)
+            {
+                this.Clear();
+            }
+
             if (datas != null)
             {
-                if (clear)
-                {
-                    this.Clear();
-                }
-
-                this?.AddRange(datas);
-
-                _entities?.Clear();
-                this.ToList()?.ForEach(x => _entities?.Add(x.Entity));
+                this.AddRange(datas);
             }
+
+            _entities?.Clear();
+            this.ForEach(x => _entities?.Add(x.Entity));
 
             return this;
         }

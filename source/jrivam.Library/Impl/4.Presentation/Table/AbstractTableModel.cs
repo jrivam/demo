@@ -6,6 +6,7 @@ using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
@@ -36,16 +37,6 @@ namespace jrivam.Library.Impl.Presentation.Table
 
         public virtual string Name { get; protected set; }
 
-        public override void OnPropertyChanged(string propertyName)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            if (Domain.Changed)
-            {
-                OnStatusChange("Editing");
-            }
-        }
-
         protected string _status = string.Empty;
         public string Status
         {
@@ -57,18 +48,12 @@ namespace jrivam.Library.Impl.Presentation.Table
             {
                 if (_status != value)
                 {
-                    OnStatusChange(value);
+                    _status = value;
+                    OnPropertyChanged(nameof(Status));
                 }
             }
         }
-        public virtual void OnStatusChange(string status)
-        {
-            if (_status != status)
-            {
-                _status = status;
-                base.OnPropertyChanged("Status");
-            }
-        }
+
 
         public virtual ICommand LoadCommand { get; protected set; }
         public virtual ICommand SaveCommand { get; protected set; }
@@ -80,11 +65,21 @@ namespace jrivam.Library.Impl.Presentation.Table
 
         protected readonly IInteractiveTableAsync<T, U, V, W> _interactivetableasync;
 
+        protected virtual void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(Status) && Domain.Changed && Status != "Editing")
+            {
+                Status = "Editing";
+            }
+        }
+
         public AbstractTableModel(IInteractiveTableAsync<T, U, V, W> interactivetableasync,
             V domain = default(V), 
             int maxdepth = 1,
             string name = null)
         {
+            base.PropertyChanged += OnPropertyChanged;
+
             _interactivetableasync = interactivetableasync;
 
             if (domain == null)

@@ -30,6 +30,7 @@ namespace demo.App.Wpf.ViewModels
             Empresas = empresas;
 
             Task.Run(async () => await Empresas.RefreshAsync());
+            //Empresas.RefreshAsync();
         }
 
         public EmpresasViewModel()

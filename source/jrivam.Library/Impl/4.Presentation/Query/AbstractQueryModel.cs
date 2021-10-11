@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Presentation.Query
 {
-    public abstract partial class AbstractQueryModel<T, U, V, W> : IQueryModel<T, U, V, W>
+    public abstract partial class AbstractQueryModel<T, U, V, W> : NotifyPropertyChanged, IQueryModel<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
@@ -18,7 +18,22 @@ namespace jrivam.Library.Impl.Presentation.Query
     {
         public IQueryDomain<T, U, V> Domain { get; set; }
 
-        public string Status { get; set; } = string.Empty;
+        protected string _status = string.Empty;
+        public string Status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    base.OnPropertyChanged(nameof(Status));
+                } 
+            }
+        } 
 
         protected readonly IInteractiveQueryAsync<T, U, V, W> _interactivequeryasync;
 

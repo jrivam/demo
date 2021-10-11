@@ -4,6 +4,7 @@ using jrivam.Library.Impl.Persistence;
 using jrivam.Library.Interface.Persistence.Sql;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 namespace jrivam.Library.Extension
@@ -17,6 +18,11 @@ namespace jrivam.Library.Extension
             int commandtimeout = 30)
         {
             return await AutofacConfiguration.Container.Resolve<RepositoryAsync>().ExecuteQueryAsync<T>(commandtext, commandtype, parameters, maxdepth, connection, commandtimeout).ConfigureAwait(false);
+        }
+
+        public static DbConnection DbConnection(this IDbCommand command)
+        {
+            return ((DbConnection)command.Connection);
         }
     }
 }
