@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
-using jrivam.Library.Extension;
 
 namespace jrivam.Library.Impl.Persistence.Database
 {

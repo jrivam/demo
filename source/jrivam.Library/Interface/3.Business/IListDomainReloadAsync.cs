@@ -13,5 +13,6 @@ namespace jrivam.Library.Interface.Business
         where V : ITableDomain<T, U, V>
     {
         Task<(Result result, IListDomain<T, U, V> domains)> RefreshAsync(int top = 0, IDbConnection connection = null, int? commandtimeout = null);
+        Task<Result> RefreshEraseAllAsync(int top = 0, IDbConnection connection = null, IDbTransaction transaction = null, int? commandtimeout = null);
     }
 }

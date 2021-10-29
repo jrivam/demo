@@ -44,5 +44,13 @@ namespace jrivam.Library.Impl.Business
 
             return (list.result, default(IListDomain<T, U, V>));
         }
+
+        public virtual async Task<Result> RefreshEraseAllAsync(int top = 0,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
+        {
+            await RefreshAsync(top, connection, commandtimeout);
+            return await EraseAllAsync(connection, transaction, commandtimeout);
+        }
     }
 }

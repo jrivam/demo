@@ -161,13 +161,8 @@ namespace jrivam.Library.Impl.Business.Table
                 var collection = property.info.GetValue(this);
                 if (collection != null)
                 {
-                    var refresh = (Task<(Result, IListDomain<T, U, V>)>)collection.GetType().GetMethod(nameof(IListDomainReloadAsync<T, U, V>.RefreshAsync)).Invoke(collection, new object[] { null, connection, commandtimeout });
-                    var item2 = refresh.GetType().GetField("Item2").GetValue(await refresh.ConfigureAwait(false));
-                    if (item2 != null)
-                    {
-                        var eraseall = (Task<Result>)item2.GetType().GetMethod(nameof(IListDomainEditAsync<T, U, V>.EraseAllAsync)).Invoke(item2, new object[] { connection, transaction, commandtimeout });
-                        erasechildren.Append(await eraseall.ConfigureAwait(false));
-                    }
+                    var eraseall = (Task<Result>)collection.GetType().GetMethod(nameof(IListDomainReloadAsync<T, U, V>.RefreshEraseAllAsync)).Invoke(collection, new object[] { 0, connection, transaction, commandtimeout });
+                    erasechildren.Append(await eraseall.ConfigureAwait(false));
                 }
             }
 
