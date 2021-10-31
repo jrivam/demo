@@ -3,12 +3,12 @@ using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Interface.Persistence.Query
 {
-    public interface IQueryData<T, U> : IBuilderQueryData, IQueryDataMethods<T, U>
+    public interface IQueryData<T, U> : IBuilderQueryData, IQueryDataMethodsAsync<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {
-        void ClearConditions();
+        bool Exclude { get; set; }
 
-        void Init();
+        void ClearConditions();
     }
 }

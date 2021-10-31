@@ -6,7 +6,7 @@ using jrivam.Library.Interface.Presentation.Table;
 
 namespace jrivam.Library.Interface.Presentation.Query
 {
-    public interface IQueryModel<T, U, V, W>: IBuilderQueryModel, IQueryModelMethods<T, U, V, W>
+    public interface IQueryModel<T, U, V, W> : IBuilderQueryModel, IQueryModelMethodsAsync<T, U, V, W>
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>

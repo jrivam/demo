@@ -10,12 +10,13 @@ using jrivam.Library.Interface.Persistence.Table;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace demo.Persistence.Table
 {
     public partial class Sucursal : AbstractTableData<Entities.Table.Sucursal, Persistence.Table.Sucursal>
     {
-        public Sucursal(IRepositoryTable<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositorytable,
+        public Sucursal(IRepositoryTableAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositorytable,
             Persistence.Query.Sucursal query,
             Entities.Table.Sucursal entity = null,
             string name = null, string dbname = null)
@@ -85,7 +86,12 @@ namespace demo.Persistence.Table
                     if (_empresa.Id == null && this.IdEmpresa != null)
                     {
                         _empresa.Id = this.IdEmpresa;
-                        _empresa.Select();
+
+                        //Task.Run(async () => await _empresa.SelectAsync());
+                        _empresa.SelectAsync().GetAwaiter().GetResult();
+                        //Task.Run(() => _empresa.SelectAsync());
+                        //Task.Run(() => _empresa.SelectAsync()).Wait();
+                        //Task.Run(async () => await _empresa.SelectAsync());
                     }
                 }
                 else
@@ -150,7 +156,7 @@ namespace demo.Persistence.Query
             return joins;
         }
 
-        public Sucursal(IRepositoryQuery<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositoryquery,
+        public Sucursal(IRepositoryQueryAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal> repositoryquery,
             string name = null, string dbname = null)
             : base(repositoryquery,
                   name, dbname)

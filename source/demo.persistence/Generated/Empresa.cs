@@ -14,7 +14,7 @@ namespace demo.Persistence.Table
 {
     public partial class Empresa : AbstractTableData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryTable<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable,
+        public Empresa(IRepositoryTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa> repositorytable,
             Persistence.Query.Empresa query,
             Entities.Table.Empresa entity = null,
             string name = null, string dbname = null)
@@ -104,7 +104,7 @@ namespace demo.Persistence.Query
 {
     public partial class Empresa : AbstractQueryData<Entities.Table.Empresa, Persistence.Table.Empresa>
     {
-        public Empresa(IRepositoryQuery<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
+        public Empresa(IRepositoryQueryAsync<Entities.Table.Empresa, Persistence.Table.Empresa> repositoryquery,
             string name = null, string dbname = null)
             : base(repositoryquery,
                   name, dbname)

@@ -4,58 +4,36 @@ using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Business.Table
 {
-    public class LogicTable<T, U, V> : ILogicTable<T, U, V> 
+    public partial class LogicTableAsync<T, U, V> : ILogicTableAsync<T, U, V> 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>
     {
-        protected readonly ILogic<T, U> _logic;
+        protected readonly ILogicAsync<T, U> _logicasync;
 
         protected readonly IDomainLoader _loader;
 
-        public LogicTable(ILogic<T, U> logic,
+        public LogicTableAsync(ILogicAsync<T, U> logicasync,
             IDomainLoader loader)
         {
-            _logic = logic;
+            _logicasync = logicasync;
 
             _loader = loader;
         }
 
-        public virtual (Result result, V domain) Load(V domain, 
-            bool usedbcommand = false, 
-            int? commandtimeout = null,
-            IDbConnection connection = null)
-        {
-            var load = _logic.Load(domain.Data, 
-                usedbcommand,
-                commandtimeout,
-                connection);
-            if (load.result.Success && load.data != null)
-            {
-                domain.Data = load.data;
-
-                _loader.Load<T, U, V>(domain, 1);
-
-                domain.Changed = false;
-                domain.Deleted = false;
-
-                return (load.result, domain);
-            }
-
-            return (load.result, default(V));
-        }
-        public virtual (Result result, V domain) LoadQuery(V domain,
-            int? commandtimeout = null,
+        public virtual async Task<(Result result, V domain)> LoadQueryAsync(V domain,
             int maxdepth = 1,
-            IDbConnection connection = null)
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var loadquery = _logic.LoadQuery(domain.Data, 
-                commandtimeout,
+            var loadquery = await _logicasync.LoadQueryAsync(domain.Data,
                 maxdepth,
-                connection);
+                connection,
+                commandtimeout).ConfigureAwait(false);
             if (loadquery.result.Success && loadquery.data != null)
             {
                 domain.Data = loadquery.data;
@@ -71,10 +49,31 @@ namespace jrivam.Library.Impl.Business.Table
             return (loadquery.result, default(V));
         }
 
-        public virtual (Result result, V domain) Save(V domain, 
-            bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, V domain)> LoadAsync(V domain,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
+        {
+            var load = await _logicasync.LoadAsync(domain.Data,
+                connection,
+                commandtimeout).ConfigureAwait(false);
+            if (load.result.Success && load.data != null)
+            {
+                domain.Data = load.data;
+
+                _loader.Load<T, U, V>(domain, 1);
+
+                domain.Changed = false;
+                domain.Deleted = false;
+
+                return (load.result, domain);
+            }
+
+            return (load.result, default(V));
+        }
+
+        public virtual async Task<(Result result, V domain)> SaveAsync(V domain,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             if (domain.Changed)
             {
@@ -82,10 +81,9 @@ namespace jrivam.Library.Impl.Business.Table
 
                 if (validate.Success)
                 {
-                    var save = _logic.Save(domain.Data, 
-                        useinsertdbcommand, useupdatedbcommand,
-                        commandtimeout,
-                        connection, transaction);
+                    var save = await _logicasync.SaveAsync(domain.Data,
+                        connection, transaction,
+                        commandtimeout).ConfigureAwait(false);
 
                     domain.Changed = !save.result.Success;
 
@@ -97,24 +95,23 @@ namespace jrivam.Library.Impl.Business.Table
 
             return (new Result(
                 new ResultMessage()
-                        {
-                            Category = ResultCategory.Information,
-                            Name = $"{this.GetType().Name}.{nameof(Save)}",
-                            Description =  $"No changes to persist in {domain.Data.Description.DbName} with Id {domain.Data.Entity.Id}."
-                        }
+                {
+                    Category = ResultCategory.Information,
+                    Name = $"{this.GetType().Name}.{nameof(SaveAsync)}",
+                    Description = $"No changes to persist in {domain.Data.Description.DbName} with Id {domain.Data.Entity.Id}."
+                }
                     ), default(V));
         }
-        public virtual (Result result, V domain) Erase(V domain, 
-            bool usedbcommand = false,
-            int? commandtimeout = null, 
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, V domain)> EraseAsync(V domain,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             if (!domain.Deleted)
             {
-                var erase = _logic.Erase(domain.Data, 
-                    usedbcommand,
-                    commandtimeout,
-                    connection, transaction);
+                var erase = await _logicasync.EraseAsync(domain.Data,
+                    connection, transaction,
+                    commandtimeout).ConfigureAwait(false);
 
                 domain.Deleted = erase.result.Success;
 
@@ -123,11 +120,11 @@ namespace jrivam.Library.Impl.Business.Table
 
             return (new Result(
                 new ResultMessage()
-                        {
-                            Category = ResultCategory.Information,
-                            Name = $"{this.GetType().Name}.{nameof(Erase)}",
-                            Description =  $"{domain.Data.Description.DbName} with Id {domain.Data.Entity.Id} already deleted."
-                        }
+                {
+                    Category = ResultCategory.Information,
+                    Name = $"{this.GetType().Name}.{nameof(EraseAsync)}",
+                    Description = $"{domain.Data.Description.DbName} with Id {domain.Data.Entity.Id} already deleted."
+                }
                     ), default(V));
         }
     }

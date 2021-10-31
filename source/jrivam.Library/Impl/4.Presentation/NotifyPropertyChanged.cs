@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace jrivam.Library.Impl.Presentation
 {
     public abstract class NotifyPropertyChanged : INotifyPropertyChanged
     {
         public virtual event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public virtual void OnPropertyChanged(string propertyName)
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

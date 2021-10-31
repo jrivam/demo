@@ -7,100 +7,37 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class Repository : IRepository
+    public partial class RepositoryAsync : IRepositoryAsync
     {
         protected readonly ConnectionStringSettings _connectionstringsettings;
 
         protected readonly ISqlCreator _sqlcreator;
 
-        protected readonly IDbCommandExecutor _dbcommandexecutor;
+        protected readonly IDbCommandExecutorAsync _dbcommandexecutorasync;
         protected readonly IEntityReader _entityreader;
 
-        public Repository(
+        public RepositoryAsync(
             ConnectionStringSettings connectionstringsettings,
             ISqlCreator sqlcreator,
-            IDbCommandExecutor dbcommandexecutor, IEntityReader entityreader)
+            IDbCommandExecutorAsync dbcommandexecutorasync, IEntityReader entityreader)
         {
             _connectionstringsettings = connectionstringsettings;
 
             _sqlcreator = sqlcreator;
 
-            _dbcommandexecutor = dbcommandexecutor;
+            _dbcommandexecutorasync = dbcommandexecutorasync;
             _entityreader = entityreader;
         }
 
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            ISqlCommand sqlcommand,
-            int maxdepth = 1,
-            IDbConnection connection = null)
-        {
-            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
-                sqlcommand.Parameters?.ToArray(), 
-                maxdepth, 
-                connection);
-        }
-        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+        protected IDbCommand GetCommand(
+            string commandtext, CommandType commandtype = CommandType.Text, 
             ISqlParameter[] parameters = null,
-            int maxdepth = 1,
-            IDbConnection connection = null)
-        {
-            var closeConnection = false;
-
-            if (connection == null)
-            {
-                connection = _sqlcreator.GetConnection(
-                   _connectionstringsettings.ProviderName,
-                   _connectionstringsettings.ConnectionString);
-
-                closeConnection = true;
-            }
-
-            var command = _sqlcreator.GetCommand(
-                    _connectionstringsettings.ProviderName,
-                    commandtext, commandtype, commandtimeout,
-                    parameters);
-
-            command.Connection = connection;
-
-            var executequery = _dbcommandexecutor.ExecuteQuery<T>(command,    
-                (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0));
-
-            if (closeConnection)
-            {
-                connection.Close();
-            }
-
-            if (executequery.result.Success && executequery.entities?.Count() == 0)
-            {
-                executequery.result.SetMessage(
-                    new ResultMessage()
-                    {
-                        Category = ResultCategory.Information,
-                        Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
-                        Description = "No rows found."
-                    }
-                );
-            }
-
-            return executequery;
-        }
-
-        public virtual (Result result, int rows) ExecuteNonQuery(
-            ISqlCommand sqlcommand,
-            IDbConnection connection = null, IDbTransaction transaction = null)
-        {
-            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
-                sqlcommand.Parameters?.ToArray(),
-                connection, transaction);
-        }
-        public virtual (Result result, int rows) ExecuteNonQuery(
-            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
-            ISqlParameter[] parameters = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int commandtimeout = 30)
         {
             if (connection == null)
             {
@@ -116,11 +53,59 @@ namespace jrivam.Library.Impl.Persistence
             command.Connection = connection;
             command.Transaction = transaction;
 
-            var executenonquery = _dbcommandexecutor.ExecuteNonQuery(command);
+            return command;
+        }
 
+        public virtual async Task<(Result result, IEnumerable<T> entities)> ExecuteQueryAsync<T>(
+            string commandtext, CommandType commandtype = CommandType.Text,
+            ISqlParameter[] parameters = null,
+            int maxdepth = 1,
+            IDbConnection connection = null,
+            int commandtimeout = 30)
+        {
+            var closeConnection = (connection == null);
+
+            var executequery = await _dbcommandexecutorasync.ExecuteQueryAsync<T>(
+                GetCommand(commandtext, commandtype,
+                parameters,
+                connection,
+                commandtimeout: commandtimeout),
+                (x, y) => _entityreader.Read<T>(x, y, new List<string>(), maxdepth, 0)).ConfigureAwait(false);
+
+            if (closeConnection)
+            {
+                connection?.Close();
+            }
+
+            if (executequery.result.Success && executequery.entities?.Count() == 0)
+            {
+                executequery.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteQueryAsync)}",
+                        Description = "No rows found."
+                    }
+                );
+            }
+
+            return executequery;
+        }
+
+        public virtual async Task<(Result result, int rows)> ExecuteNonQueryAsync(
+            string commandtext, CommandType commandtype = CommandType.Text,
+            ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int commandtimeout = 30)
+        {
+            var executenonquery = await _dbcommandexecutorasync.ExecuteNonQueryAsync(
+                GetCommand(commandtext, commandtype,
+                parameters,
+                connection, transaction,
+                commandtimeout)).ConfigureAwait(false);
             if (transaction == null)
             {
-                connection.Close();
+                connection?.Close();
             }
 
             if (executenonquery.result.Success && executenonquery.rows == 0)
@@ -129,7 +114,7 @@ namespace jrivam.Library.Impl.Persistence
                     new ResultMessage()
                     {
                         Category = ResultCategory.Information,
-                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQueryAsync)}",
                         Description = "No rows affected."
                     }
                 );
@@ -138,52 +123,34 @@ namespace jrivam.Library.Impl.Persistence
             return executenonquery;
         }
 
-        public virtual (Result result, T scalar) ExecuteScalar<T>(
-            ISqlCommand sqlcommand,
-            IDbConnection connection = null, IDbTransaction transaction = null)
-        {
-            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
-                sqlcommand.Parameters?.ToArray(), 
-                connection, transaction);
-        }
-        public virtual (Result result, T scalar) ExecuteScalar<T>(
-            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+        public virtual async Task<(Result result, T scalar)> ExecuteScalarAsync<T>(
+            string commandtext, CommandType commandtype = CommandType.Text,
             ISqlParameter[] parameters = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int commandtimeout = 30)
         {
-            if (connection == null)
-            {
-                connection = _sqlcreator.GetConnection(
-                        _connectionstringsettings.ProviderName,
-                        _connectionstringsettings.ConnectionString);
-            }
-
-            var command = _sqlcreator.GetCommand(
-                    _connectionstringsettings.ProviderName,
-                    commandtext, commandtype, commandtimeout,
-                    parameters);
-
-            command.Connection = connection;
-            command.Transaction = transaction;
-                
-            var executescalar = _dbcommandexecutor.ExecuteScalar<T>(command);
+            var executescalar = await _dbcommandexecutorasync.ExecuteScalarAsync<T>(
+                GetCommand(commandtext, commandtype,
+                parameters,
+                connection, transaction,
+                commandtimeout)).ConfigureAwait(false);
 
             if (transaction == null)
             {
-                connection.Close();
+                connection?.Close();
             }
 
             if (executescalar.result.Success && executescalar.scalar == null)
-                {
-                    executescalar.result.SetMessage(
-                        new ResultMessage()
-                        {
-                            Category = ResultCategory.Information,
-                            Name = $"{this.GetType().Name}.{nameof(ExecuteScalar)}",
-                            Description = "No rows affected."
-                        }
-                    );
-                }
+            {
+                executescalar.result.SetMessage(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Information,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteScalarAsync)}",
+                        Description = "No rows affected."
+                    }
+                );
+            }
 
             return executescalar;
         }

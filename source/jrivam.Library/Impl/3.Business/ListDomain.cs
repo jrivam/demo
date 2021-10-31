@@ -31,17 +31,17 @@ namespace jrivam.Library.Impl.Business
 
         public virtual IListDomain<T, U, V> Load(IEnumerable<V> domains, bool clear = false)
         {
+            if (clear || domains == null)
+            {
+                this.Clear();
+            }
+
             if (domains != null)
             {
-                if (clear)
-                {
-                    this.Clear();
-                }
-
-                this?.AddRange(domains);
-
-                _datas?.Load(this.Select(x => x.Data), true);
+                this.AddRange(domains);
             }
+
+            _datas?.Load(this.Select(x => x.Data), true);
 
             return this;
         }

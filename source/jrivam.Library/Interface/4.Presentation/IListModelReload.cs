@@ -1,9 +1,7 @@
-﻿using jrivam.Library.Impl;
-using jrivam.Library.Interface.Business.Table;
+﻿using jrivam.Library.Interface.Business.Table;
 using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence.Table;
 using jrivam.Library.Interface.Presentation.Table;
-using System.Data;
 using System.Windows.Input;
 
 namespace jrivam.Library.Interface.Presentation
@@ -15,7 +13,5 @@ namespace jrivam.Library.Interface.Presentation
         where W : ITableModel<T, U, V, W>
     {
         ICommand RefreshCommand { get; }
-
-        (Result result, IListModel<T, U, V, W> models) Refresh(int? commandtimeout = null, int top = 0, IDbConnection connection = null);
     }
 }

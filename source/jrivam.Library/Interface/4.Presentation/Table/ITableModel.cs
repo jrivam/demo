@@ -4,7 +4,7 @@ using jrivam.Library.Interface.Persistence.Table;
 
 namespace jrivam.Library.Interface.Presentation.Table
 {
-    public interface ITableModel<T, U, V, W> : IBuilderTableModel, ITableModelMethods<T, U, V, W>, ITableModelValidation 
+    public interface ITableModel<T, U, V, W> : IBuilderTableModel, ITableModelMethodsAsync<T, U, V, W>, ITableModelValidation 
         where T : IEntity
         where U : ITableData<T, U>
         where V : ITableDomain<T, U, V>

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using jrivam.Library;
 using jrivam.Library.Impl.Presentation;
+using System.Threading.Tasks;
 
 namespace demo.App.Wpf.ViewModels
 {
@@ -27,7 +28,9 @@ namespace demo.App.Wpf.ViewModels
             : base()
         {
             Empresas = empresas;
-            Empresas.Refresh();
+
+            Task.Run(async () => await Empresas.RefreshAsync());
+            //Empresas.RefreshAsync();
         }
 
         public EmpresasViewModel()

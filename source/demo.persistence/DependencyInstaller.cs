@@ -26,11 +26,11 @@ namespace demo.Persistence
                 return SqlSyntaxSignFactory.Create(connectionstringsetting.ProviderName);
             }).As<ISqlSyntaxSign>();
 
-            builder.RegisterType<Repository>()
+            builder.RegisterType<RepositoryAsync>()
                 .WithParameter(
                     new TypedParameter(typeof(ConnectionStringSettings), connectionstringsetting)
                  )
-                .As<IRepository>();
+                .As<IRepositoryAsync>();
 
             /////////////////////////////////////////////////////////////////////////////
 

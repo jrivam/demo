@@ -11,12 +11,13 @@ using jrivam.Library.Interface.Presentation.Query;
 using jrivam.Library.Interface.Presentation.Table;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace demo.Presentation.Table
 {
     public partial class Empresa : AbstractTableModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresa(IInteractiveTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactivetable,
+        public Empresa(IInteractiveTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactivetable,
             Business.Table.Empresa domain = null,
             int maxdepth = 1,
             string name = null)
@@ -49,7 +50,9 @@ namespace demo.Presentation.Table
                     if (this.Id != null)
                     {
                         _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
-                        _sucursales.Refresh();
+
+                        Task.Run(async () => await _sucursales.RefreshAsync());
+                        // _sucursales.RefreshAsync();
                     }
                 }
                 else
@@ -91,7 +94,7 @@ namespace demo.Presentation.Table
 
     public partial class EmpresasEdit : ListModelEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public EmpresasEdit(IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
+        public EmpresasEdit(IListDomainEditAsync<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains)
             : base(domains)
         {
         }
@@ -109,7 +112,7 @@ namespace demo.Presentation.Table
     public partial class EmpresasReload : ListModelReload<Presentation.Query.Empresa, Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
         public EmpresasReload(Presentation.Query.Empresa query,
-            IListDomainEdit<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains = null, 
+            IListDomainEditAsync<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> domains = null, 
             int maxdepth = 1, int top = 0)
             : base(query, 
                   domains,                   
@@ -123,7 +126,7 @@ namespace demo.Presentation.Query
 {
     public partial class Empresa : AbstractQueryModel<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa>
     {
-        public Empresa(IInteractiveQuery<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactivequery,
+        public Empresa(IInteractiveQueryAsync<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa, Presentation.Table.Empresa> interactivequery,
             Business.Query.Empresa domain)
             : base(interactivequery,
                   domain)

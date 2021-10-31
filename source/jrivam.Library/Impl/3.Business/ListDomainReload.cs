@@ -5,10 +5,11 @@ using jrivam.Library.Interface.Entities;
 using jrivam.Library.Interface.Persistence;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Business
 {
-    public class ListDomainReload<S, T, U, V> : ListDomainEdit<T, U, V>, IListDomainReload<T, U, V>, IListDomainQuery<S, T, U, V>
+    public partial class ListDomainReload<S, T, U, V> : ListDomainEdit<T, U, V>, IListDomainReloadAsync<T, U, V>, IListDomainQuery<S, T, U, V>
         where T : IEntity
         where U : ITableData<T, U>
         where V : class, ITableDomain<T, U, V>
@@ -26,13 +27,13 @@ namespace jrivam.Library.Impl.Business
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListDomain<T, U, V> domains) Refresh(int? commandtimeout = null, 
-            int top = 0,
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, IListDomain<T, U, V> domains)> RefreshAsync(int top = 0,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var list = Query.List(commandtimeout,
-                _maxdepth, top,
-                connection);
+            var list = await Query.ListAsync(_maxdepth, top,
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             if (list.result.Success)
             {
@@ -42,6 +43,14 @@ namespace jrivam.Library.Impl.Business
             }
 
             return (list.result, default(IListDomain<T, U, V>));
+        }
+
+        public virtual async Task<Result> RefreshEraseAllAsync(int top = 0,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
+        {
+            await RefreshAsync(top, connection, commandtimeout);
+            return await EraseAllAsync(connection, transaction, commandtimeout);
         }
     }
 }

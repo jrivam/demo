@@ -5,116 +5,110 @@ using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Business
 {
-    public class Logic<T, U> : ILogic<T, U>
+    public partial class LogicAsync<T, U> : ILogicAsync<T, U>
         where T : IEntity
         where U : ITableData<T, U>
     {
-        public Logic()
-        {
-        }
-
-        public virtual (Result result, U data) Load(U data, 
-            bool usedbcommand = false, 
-            int? commandtimeout = null,
-            IDbConnection connection = null)
-        {
-            var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-            if (primarykeycolumn != null)
-            {
-                if (primarykeycolumn.Value != null)
-                {
-                    return data.Select(usedbcommand, commandtimeout,
-                        connection);
-                }
-
-                return (new Result(
-                    new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(Load)}",
-                            Description =  $"Id in {data.Description.DbName} cannot be null."
-                        }
-                    ), default(U));
-            }
-
-            return (new Result(
-                new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(Load)}",
-                            Description =  $"Primary Key column in {data.Description.DbName} not defined."
-                        }
-                    ), default(U));
-        }
-        public virtual (Result result, U data) LoadQuery(U data, 
-            int? commandtimeout = null,
-            int maxdepth = 1, 
-            IDbConnection connection = null)
-        {
-            var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
-            if (primarykeycolumn != null)
-            {
-                if (primarykeycolumn.Value != null)
-                {
-                    return data.SelectQuery(commandtimeout, 
-                        maxdepth,
-                        connection);
-                }
-
-                return (new Result(
-                    new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(LoadQuery)}",
-                            Description =  $"Id in {data.Description.DbName} cannot be null."
-                        }
-                    ), default(U));
-            }
-
-            return (new Result(
-                new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(LoadQuery)}",
-                            Description = $"Primary Key column in {data.Description.DbName} not defined."
-                        }
-                    ), default(U));
-        }
-
-        public virtual (Result result, IEnumerable<U> datas) List(IQueryData<T, U> query,
-            int? commandtimeout = null, 
+        public virtual async Task<(Result result, IEnumerable<U> datas)> ListAsync(IQueryData<T, U> query,
             int maxdepth = 1, int top = 0,
-            IDbConnection connection = null)
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            return query.Select(commandtimeout, 
-                maxdepth, top,
-                connection);
+            return await query.SelectAsync(maxdepth, top,
+                connection,
+                commandtimeout).ConfigureAwait(false);
         }
 
-        public virtual (Result result, U data) Save(U data, 
-            bool useinsertdbcommand = false, bool useupdatedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, U data)> LoadQueryAsync(U data,
+            int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
+        {
+            var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
+            if (primarykeycolumn != null)
+            {
+                if (primarykeycolumn.Value != null)
+                {
+                    return await data.SelectQueryAsync(maxdepth,
+                        connection,
+                        commandtimeout).ConfigureAwait(false);
+                }
+
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Error,
+                        Name = $"{this.GetType().Name}.{nameof(LoadQueryAsync)}",
+                        Description = $"Id in {data.Description.DbName} cannot be null."
+                    }
+                    ), default(U));
+            }
+
+            return (new Result(
+                new ResultMessage()
+                {
+                    Category = ResultCategory.Error,
+                    Name = $"{this.GetType().Name}.{nameof(LoadQueryAsync)}",
+                    Description = $"Primary Key column in {data.Description.DbName} not defined."
+                }
+                    ), default(U));
+        }
+
+        public virtual async Task<(Result result, U data)> LoadAsync(U data,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
+        {
+            var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
+            if (primarykeycolumn != null)
+            {
+                if (primarykeycolumn.Value != null)
+                {
+                    return await data.SelectAsync(connection,
+                        commandtimeout).ConfigureAwait(false);
+                }
+
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Error,
+                        Name = $"{this.GetType().Name}.{nameof(LoadAsync)}",
+                        Description = $"Id in {data.Description.DbName} cannot be null."
+                    }
+                    ), default(U));
+            }
+
+            return (new Result(
+                new ResultMessage()
+                {
+                    Category = ResultCategory.Error,
+                    Name = $"{this.GetType().Name}.{nameof(LoadAsync)}",
+                    Description = $"Primary Key column in {data.Description.DbName} not defined."
+                }
+                    ), default(U));
+        }
+
+        public virtual async Task<(Result result, U data)> SaveAsync(U data,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
             if (primarykeycolumn != null)
             {
                 if (primarykeycolumn.DbValue != null)
                 {
-                    var update = data.Update(useupdatedbcommand,
-                        commandtimeout,
-                        connection, transaction);
+                    var update = await data.UpdateAsync(connection, transaction,
+                        commandtimeout).ConfigureAwait(false);
 
                     return (update.result, update.data);
                 }
                 else
                 {
-                    var insert = data.Insert(useinsertdbcommand,
-                        commandtimeout,
-                        connection, transaction);
+                    var insert = await data.InsertAsync(connection, transaction,
+                        commandtimeout).ConfigureAwait(false);
 
                     return (insert.result, insert.data);
                 }
@@ -122,47 +116,46 @@ namespace jrivam.Library.Impl.Business
 
             return (new Result(
                 new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(Save)}",
-                            Description = $"Primary Key column in {data.Description.DbName} not defined."
-                        }
+                {
+                    Category = ResultCategory.Error,
+                    Name = $"{this.GetType().Name}.{nameof(SaveAsync)}",
+                    Description = $"Primary Key column in {data.Description.DbName} not defined."
+                }
                     ), default(U));
         }
-        public virtual (Result result, U data) Erase(U data, 
-            bool usedbcommand = false,
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+
+        public virtual async Task<(Result result, U data)> EraseAsync(U data,
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
             var primarykeycolumn = data.Columns.FirstOrDefault(x => x.IsPrimaryKey);
             if (primarykeycolumn != null)
             {
                 if (primarykeycolumn?.Value != null)
                 {
-                    var delete = data.Delete(usedbcommand,
-                        commandtimeout,
-                        connection, transaction);
+                    var delete = await data.DeleteAsync(connection, transaction,
+                        commandtimeout).ConfigureAwait(false);
 
                     return (delete.result, delete.data);
                 }
 
                 return (new Result(
                     new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(Erase)}",
-                            Description = $"Id in {data.Description.DbName} cannot be null."
-                        }
-                    ), default(U));                
+                    {
+                        Category = ResultCategory.Error,
+                        Name = $"{this.GetType().Name}.{nameof(EraseAsync)}",
+                        Description = $"Id in {data.Description.DbName} cannot be null."
+                    }
+                    ), default(U));
             }
 
             return (new Result(
                 new ResultMessage()
-                        {
-                            Category = ResultCategory.Error,
-                            Name = $"{this.GetType().Name}.{nameof(Erase)}",
-                            Description = $"Primary Key column in {data.Description.DbName} not defined."
-                        }
+                {
+                    Category = ResultCategory.Error,
+                    Name = $"{this.GetType().Name}.{nameof(EraseAsync)}",
+                    Description = $"Primary Key column in {data.Description.DbName} not defined."
+                }
                     ), default(U));
         }
     }

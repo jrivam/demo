@@ -4,10 +4,11 @@ using jrivam.Library.Interface.Persistence.Query;
 using jrivam.Library.Interface.Persistence.Table;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Persistence
 {
-    public class ListDataReload<S, T, U> : ListDataEdit<T, U>, IListDataReload<T, U>, IListDataQuery<S, T, U> 
+    public partial class ListDataReload<S, T, U> : ListDataEdit<T, U>, IListDataReloadAsync<T, U>, IListDataQuery<S, T, U> 
         where T : IEntity
         where U : ITableData<T, U>
         where S : IQueryData<T, U>
@@ -24,13 +25,13 @@ namespace jrivam.Library.Impl.Persistence
             _maxdepth = maxdepth;
         }
 
-        public virtual (Result result, IListData<T, U> datas) Refresh(int? commandtimeout = null,
-            int top = 0,
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, IListData<T, U> datas)> RefreshAsync(int top = 0,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            var select = Query.Select(commandtimeout, 
-                _maxdepth, top,
-                connection);
+            var select = await Query.SelectAsync(_maxdepth, top,
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             if (select.result.Success)
             {

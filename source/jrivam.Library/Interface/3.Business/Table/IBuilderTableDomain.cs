@@ -1,6 +1,6 @@
 ﻿namespace jrivam.Library.Interface.Business.Table
 {
-    public interface IBuilderTableDomain : ITableDomainColumns
+    public interface IBuilderTableDomain : ITableColumns
     {
     }
 }

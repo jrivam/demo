@@ -4,6 +4,7 @@ using jrivam.Library.Impl;
 using jrivam.Library.Impl.Persistence.Sql;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Http;
 
@@ -14,7 +15,7 @@ namespace demo.Web.Api.Controllers
     {
         [HttpGet]
         [Route(nameof(Search))]
-        public IHttpActionResult Search(string razonsocial = null, bool? activo = null)
+        public async Task<IHttpActionResult> Search(string razonsocial = null, bool? activo = null)
         {
             try
             {
@@ -25,7 +26,7 @@ namespace demo.Web.Api.Controllers
                 if (activo != null)
                     query.Activo = (activo, WhereOperator.Equals);
 
-                var list = query.List();
+                var list = await query.ListAsync();
                 if (list.result.Success)
                 {
                     return Ok(new Business.Table.Empresas().Load(list.domains)?.Datas?.Entities);
@@ -42,13 +43,13 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetAll()
+        public async Task<IHttpActionResult> GetAll()
         {
-            return Search();
+            return await Search();
         }
 
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
             if (id > 0)
             {
@@ -57,12 +58,12 @@ namespace demo.Web.Api.Controllers
                     var empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>();
                     empresa.Id = id;
 
-                    var load = empresa.Load();
+                    var load = await empresa.LoadAsync();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
                         {
-                            load.domain.Sucursales.Refresh();
+                            await load.domain.Sucursales.RefreshAsync();
 
                             return Ok(load.domain?.Data?.Entity);
                         }
@@ -84,7 +85,7 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody] Entities.Table.Empresa entity)
+        public async Task<IHttpActionResult> Create([FromBody] Entities.Table.Empresa entity)
         {
             if (entity != null)
             {
@@ -92,7 +93,7 @@ namespace demo.Web.Api.Controllers
                 {
                     using (var scope = new TransactionScope())
                     {
-                        var save = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>(new TypedParameter(typeof(Entities.Table.Empresa), entity)).Save();
+                        var save = await AutofacConfiguration.Container.Resolve<Business.Table.Empresa>(new TypedParameter(typeof(Entities.Table.Empresa), entity)).SaveAsync();
                         if (save.result.Success)
                         {
                             scope.Complete();
@@ -115,7 +116,7 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Update(int id, [FromBody] Entities.Table.Empresa entity)
+        public async Task<IHttpActionResult> Update(int id, [FromBody] Entities.Table.Empresa entity)
         {
             if (id > 0)
             {
@@ -124,7 +125,7 @@ namespace demo.Web.Api.Controllers
                     var empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>();
                     empresa.Id = id;
 
-                    var load = empresa.Load();
+                    var load = await empresa.LoadAsync();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
@@ -133,7 +134,7 @@ namespace demo.Web.Api.Controllers
 
                             using (var scope = new TransactionScope())
                             {
-                                var save = load.domain.Save();
+                                var save = await load.domain.SaveAsync();
                                 if (save.result.Success)
                                 {
                                     scope.Complete();
@@ -164,7 +165,7 @@ namespace demo.Web.Api.Controllers
         }
 
         [HttpDelete]
-        public IHttpActionResult Delete(int id)
+        public async Task<IHttpActionResult> Delete(int id)
         {
             if (id > 0)
             {
@@ -173,14 +174,14 @@ namespace demo.Web.Api.Controllers
                     var empresa = AutofacConfiguration.Container.Resolve<Business.Table.Empresa>();
                     empresa.Id = id;
 
-                    var load = empresa.Load();
+                    var load = await empresa.LoadAsync();
                     if (load.result.Success)
                     {
                         if (load.domain != null)
                         {
                             using (var scope = new TransactionScope())
                             {
-                                var erase = load.domain.Erase();
+                                var erase = await load.domain.EraseAsync();
                                 if (erase.result.Success)
                                 {
                                     scope.Complete();

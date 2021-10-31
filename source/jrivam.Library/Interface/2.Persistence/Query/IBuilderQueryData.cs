@@ -1,6 +1,6 @@
 ﻿namespace jrivam.Library.Interface.Persistence.Query
 {
-    public interface IBuilderQueryData : IQueryDataColumns, IQueryDataJoins, IQueryDataSorts
+    public interface IBuilderQueryData : IQueryColumns, IQueryJoins, IQueryDataSorts
     {
     }
 }

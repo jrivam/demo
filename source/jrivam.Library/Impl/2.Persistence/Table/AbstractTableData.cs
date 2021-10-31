@@ -12,10 +12,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jrivam.Library.Impl.Persistence.Table
 {
-    public abstract class AbstractTableData<T, U> : ITableData<T, U>
+    public abstract partial class AbstractTableData<T, U> : ITableData<T, U>
         where T : IEntity
         where U : class, ITableData<T, U>
     {
@@ -37,19 +38,6 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
         }
 
-        protected IQueryData<T, U> _query;
-        public virtual IQueryData<T, U> Query
-        { 
-            get
-            {
-                return _query;
-            }
-            set 
-            {
-                _query = value;
-            }
-        }
-
         public virtual Description Description { get; protected set; }
 
         public virtual IColumnTable this[string name]
@@ -61,24 +49,19 @@ namespace jrivam.Library.Impl.Persistence.Table
         }
         public virtual ListColumns<IColumnTable> Columns { get; set; } = new ListColumns<IColumnTable>();
 
-        public virtual bool UseDbCommand { get; set; }
+        protected readonly IRepositoryTableAsync<T, U> _repositorytableasync;
+        protected readonly IQueryData<T, U> _queryasync;
+
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? SelectDbCommand { get; set; }
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? InsertDbCommand { get; set; }
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? UpdateDbCommand { get; set; }
         public virtual (bool usedbcommand, ISqlCommand dbcommand)? DeleteDbCommand { get; set; }
 
-        protected readonly IRepositoryTable<T, U> _repositorytable;
-
-        protected AbstractTableData(IRepositoryTable<T, U> repositorytable,
-            IQueryData<T, U> query,
+        public AbstractTableData(IRepositoryTableAsync<T, U> repositorytableasync,
+            IQueryData<T, U> queryasync,
             T entity = default(T),
-            string name = null, 
-            string dbname = null)
+            string name = null, string dbname = null)
         {
-            _repositorytable = repositorytable;
-
-            _query = query;
-
             if (entity == null)
                 _entity = HelperEntities<T>.CreateEntity();
             else
@@ -87,6 +70,9 @@ namespace jrivam.Library.Impl.Persistence.Table
             Description = new Description(name ?? typeof(T).Name, dbname ?? typeof(T).GetAttributeFromType<TableAttribute>()?.Name ?? typeof(T).Name);
 
             Init();
+
+            _repositorytableasync = repositorytableasync;
+            _queryasync = queryasync;
         }
 
         protected virtual void Init()
@@ -112,163 +98,129 @@ namespace jrivam.Library.Impl.Persistence.Table
             }
         }
 
-        public virtual (Result result, U data) SelectQuery(int? commandtimeout = null, 
-            int maxdepth = 1, 
-            IDbConnection connection = null)
+        public virtual async Task<(Result result, U data)> SelectQueryAsync(int maxdepth = 1,
+            IDbConnection connection = null,
+            int? commandtimeout = null)
         {
-            _query.ClearConditions();
+            _queryasync.ClearConditions();
 
             var primarykeycolumns = Columns?.Where(x => x.IsPrimaryKey);
             if (primarykeycolumns != null)
             {
                 foreach (var primarykeycolumn in primarykeycolumns)
                 {
-                    _query[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
+                    _queryasync[primarykeycolumn.Description.Name].Where(Columns[primarykeycolumn.Description.Name].Value, WhereOperator.Equals);
                 }
             }
 
-            var selectsingle = _query.SelectSingle(commandtimeout,
-                maxdepth,
-                connection);
+            var selectsingle = await _queryasync.SelectSingleAsync(maxdepth,
+                connection,
+                commandtimeout).ConfigureAwait(false);
 
             return selectsingle;
-        }          
-        public virtual (Result result, U data) Select(bool usedbcommand = false, 
-            int? commandtimeout = null,
-            IDbConnection connection = null)
-        {
-            if (Helper.UseDbCommand(UseDbCommand, SelectDbCommand?.usedbcommand ?? false, usedbcommand))
-            {
-                if (SelectDbCommand != null)
-                {
-                    return _repositorytable.Select(this as U, 
-                        SelectDbCommand.Value.dbcommand,
-                        connection);
-                }
+        }
 
-                return (new Result(
-                    new ResultMessage()
-                    {
-                        Category = ResultCategory.Error,
-                        Name = $"{this.GetType().Name}.{nameof(Select)}",
-                        Description = "No SelectDbCommand defined."
-                    }
-                    ), default(U));
+        public virtual async Task<(Result result, U data)> SelectAsync(
+            IDbConnection connection = null,
+            int? commandtimeout = null)
+        {
+            if (SelectDbCommand != null)
+            {
+                return await _repositorytableasync.SelectAsync(this as U,
+                    SelectDbCommand.Value.dbcommand.Text, SelectDbCommand.Value.dbcommand.Type,
+                    SelectDbCommand.Value.dbcommand.Parameters,
+                    connection,
+                    Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
             }
 
-            var select = _repositorytable.Select(this as U,
-                Helper.CommandTimeout(commandtimeout),
-                connection);
+            var select = await _repositorytableasync.SelectAsync(this as U,
+                connection,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return select;
         }
 
-        public virtual (Result result, U data) Insert(bool usedbcommand = false, 
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, U data)> InsertAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            if (Helper.UseDbCommand(UseDbCommand, InsertDbCommand?.usedbcommand ?? false, usedbcommand))
+            if (InsertDbCommand != null)
             {
-                if (InsertDbCommand != null)
-                {
-                    return _repositorytable.Insert(this as U, 
-                        InsertDbCommand.Value.dbcommand,
-                        connection, transaction);
-                }
-
-                return (new Result(
-                    new ResultMessage()
-                    {
-                        Category = ResultCategory.Error,
-                        Name = $"{this.GetType().Name}.{nameof(Insert)}",
-                        Description = "No InsertDbCommand defined."
-                    }
-                    ), default(U));
+                return await _repositorytableasync.InsertAsync(this as U,
+                    InsertDbCommand.Value.dbcommand.Text, InsertDbCommand.Value.dbcommand.Type,
+                    InsertDbCommand.Value.dbcommand.Parameters,
+                    connection, transaction,
+                    Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
             }
 
-            var insert = _repositorytable.Insert(this as U,
-                Helper.CommandTimeout(commandtimeout),
-                connection, transaction);
+            var insert = await _repositorytableasync.InsertAsync(this as U,
+                connection, transaction,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return insert;
         }
-        public virtual (Result result, U data) Update(bool usedbcommand = false, 
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
-        {
-            if (Helper.UseDbCommand(UseDbCommand, UpdateDbCommand?.usedbcommand ?? false, usedbcommand))
-            {
-                if (UpdateDbCommand != null)
-                {
-                    return _repositorytable.Update(this as U, 
-                        UpdateDbCommand.Value.dbcommand,
-                        connection, transaction);
-                }
 
-                return (new Result(
-                    new ResultMessage()
-                    {
-                        Category = ResultCategory.Error,
-                        Name = $"{this.GetType().Name}.{nameof(Update)}",
-                        Description = "No UpdateDbCommand defined."
-                    }
-                    ), default(U));
+        public virtual async Task<(Result result, U data)> UpdateAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
+        {
+            if (UpdateDbCommand != null)
+            {
+                return await _repositorytableasync.UpdateAsync(this as U,
+                    UpdateDbCommand.Value.dbcommand.Text, UpdateDbCommand.Value.dbcommand.Type,
+                    UpdateDbCommand.Value.dbcommand.Parameters,
+                    connection, transaction,
+                    Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
             }
 
-            var update = _repositorytable.Update(this as U,
-                Helper.CommandTimeout(commandtimeout),
-                connection, transaction);
+            var update = await _repositorytableasync.UpdateAsync(this as U,
+                connection, transaction,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return update;
         }
-        public virtual (Result result, U data) Delete(bool usedbcommand = false, 
-            int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
-        {
-            if (Helper.UseDbCommand(UseDbCommand, DeleteDbCommand?.usedbcommand ?? false, usedbcommand))
-            {
-                if (DeleteDbCommand != null)
-                {
-                    return _repositorytable.Delete(this as U, 
-                        DeleteDbCommand.Value.dbcommand,
-                        connection, transaction);
-                }
 
-                return (new Result(
-                    new ResultMessage()
-                    {
-                        Category = ResultCategory.Error,
-                        Name = $"{this.GetType().Name}.{nameof(Delete)}",
-                        Description = "No DeleteDbCommand defined."
-                    }
-                    ), default(U));
+        public virtual async Task<(Result result, U data)> DeleteAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
+        {
+            if (DeleteDbCommand != null)
+            {
+                return await _repositorytableasync.DeleteAsync(this as U,
+                    DeleteDbCommand.Value.dbcommand.Text, DeleteDbCommand.Value.dbcommand.Type,
+                    DeleteDbCommand.Value.dbcommand.Parameters,
+                    connection, transaction,
+                    Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
             }
 
-            var delete = _repositorytable.Delete(this as U,
-                Helper.CommandTimeout(commandtimeout),
-                connection, transaction);
+            var delete = await _repositorytableasync.DeleteAsync(this as U,
+                connection, transaction,
+                Helper.CommandTimeout(commandtimeout)).ConfigureAwait(false);
 
             return delete;
         }
 
-        public virtual (Result result, U data) Upsert(bool usedbcommand = false, int? commandtimeout = null,
-            IDbConnection connection = null, IDbTransaction transaction = null)
+        public virtual async Task<(Result result, U data)> UpsertAsync(
+            IDbConnection connection = null, IDbTransaction transaction = null,
+            int? commandtimeout = null)
         {
-            var select = Select(usedbcommand,
-                Helper.CommandTimeout(commandtimeout),
-                connection);
-            if (select.result.Success && select.data != null)
+            var select = await SelectAsync(connection,
+                commandtimeout).ConfigureAwait(false);
+            if (select.result.Success)
             {
-                return Update(usedbcommand,
-                    Helper.CommandTimeout(commandtimeout),
-                    connection, transaction);
+                if (select.data != null)
+                {
+                    return await UpdateAsync(connection, transaction,
+                        commandtimeout).ConfigureAwait(false);
+                }
+                else
+                {
+                    return await InsertAsync(connection, transaction,
+                        commandtimeout).ConfigureAwait(false);
+                }
             }
-            else
-            {
-                return Insert(usedbcommand,
-                    Helper.CommandTimeout(commandtimeout), 
-                    connection, transaction);
-            }
+
+            return (select.result, default(U));
         }
     }
 }

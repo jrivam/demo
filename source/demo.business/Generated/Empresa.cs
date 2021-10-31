@@ -24,7 +24,7 @@ namespace demo.Business.Table
             //Validations.Add(("RazonSocialNotEmpty", new EmptyValidator(Data["RazonSocial"])));
         }
 
-        public Empresa(ILogicTable<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logictable,
+        public Empresa(ILogicTableAsync<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logictable,
             Persistence.Table.Empresa data = null)
             : base(logictable,
                   data)
@@ -48,7 +48,7 @@ namespace demo.Business.Table
             {
                 if (_sucursales == null)
                 {
-                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesReload>(new TypedParameter(typeof(IListDataReload<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
+                    Sucursales = AutofacConfiguration.Container.Resolve<Business.Table.SucursalesReload>(new TypedParameter(typeof(IListDataReloadAsync<Entities.Table.Sucursal, Persistence.Table.Sucursal>), Data?.Sucursales));
                 }
 
                 _sucursales.Query.IdEmpresa = (this.Id, WhereOperator.Equals);
@@ -108,7 +108,7 @@ namespace demo.Business.Query
 {
     public partial class Empresa : AbstractQueryDomain<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa>
     {
-        public Empresa(ILogicQuery<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logicquery,
+        public Empresa(ILogicQueryAsync<Entities.Table.Empresa, Persistence.Table.Empresa, Business.Table.Empresa> logicquery,
             Persistence.Query.Empresa data)
             : base(logicquery,
                   data)
