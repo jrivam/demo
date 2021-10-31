@@ -1,0 +1,203 @@
+﻿using Dapper;
+using jrivam.Library.Interface.Persistence;
+using jrivam.Library.Interface.Persistence.Sql;
+using jrivam.Library.Interface.Persistence.Sql.Database;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+
+namespace jrivam.Library.Impl.Persistence
+{
+    public class RepositoryDapper : IRepository
+    {
+        protected readonly ConnectionStringSettings _connectionstringsettings;
+
+        protected readonly ISqlCreator _sqlcreator;
+
+        public RepositoryDapper(
+            ConnectionStringSettings connectionstringsettings,
+            ISqlCreator sqlcreator)
+        {
+            _connectionstringsettings = connectionstringsettings;
+
+            _sqlcreator = sqlcreator;
+        }
+
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
+            ISqlCommand sqlcommand,
+            int maxdepht = 1,
+            IDbConnection connection = null)
+        {
+            return ExecuteQuery<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout,
+                sqlcommand.Parameters.ToArray(), maxdepht,
+                connection);
+        }
+        public virtual (Result result, IEnumerable<T> entities) ExecuteQuery<T>(
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
+            int maxdepht = 1,
+            IDbConnection connection = null)
+        {
+            try
+            {
+                var closeConnection = false;
+
+                if (connection == null)
+                {
+                    connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
+
+                    closeConnection = true;
+                }
+
+                var p = new DynamicParameters();
+
+                foreach(var parameter in parameters)
+                {
+                    p.Add(parameter.Name, parameter.Value);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                var query = connection.Query<T>(commandtext, p, commandTimeout: commandtimeout);
+                
+                if (closeConnection)
+                {
+                    connection.Close();
+                }
+
+                return (new Result(), query);
+
+            }
+            catch (Exception ex)
+            {
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteQuery)}",
+                        Description = ex.Message
+                    })
+                { Exception = ex }, default(IEnumerable<T>));
+            }
+        }
+
+        public virtual (Result result, int rows) ExecuteNonQuery(
+            ISqlCommand sqlcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            return ExecuteNonQuery(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
+                connection, transaction);
+        }
+        public virtual (Result result, int rows) ExecuteNonQuery(
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30,
+            ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            try
+            {
+                if (connection == null)
+                {
+                    connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
+                }
+
+                var p = new DynamicParameters();
+
+                foreach (var parameter in parameters)
+                {
+                    p.Add(parameter.Name, parameter.Value);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                var query = connection.Query<int>(commandtext, p, transaction, commandTimeout: commandtimeout).FirstOrDefault();
+
+                if (transaction == null)
+                {
+                    connection.Close();
+                }
+
+                return (new Result(), query);
+            }
+            catch (Exception ex)
+            {
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteNonQuery)}",
+                        Description = ex.Message
+                    })
+                { Exception = ex }, -1);
+            }
+        }
+
+        public virtual (Result result, T scalar) ExecuteScalar<T>(
+            ISqlCommand sqlcommand,
+            IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            return ExecuteScalar<T>(sqlcommand.Text, sqlcommand.Type, sqlcommand.CommandTimeout, 
+                sqlcommand.Parameters?.ToArray(),
+                connection, transaction);
+        }
+        public virtual (Result result, T scalar) ExecuteScalar<T>(
+            string commandtext, CommandType commandtype = CommandType.Text, int commandtimeout = 30, 
+            ISqlParameter[] parameters = null,
+            IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            try
+            {
+                if (connection == null)
+                {
+                    connection = _sqlcreator.GetConnection(
+                        _connectionstringsettings.ProviderName,
+                        _connectionstringsettings.ConnectionString);
+                }
+
+                var p = new DynamicParameters();
+
+                foreach (var parameter in parameters)
+                {
+                    p.Add(parameter.Name, parameter.Value);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                var execute = connection.Execute(commandtext, p, transaction, commandTimeout: commandtimeout);
+
+                if (transaction == null)
+                {
+                    connection.Close();
+                }
+
+                return (new Result(), (T)Convert.ChangeType(execute, typeof(T)));
+            }
+            catch (Exception ex)
+            {
+                return (new Result(
+                    new ResultMessage()
+                    {
+                        Category = ResultCategory.Exception,
+                        Name = $"{this.GetType().Name}.{nameof(ExecuteScalar)}",
+                        Description = ex.Message
+                    })
+                { Exception = ex }, default(T));
+            }
+        }
+    }
+}

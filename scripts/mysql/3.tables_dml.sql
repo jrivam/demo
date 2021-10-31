@@ -4,26 +4,26 @@ USE test;
 
 INSERT INTO empresa
            
-(razon_social
+(razon_social, ruc,
            
 ,activo)
      
 VALUES
            
-('empresa 1', 1);
+('empresa 1', '1111111111', 1);
 
 
 
 
 INSERT INTO empresa
            
-(razon_social
+(razon_social, ruc,
            
 ,activo)
      
 VALUES
            
-('empresa 2', 1);
+('empresa 2', '22222222222', 1);
 
 
 
@@ -31,6 +31,8 @@ INSERT INTO sucursal
            
 (nombre
            
+,codigo
+
 ,id_empresa
            
 ,fecha
@@ -40,8 +42,9 @@ INSERT INTO sucursal
 VALUES
            
 ('sucursal 1'
-           
-,(select id from empresa where razon_social = 'empresa 1')
+
+,'s1'           
+,(select id from empresa where ruc = '1111111111')
            
 ,now()
            
@@ -53,7 +56,8 @@ VALUES
 INSERT INTO sucursal
            
 (nombre
-           
+
+,codigo           
 ,id_empresa
            
 ,fecha
@@ -63,8 +67,8 @@ INSERT INTO sucursal
 VALUES
            
 ('sucursal 2'
-           
-,(select id from empresa where razon_social = 'empresa 2')
+,'s2'           
+,(select id from empresa where ruc= '22222222222')
            
 ,now()
            

@@ -4,8 +4,9 @@ use test
 
 CREATE TABLE `empresa` (
   `id` int(11) NOT NULL,
-  `razon_social` varchar(100) NOT NULL,
-  `activo` tinyint(1) NOT NULL
+  `ruc` varchar(50) NULL,
+  `razon_social` varchar(100) NULL,
+  `activo` tinyint(1) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE `empresa`
@@ -18,9 +19,10 @@ ALTER TABLE `empresa`
 
 CREATE TABLE `sucursal` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `fecha` datetime NOT NULL,
-  `activo` tinyint(1) NOT NULL,
+  `codigo` varchar(50) NOT NULL,
+  `nombre` varchar(100) NULL,
+  `fecha` datetime NULL,
+  `activo` tinyint(1) NULL,
   `id_empresa` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

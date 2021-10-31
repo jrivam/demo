@@ -5,6 +5,7 @@ ALTER SEQUENCE public.empresa_id_seq
 	
 CREATE TABLE public.empresa
 (
+    ruc character varying(50) COLLATE pg_catalog."default",
     razon_social character varying(100) COLLATE pg_catalog."default",
     activo boolean,
     id integer NOT NULL DEFAULT nextval('empresa_id_seq'::regclass),
@@ -28,6 +29,7 @@ ALTER SEQUENCE public.sucursal_id_seq
 	
 CREATE TABLE public.sucursal
 (
+    codigo character varying(50) COLLATE pg_catalog."default",
     nombre character varying(100) COLLATE pg_catalog."default",
     fecha date,
     id_empresa integer,
