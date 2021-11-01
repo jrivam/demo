@@ -13,9 +13,9 @@ namespace jrivam.Library.Impl.Presentation
         private bool _suppressNotification = false;
 
         public ConcurrentObservableCollection()
+            : base()
         {
         }
-
         public ConcurrentObservableCollection(IEnumerable<T> list)
             : base(list)
         {
@@ -29,6 +29,20 @@ namespace jrivam.Library.Impl.Presentation
                 foreach (var item in collection)
                 {
                     this.Add(item);
+                }
+                _suppressNotification = false;
+
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
+        }
+        public void RemoveRange(IEnumerable<T> collection)
+        {
+            if (collection != null)
+            {
+                _suppressNotification = true;
+                foreach (var item in collection)
+                {
+                    this.Remove(item);
                 }
                 _suppressNotification = false;
 
@@ -49,14 +63,6 @@ namespace jrivam.Library.Impl.Presentation
                 _synchronizationContext.Send(RaiseCollectionChanged, e);
             }
         }
-
-        private void RaiseCollectionChanged(object param)
-        {
-            // We are in the creator thread, call the base implementation directly
-            if (!_suppressNotification)
-                base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
-        }
-
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (SynchronizationContext.Current == _synchronizationContext)
@@ -71,6 +77,12 @@ namespace jrivam.Library.Impl.Presentation
             }
         }
 
+        private void RaiseCollectionChanged(object param)
+        {
+            // We are in the creator thread, call the base implementation directly
+            if (!_suppressNotification)
+                base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
+        }
         private void RaisePropertyChanged(object param)
         {
             // We are in the creator thread, call the base implementation directly
